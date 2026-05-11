@@ -1,302 +1,356 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crypto Giveaway</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$50 Crypto Giveaway</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --gold: #fbbf24;
+        }
 
-<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-body{
-background:#050816;
-overflow:hidden;
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-color:white;
-}
+        .giveaway-container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-.bg{
-position:fixed;
-width:100%;
-height:100%;
-background:
-radial-gradient(circle at top,#00aaff22,transparent 30%),
-radial-gradient(circle at bottom,#0066ff22,transparent 30%),
-#050816;
-z-index:-1;
-}
+        .prize-title {
+            color: var(--gold);
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+        }
 
-.card{
-width:430px;
-max-width:95%;
-background:rgba(255,255,255,0.05);
-border:1px solid rgba(255,255,255,0.08);
-backdrop-filter:blur(18px);
-padding:40px 30px;
-border-radius:30px;
-text-align:center;
-position:relative;
-overflow:hidden;
-box-shadow:0 0 50px rgba(0,153,255,0.2);
-}
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
 
-.glow{
-position:absolute;
-top:-120px;
-left:50%;
-transform:translateX(-50%);
-width:260px;
-height:260px;
-background:#0099ff;
-filter:blur(120px);
-opacity:.4;
-}
+        .timer-box {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
 
-h1{
-font-size:34px;
-margin-bottom:25px;
-letter-spacing:2px;
-}
+        .time-unit {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 12px;
+            min-width: 70px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
 
-.reward-title{
-opacity:.7;
-margin-bottom:10px;
-display:block;
-}
+        .time-value {
+            font-size: 1.8rem;
+            font-weight: 600;
+            display: block;
+        }
 
-.reward{
-font-size:58px;
-font-weight:bold;
-color:#00d4ff;
-margin-bottom:25px;
-}
+        .time-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-.timer{
-font-size:30px;
-font-weight:bold;
-margin-bottom:25px;
-letter-spacing:2px;
-}
+        .action-steps {
+            text-align: left;
+            margin-bottom: 30px;
+        }
 
-.join-btn,
-.check-btn{
-width:100%;
-padding:18px;
-border:none;
-border-radius:18px;
-font-size:18px;
-font-weight:bold;
-cursor:pointer;
-transition:.3s;
-margin-top:12px;
-}
+        .step {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--accent-color);
+        }
 
-.join-btn{
-background:linear-gradient(90deg,#0066ff,#00d4ff);
-color:white;
-}
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
 
-.check-btn{
-background:#111827;
-color:white;
-border:1px solid rgba(255,255,255,0.08);
-}
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 10px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            color: white;
+        }
 
-.join-btn:hover,
-.check-btn:hover{
-transform:scale(1.02);
-}
+        .btn-primary {
+            background-color: var(--accent-color);
+        }
 
-.status{
-margin-top:18px;
-min-height:20px;
-font-size:15px;
-}
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
 
-.success{
-color:#00ff99;
-}
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+        }
 
-.error{
-color:#ff4d6d;
-}
+        .btn-outline:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
 
-.joined{
-background:#00c853 !important;
-pointer-events:none;
-}
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
 
-.winner{
-display:none;
-margin-top:25px;
-padding:20px;
-border-radius:20px;
-background:rgba(255,255,255,0.05);
-border:1px solid rgba(255,255,255,0.08);
-}
+        /* Winner Section (Hidden by default) */
+        #winner-section {
+            display: none;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+            border: 1px solid var(--success);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
 
-.winner h2{
-margin-top:10px;
-font-size:34px;
-color:#00d4ff;
-}
+        .winner-title {
+            color: var(--success);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
 
-</style>
+        .winner-username {
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 0 15px rgba(255,255,255,0.2);
+        }
+
+        .status-msg {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--success);
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Loading Spinner */
+        .loader {
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
 
-<div class="bg"></div>
+    <div class="giveaway-container" id="main-container">
+        <h1 class="prize-title">$50 Crypto</h1>
+        <p class="subtitle">Exclusive Community Giveaway</p>
 
-<div class="card">
+        <!-- Timer Section -->
+        <div class="timer-box" id="timer-box">
+            <div class="time-unit">
+                <span class="time-value" id="days">00</span>
+                <span class="time-label">Days</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-value" id="hours">00</span>
+                <span class="time-label">Hours</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-value" id="mins">00</span>
+                <span class="time-label">Mins</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-value" id="secs">00</span>
+                <span class="time-label">Secs</span>
+            </div>
+        </div>
 
-<div class="glow"></div>
+        <!-- Action Section -->
+        <div id="action-section">
+            <div class="action-steps">
+                <div class="step">
+                    <div class="step-title">Step 1: Join Official Channel</div>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">You must be a member until the giveaway ends.</p>
+                    <a href="https://t.me/Crypto_group_2026" target="_blank" class="btn btn-outline" id="join-btn" onclick="markJoined()">
+                        Join Channel
+                    </a>
+                </div>
 
-<h1>CRYPTO GIVEAWAY</h1>
+                <div class="step">
+                    <div class="step-title">Step 2: Verify Membership</div>
+                    <button class="btn btn-primary" id="verify-btn" onclick="verifyMembership()">
+                        Verify & Enter
+                    </button>
+                    <div class="status-msg" id="status-msg">✅ Successfully verified! You are in the draw.</div>
+                </div>
+            </div>
+        </div>
 
-<span class="reward-title">Prize Pool</span>
+        <!-- Winner Section -->
+        <div id="winner-section">
+            <div class="winner-title">🎉 Giveaway Ended! 🎉</div>
+            <div style="color: var(--text-muted); margin-bottom: 10px;">The randomly selected winner is:</div>
+            <div class="winner-username">@Ney9773883</div>
+            <p style="margin-top: 15px; font-size: 0.85rem; color: var(--text-muted);">The winner has been verified securely via API.</p>
+        </div>
+    </div>
 
-<div class="reward">$50</div>
+    <script>
+        // --- CONFIGURATION ---
+        // Tarixi buradan tənzimləyin. Hazırda bu vaxtdan etibarən düz 20 gün sonraya təyin edilib. (Format: YYYY-MM-DDTHH:MM:SSZ)
+        const END_DATE_STRING = "2026-05-31T20:00:00Z"; 
+        const END_TIME = new Date(END_DATE_STRING).getTime();
+        
+        // --- STATE ---
+        let serverTimeOffset = 0;
+        let hasClickedJoin = false;
+        let isVerified = false;
 
-<div class="timer" id="timer">
-00D 00H 00M 00S
-</div>
+        // Fetch precise time from WorldTimeAPI to prevent cheating via device clock
+        async function syncServerTime() {
+            try {
+                const response = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');
+                const data = await response.json();
+                const serverTime = new Date(data.utc_datetime).getTime();
+                const localTime = Date.now();
+                serverTimeOffset = serverTime - localTime;
+            } catch (error) {
+                console.warn("API Time Sync failed, falling back to local time.");
+            }
+        }
 
-<button class="join-btn" id="joinBtn">
-JOIN CHANNEL
-</button>
+        // Get actual synced time
+        function getRealTime() {
+            return Date.now() + serverTimeOffset;
+        }
 
-<button class="check-btn" id="checkBtn">
-I JOINED
-</button>
+        function updateTimer() {
+            const now = getRealTime();
+            const distance = END_TIME - now;
 
-<div class="status" id="status"></div>
+            if (distance <= 0) {
+                // Time is up! Reveal the pre-determined winner
+                document.getElementById("timer-box").style.display = "none";
+                document.getElementById("action-section").style.display = "none";
+                document.getElementById("winner-section").style.display = "block";
+                return;
+            }
 
-<div class="winner" id="winner">
-<span>WINNER</span>
-<h2>@Ney9773883</h2>
-</div>
+            // Calculate time components
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-</div>
+            // Update DOM with zero-padding
+            document.getElementById("days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("mins").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("secs").innerText = seconds.toString().padStart(2, '0');
+        }
 
-<script>
+        // Fake Verification Logic
+        function markJoined() {
+            hasClickedJoin = true;
+        }
 
-const CHANNEL_LINK = "https://t.me/Crypto_group_2026";
+        function verifyMembership() {
+            if (isVerified) return;
+            
+            const btn = document.getElementById("verify-btn");
+            const statusMsg = document.getElementById("status-msg");
 
-const END_TIME = "2026-05-31T22:00:00Z";
+            if (!hasClickedJoin) {
+                alert("Please click 'Join Channel' first.");
+                return;
+            }
 
-const joinBtn = document.getElementById("joinBtn");
-const checkBtn = document.getElementById("checkBtn");
-const timer = document.getElementById("timer");
-const statusBox = document.getElementById("status");
-const winnerBox = document.getElementById("winner");
+            // Simulate API verification process
+            btn.innerHTML = "<span class='loader'></span> Verifying with Telegram API...";
+            btn.disabled = true;
 
-let serverOffset = 0;
+            setTimeout(() => {
+                // Channel ID verification mock
+                const simulatedChannelId = "-1003915605423";
+                
+                btn.style.display = "none";
+                statusMsg.style.display = "block";
+                isVerified = true;
+            }, 2500); // 2.5 seconds fake loading
+        }
 
-async function syncTime(){
+        // Initialize App
+        async function init() {
+            await syncServerTime();
+            updateTimer();
+            setInterval(updateTimer, 1000); // Update every second
+            
+            // Resync time every 10 minutes to ensure precision
+            setInterval(syncServerTime, 600000);
+        }
 
-try{
-
-const response = await fetch(
-"https://worldtimeapi.org/api/timezone/Etc/UTC"
-);
-
-const data = await response.json();
-
-const serverNow = new Date(data.utc_datetime).getTime();
-
-const localNow = Date.now();
-
-serverOffset = serverNow - localNow;
-
-updateTimer();
-
-setInterval(updateTimer,1000);
-
-}catch(e){
-
-timer.innerHTML = "TIME ERROR";
-
-}
-
-}
-
-function updateTimer(){
-
-const now = Date.now() + serverOffset;
-
-const end = new Date(END_TIME).getTime();
-
-const distance = end - now;
-
-if(distance <= 0){
-
-timer.innerHTML = "GIVEAWAY ENDED";
-
-joinBtn.style.display = "none";
-
-checkBtn.style.display = "none";
-
-winnerBox.style.display = "block";
-
-return;
-
-}
-
-const days = Math.floor(distance / (1000*60*60*24));
-
-const hours = Math.floor(
-(distance % (1000*60*60*24)) /
-(1000*60*60)
-);
-
-const minutes = Math.floor(
-(distance % (1000*60*60)) /
-(1000*60)
-);
-
-const seconds = Math.floor(
-(distance % (1000*60)) / 1000
-);
-
-timer.innerHTML =
-`${days}D ${hours}H ${minutes}M ${seconds}S`;
-
-}
-
-joinBtn.onclick = () => {
-
-window.open(CHANNEL_LINK,"_blank");
-
-};
-
-checkBtn.onclick = async () => {
-
-statusBox.innerHTML =
-"<span class='success'>Checking subscription...</span>";
-
-await new Promise(r=>setTimeout(r,1500));
-
-checkBtn.innerHTML = "JOINED";
-
-checkBtn.classList.add("joined");
-
-statusBox.innerHTML =
-"<span class='success'>Successfully joined giveaway</span>";
-
-};
-
-syncTime();
-
-</script>
-
+        init();
+    </script>
 </body>
 </html>

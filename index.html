@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>$50 TON Eksklüziv Hədiyyə</title>
+    <title>$50 Crypto Exclusive Giveaway</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-main: #0B0E14;
             --card-bg: #151A23;
-            --primary: #0088CC; /* TON Blue */
-            --primary-hover: #0077B3;
+            --primary: #3b82f6; 
+            --primary-hover: #2563eb;
             --text-light: #F8FAFC;
             --text-gray: #A0AEC0;
             --border-color: #2D3748;
@@ -76,14 +76,10 @@
         .prize-title {
             font-family: 'Poppins', sans-serif;
             color: var(--text-light);
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 700;
             margin-bottom: 8px;
             letter-spacing: -0.5px;
-        }
-
-        .prize-title span {
-            color: var(--primary);
         }
 
         .subtitle { 
@@ -153,7 +149,7 @@
             line-height: 1.5; 
         }
 
-        /* Solid Buttons - No Bouncy Hover */
+        /* Solid Buttons */
         .btn {
             display: flex;
             justify-content: center;
@@ -247,32 +243,32 @@
 
     <div class="giveaway-card">
         <div class="live-status">
-            <span class="dot"></span> Təhlükəsiz Sistem
+            <span class="dot"></span> Secure System Live
         </div>
 
-        <h1 class="prize-title">$50 <span>TON</span></h1>
-        <p class="subtitle">Eksklüziv İcma Hədiyyəsi</p>
+        <h1 class="prize-title">$50</h1>
+        <p class="subtitle">Exclusive Crypto Giveaway</p>
 
         <!-- Timer Board -->
         <div class="timer-wrapper" id="timer-ui">
-            <div class="time-box"><span class="time-val" id="t-days">00</span><span class="time-lbl">Gün</span></div>
-            <div class="time-box"><span class="time-val" id="t-hours">00</span><span class="time-lbl">Saat</span></div>
-            <div class="time-box"><span class="time-val" id="t-mins">00</span><span class="time-lbl">Dəq</span></div>
-            <div class="time-box"><span class="time-val" id="t-secs">00</span><span class="time-lbl">San</span></div>
+            <div class="time-box"><span class="time-val" id="t-days">00</span><span class="time-lbl">Days</span></div>
+            <div class="time-box"><span class="time-val" id="t-hours">00</span><span class="time-lbl">Hours</span></div>
+            <div class="time-box"><span class="time-val" id="t-mins">00</span><span class="time-lbl">Mins</span></div>
+            <div class="time-box"><span class="time-val" id="t-secs">00</span><span class="time-lbl">Secs</span></div>
         </div>
 
         <!-- Interactive Steps -->
         <div id="interactive-ui">
             <div class="steps-container">
                 <div class="step-card">
-                    <div class="step-header">Addım 1: Rəsmi Kanala Qoşulun</div>
-                    <p class="step-desc">Mütləq tələbdir. İştirak etmək üçün sistem tərəfindən kanal üzvlüyünüz yoxlanılır.</p>
-                    <a href="https://t.me/Crypto_group_2026" target="_blank" class="btn btn-join" onclick="markInteraction()">Kanala Qoşul</a>
+                    <div class="step-header">Step 1: Join Official Channel</div>
+                    <p class="step-desc">Strictly required. Our automated system checks your membership status upon entry.</p>
+                    <a href="https://t.me/Crypto_group_2026" target="_blank" class="btn btn-join" onclick="markInteraction()">Join Channel</a>
                 </div>
 
                 <div class="step-card">
-                    <div class="step-header">Addım 2: İştirakı Təsdiqləyin</div>
-                    <button class="btn btn-verify" id="verify-action" onclick="processVerification()">Yoxla və İştirak Et</button>
+                    <div class="step-header">Step 2: Verify Membership</div>
+                    <button class="btn btn-verify" id="verify-action" onclick="processVerification()">Verify & Enter Giveaway</button>
                     <div class="msg-box" id="msg-display"></div>
                 </div>
             </div>
@@ -280,9 +276,9 @@
 
         <!-- Winner Board (Hidden by default) -->
         <div id="winner-board">
-            <div class="winner-lbl">Hədiyyə Başa Çatdı</div>
+            <div class="winner-lbl">Giveaway Ended</div>
             <div class="winner-user">@Ney9773883</div>
-            <p class="winner-desc">Qalib API vasitəsilə təhlükəsiz şəkildə təsdiqlənmişdir.</p>
+            <p class="winner-desc">The winner has been strictly verified securely via API.</p>
         </div>
     </div>
 
@@ -347,7 +343,7 @@
 
         function markInteraction() {
             userInteracted = true;
-            document.getElementById("msg-display").style.display = "none";
+            // Removed the code that hides the message box here, so the layout stays stable.
         }
 
         function isAlreadyVerified() {
@@ -356,7 +352,7 @@
                 const msg = document.getElementById("msg-display");
                 btn.style.display = "none";
                 msg.className = "msg-box msg-succ";
-                msg.innerHTML = "✅ <b>Təsdiqlənib:</b> Siz artıq bu hədiyyədə iştirakınızı uğurla təsdiqləmisiniz.";
+                msg.innerHTML = "✅ <b>Already Entered:</b> You have successfully secured your spot in this giveaway.";
                 msg.style.display = "block";
                 return true;
             }
@@ -371,13 +367,13 @@
 
             if (!userInteracted) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = "⚠️ <b>Diqqət:</b> Zəhmət olmasa yoxlamadan öncə ilk addımda 'Kanala Qoşul' butonuna klikləyin.";
+                msg.innerHTML = "⚠️ <b>Action Required:</b> Please click the 'Join Channel' button first before verifying.";
                 msg.style.display = "block";
                 return;
             }
 
             // UI Loading state
-            btn.innerHTML = "<span class='spinner'></span> Yoxlanır...";
+            btn.innerHTML = "<span class='spinner'></span> Connecting API...";
             btn.disabled = true;
             msg.style.display = "none";
 
@@ -385,15 +381,15 @@
                 attemptCount++;
 
                 if (attemptCount <= REQUIRED_ATTEMPTS) {
-                    btn.innerHTML = "Yoxla və İştirak Et";
+                    btn.innerHTML = "Verify & Enter Giveaway";
                     btn.disabled = false;
                     msg.className = "msg-box msg-err";
-                    msg.innerHTML = `❌ <b>Yoxlama Alınmadı:</b> Kanal üzvlüyünüzü təsdiqləyə bilmədik. <br><br>Zəhmət olmasa kanala qoşulduğunuzdan əmin olun və yenidən cəhd edin. Əgər artıq qoşulmusunuzsa, server gecikməsi ola bilər, yenidən yoxla butonuna klikləyin.`;
+                    msg.innerHTML = `❌ <b>Verification Failed:</b> We couldn't detect your membership status. <br><br>Please ensure you have joined the channel and try again. If you are already a member, our servers might be experiencing sync delays—please click verify a few more times.`;
                     msg.style.display = "block";
                 } else {
                     btn.style.display = "none";
                     msg.className = "msg-box msg-succ";
-                    msg.innerHTML = "🎉 <b>Uğurlu!</b> Kanal üzvlüyünüz təsdiqləndi və iştirakınız qeydə alındı. Uğurlar!";
+                    msg.innerHTML = "🎉 <b>Verification Successful!</b> Your membership is confirmed and you are officially in the draw. Best of luck!";
                     msg.style.display = "block";
                     localStorage.setItem("gw_entry_secured", "true");
                 }

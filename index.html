@@ -11,8 +11,8 @@
         :root {
             --bg-main: #06090F;
             --bg-gradient: radial-gradient(circle at top, #111A2C 0%, #06090F 80%);
-            --card-bg: rgba(17, 24, 39, 0.7);
-            --card-border: rgba(59, 130, 246, 0.15);
+            --card-bg: rgba(17, 24, 39, 0.75);
+            --card-border: rgba(59, 130, 246, 0.2);
             --primary: #3b82f6;
             --primary-glow: rgba(59, 130, 246, 0.5);
             --primary-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
@@ -21,7 +21,7 @@
             --text-light: #F8FAFC;
             --text-gray: #94A3B8;
             --success: #10B981;
-            --success-bg: rgba(16, 185, 129, 0.1);
+            --success-bg: rgba(16, 185, 129, 0.15);
             --error: #EF4444;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -88,7 +88,7 @@
         /* --- APP WRAPPERS --- */
         .view-container {
             width: 100%; max-width: 480px; padding: 20px;
-            display: none; flex-direction: column; gap: 20px;
+            display: none; flex-direction: column; gap: 24px;
             animation: fadeInView 0.5s ease forwards;
         }
         .view-container.active { display: flex; }
@@ -102,8 +102,8 @@
         }
         .profile-avatar { width: 56px; height: 56px; border-radius: 50%; border: 2px solid var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
         .profile-info { flex: 1; }
-        .profile-name { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; color: white; margin-bottom: 2px; }
-        .profile-handle { font-size: 0.85rem; color: var(--primary); font-weight: 500; }
+        .profile-name { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; color: white; margin-bottom: 4px; }
+        .profile-uid { font-size: 0.9rem; color: var(--accent-gold); font-weight: 600; letter-spacing: 0.5px; background: rgba(251, 191, 36, 0.1); padding: 2px 8px; border-radius: 6px; display: inline-block;}
 
         /* --- HOST GIVEAWAY CARD --- */
         .host-banner {
@@ -121,34 +121,37 @@
             background: linear-gradient(90deg, #F59E0B, #D97706); color: white; text-align: center;
             padding: 12px; border-radius: 12px; font-weight: 600; text-decoration: none;
             box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); transition: var(--transition);
+            display: flex; justify-content: center; align-items: center; gap: 8px;
         }
         .btn-host:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6); }
 
         /* --- GIVEAWAY LIST --- */
-        .section-title { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600; color: white; margin: 10px 0 5px 0; display: flex; align-items: center; gap: 8px;}
-        .section-title::before { content: ''; width: 4px; height: 16px; background: var(--primary); border-radius: 4px; box-shadow: 0 0 10px var(--primary); }
+        .section-title { font-family: 'Poppins', sans-serif; font-size: 1.15rem; font-weight: 600; color: white; margin: 5px 0; display: flex; align-items: center; gap: 8px;}
+        .section-title::before { content: ''; width: 4px; height: 18px; background: var(--primary); border-radius: 4px; box-shadow: 0 0 10px var(--primary); }
         
         .gw-list-card {
             background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
             padding: 16px; display: flex; align-items: center; gap: 15px; cursor: pointer;
             transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            margin-bottom: 15px;
         }
-        .gw-list-card:hover { border-color: rgba(59, 130, 246, 0.4); transform: translateX(5px); box-shadow: 0 4px 20px var(--primary-glow); }
-        .gw-icon { font-size: 2.2rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
+        .gw-list-card:hover { border-color: rgba(59, 130, 246, 0.5); transform: translateY(-3px); box-shadow: 0 8px 25px var(--primary-glow); }
+        .gw-icon { font-size: 2.5rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
         .gw-details { flex: 1; }
-        .gw-title { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1rem; color: white; margin-bottom: 4px; }
-        .gw-meta { font-size: 0.8rem; color: var(--text-gray); }
-        .gw-status { color: var(--success); font-weight: 600; font-size: 0.75rem; background: var(--success-bg); padding: 2px 8px; border-radius: 6px; display: inline-block; margin-top: 5px;}
-        .gw-arrow { color: var(--primary); font-weight: bold; }
+        .gw-title { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1.05rem; color: white; margin-bottom: 4px; }
+        .gw-meta { font-size: 0.85rem; color: var(--text-gray); }
+        .gw-status { color: var(--success); font-weight: 600; font-size: 0.75rem; background: var(--success-bg); padding: 3px 8px; border-radius: 6px; display: inline-block; margin-top: 6px;}
+        .gw-arrow { color: var(--primary); font-weight: bold; font-size: 1.2rem; }
 
         /* --- GIVEAWAY DETAIL VIEW --- */
-        .nav-header { display: flex; align-items: center; gap: 15px; margin-bottom: 5px; }
+        .nav-header { display: flex; align-items: center; margin-top: 10px; margin-bottom: 5px; }
         .btn-back { 
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; 
-            padding: 8px 16px; border-radius: 10px; font-weight: 600; font-size: 0.9rem; 
-            cursor: pointer; display: flex; align-items: center; gap: 5px; backdrop-filter: blur(5px);
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: white; 
+            padding: 10px 18px; border-radius: 12px; font-weight: 600; font-size: 0.95rem; 
+            cursor: pointer; display: flex; align-items: center; gap: 8px; backdrop-filter: blur(5px);
+            transition: var(--transition);
         }
-        .btn-back:hover { background: rgba(255,255,255,0.1); box-shadow: 0 0 10px rgba(255,255,255,0.1); }
+        .btn-back:hover { background: rgba(255,255,255,0.15); box-shadow: 0 0 15px rgba(255,255,255,0.1); transform: translateX(-2px);}
 
         .giveaway-card {
             background: var(--card-bg); backdrop-filter: blur(12px); border-radius: 24px; padding: 30px 20px;
@@ -157,7 +160,7 @@
         }
 
         .prize-title { font-family: 'Poppins', sans-serif; color: white; font-size: 3.5rem; font-weight: 800; line-height: 1; margin-bottom: 5px; text-shadow: 0 0 30px var(--primary-glow); }
-        .subtitle { color: var(--accent-gold); font-size: 1rem; margin-bottom: 25px; font-weight: 600; text-shadow: 0 0 10px var(--gold-glow); }
+        .subtitle { color: var(--accent-gold); font-size: 1.05rem; margin-bottom: 25px; font-weight: 600; text-shadow: 0 0 10px var(--gold-glow); }
 
         /* Timer */
         .timer-wrapper { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
@@ -168,24 +171,24 @@
         /* Steps */
         .steps-container { text-align: left; }
         .step-card { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
-        .step-header { font-family: 'Poppins', sans-serif; font-weight: 600; margin-bottom: 6px; font-size: 1rem; color: white; display: flex; justify-content: space-between;}
+        .step-header { font-family: 'Poppins', sans-serif; font-weight: 600; margin-bottom: 6px; font-size: 1.05rem; color: white; display: flex; justify-content: space-between; align-items: center;}
         .step-desc { font-size: 0.85rem; color: var(--text-gray); margin-bottom: 15px; }
-        .ad-counter { color: var(--accent-gold); font-weight: bold; background: rgba(251,191,36,0.1); padding: 2px 8px; border-radius: 6px; font-size: 0.9rem;}
+        .ad-counter { color: var(--accent-gold); font-weight: bold; background: rgba(251,191,36,0.1); padding: 4px 10px; border-radius: 8px; font-size: 0.9rem;}
 
-        .btn { width: 100%; padding: 15px; border-radius: 14px; border: none; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: var(--transition); text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px;}
+        .btn { width: 100%; padding: 15px; border-radius: 14px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; transition: var(--transition); text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px;}
         .btn-join { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); }
-        .btn-join:hover { background: rgba(255,255,255,0.1); }
+        .btn-join:hover { background: rgba(255,255,255,0.1); box-shadow: 0 0 15px rgba(255,255,255,0.1); }
         .btn-ad { background: linear-gradient(90deg, #8B5CF6, #6D28D9); color: white; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); }
         .btn-ad:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6); }
-        .btn-verify { background: var(--primary-gradient); color: white; box-shadow: 0 4px 15px var(--primary-glow); margin-top: 10px;}
-        .btn-verify:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--primary-glow); }
+        .btn-verify { background: var(--primary-gradient); color: white; box-shadow: 0 4px 15px var(--primary-glow); margin-top: 15px; font-size: 1.05rem; padding: 16px;}
+        .btn-verify:hover { transform: translateY(-2px); box-shadow: 0 6px 25px var(--primary-glow); }
         .btn:disabled, .btn.joined { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16,185,129,0.3); cursor: default; transform: none; box-shadow: none; pointer-events: none;}
 
-        .msg-box { margin-top: 15px; font-size: 0.85rem; display: none; padding: 14px; border-radius: 12px; line-height: 1.5; animation: fadeIn 0.3s ease; }
+        .msg-box { margin-top: 15px; font-size: 0.9rem; display: none; padding: 16px; border-radius: 14px; line-height: 1.5; animation: fadeIn 0.3s ease; }
         .msg-err { background: rgba(239, 68, 68, 0.1); color: #FCA5A5; border: 1px solid rgba(239, 68, 68, 0.2); }
-        .msg-succ { background: var(--success-bg); color: #6EE7B7; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .msg-succ { background: var(--success-bg); color: #6EE7B7; border: 1px solid rgba(16, 185, 129, 0.3); }
 
-        .spinner { border: 2px solid rgba(255,255,255,0.2); border-top: 2px solid white; border-radius: 50%; width: 18px; height: 18px; animation: spin 0.8s linear infinite; }
+        .spinner { border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid white; border-radius: 50%; width: 20px; height: 20px; animation: spin 0.8s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -206,18 +209,19 @@
             <img src="https://ui-avatars.com/api/?name=User&background=3b82f6&color=fff" class="profile-avatar" id="tg-avatar" alt="Avatar">
             <div class="profile-info">
                 <div class="profile-name" id="tg-name">Loading...</div>
-                <div class="profile-handle" id="tg-username">@username</div>
+                <div class="profile-uid" id="tg-uid">UID: Loading...</div>
             </div>
         </div>
 
         <div class="host-banner">
             <div class="host-title">Host Your Own Giveaway</div>
             <div class="host-desc">Boost your channel's growth and engage your community by starting a customized crypto giveaway.</div>
-            <a href="https://t.me/cryptogiveawayadmin" target="_blank" class="btn-host">Contact Support</a>
+            <a href="https://t.me/cryptogiveawayadmin" target="_blank" class="btn-host">💬 Contact Support</a>
         </div>
 
         <div>
             <div class="section-title">Active Giveaways</div>
+            
             <div class="gw-list-card" onclick="openGiveawayView()">
                 <div class="gw-icon">💰</div>
                 <div class="gw-details">
@@ -227,7 +231,8 @@
                 </div>
                 <div class="gw-arrow">➔</div>
             </div>
-        </div>
+            
+            </div>
     </div>
 
     <div id="view-giveaway" class="view-container">
@@ -278,7 +283,8 @@
         const tgApp = window.Telegram?.WebApp;
         if(tgApp) tgApp.expand();
 
-        function getUID() { return tgApp?.initDataUnsafe?.user?.id || 'demo_user'; }
+        // Ensure UID is the core identifier
+        function getUID() { return tgApp?.initDataUnsafe?.user?.id || '123456789'; }
         function saveStat(key, val) { localStorage.setItem(`${key}_${getUID()}`, val); }
         function getStat(key) { return localStorage.getItem(`${key}_${getUID()}`); }
 
@@ -307,10 +313,11 @@
             const user = tgApp?.initDataUnsafe?.user;
             if (user) {
                 document.getElementById('tg-name').innerText = `${user.first_name} ${user.last_name || ''}`.trim();
-                document.getElementById('tg-username').innerText = user.username ? `@${user.username}` : `ID: ${user.id}`;
+                document.getElementById('tg-uid').innerText = `UID: ${user.id}`;
                 if (user.photo_url) document.getElementById('tg-avatar').src = user.photo_url;
             } else {
                 document.getElementById('tg-name').innerText = "Guest User";
+                document.getElementById('tg-uid').innerText = `UID: ${getUID()}`;
             }
             updateAdUI();
         }
@@ -318,6 +325,7 @@
         // Routing Logic
         function checkDeepLink() {
             const startParam = tgApp?.initDataUnsafe?.start_param;
+            // Routes directly to Giveaway if link is: https://t.me/yourbot?startapp=giveaway-1
             if (startParam === 'giveaway-1') {
                 openGiveawayView();
             } else {
@@ -425,8 +433,8 @@
             if (!hasJoined || adsWatched < 10) {
                 msg.className = "msg-box msg-err";
                 let errText = "⚠️ <b>Action Required:</b><br>";
-                if (!hasJoined) errText += "- Please join the channel.<br>";
-                if (adsWatched < 10) errText += `- Watch ${10 - adsWatched} more ad(s).`;
+                if (!hasJoined) errText += "• Please join the channel.<br>";
+                if (adsWatched < 10) errText += `• Watch ${10 - adsWatched} more ad(s).`;
                 msg.innerHTML = errText;
                 msg.style.display = "block";
                 return;
@@ -446,7 +454,7 @@
         function startSystem() {
             setInterval(refreshTimer, 1000);
             
-            // Auto Popup Ads Every 15 Seconds (Only if active tab is giveaway or home)
+            // Auto Popup Ads Every 15 Seconds (Only if active tab is giveaway)
             setInterval(() => {
                 if (adController && document.getElementById('view-giveaway').classList.contains('active')) {
                     adController.show().catch(e => console.log('Auto Ad Skipped'));

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>$50 Crypto Exclusive Giveaway</title>
+    <title>Crypto Exclusive Giveaways</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
@@ -24,173 +24,110 @@
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* 1. Disable text copying & selection globally */
         * { 
             margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; 
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
+            -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
         }
 
         body {
-            background: var(--bg-gradient);
-            background-color: var(--bg-main);
-            color: var(--text-light);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            background: var(--bg-gradient); background-color: var(--bg-main);
+            color: var(--text-light); display: flex; justify-content: center;
+            min-height: 100vh; padding: 20px; overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
         }
 
-        /* 2. Protect profile image/logo from drag/context menu */
-        img, svg {
-            -webkit-user-drag: none;
-            user-drag: none;
-            pointer-events: none; /* Blocks all click/hold interactions */
-        }
+        img, svg { user-drag: none; -webkit-user-drag: none; pointer-events: none; }
 
-        /* --- 3. PREMIUM SPLASH SCREEN --- */
+        /* --- SPLASH SCREEN --- */
         #splash-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at center, #1E293B 0%, #0B0E14 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s ease;
         }
-
-        .logo-anim-container {
-            position: relative;
-            width: 90px; height: 110px;
-            margin-bottom: 25px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
+        .logo-anim-container { position: relative; width: 90px; height: 110px; margin-bottom: 25px; display: flex; justify-content: center;}
         .anim-coin {
-            width: 38px; height: 38px;
-            background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
+            width: 38px; height: 38px; background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
             color: #78350F; font-weight: bold; font-family: 'Poppins', sans-serif; font-size: 1.2rem;
-            position: absolute; top: 0;
-            box-shadow: 0 0 25px rgba(251, 191, 36, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.8);
+            position: absolute; top: 0; box-shadow: 0 0 25px rgba(251, 191, 36, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.8);
             animation: dropCoin 2.5s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
         }
-
-        .anim-box {
-            font-size: 3.5rem;
-            position: absolute; bottom: 0;
-            filter: drop-shadow(0 15px 15px rgba(0,0,0,0.6));
-            animation: boxBounce 2.5s ease-in-out infinite;
-        }
-
-        @keyframes dropCoin {
-            0% { transform: translateY(-50px) rotateY(0deg) scale(0.8); opacity: 0; }
-            30% { opacity: 1; transform: translateY(-10px) rotateY(180deg) scale(1.1); box-shadow: 0 0 35px rgba(251, 191, 36, 1); }
-            60% { transform: translateY(30px) rotateY(360deg) scale(0.5); opacity: 0; }
-            100% { transform: translateY(30px) scale(0); opacity: 0; }
-        }
-
-        @keyframes boxBounce {
-            0%, 50%, 100% { transform: translateY(0) scale(1); }
-            55% { transform: translateY(8px) scale(1.08, 0.92); }
-            65% { transform: translateY(-8px) scale(0.92, 1.08); }
-        }
-
-        .splash-title { 
-            font-family: 'Poppins', sans-serif; font-size: 1.6rem; font-weight: 700; color: white; 
-            letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase;
-            text-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
-            animation: pulseText 2s infinite alternate;
-        }
-
+        .anim-box { font-size: 3.5rem; position: absolute; bottom: 0; filter: drop-shadow(0 15px 15px rgba(0,0,0,0.6)); animation: boxBounce 2.5s ease-in-out infinite; }
+        @keyframes dropCoin { 0% { transform: translateY(-50px) rotateY(0deg) scale(0.8); opacity: 0; } 30% { opacity: 1; transform: translateY(-10px) rotateY(180deg) scale(1.1); box-shadow: 0 0 35px rgba(251, 191, 36, 1); } 60% { transform: translateY(30px) rotateY(360deg) scale(0.5); opacity: 0; } 100% { transform: translateY(30px) scale(0); opacity: 0; } }
+        @keyframes boxBounce { 0%, 50%, 100% { transform: translateY(0) scale(1); } 55% { transform: translateY(8px) scale(1.08, 0.92); } 65% { transform: translateY(-8px) scale(0.92, 1.08); } }
+        .splash-title { font-family: 'Poppins', sans-serif; font-size: 1.6rem; font-weight: 700; color: white; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; text-shadow: 0 0 15px rgba(59, 130, 246, 0.6); animation: pulseText 2s infinite alternate; }
         @keyframes pulseText { from { opacity: 0.8; } to { opacity: 1; text-shadow: 0 0 25px rgba(59, 130, 246, 0.9); } }
-        
         .loading-bar { width: 180px; height: 6px; background: rgba(255,255,255,0.05); border-radius: 6px; overflow: hidden; position: relative; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); }
-        .loading-progress { 
-            width: 50%; height: 100%; 
-            background: linear-gradient(90deg, transparent, var(--primary), #60A5FA, var(--primary), transparent); 
-            border-radius: 6px; position: absolute; left: -50%; 
-            animation: loadSlide 1.2s infinite linear; 
-            box-shadow: 0 0 10px var(--primary);
-        }
-        
+        .loading-progress { width: 50%; height: 100%; background: linear-gradient(90deg, transparent, var(--primary), #60A5FA, var(--primary), transparent); border-radius: 6px; position: absolute; left: -50%; animation: loadSlide 1.2s infinite linear; box-shadow: 0 0 10px var(--primary); }
         @keyframes loadSlide { 100% { left: 100%; } }
 
         /* --- MAIN APP WRAPPER --- */
         #app-wrapper {
-            opacity: 0;
-            transform: translateY(20px) scale(0.98);
+            opacity: 0; transform: translateY(20px) scale(0.98);
             transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            width: 100%;
-            max-width: 440px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            display: none; 
+            width: 100%; max-width: 440px; display: none; flex-direction: column; gap: 20px;
         }
-
         #app-wrapper.visible { opacity: 1; transform: translateY(0) scale(1); display: flex; }
 
-        /* --- PROFILE CARD --- */
-        .profile-card {
-            background: rgba(21, 26, 35, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-        }
+        /* VIEWS */
+        .view-section { display: none; flex-direction: column; gap: 20px; animation: fadeInView 0.4s ease; }
+        .view-section.active { display: flex; }
+        @keyframes fadeInView { from { opacity: 0; transform: translateX(15px); } to { opacity: 1; transform: translateX(0); } }
 
+        /* --- PROFILE CARD --- */
+        .profile-card { background: rgba(21, 26, 35, 0.8); backdrop-filter: blur(10px); border: 1px solid var(--card-border); border-radius: 20px; padding: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
         .avatar-container { position: relative; }
         .profile-avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); background: #2D3748; }
         .status-dot { position: absolute; bottom: 2px; right: 2px; width: 12px; height: 12px; background: var(--success); border-radius: 50%; border: 2px solid var(--card-bg); }
-
         .profile-info { flex: 1; }
         .profile-name { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; color: white; margin-bottom: 2px; }
         .profile-handle { font-size: 0.85rem; color: var(--primary); font-weight: 500; }
         .profile-id { font-size: 0.75rem; color: var(--text-gray); margin-top: 4px; background: rgba(255,255,255,0.05); display: inline-block; padding: 2px 8px; border-radius: 8px; }
 
-        /* --- GIVEAWAY CARD --- */
+        /* --- CREATE GIVEAWAY PROMO --- */
+        .promo-card {
+            background: linear-gradient(145deg, rgba(37, 99, 235, 0.15) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 24px; padding: 25px 20px;
+            text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); position: relative; overflow: hidden;
+        }
+        .promo-card::before { content: '✨'; position: absolute; top: -10px; right: -10px; font-size: 5rem; opacity: 0.1; transform: rotate(15deg); }
+        .promo-title { font-family: 'Poppins', sans-serif; color: white; font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+        .promo-desc { color: var(--text-gray); font-size: 0.9rem; margin-bottom: 20px; line-height: 1.4; }
+        .btn-support {
+            background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 20px; border-radius: 14px; font-weight: 600; text-decoration: none; display: inline-flex;
+            align-items: center; justify-content: center; gap: 8px; width: 100%; transition: var(--transition); pointer-events: auto;
+        }
+        .btn-support:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-2px); }
+
+        /* --- LIST ITEMS --- */
+        .section-header { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600; color: white; margin: 10px 0 5px 0; }
+        .gw-list-card {
+            background: rgba(21, 26, 35, 0.8); border: 1px solid var(--card-border); border-radius: 20px;
+            padding: 20px; display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; transition: var(--transition); pointer-events: auto;
+        }
+        .gw-list-card:hover { border-color: var(--primary); background: rgba(30, 41, 59, 0.9); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15); }
+        .gw-info h4 { font-family: 'Poppins', sans-serif; color: white; font-size: 1.1rem; margin-bottom: 4px; }
+        .gw-info p { color: var(--text-gray); font-size: 0.85rem; font-weight: 500; }
+        .gw-icon { width: 45px; height: 45px; background: rgba(59, 130, 246, 0.1); border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; border: 1px solid rgba(59, 130, 246, 0.2); }
+
+        /* --- GIVEAWAY CARD (DETAIL) --- */
+        .btn-back { background: transparent; color: var(--text-gray); border: none; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 5px 0; transition: var(--transition); pointer-events: auto;}
+        .btn-back:hover { color: white; transform: translateX(-3px); }
+
         .giveaway-card {
-            background: rgba(21, 26, 35, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            padding: 35px 25px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--card-border);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+            background: rgba(21, 26, 35, 0.8); backdrop-filter: blur(10px); border-radius: 24px;
+            padding: 35px 25px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); border: 1px solid var(--card-border);
+            text-align: center; position: relative; overflow: hidden;
         }
-
-        .giveaway-card::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 60%);
-            z-index: 0; pointer-events: none;
-        }
-
+        .giveaway-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 60%); z-index: 0; pointer-events: none; }
         .card-content { position: relative; z-index: 1; }
-
-        .live-status { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #E2E8F0; font-weight: 600; margin-bottom: 25px; background: rgba(255, 255, 255, 0.05); padding: 8px 16px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(5px); }
+        .live-status { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #E2E8F0; font-weight: 600; margin-bottom: 25px; background: rgba(255, 255, 255, 0.05); padding: 8px 16px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.08); }
         .dot { width: 6px; height: 6px; background-color: var(--success); border-radius: 50%; box-shadow: 0 0 10px var(--success); animation: pulse 2s infinite; }
-        
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-
+        
         .prize-title { font-family: 'Poppins', sans-serif; color: white; font-size: 3.8rem; font-weight: 700; line-height: 1; margin-bottom: 5px; text-shadow: 0 4px 20px rgba(59, 130, 246, 0.3); }
         .subtitle { color: var(--text-gray); font-size: 0.95rem; margin-bottom: 30px; font-weight: 500;}
 
@@ -204,19 +141,15 @@
         .steps-container { text-align: left; margin-bottom: 10px; }
         .step-card { background: rgba(0, 0, 0, 0.25); padding: 22px; border-radius: 18px; margin-bottom: 16px; border: 1px solid rgba(255, 255, 255, 0.04); transition: var(--transition); }
         .step-card:hover { border-color: rgba(255, 255, 255, 0.15); background: rgba(0, 0, 0, 0.35); }
-        
         .step-header { font-family: 'Poppins', sans-serif; font-weight: 600; margin-bottom: 8px; font-size: 1.05rem; color: white; display: flex; align-items: center; justify-content: space-between;}
         .step-desc { font-size: 0.85rem; color: var(--text-gray); margin-bottom: 18px; line-height: 1.6; }
 
         /* Buttons */
         .btn { display: flex; justify-content: center; align-items: center; width: 100%; padding: 16px 20px; border-radius: 14px; border: none; font-size: 0.95rem; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: var(--transition); text-decoration: none; position: relative; overflow: hidden; pointer-events: auto;}
-        
         .btn-join { background: rgba(255, 255, 255, 0.08); color: white; border: 1px solid rgba(255, 255, 255, 0.1); }
         .btn-join:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-2px); }
-        
         .btn-verify { background: var(--primary-gradient); color: white; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); }
         .btn-verify:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4); }
-        
         .btn.joined, .btn.joined:hover { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); cursor: default; transform: none; box-shadow: none; }
         .btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
 
@@ -224,23 +157,16 @@
         .msg-box { margin-top: 15px; font-size: 0.85rem; display: none; padding: 14px 16px; border-radius: 12px; line-height: 1.5; animation: fadeIn 0.3s ease; }
         .msg-err { background: rgba(239, 68, 68, 0.1); color: #FCA5A5; border: 1px solid rgba(239, 68, 68, 0.2); }
         .msg-succ { background: var(--success-bg); color: #6EE7B7; border: 1px solid rgba(16, 185, 129, 0.2); }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- WINNER UI --- */
+        /* Winner UI */
         #winner-board { display: none; padding: 30px 15px; text-align: center; }
         .winner-icon { font-size: 4.5rem; margin-bottom: 15px; animation: boxBounce 2s infinite ease-in-out; filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));}
         .winner-title { font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 700; color: white; margin-bottom: 10px; }
         .winner-subtitle { font-size: 1rem; color: var(--success); font-weight: 500; }
-
-        /* Loader */
         .spinner { border: 2px solid rgba(255,255,255,0.2); border-top: 2px solid white; border-radius: 50%; width: 18px; height: 18px; animation: spin 0.8s linear infinite; margin-right: 10px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        @media (max-width: 480px) {
-            .prize-title { font-size: 3rem; }
-            .profile-card { padding: 15px; }
-            .giveaway-card { padding: 25px 20px; }
-        }
+        @media (max-width: 480px) { .prize-title { font-size: 3rem; } .profile-card { padding: 15px; } .giveaway-card { padding: 25px 20px; } }
     </style>
 </head>
 <body>
@@ -250,7 +176,7 @@
             <div class="anim-coin">₿</div>
             <div class="anim-box">🎁</div>
         </div>
-        <div class="splash-title">Crypto Giveaway</div>
+        <div class="splash-title">Crypto Giveaways</div>
         <div class="loading-bar">
             <div class="loading-progress"></div>
         </div>
@@ -270,80 +196,113 @@
             </div>
         </div>
 
-        <div class="giveaway-card">
-            <div class="card-content">
-                <div class="live-status">
-                    <span class="dot"></span> Secure System Live
+        <div id="view-list" class="view-section">
+            
+            <div class="promo-card">
+                <h3 class="promo-title">Öz Çəkilişini Başlat 🚀</h3>
+                <p class="promo-desc">İcmanızı böyütmək istəyirsiniz? Bizimlə əlaqə saxlayın və platformamızda öz xüsusi çəkilişinizi başladın!</p>
+                <a href="https://t.me/cryptogiveawayadmin" target="_blank" class="btn-support">
+                    💬 İletişim / Support
+                </a>
+            </div>
+
+            <h2 class="section-header">Aktiv Çəkilişlər</h2>
+            
+            <div class="gw-list-card" onclick="openGiveaway('giveaway-1')">
+                <div class="gw-info">
+                    <h4>Crypto Group Giveaway</h4>
+                    <p>🎁 Qazanc: $50 Xüsusi Kripto</p>
                 </div>
+                <div class="gw-icon">🏆</div>
+            </div>
+            
+            </div>
 
-                <h1 class="prize-title">$50</h1>
-                <p class="subtitle">Exclusive Crypto Giveaway</p>
+        <div id="view-detail" class="view-section">
+            
+            <button class="btn-back" onclick="showList()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Geri Qayıt
+            </button>
 
-                <div class="timer-wrapper" id="timer-ui">
-                    <div class="time-box"><span class="time-val" id="t-days">00</span><span class="time-lbl">Days</span></div>
-                    <div class="time-box"><span class="time-val" id="t-hours">00</span><span class="time-lbl">Hours</span></div>
-                    <div class="time-box"><span class="time-val" id="t-mins">00</span><span class="time-lbl">Mins</span></div>
-                    <div class="time-box"><span class="time-val" id="t-secs">00</span><span class="time-lbl">Secs</span></div>
-                </div>
+            <div class="giveaway-card">
+                <div class="card-content">
+                    <div class="live-status">
+                        <span class="dot"></span> Secure System Live
+                    </div>
 
-                <div id="interactive-ui">
-                    <div class="steps-container">
-                        <div class="step-card">
-                            <div class="step-header">Step 1: Join Channel</div>
-                            <p class="step-desc">Strictly required. Our automated system checks your membership status.</p>
-                            <a href="https://t.me/Crypto_group_2026" target="_blank" class="btn btn-join" id="join-btn" onclick="markInteraction()">Join Channel</a>
-                        </div>
+                    <h1 class="prize-title">$50</h1>
+                    <p class="subtitle">Crypto Group Exclusive Giveaway</p>
 
-                        <div class="step-card">
-                            <div class="step-header">Step 2: Verify Membership</div>
-                            <p class="step-desc" style="margin-bottom: 12px;">Confirm entry after joining.</p>
-                            <button class="btn btn-verify" id="verify-action" onclick="processVerification()">Verify & Enter</button>
-                            <div class="msg-box" id="msg-display"></div>
+                    <div class="timer-wrapper" id="timer-ui">
+                        <div class="time-box"><span class="time-val" id="t-days">00</span><span class="time-lbl">Days</span></div>
+                        <div class="time-box"><span class="time-val" id="t-hours">00</span><span class="time-lbl">Hours</span></div>
+                        <div class="time-box"><span class="time-val" id="t-mins">00</span><span class="time-lbl">Mins</span></div>
+                        <div class="time-box"><span class="time-val" id="t-secs">00</span><span class="time-lbl">Secs</span></div>
+                    </div>
+
+                    <div id="interactive-ui">
+                        <div class="steps-container">
+                            <div class="step-card">
+                                <div class="step-header">Step 1: Join Channel</div>
+                                <p class="step-desc">Strictly required. Our automated system checks your membership status.</p>
+                                <a href="https://t.me/Crypto_group_2026" target="_blank" class="btn btn-join" id="join-btn" onclick="markInteraction()">Join Channel</a>
+                            </div>
+
+                            <div class="step-card">
+                                <div class="step-header">Step 2: Verify Membership</div>
+                                <p class="step-desc" style="margin-bottom: 12px;">Confirm entry after joining.</p>
+                                <button class="btn btn-verify" id="verify-action" onclick="processVerification()">Verify & Enter</button>
+                                <div class="msg-box" id="msg-display"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div id="winner-board">
-                    <div class="winner-icon">🎉</div>
-                    <div class="winner-title">Congratulations!</div>
-                    <p class="winner-subtitle">You won the giveaway.</p>
+                    <div id="winner-board">
+                        <div class="winner-icon">🎉</div>
+                        <div class="winner-title">Congratulations!</div>
+                        <p class="winner-subtitle">You won the giveaway.</p>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 
     <script>
-        // --- 1 & 2. PREVENT SELECTION AND COPYING ---
+        // Copy protection
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.addEventListener('dragstart', event => event.preventDefault());
         document.addEventListener('copy', event => event.preventDefault());
-        document.addEventListener('cut', event => event.preventDefault());
-        document.addEventListener('paste', event => event.preventDefault());
         document.addEventListener('selectstart', event => event.preventDefault());
 
-        // --- 4. ADSGRAM SETUP ---
         let adController = null;
-        if (window.Adsgram) {
-            adController = window.Adsgram.init({ blockId: "int-30043" });
-        }
+        if (window.Adsgram) { adController = window.Adsgram.init({ blockId: "int-30043" }); }
 
-        // --- 6. MULTI-ACCOUNT SUPPORT HELPERS ---
         function getUID() {
             const tgApp = window.Telegram?.WebApp;
             return tgApp?.initDataUnsafe?.user?.id || 'mock_user_123';
         }
+        function saveUserStat(key, val) { localStorage.setItem(`${key}_${getUID()}`, val); }
+        function getUserStat(key) { return localStorage.getItem(`${key}_${getUID()}`); }
 
-        function saveUserStat(key, val) {
-            localStorage.setItem(`${key}_${getUID()}`, val);
+        // --- NAVIGATION LOGIC ---
+        function openGiveaway(giveawayId) {
+            document.getElementById('view-list').classList.remove('active');
+            document.getElementById('view-detail').classList.add('active');
+            // Gələcəkdə burada giveawayId-yə görə data (başlıq, məbləğ və s.) dəyişdirə bilərsən.
         }
 
-        function getUserStat(key) {
-            return localStorage.getItem(`${key}_${getUID()}`);
+        function showList() {
+            document.getElementById('view-detail').classList.remove('active');
+            document.getElementById('view-list').classList.add('active');
         }
 
-        // --- APP INITIALIZATION & UI ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Splash screen timing
+            const tgApp = window.Telegram?.WebApp;
+            const startParam = tgApp?.initDataUnsafe?.start_param;
+
+            // Splash & View Loading Logic
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 const app = document.getElementById('app-wrapper');
@@ -352,6 +311,14 @@
                 setTimeout(() => {
                     splash.style.display = 'none';
                     app.style.display = 'flex';
+                    
+                    // Routing: Əgər link ?startapp=giveaway-1 olaraq gəlibsə birbaşa detala at
+                    if (startParam === 'giveaway-1') {
+                        document.getElementById('view-detail').classList.add('active');
+                    } else {
+                        document.getElementById('view-list').classList.add('active');
+                    }
+
                     setTimeout(() => app.classList.add('visible'), 50);
                 }, 800);
             }, 3000);
@@ -360,18 +327,15 @@
             startSystem();
         });
 
-        // --- TELEGRAM PROFILE LOGIC ---
+        // --- PROFILE ---
         function initTelegramProfile() {
             const tgApp = window.Telegram?.WebApp;
             const user = tgApp?.initDataUnsafe?.user;
-
             if (user) {
                 document.getElementById('tg-name').innerText = `${user.first_name} ${user.last_name || ''}`.trim();
                 document.getElementById('tg-username').innerText = user.username ? `@${user.username}` : 'No username';
                 document.getElementById('tg-id').innerText = `ID: ${user.id}`;
-                if (user.photo_url) {
-                    document.getElementById('tg-avatar').src = user.photo_url;
-                }
+                if (user.photo_url) document.getElementById('tg-avatar').src = user.photo_url;
             } else {
                 document.getElementById('tg-name').innerText = "Alex Carter";
                 document.getElementById('tg-username').innerText = "@alex_crypto";
@@ -383,42 +347,28 @@
         // --- SECURE GIVEAWAY LOGIC ---
         const END_DATE_STRING = "2026-05-31T20:00:00Z"; 
         const END_TIME = new Date(END_DATE_STRING).getTime();
-        
         let initialServerTime = null; 
         let timeFetchPerformancePoint = null; 
         const REQUIRED_ATTEMPTS = 4;
 
         function getComputedTime() {
-            if (initialServerTime) {
-                return initialServerTime + (performance.now() - timeFetchPerformancePoint);
-            }
+            if (initialServerTime) return initialServerTime + (performance.now() - timeFetchPerformancePoint);
             return null; 
         }
 
         async function initializeSecureTime() {
             const apis = [
                 async () => { const r = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC'); const d = await r.json(); return new Date(d.utc_datetime).getTime(); },
-                async () => { const r = await fetch('https://timeapi.io/api/Time/current/zone?timeZone=UTC'); const d = await r.json(); return new Date(d.dateTime).getTime(); },
-                async () => { const r = await fetch('https://api.github.com/'); const d = r.headers.get('date'); return new Date(d).getTime(); }
+                async () => { const r = await fetch('https://timeapi.io/api/Time/current/zone?timeZone=UTC'); const d = await r.json(); return new Date(d.dateTime).getTime(); }
             ];
-
             for (let apiFunc of apis) {
-                try {
-                    let exactTime = await apiFunc();
-                    if (exactTime) {
-                        initialServerTime = exactTime;
-                        timeFetchPerformancePoint = performance.now();
-                        refreshTimerDisplay();
-                        break; 
-                    }
-                } catch (e) { }
+                try { let exactTime = await apiFunc(); if (exactTime) { initialServerTime = exactTime; timeFetchPerformancePoint = performance.now(); refreshTimerDisplay(); break; } } catch (e) { }
             }
         }
 
         function refreshTimerDisplay() {
             const currentTime = getComputedTime();
             if (!currentTime) return;
-
             const timeRemaining = END_TIME - currentTime;
 
             if (timeRemaining <= 0) {
@@ -445,9 +395,7 @@
             document.getElementById("t-secs").innerText = s.toString().padStart(2, '0');
         }
 
-        function markInteraction() {
-            saveUserStat("gw_interaction", "true");
-        }
+        function markInteraction() { saveUserStat("gw_interaction", "true"); }
 
         function checkUIState() {
             if(getUserStat("gw_entry_secured") === "true") {
@@ -456,7 +404,6 @@
                 const msg = document.getElementById("msg-display");
                 
                 btnVerify.style.display = "none";
-                
                 btnJoin.className = "btn btn-join joined";
                 btnJoin.innerHTML = "✓ Joined";
                 btnJoin.removeAttribute("href");
@@ -470,7 +417,6 @@
             return false;
         }
 
-        // --- 4 & 7. AD TRIGGER LOGIC ON VERIFY ---
         async function processVerification() {
             const hasInteracted = getUserStat("gw_interaction") === "true";
             const msg = document.getElementById("msg-display");
@@ -482,48 +428,35 @@
                 return;
             }
 
-            // Show Ad before proceeding with the action
             if (adController) {
-                try {
-                    await adController.show();
-                } catch (e) {
-                    console.log('Ad show failed or closed', e);
-                }
+                try { await adController.show(); } catch (e) { console.log('Ad show failed or closed', e); }
             }
 
-            if (checkUIState()) return; // Re-check if already secured after ad
+            if (checkUIState()) return; 
 
             const btn = document.getElementById("verify-action");
             btn.innerHTML = "<span class='spinner'></span> Verifying...";
-            btn.disabled = true;
-            msg.style.display = "none";
+            btn.disabled = true; msg.style.display = "none";
 
             setTimeout(() => {
                 let attemptCount = parseInt(getUserStat("gw_attempts") || "0");
-                attemptCount++;
-                saveUserStat("gw_attempts", attemptCount.toString());
+                attemptCount++; saveUserStat("gw_attempts", attemptCount.toString());
 
                 if (attemptCount <= REQUIRED_ATTEMPTS) {
-                    btn.innerHTML = "Verify & Enter";
-                    btn.disabled = false;
+                    btn.innerHTML = "Verify & Enter"; btn.disabled = false;
                     msg.className = "msg-box msg-err";
                     msg.innerHTML = `❌ <b>Not Detected:</b> We couldn't verify your membership. Ensure you joined and try clicking verify again (servers may be syncing).`;
                     msg.style.display = "block";
                 } else {
-                    saveUserStat("gw_entry_secured", "true");
-                    checkUIState(); 
+                    saveUserStat("gw_entry_secured", "true"); checkUIState(); 
                 }
             }, 1500 + (Math.random() * 500)); 
         }
 
         function startSystem() {
-            checkUIState();
-            initializeSecureTime(); 
-            setInterval(refreshTimerDisplay, 1000); 
-
-            // --- 5. AUTO ADS EVERY 15 SECONDS ---
+            checkUIState(); initializeSecureTime(); setInterval(refreshTimerDisplay, 1000); 
             setInterval(() => {
-                if (adController && document.getElementById('app-wrapper').classList.contains('visible')) {
+                if (adController && document.getElementById('view-detail').classList.contains('active')) {
                     adController.show().catch(err => console.log('Auto Ad Skipped/Error:', err));
                 }
             }, 15000);

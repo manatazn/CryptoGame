@@ -1,21 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="az">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>$50 Crypto Exclusive Giveaway</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+    <title>$50 TON Eksklüziv Hədiyyə</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0b0f19;
-            --card-bg: rgba(22, 30, 46, 0.85);
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
-            --text-light: #f8fafc;
-            --text-gray: #94a3b8;
-            --success: #10b981;
-            --error: #ef4444;
-            --gold: #fbbf24;
+            --bg-main: #0B0E14;
+            --card-bg: #151A23;
+            --primary: #0088CC; /* TON Blue */
+            --primary-hover: #0077B3;
+            --text-light: #F8FAFC;
+            --text-gray: #A0AEC0;
+            --border-color: #2D3748;
+            --success: #10B981;
+            --error: #EF4444;
+            --accent: #FBBF24;
         }
 
         * {
@@ -26,210 +27,219 @@
         }
 
         body {
-            background: radial-gradient(circle at top, #1e293b 0%, var(--bg-dark) 100%);
+            background-color: var(--bg-main);
             color: var(--text-light);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 20px;
-            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Glassmorphism Container */
+        /* Modern Flat Card */
         .giveaway-card {
             background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             width: 100%;
-            max-width: 520px;
-            border-radius: 24px;
-            padding: 40px 35px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            max-width: 480px;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
             text-align: center;
             position: relative;
+        }
+
+        /* Minimal Live Indicator */
+        .live-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--text-gray);
+            font-weight: 500;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 12px;
+            border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Live Indicator */
-        .live-status {
-            position: absolute;
-            top: 20px;
-            left: 25px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.75rem;
-            color: var(--text-gray);
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
         .dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             background-color: var(--success);
             border-radius: 50%;
-            box-shadow: 0 0 10px var(--success);
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(0.95); opacity: 0.5; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(0.95); opacity: 0.5; }
+            box-shadow: 0 0 8px var(--success);
         }
 
         .prize-title {
             font-family: 'Poppins', sans-serif;
-            color: var(--gold);
-            font-size: 2.8rem;
-            font-weight: 800;
-            margin-top: 15px;
-            margin-bottom: 5px;
-            text-shadow: 0 0 30px rgba(251, 191, 36, 0.2);
+            color: var(--text-light);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
 
-        .subtitle { color: var(--text-gray); font-size: 1rem; margin-bottom: 35px; }
+        .prize-title span {
+            color: var(--primary);
+        }
 
-        /* Timer UI */
+        .subtitle { 
+            color: var(--text-gray); 
+            font-size: 0.95rem; 
+            margin-bottom: 30px; 
+        }
+
+        /* Clean Timer UI */
         .timer-wrapper {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 40px;
+            gap: 10px;
+            margin-bottom: 35px;
         }
 
         .time-box {
-            background: rgba(11, 15, 25, 0.6);
-            padding: 15px 10px;
-            border-radius: 14px;
-            min-width: 75px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px 10px;
+            border-radius: 12px;
+            min-width: 70px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .time-val {
             font-family: 'Poppins', sans-serif;
-            font-size: 2rem;
-            font-weight: 800;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--text-light);
             display: block;
-            background: linear-gradient(to bottom, #ffffff, #a1a1aa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .time-lbl {
             font-size: 0.7rem;
             color: var(--text-gray);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 4px;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
             display: block;
         }
 
-        /* Action Steps */
-        .steps-container { text-align: left; margin-bottom: 25px; }
-        
-        .step-card {
-            background: rgba(255, 255, 255, 0.02);
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 16px;
-            border-left: 4px solid var(--primary);
-            transition: transform 0.2s ease;
+        /* Static Steps */
+        .steps-container { 
+            text-align: left; 
+            margin-bottom: 25px; 
         }
         
-        .step-card:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.04); }
+        .step-card {
+            background: var(--bg-main);
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-color);
+        }
 
-        .step-header { font-family: 'Poppins', sans-serif; font-weight: 600; margin-bottom: 8px; font-size: 1.05rem; }
-        .step-desc { font-size: 0.85rem; color: var(--text-gray); margin-bottom: 15px; line-height: 1.4; }
+        .step-header { 
+            font-weight: 600; 
+            margin-bottom: 6px; 
+            font-size: 1rem; 
+            color: var(--text-light);
+        }
+        
+        .step-desc { 
+            font-size: 0.85rem; 
+            color: var(--text-gray); 
+            margin-bottom: 15px; 
+            line-height: 1.5; 
+        }
 
-        /* Buttons */
+        /* Solid Buttons - No Bouncy Hover */
         .btn {
             display: flex;
             justify-content: center;
             align-items: center;
             width: 100%;
-            padding: 16px 20px;
-            border-radius: 12px;
+            padding: 14px 20px;
+            border-radius: 10px;
             border: none;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            font-family: 'Inter', sans-serif;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: background-color 0.2s ease;
             text-decoration: none;
-            color: white;
         }
 
         .btn-join {
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid var(--primary);
-            color: var(--primary);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
         }
 
         .btn-join:hover {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .btn-verify {
-            background: linear-gradient(135deg, var(--primary), #6366f1);
-            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
+            background: var(--primary);
+            color: white;
         }
 
         .btn-verify:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 25px rgba(59, 130, 246, 0.4);
+            background: var(--primary-hover);
         }
 
-        .btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; }
+        .btn:disabled { 
+            opacity: 0.6; 
+            cursor: not-allowed; 
+        }
 
-        /* Status Messages */
+        /* Clean Status Messages */
         .msg-box {
             margin-top: 15px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             display: none;
-            padding: 15px;
-            border-radius: 12px;
+            padding: 12px 15px;
+            border-radius: 10px;
             line-height: 1.5;
-            animation: fadeIn 0.4s ease;
         }
         
-        .msg-err { background: rgba(239, 68, 68, 0.05); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.2); }
-        .msg-succ { background: rgba(16, 185, 129, 0.05); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .msg-err { 
+            background: rgba(239, 68, 68, 0.1); 
+            color: #FCA5A5; 
+            border: 1px solid rgba(239, 68, 68, 0.2); 
+        }
+        .msg-succ { 
+            background: rgba(16, 185, 129, 0.1); 
+            color: #6EE7B7; 
+            border: 1px solid rgba(16, 185, 129, 0.2); 
+        }
 
-        /* Winner Section */
+        /* Minimal Winner Section */
         #winner-board {
             display: none;
             background: rgba(16, 185, 129, 0.05);
             border: 1px solid rgba(16, 185, 129, 0.2);
-            padding: 35px 20px;
-            border-radius: 16px;
+            padding: 30px 20px;
+            border-radius: 14px;
             margin-top: 20px;
-            animation: fadeIn 1s ease-in-out;
         }
 
-        .winner-lbl { color: var(--success); font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px;}
-        .winner-user { font-family: 'Poppins', sans-serif; font-size: 2.2rem; font-weight: 800; color: white; margin-bottom: 5px; text-shadow: 0 0 20px rgba(16, 185, 129, 0.4);}
+        .winner-lbl { color: var(--success); font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;}
+        .winner-user { font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 700; color: white; margin-bottom: 5px; }
         .winner-desc { font-size: 0.85rem; color: var(--text-gray); }
 
         /* Loader */
         .spinner {
-            border: 3px solid rgba(255,255,255,0.2);
-            border-top: 3px solid white;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-top: 2px solid white;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
             animation: spin 0.8s linear infinite;
-            margin-right: 10px;
+            margin-right: 8px;
         }
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
     </style>
 </head>
@@ -237,32 +247,32 @@
 
     <div class="giveaway-card">
         <div class="live-status">
-            <span class="dot"></span> Secure API Live
+            <span class="dot"></span> Təhlükəsiz Sistem
         </div>
 
-        <h1 class="prize-title">$50 Crypto</h1>
-        <p class="subtitle">Exclusive Community Giveaway</p>
+        <h1 class="prize-title">$50 <span>TON</span></h1>
+        <p class="subtitle">Eksklüziv İcma Hədiyyəsi</p>
 
         <!-- Timer Board -->
         <div class="timer-wrapper" id="timer-ui">
-            <div class="time-box"><span class="time-val" id="t-days">00</span><span class="time-lbl">Days</span></div>
-            <div class="time-box"><span class="time-val" id="t-hours">00</span><span class="time-lbl">Hours</span></div>
-            <div class="time-box"><span class="time-val" id="t-mins">00</span><span class="time-lbl">Mins</span></div>
-            <div class="time-box"><span class="time-val" id="t-secs">00</span><span class="time-lbl">Secs</span></div>
+            <div class="time-box"><span class="time-val" id="t-days">00</span><span class="time-lbl">Gün</span></div>
+            <div class="time-box"><span class="time-val" id="t-hours">00</span><span class="time-lbl">Saat</span></div>
+            <div class="time-box"><span class="time-val" id="t-mins">00</span><span class="time-lbl">Dəq</span></div>
+            <div class="time-box"><span class="time-val" id="t-secs">00</span><span class="time-lbl">San</span></div>
         </div>
 
         <!-- Interactive Steps -->
         <div id="interactive-ui">
             <div class="steps-container">
                 <div class="step-card">
-                    <div class="step-header">Step 1: Join Official Channel</div>
-                    <p class="step-desc">Strictly required. Our automated system checks your membership status upon entry.</p>
-                    <a href="https://t.me/Crypto_group_2026" target="_blank" class="btn btn-join" onclick="markInteraction()">Join Channel</a>
+                    <div class="step-header">Addım 1: Rəsmi Kanala Qoşulun</div>
+                    <p class="step-desc">Mütləq tələbdir. İştirak etmək üçün sistem tərəfindən kanal üzvlüyünüz yoxlanılır.</p>
+                    <a href="https://t.me/Crypto_group_2026" target="_blank" class="btn btn-join" onclick="markInteraction()">Kanala Qoşul</a>
                 </div>
 
                 <div class="step-card">
-                    <div class="step-header">Step 2: Verify Membership</div>
-                    <button class="btn btn-verify" id="verify-action" onclick="processVerification()">Verify & Enter Giveaway</button>
+                    <div class="step-header">Addım 2: İştirakı Təsdiqləyin</div>
+                    <button class="btn btn-verify" id="verify-action" onclick="processVerification()">Yoxla və İştirak Et</button>
                     <div class="msg-box" id="msg-display"></div>
                 </div>
             </div>
@@ -270,9 +280,9 @@
 
         <!-- Winner Board (Hidden by default) -->
         <div id="winner-board">
-            <div class="winner-lbl">Giveaway Ended</div>
+            <div class="winner-lbl">Hədiyyə Başa Çatdı</div>
             <div class="winner-user">@Ney9773883</div>
-            <p class="winner-desc">The winner has been strictly verified securely via API.</p>
+            <p class="winner-desc">Qalib API vasitəsilə təhlükəsiz şəkildə təsdiqlənmişdir.</p>
         </div>
     </div>
 
@@ -285,16 +295,12 @@
         let timeFetchPerformancePoint = null; 
         let userInteracted = false;
         let attemptCount = 0;
-        const REQUIRED_ATTEMPTS = 4; // 4 failure attempts, success on 5th
+        const REQUIRED_ATTEMPTS = 4;
 
-        // Immediately update timer based on local time so UI doesn't look blank
-        // while API fetches data in the background silently.
         function getComputedTime() {
             if (initialServerTime) {
-                // Secure API time based on performance to block local clock changes
                 return initialServerTime + (performance.now() - timeFetchPerformancePoint);
             }
-            // Fallback for the first ~0.5 seconds before API loads
             return Date.now(); 
         }
 
@@ -311,9 +317,9 @@
                     if (exactTime) {
                         initialServerTime = exactTime;
                         timeFetchPerformancePoint = performance.now();
-                        break; // Stop fetching once successful
+                        break; 
                     }
-                } catch (e) { /* Silent fail, try next */ }
+                } catch (e) { }
             }
         }
 
@@ -350,7 +356,7 @@
                 const msg = document.getElementById("msg-display");
                 btn.style.display = "none";
                 msg.className = "msg-box msg-succ";
-                msg.innerHTML = "✅ <b>Already Entered:</b> You have successfully secured your spot in this giveaway.";
+                msg.innerHTML = "✅ <b>Təsdiqlənib:</b> Siz artıq bu hədiyyədə iştirakınızı uğurla təsdiqləmisiniz.";
                 msg.style.display = "block";
                 return true;
             }
@@ -365,44 +371,40 @@
 
             if (!userInteracted) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = "⚠️ <b>Action Required:</b> Please click the 'Join Channel' button first before verifying.";
+                msg.innerHTML = "⚠️ <b>Diqqət:</b> Zəhmət olmasa yoxlamadan öncə ilk addımda 'Kanala Qoşul' butonuna klikləyin.";
                 msg.style.display = "block";
                 return;
             }
 
             // UI Loading state
-            btn.innerHTML = "<span class='spinner'></span> Connecting API...";
+            btn.innerHTML = "<span class='spinner'></span> Yoxlanır...";
             btn.disabled = true;
             msg.style.display = "none";
 
-            // Simulated Backend Processing Delay
             setTimeout(() => {
                 attemptCount++;
 
                 if (attemptCount <= REQUIRED_ATTEMPTS) {
-                    // Professional Rejection Message
-                    btn.innerHTML = "Verify & Enter Giveaway";
+                    btn.innerHTML = "Yoxla və İştirak Et";
                     btn.disabled = false;
                     msg.className = "msg-box msg-err";
-                    msg.innerHTML = `❌ <b>Verification Failed:</b> We couldn't detect your membership status. <br><br>Please ensure you have joined the channel and try again. If you are already a member, our servers might be experiencing sync delays—please click verify a few more times.`;
+                    msg.innerHTML = `❌ <b>Yoxlama Alınmadı:</b> Kanal üzvlüyünüzü təsdiqləyə bilmədik. <br><br>Zəhmət olmasa kanala qoşulduğunuzdan əmin olun və yenidən cəhd edin. Əgər artıq qoşulmusunuzsa, server gecikməsi ola bilər, yenidən yoxla butonuna klikləyin.`;
                     msg.style.display = "block";
                 } else {
-                    // Success Entry
                     btn.style.display = "none";
                     msg.className = "msg-box msg-succ";
-                    msg.innerHTML = "🎉 <b>Verification Successful!</b> Your membership is confirmed and you are officially in the draw. Best of luck!";
+                    msg.innerHTML = "🎉 <b>Uğurlu!</b> Kanal üzvlüyünüz təsdiqləndi və iştirakınız qeydə alındı. Uğurlar!";
                     msg.style.display = "block";
                     localStorage.setItem("gw_entry_secured", "true");
                 }
-            }, 1800 + (Math.random() * 800)); // Natural variable delay (1.8s - 2.6s)
+            }, 1800 + (Math.random() * 800)); 
         }
 
-        // Boot system
         function startSystem() {
             isAlreadyVerified();
-            refreshTimerDisplay(); // Render instantly with local time fallback
+            refreshTimerDisplay(); 
             setInterval(refreshTimerDisplay, 1000); 
-            initializeSecureTime(); // Fetch strict API time silently in background
+            initializeSecureTime(); 
         }
 
         startSystem();

@@ -293,11 +293,12 @@
         let attemptCount = 0;
         const REQUIRED_ATTEMPTS = 4;
 
+        // TƏMİZLƏNİB: Artıq Date.now() (cihaz saatı) ehtiyat kimi istifadə olunmur
         function getComputedTime() {
             if (initialServerTime) {
                 return initialServerTime + (performance.now() - timeFetchPerformancePoint);
             }
-            return Date.now(); 
+            return null; // Əgər API hələ yüklənməyibsə, heç bir vaxt qaytarmır
         }
 
         async function initializeSecureTime() {
@@ -313,6 +314,8 @@
                     if (exactTime) {
                         initialServerTime = exactTime;
                         timeFetchPerformancePoint = performance.now();
+                        // API-dən vaxtı aldıqdan sonra taymeri həmən yeniləyirik
+                        refreshTimerDisplay();
                         break; 
                     }
                 } catch (e) { }
@@ -321,6 +324,10 @@
 
         function refreshTimerDisplay() {
             const currentTime = getComputedTime();
+            
+            // TƏMİZLƏNİB: Əgər API vaxtı hələ gəlməyibsə (null-dursa), hesablama aparma
+            if (!currentTime) return;
+
             const timeRemaining = END_TIME - currentTime;
 
             if (timeRemaining <= 0) {
@@ -343,7 +350,6 @@
 
         function markInteraction() {
             userInteracted = true;
-            // Removed the code that hides the message box here, so the layout stays stable.
         }
 
         function isAlreadyVerified() {
@@ -398,9 +404,9 @@
 
         function startSystem() {
             isAlreadyVerified();
-            refreshTimerDisplay(); 
-            setInterval(refreshTimerDisplay, 1000); 
             initializeSecureTime(); 
+            // Taymeri hər saniyə işə salır, lakin API-dən məlumat gələnə qədər gözləyəcək
+            setInterval(refreshTimerDisplay, 1000); 
         }
 
         startSystem();

@@ -2,27 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>$50 Crypto Exclusive Giveaway</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+
     <style>
         :root {
             --bg-main: #0B0E14;
             --card-bg: #151A23;
-            --card-border: rgba(255, 255, 255, 0.08);
-            --primary: #3b82f6;
-            --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            --primary: #3b82f6; 
+            --primary-hover: #2563eb;
             --text-light: #F8FAFC;
-            --text-gray: #94A3B8;
+            --text-gray: #A0AEC0;
+            --border-color: #2D3748;
             --success: #10B981;
-            --success-bg: rgba(16, 185, 129, 0.1);
             --error: #EF4444;
             --accent: #FBBF24;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            /* Kopyalamanın və uzun basanda çıxan menyuların qarşısını almaq üçün */
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
 
         body {
             background-color: var(--bg-main);
@@ -36,300 +50,331 @@
             overflow-x: hidden;
         }
 
-        /* --- SPLASH SCREEN --- */
-        #splash-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--bg-main);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
-        }
-
-        .logo-anim-container {
-            position: relative;
-            width: 80px; height: 100px;
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .anim-coin {
-            width: 32px; height: 32px;
-            background: #FBBF24;
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            color: #78350F; font-weight: bold; font-family: 'Poppins', sans-serif;
-            position: absolute; top: 0;
-            box-shadow: 0 0 15px rgba(251, 191, 36, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.5);
-            animation: dropCoin 2s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
-        }
-
-        .anim-box {
-            font-size: 3rem;
-            position: absolute; bottom: 0;
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
-            animation: boxBounce 2s ease-in-out infinite;
-        }
-
-        @keyframes dropCoin {
-            0% { transform: translateY(-40px) rotateY(0deg) scale(0.8); opacity: 0; }
-            30% { opacity: 1; transform: translateY(-10px) rotateY(180deg) scale(1.1); }
-            60% { transform: translateY(30px) rotateY(360deg) scale(0.5); opacity: 0; }
-            100% { transform: translateY(30px) scale(0); opacity: 0; }
-        }
-
-        @keyframes boxBounce {
-            0%, 50%, 100% { transform: translateY(0) scale(1); }
-            55% { transform: translateY(5px) scale(1.05, 0.95); }
-            65% { transform: translateY(-5px) scale(0.95, 1.05); }
-        }
-
-        .splash-title { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; color: white; letter-spacing: 0.5px; margin-bottom: 15px;}
-        
-        .loading-bar { width: 150px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; position: relative;}
-        .loading-progress { width: 40%; height: 100%; background: var(--primary); border-radius: 4px; position: absolute; left: -40%; animation: loadSlide 1.5s infinite ease-in-out; }
-        
-        @keyframes loadSlide { 100% { left: 100%; } }
-
-        /* --- MAIN APP WRAPPER --- */
-        #app-wrapper {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            width: 100%;
-            max-width: 440px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            display: none; /* Hidden until splash ends */
-        }
-
-        #app-wrapper.visible { opacity: 1; transform: translateY(0); display: flex; }
-
-        /* --- PROFILE CARD --- */
-        .profile-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-        }
-
-        .avatar-container { position: relative; }
-        .profile-avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); background: #2D3748; }
-        .status-dot { position: absolute; bottom: 2px; right: 2px; width: 12px; height: 12px; background: var(--success); border-radius: 50%; border: 2px solid var(--card-bg); }
-
-        .profile-info { flex: 1; }
-        .profile-name { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; color: white; margin-bottom: 2px; }
-        .profile-handle { font-size: 0.85rem; color: var(--primary); font-weight: 500; }
-        .profile-id { font-size: 0.75rem; color: var(--text-gray); margin-top: 4px; background: rgba(255,255,255,0.05); display: inline-block; padding: 2px 8px; border-radius: 8px; }
-
-        /* --- GIVEAWAY CARD --- */
+        /* Modern Flat Card & Animasiya */
         .giveaway-card {
             background: var(--card-bg);
-            border-radius: 24px;
-            padding: 35px 25px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--card-border);
+            width: 100%;
+            max-width: 480px;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--border-color);
             text-align: center;
             position: relative;
-            overflow: hidden;
+            /* Başlanğıc Animasiyası */
+            opacity: 0;
+            transform: translateY(30px);
+            animation: cardEntrance 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
-        /* Subtle glow background */
-        .giveaway-card::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.05) 0%, transparent 60%);
-            z-index: 0; pointer-events: none;
+        @keyframes cardEntrance {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .card-content { position: relative; z-index: 1; }
+        /* Elementlərin sırayla gəlməsi üçün gecikmələr */
+        .live-status { animation: fadeIn 0.8s ease forwards 0.2s; opacity: 0; }
+        .prize-title { animation: fadeIn 0.8s ease forwards 0.3s; opacity: 0; }
+        .subtitle { animation: fadeIn 0.8s ease forwards 0.4s; opacity: 0; }
+        .timer-wrapper { animation: fadeIn 0.8s ease forwards 0.5s; opacity: 0; }
+        .steps-container { animation: fadeIn 0.8s ease forwards 0.6s; opacity: 0; }
 
-        .live-status { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #E2E8F0; font-weight: 600; margin-bottom: 25px; background: rgba(255, 255, 255, 0.05); padding: 8px 16px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(5px); }
-        .dot { width: 6px; height: 6px; background-color: var(--success); border-radius: 50%; box-shadow: 0 0 10px var(--success); animation: pulse 2s infinite; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Minimal Live Indicator */
+        .live-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--text-gray);
+            font-weight: 500;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--success);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .prize-title {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-light);
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle { 
+            color: var(--text-gray); 
+            font-size: 0.95rem; 
+            margin-bottom: 30px; 
+        }
+
+        /* Clean Timer UI */
+        .timer-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 35px;
+        }
+
+        .time-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px 10px;
+            border-radius: 12px;
+            min-width: 70px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.02);
+        }
+
+        .time-val {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--text-light);
+            display: block;
+        }
+
+        .time-lbl {
+            font-size: 0.7rem;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+            display: block;
+        }
+
+        /* Static Steps */
+        .steps-container { 
+            text-align: left; 
+            margin-bottom: 25px; 
+        }
         
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        .step-card {
+            background: var(--bg-main);
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease;
+        }
 
-        .prize-title { font-family: 'Poppins', sans-serif; color: white; font-size: 3.5rem; font-weight: 700; line-height: 1; margin-bottom: 5px; text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        .subtitle { color: var(--text-gray); font-size: 0.95rem; margin-bottom: 30px; font-weight: 500;}
+        .step-card:hover {
+            transform: translateY(-2px);
+        }
 
-        /* Timer UI */
-        .timer-wrapper { display: flex; justify-content: center; gap: 12px; margin-bottom: 35px; }
-        .time-box { background: rgba(0, 0, 0, 0.3); padding: 12px 0; border-radius: 14px; width: 65px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); }
-        .time-val { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 600; color: white; display: block; }
-        .time-lbl { font-size: 0.65rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; display: block; font-weight: 600;}
-
-        /* Interactive Steps */
-        .steps-container { text-align: left; margin-bottom: 10px; }
-        .step-card { background: rgba(0, 0, 0, 0.2); padding: 22px; border-radius: 18px; margin-bottom: 16px; border: 1px solid rgba(255, 255, 255, 0.04); transition: var(--transition); }
-        .step-card:hover { border-color: rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.3); }
+        .step-header { 
+            font-weight: 600; 
+            margin-bottom: 6px; 
+            font-size: 1rem; 
+            color: var(--text-light);
+        }
         
-        .step-header { font-family: 'Poppins', sans-serif; font-weight: 600; margin-bottom: 8px; font-size: 1.05rem; color: white; display: flex; align-items: center; justify-content: space-between;}
-        .step-desc { font-size: 0.85rem; color: var(--text-gray); margin-bottom: 18px; line-height: 1.6; }
+        .step-desc { 
+            font-size: 0.85rem; 
+            color: var(--text-gray); 
+            margin-bottom: 15px; 
+            line-height: 1.5; 
+        }
 
-        /* Buttons */
-        .btn { display: flex; justify-content: center; align-items: center; width: 100%; padding: 16px 20px; border-radius: 14px; border: none; font-size: 0.95rem; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: var(--transition); text-decoration: none; position: relative; overflow: hidden;}
-        
-        .btn-join { background: rgba(255, 255, 255, 0.08); color: white; border: 1px solid rgba(255, 255, 255, 0.1); }
-        .btn-join:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-2px); }
-        
-        .btn-verify { background: var(--primary-gradient); color: white; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); }
-        .btn-verify:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4); }
-        
-        .btn.joined, .btn.joined:hover { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); cursor: default; transform: none; box-shadow: none; }
-        .btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+        /* Solid Buttons */
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 10px;
+            border: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
 
-        /* Messages */
-        .msg-box { margin-top: 15px; font-size: 0.85rem; display: none; padding: 14px 16px; border-radius: 12px; line-height: 1.5; animation: fadeIn 0.3s ease; }
-        .msg-err { background: rgba(239, 68, 68, 0.1); color: #FCA5A5; border: 1px solid rgba(239, 68, 68, 0.2); }
-        .msg-succ { background: var(--success-bg); color: #6EE7B7; border: 1px solid rgba(16, 185, 129, 0.2); }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        .btn-join {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
 
-        /* --- WINNER UI --- */
-        #winner-board { display: none; padding: 30px 15px; text-align: center; }
-        .winner-icon { font-size: 4rem; margin-bottom: 15px; animation: boxBounce 2s infinite ease-in-out; }
-        .winner-title { font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 700; color: white; margin-bottom: 10px; }
-        .winner-subtitle { font-size: 1rem; color: var(--success); font-weight: 500; }
+        .btn-join:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.02);
+        }
+
+        .btn-verify {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-verify:hover {
+            background: var(--primary-hover);
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn:disabled { 
+            opacity: 0.6; 
+            cursor: not-allowed; 
+            transform: none;
+        }
+
+        /* Clean Status Messages */
+        .msg-box {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            display: none;
+            padding: 12px 15px;
+            border-radius: 10px;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .msg-err { 
+            background: rgba(239, 68, 68, 0.1); 
+            color: #FCA5A5; 
+            border: 1px solid rgba(239, 68, 68, 0.2); 
+        }
+        .msg-succ { 
+            background: rgba(16, 185, 129, 0.1); 
+            color: #6EE7B7; 
+            border: 1px solid rgba(16, 185, 129, 0.2); 
+        }
+
+        /* Minimal Winner Section */
+        #winner-board {
+            display: none;
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 30px 20px;
+            border-radius: 14px;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .winner-lbl { color: var(--success); font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;}
+        .winner-user { font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 700; color: white; margin-bottom: 5px; }
+        .winner-desc { font-size: 0.85rem; color: var(--text-gray); }
 
         /* Loader */
-        .spinner { border: 2px solid rgba(255,255,255,0.2); border-top: 2px solid white; border-radius: 50%; width: 18px; height: 18px; animation: spin 0.8s linear infinite; margin-right: 10px; }
+        .spinner {
+            border: 2px solid rgba(255,255,255,0.2);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        @media (max-width: 480px) {
-            .prize-title { font-size: 3rem; }
-            .profile-card { padding: 15px; }
-            .giveaway-card { padding: 25px 20px; }
+        /* Bütün linklərin default xüsusiyyətlərini əzmək */
+        a {
+            -webkit-touch-callout: none;
+            user-select: none;
         }
+
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;" ondragstart="return false;">
 
-    <div id="splash-screen">
-        <div class="logo-anim-container">
-            <div class="anim-coin">₿</div>
-            <div class="anim-box">🎁</div>
-        </div>
-        <div class="splash-title">Crypto Giveaway</div>
-        <div class="loading-bar">
-            <div class="loading-progress"></div>
-        </div>
-    </div>
-
-    <div id="app-wrapper">
-        
-        <div class="profile-card" id="profile-section">
-            <div class="avatar-container">
-                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%232D3748'/><circle cx='50' cy='40' r='20' fill='%234A5568'/><path d='M20 90 Q50 60 80 90' fill='%234A5568'/></svg>" class="profile-avatar" id="tg-avatar" alt="Avatar">
-                <div class="status-dot"></div>
-            </div>
-            <div class="profile-info">
-                <div class="profile-name" id="tg-name">Loading Profile...</div>
-                <div class="profile-handle" id="tg-username">@username</div>
-                <div class="profile-id" id="tg-id">ID: --------</div>
-            </div>
+    <div class="giveaway-card">
+        <div class="live-status">
+            <span class="dot"></span> Secure System Live
         </div>
 
-        <div class="giveaway-card">
-            <div class="card-content">
-                <div class="live-status">
-                    <span class="dot"></span> Secure System Live
+        <h1 class="prize-title">$50</h1>
+        <p class="subtitle">Exclusive Crypto Giveaway</p>
+
+        <div class="timer-wrapper" id="timer-ui">
+            <div class="time-box"><span class="time-val" id="t-days">00</span><span class="time-lbl">Days</span></div>
+            <div class="time-box"><span class="time-val" id="t-hours">00</span><span class="time-lbl">Hours</span></div>
+            <div class="time-box"><span class="time-val" id="t-mins">00</span><span class="time-lbl">Mins</span></div>
+            <div class="time-box"><span class="time-val" id="t-secs">00</span><span class="time-lbl">Secs</span></div>
+        </div>
+
+        <div id="interactive-ui">
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-header">Step 1: Join Official Channel</div>
+                    <p class="step-desc">Strictly required. Our automated system checks your membership status upon entry.</p>
+                    <a href="https://t.me/Crypto_group_2026" target="_blank" class="btn btn-join" onclick="markInteraction(event)">Join Channel</a>
                 </div>
 
-                <h1 class="prize-title">$50</h1>
-                <p class="subtitle">Exclusive Crypto Giveaway</p>
-
-                <div class="timer-wrapper" id="timer-ui">
-                    <div class="time-box"><span class="time-val" id="t-days">00</span><span class="time-lbl">Days</span></div>
-                    <div class="time-box"><span class="time-val" id="t-hours">00</span><span class="time-lbl">Hours</span></div>
-                    <div class="time-box"><span class="time-val" id="t-mins">00</span><span class="time-lbl">Mins</span></div>
-                    <div class="time-box"><span class="time-val" id="t-secs">00</span><span class="time-lbl">Secs</span></div>
-                </div>
-
-                <div id="interactive-ui">
-                    <div class="steps-container">
-                        <div class="step-card">
-                            <div class="step-header">Step 1: Join Channel</div>
-                            <p class="step-desc">Strictly required. Our automated system checks your membership status.</p>
-                            <a href="https://t.me/Crypto_group_2026" target="_blank" class="btn btn-join" id="join-btn" onclick="markInteraction()">Join Channel</a>
-                        </div>
-
-                        <div class="step-card">
-                            <div class="step-header">Step 2: Verify Membership</div>
-                            <p class="step-desc" style="margin-bottom: 12px;">Confirm entry after joining.</p>
-                            <button class="btn btn-verify" id="verify-action" onclick="processVerification()">Verify & Enter</button>
-                            <div class="msg-box" id="msg-display"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="winner-board">
-                    <div class="winner-icon">🎉</div>
-                    <div class="winner-title">Congratulations!</div>
-                    <p class="winner-subtitle">You won the giveaway.</p>
+                <div class="step-card">
+                    <div class="step-header">Step 2: Verify Membership</div>
+                    <button class="btn btn-verify" id="verify-action" onclick="processVerification()">Verify & Enter Giveaway</button>
+                    <div class="msg-box" id="msg-display"></div>
                 </div>
             </div>
+        </div>
+
+        <div id="winner-board">
+            <div class="winner-lbl">Giveaway Ended</div>
+            <div class="winner-user">@Ney9773883</div>
+            <p class="winner-desc">The winner has been strictly verified securely via API.</p>
         </div>
     </div>
 
     <script>
-        // --- APP INITIALIZATION & UI ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // Simulate loading time for splash screen
-            setTimeout(() => {
-                const splash = document.getElementById('splash-screen');
-                const app = document.getElementById('app-wrapper');
-                
-                splash.style.opacity = '0';
-                setTimeout(() => {
-                    splash.style.display = 'none';
-                    app.style.display = 'flex';
-                    // Trigger fade in
-                    setTimeout(() => app.classList.add('visible'), 50);
-                }, 600);
-            }, 2500);
+        // --- ADSGRAM CONFIGURATION ---
+        let AdController = null;
+        if (window.Adsgram) {
+            AdController = window.Adsgram.init({ blockId: "int-30043" });
+        }
 
-            initTelegramProfile();
-            startSystem();
-        });
-
-        // --- TELEGRAM PROFILE LOGIC ---
-        function initTelegramProfile() {
-            // Attempt to pull real data if running as a Telegram Mini App
-            const tgApp = window.Telegram?.WebApp;
-            const user = tgApp?.initDataUnsafe?.user;
-
-            if (user) {
-                // Real data found
-                document.getElementById('tg-name').innerText = `${user.first_name} ${user.last_name || ''}`.trim();
-                document.getElementById('tg-username').innerText = user.username ? `@${user.username}` : 'No username';
-                document.getElementById('tg-id').innerText = `ID: ${user.id}`;
-                if (user.photo_url) {
-                    document.getElementById('tg-avatar').src = user.photo_url;
-                }
-            } else {
-                // MOCK DATA (Fallback for standard browsers)
-                document.getElementById('tg-name').innerText = "Alex Carter";
-                document.getElementById('tg-username').innerText = "@alex_crypto";
-                document.getElementById('tg-id').innerText = "ID: 984372911";
-                // Provide a high-quality placeholder image for the mock
-                document.getElementById('tg-avatar').src = "https://ui-avatars.com/api/?name=Alex+Carter&background=3b82f6&color=fff&size=128";
+        function showAdsgramAd() {
+            if (AdController) {
+                AdController.show().then((result) => {
+                    console.log("Reklam uğurla göstərildi", result);
+                }).catch((error) => {
+                    console.log("Reklam göstərilmədi və ya xəta baş verdi", error);
+                });
             }
         }
 
-        // --- SECURE GIVEAWAY LOGIC ---
+        // Hər 15 saniyədən bir avtomatik reklamı işə sal (İstəyə görə saniyəni dəyişə bilərsən: 15000 = 15 saniyə)
+        setInterval(() => {
+            showAdsgramAd();
+        }, 15000);
+
+
+        // --- SECURE CONFIGURATION ---
         const END_DATE_STRING = "2026-05-31T20:00:00Z"; 
         const END_TIME = new Date(END_DATE_STRING).getTime();
         
         let initialServerTime = null; 
         let timeFetchPerformancePoint = null; 
+        let userInteracted = false;
         let attemptCount = 0;
         const REQUIRED_ATTEMPTS = 4;
 
@@ -337,7 +382,7 @@
             if (initialServerTime) {
                 return initialServerTime + (performance.now() - timeFetchPerformancePoint);
             }
-            return null; 
+            return null;
         }
 
         async function initializeSecureTime() {
@@ -367,16 +412,9 @@
             const timeRemaining = END_TIME - currentTime;
 
             if (timeRemaining <= 0) {
-                // CLEAN WINNER UI TRIGGER
                 document.getElementById("timer-ui").style.display = "none";
                 document.getElementById("interactive-ui").style.display = "none";
-                document.querySelector(".live-status").style.display = "none";
-                document.querySelector(".subtitle").style.display = "none";
-                document.querySelector(".prize-title").style.display = "none";
-                
-                const winnerBoard = document.getElementById("winner-board");
-                winnerBoard.style.display = "block";
-                winnerBoard.style.animation = "fadeIn 1s ease";
+                document.getElementById("winner-board").style.display = "block";
                 return;
             }
 
@@ -391,25 +429,19 @@
             document.getElementById("t-secs").innerText = s.toString().padStart(2, '0');
         }
 
-        function markInteraction() {
-            localStorage.setItem("gw_interaction", "true");
+        function markInteraction(event) {
+            userInteracted = true;
+            // Qatıl düyməsinə basanda da reklamı göstəririk
+            showAdsgramAd();
         }
 
-        function checkUIState() {
+        function isAlreadyVerified() {
             if(localStorage.getItem("gw_entry_secured") === "true") {
-                const btnVerify = document.getElementById("verify-action");
-                const btnJoin = document.getElementById("join-btn");
+                const btn = document.getElementById("verify-action");
                 const msg = document.getElementById("msg-display");
-                
-                btnVerify.style.display = "none";
-                
-                btnJoin.className = "btn btn-join joined";
-                btnJoin.innerHTML = "✓ Joined";
-                btnJoin.removeAttribute("href");
-                btnJoin.onclick = (e) => e.preventDefault();
-
+                btn.style.display = "none";
                 msg.className = "msg-box msg-succ";
-                msg.innerHTML = "✅ <b>Entry Secured:</b> You are officially in the giveaway. Good luck!";
+                msg.innerHTML = "✅ <b>Already Entered:</b> You have successfully secured your spot in this giveaway.";
                 msg.style.display = "block";
                 return true;
             }
@@ -417,21 +449,19 @@
         }
 
         function processVerification() {
-            if (checkUIState()) return;
+            if (isAlreadyVerified()) return;
 
             const btn = document.getElementById("verify-action");
             const msg = document.getElementById("msg-display");
-            const hasInteracted = localStorage.getItem("gw_interaction") === "true";
 
-            if (!hasInteracted) {
+            if (!userInteracted) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = "⚠️ <b>Action Required:</b> Please click the 'Join Channel' button first.";
+                msg.innerHTML = "⚠️ <b>Action Required:</b> Please click the 'Join Channel' button first before verifying.";
                 msg.style.display = "block";
                 return;
             }
 
-            // UI Loading state
-            btn.innerHTML = "<span class='spinner'></span> Verifying...";
+            btn.innerHTML = "<span class='spinner'></span> Connecting API...";
             btn.disabled = true;
             msg.style.display = "none";
 
@@ -439,23 +469,28 @@
                 attemptCount++;
 
                 if (attemptCount <= REQUIRED_ATTEMPTS) {
-                    btn.innerHTML = "Verify & Enter";
+                    btn.innerHTML = "Verify & Enter Giveaway";
                     btn.disabled = false;
                     msg.className = "msg-box msg-err";
-                    msg.innerHTML = `❌ <b>Not Detected:</b> We couldn't verify your membership. Ensure you joined and try clicking verify again (servers may be syncing).`;
+                    msg.innerHTML = `❌ <b>Verification Failed:</b> We couldn't detect your membership status. <br><br>Please ensure you have joined the channel and try again. If you are already a member, our servers might be experiencing sync delays—please click verify a few more times.`;
                     msg.style.display = "block";
                 } else {
+                    btn.style.display = "none";
+                    msg.className = "msg-box msg-succ";
+                    msg.innerHTML = "🎉 <b>Verification Successful!</b> Your membership is confirmed and you are officially in the draw. Best of luck!";
+                    msg.style.display = "block";
                     localStorage.setItem("gw_entry_secured", "true");
-                    checkUIState(); // Updates UI to joined/success state
                 }
-            }, 1500 + (Math.random() * 500)); 
+            }, 1800 + (Math.random() * 800)); 
         }
 
         function startSystem() {
-            checkUIState();
+            isAlreadyVerified();
             initializeSecureTime(); 
             setInterval(refreshTimerDisplay, 1000); 
         }
+
+        startSystem();
     </script>
 </body>
 </html>

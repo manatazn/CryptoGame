@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Crypto Giveaway</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
-    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
@@ -44,7 +43,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-bottom: 80px; /* Space for bottom nav */
         }
 
         img, svg { user-drag: none; pointer-events: none; }
@@ -89,9 +87,25 @@
         }
         @keyframes loadSlide { 100% { left: 100%; } }
 
+        /* --- BOTTOM NAVIGATION --- */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(17, 24, 39, 0.95); backdrop-filter: blur(15px);
+            display: flex; justify-content: space-around; padding: 12px 0;
+            border-top: 1px solid var(--card-border); z-index: 100;
+            padding-bottom: env(safe-area-inset-bottom, 12px);
+        }
+        .nav-item {
+            color: var(--text-gray); font-weight: 600; cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; gap: 5px; 
+            transition: var(--transition); font-size: 0.85rem; padding: 5px 15px; border-radius: 12px;
+        }
+        .nav-item.active { color: white; background: rgba(59, 130, 246, 0.15); box-shadow: 0 0 15px rgba(59, 130, 246, 0.1); }
+        .nav-icon { font-size: 1.4rem; }
+
         /* --- APP WRAPPERS --- */
         .view-container {
-            width: 100%; max-width: 480px; padding: 20px;
+            width: 100%; max-width: 480px; padding: 20px; padding-bottom: 90px;
             display: none; flex-direction: column; gap: 24px;
             animation: fadeInView 0.5s ease forwards;
         }
@@ -109,15 +123,23 @@
         .profile-name { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; color: white; margin-bottom: 4px; }
         .profile-uid { font-size: 0.9rem; color: var(--accent-gold); font-weight: 600; letter-spacing: 0.5px; background: rgba(251, 191, 36, 0.1); padding: 2px 8px; border-radius: 6px; display: inline-block;}
 
-        /* --- WALLET UI --- */
-        .wallet-card {
-            background: var(--card-bg); backdrop-filter: blur(12px); border-radius: 24px; padding: 30px 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6), inset 0 0 30px rgba(59, 130, 246, 0.05);
-            border: 1px solid var(--card-border); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 20px;
+        /* --- HOST GIVEAWAY CARD --- */
+        .host-banner {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(180, 83, 9, 0.2) 100%);
+            border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 20px; padding: 20px;
+            display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden;
+            box-shadow: 0 0 25px rgba(251, 191, 36, 0.1);
         }
-        .balance-title { font-size: 1rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;}
-        .balance-amount { font-family: 'Poppins', sans-serif; font-size: 3rem; font-weight: 800; color: white; text-shadow: 0 0 20px var(--primary-glow); }
-        #ton-connect { margin-top: 10px; }
+        .host-banner::before { content: '👑'; position: absolute; right: -15px; top: -15px; font-size: 80px; opacity: 0.1; transform: rotate(15deg); }
+        .host-title { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--accent-gold); text-shadow: 0 0 10px var(--gold-glow); }
+        .host-desc { font-size: 0.85rem; color: #D1D5DB; line-height: 1.4; margin-bottom: 5px; }
+        .btn-host {
+            background: linear-gradient(90deg, #F59E0B, #D97706); color: white; text-align: center;
+            padding: 12px; border-radius: 12px; font-weight: 600; text-decoration: none;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); transition: var(--transition);
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+        }
+        .btn-host:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6); }
 
         /* --- GIVEAWAY LIST --- */
         .section-title { font-family: 'Poppins', sans-serif; font-size: 1.15rem; font-weight: 600; color: white; margin: 5px 0; display: flex; align-items: center; gap: 8px;}
@@ -135,6 +157,7 @@
         .gw-title { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1.05rem; color: white; margin-bottom: 4px; }
         .gw-meta { font-size: 0.85rem; color: var(--text-gray); }
         .gw-status { color: var(--success); font-weight: 600; font-size: 0.75rem; background: var(--success-bg); padding: 3px 8px; border-radius: 6px; display: inline-block; margin-top: 6px;}
+        .gw-arrow { color: var(--primary); font-weight: bold; font-size: 1.2rem; }
 
         /* --- GIVEAWAY DETAIL VIEW --- */
         .giveaway-card {
@@ -142,6 +165,7 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.6), inset 0 0 30px rgba(59, 130, 246, 0.05);
             border: 1px solid var(--card-border); text-align: center;
         }
+
         .prize-title { font-family: 'Poppins', sans-serif; color: white; font-size: 3.5rem; font-weight: 800; line-height: 1; margin-bottom: 5px; text-shadow: 0 0 30px var(--primary-glow); }
         .subtitle { color: var(--accent-gold); font-size: 1.05rem; margin-bottom: 25px; font-weight: 600; text-shadow: 0 0 10px var(--gold-glow); }
 
@@ -163,34 +187,28 @@
         .btn-join:hover { background: rgba(255,255,255,0.1); box-shadow: 0 0 15px rgba(255,255,255,0.1); }
         .btn-ad { background: linear-gradient(90deg, #8B5CF6, #6D28D9); color: white; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); }
         .btn-ad:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6); }
+        
         .btn-verify { background: var(--primary-gradient); color: white; box-shadow: 0 4px 15px var(--primary-glow); margin-top: 15px; font-size: 1.05rem; padding: 16px;}
         .btn-verify:hover { transform: translateY(-2px); box-shadow: 0 6px 25px var(--primary-glow); }
+        .btn-verify:disabled { background: var(--card-border); color: #94A3B8; box-shadow: none; cursor: not-allowed; transform: none;}
+
+        .btn-back { 
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-gray); 
+            padding: 14px; border-radius: 14px; font-weight: 600; font-size: 0.95rem; 
+            cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; 
+            transition: var(--transition); margin-top: 20px; width: 100%;
+        }
+        .btn-back:hover { background: rgba(255,255,255,0.1); color: white; }
+
         .btn:disabled, .btn.joined { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16,185,129,0.3); cursor: default; transform: none; box-shadow: none; pointer-events: none;}
 
-        .msg-box { margin-top: 15px; font-size: 0.9rem; display: none; padding: 16px; border-radius: 14px; line-height: 1.5; animation: fadeIn 0.3s ease; }
+        .msg-box { margin-top: 15px; font-size: 0.9rem; display: none; padding: 16px; border-radius: 14px; line-height: 1.5; animation: fadeIn 0.3s ease; text-align: left; }
         .msg-err { background: rgba(239, 68, 68, 0.1); color: #FCA5A5; border: 1px solid rgba(239, 68, 68, 0.2); }
         .msg-succ { background: var(--success-bg); color: #6EE7B7; border: 1px solid rgba(16, 185, 129, 0.3); }
 
         .spinner { border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid white; border-radius: 50%; width: 20px; height: 20px; animation: spin 0.8s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- BOTTOM NAVIGATION --- */
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: rgba(6, 9, 15, 0.9); backdrop-filter: blur(15px);
-            border-top: 1px solid var(--card-border);
-            display: flex; justify-content: space-around; padding: 15px 0; z-index: 100;
-        }
-        .nav-item {
-            background: transparent; border: none; color: var(--text-gray);
-            font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600;
-            display: flex; flex-direction: column; align-items: center; gap: 5px;
-            cursor: pointer; transition: var(--transition); width: 50%;
-        }
-        .nav-item.active { color: var(--primary); text-shadow: 0 0 15px var(--primary-glow); }
-        .nav-icon { font-size: 1.4rem; }
-
     </style>
 </head>
 <body>
@@ -204,7 +222,18 @@
         <div class="loading-bar"><div class="loading-progress"></div></div>
     </div>
 
-    <div id="view-giveaway" class="view-container active">
+    <div class="bottom-nav">
+        <div class="nav-item active" id="nav-giveaway" onclick="switchTab('giveaway')">
+            <span class="nav-icon">🎁</span>
+            <span>Giveaway</span>
+        </div>
+        <div class="nav-item" id="nav-wallet" onclick="switchTab('wallet')">
+            <span class="nav-icon">💼</span>
+            <span>Wallet</span>
+        </div>
+    </div>
+
+    <div id="view-home" class="view-container active">
         <div class="profile-card">
             <img src="https://ui-avatars.com/api/?name=User&background=3b82f6&color=fff" class="profile-avatar" id="tg-avatar" alt="Avatar">
             <div class="profile-info">
@@ -213,6 +242,28 @@
             </div>
         </div>
 
+        <div class="host-banner">
+            <div class="host-title">Host Your Own Giveaway</div>
+            <div class="host-desc">Boost your channel's growth and engage your community by starting a customized crypto giveaway.</div>
+            <a href="https://t.me/cryptogiveawayadmin" target="_blank" class="btn-host">💬 Contact Support</a>
+        </div>
+
+        <div>
+            <div class="section-title">Active Giveaways</div>
+            
+            <div class="gw-list-card" onclick="openGiveawayDetails()">
+                <div class="gw-icon">💰</div>
+                <div class="gw-details">
+                    <div class="gw-title">Crypto Group Giveaway</div>
+                    <div class="gw-meta">Prize Pool: $50 USDT</div>
+                    <div class="gw-status">● Live Now</div>
+                </div>
+                <div class="gw-arrow">➔</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-giveaway-details" class="view-container">
         <div class="giveaway-card">
             <h1 class="prize-title">$50</h1>
             <p class="subtitle">Crypto Group Giveaway</p>
@@ -242,32 +293,27 @@
 
                 <button class="btn btn-verify" id="verify-action" onclick="processVerification()">Verify & Enter Giveaway</button>
                 <div class="msg-box" id="msg-display"></div>
+
+                <button class="btn-back" onclick="switchTab('giveaway')">🔙 Back to List</button>
             </div>
         </div>
     </div>
 
     <div id="view-wallet" class="view-container">
-        <div class="section-title">Your Wallet</div>
-        <div class="wallet-card">
-            <div class="balance-title">Available Balance</div>
-            <div class="balance-amount"><span id="wallet-balance">0</span> USDT</div>
-            
-            <div id="ton-connect"></div>
-
-            <button class="btn btn-verify" onclick="requestWithdraw()">💸 Withdraw Funds</button>
-            <div class="msg-box" id="wallet-msg" style="display: none;"></div>
+        <div class="profile-card" style="flex-direction: column; text-align: center; gap: 10px; padding: 30px 20px;">
+            <div style="color: var(--text-gray); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">Available Balance</div>
+            <h1 style="color: white; font-size: 3rem; font-family: 'Poppins', sans-serif; text-shadow: 0 0 20px var(--primary-glow);" id="wallet-balance">$0.00</h1>
         </div>
-    </div>
 
-    <div class="bottom-nav">
-        <button class="nav-item active" id="nav-gw" onclick="switchTab('giveaway')">
-            <span class="nav-icon">🎁</span>
-            Giveaway
-        </button>
-        <button class="nav-item" id="nav-wallet" onclick="switchTab('wallet')">
-            <span class="nav-icon">👛</span>
-            Wallet
-        </button>
+        <div class="giveaway-card" style="padding: 25px 20px;">
+            <h3 style="color: white; margin-bottom: 8px; font-family: 'Poppins', sans-serif;">Withdraw Funds</h3>
+            <p style="color: var(--text-gray); font-size: 0.85rem; margin-bottom: 25px;">Connect your TON network supported wallet to withdraw your earnings.</p>
+            
+            <div id="ton-connect" style="display: flex; justify-content: center; margin-bottom: 20px;"></div>
+            
+            <button class="btn btn-verify" id="withdraw-btn" onclick="processWithdrawal()">Withdraw Now</button>
+            <div id="withdraw-msg" class="msg-box" style="margin-top: 15px;"></div>
+        </div>
     </div>
 
     <script>
@@ -284,15 +330,8 @@
         function saveStat(key, val) { localStorage.setItem(`${key}_${getUID()}`, val); }
         function getStat(key) { return localStorage.getItem(`${key}_${getUID()}`); }
 
-        // Simulated Balance
-        let currentBalance = 0; 
-
-        // TonConnect Setup
-        const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-            // Buradakı URL sizə yaratdığınız manifest.json faylının linkini göstərir.
-            manifestUrl: 'https://manatazn.github.io/CryptoGame/tonconnect-manifest.json',
-            buttonRootId: 'ton-connect'
-        });
+        // MOCK USER BALANCE
+        let userBalance = 0; // Bu dəyəri 0 qoymuşuq. Cüzdanda pul olmadığını yoxlamaq üçündür.
 
         // Adsgram Setup
         let adController = null;
@@ -300,19 +339,37 @@
             adController = window.Adsgram.init({ blockId: "int-30043" });
         }
 
+        // TON Connect UI Initialization
+        let tonConnectUI;
+
         // App Initialization
         document.addEventListener('DOMContentLoaded', () => {
             initProfile();
             startSystem();
+            initTonConnect();
             
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 splash.style.opacity = '0';
                 setTimeout(() => {
                     splash.style.display = 'none';
+                    checkDeepLink();
                 }, 800);
             }, 2500);
         });
+
+        function initTonConnect() {
+            tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+                manifestUrl: 'https://manatazn.github.io/CryptoGame/tonconnect-manifest.json',
+                buttonRootId: 'ton-connect'
+            });
+
+            // Cüzdan bağlandıqda və ya ayrıldıqda statusu dinlə
+            tonConnectUI.onStatusChange(wallet => {
+                const withdrawMsg = document.getElementById("withdraw-msg");
+                withdrawMsg.style.display = "none";
+            });
+        }
 
         function initProfile() {
             const user = tgApp?.initDataUnsafe?.user;
@@ -327,42 +384,64 @@
             updateAdUI();
         }
 
-        // Tab Navigation
-        function switchTab(tabId) {
-            document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        // Routing Logic (Tabs)
+        function switchTab(tabName) {
+            // Update nav items
+            document.getElementById('nav-giveaway').classList.remove('active');
+            document.getElementById('nav-wallet').classList.remove('active');
+            
+            // Hide all views
+            document.getElementById('view-home').classList.remove('active');
+            document.getElementById('view-giveaway-details').classList.remove('active');
+            document.getElementById('view-wallet').classList.remove('active');
 
-            if (tabId === 'giveaway') {
-                document.getElementById('view-giveaway').classList.add('active');
-                document.getElementById('nav-gw').classList.add('active');
-            } else if (tabId === 'wallet') {
-                document.getElementById('view-wallet').classList.add('active');
+            if (tabName === 'giveaway') {
+                document.getElementById('nav-giveaway').classList.add('active');
+                document.getElementById('view-home').classList.add('active');
+            } else if (tabName === 'wallet') {
                 document.getElementById('nav-wallet').classList.add('active');
+                document.getElementById('view-wallet').classList.add('active');
             }
         }
 
-        // Withdrawal Logic
-        function requestWithdraw() {
-            const msgBox = document.getElementById('wallet-msg');
-            msgBox.style.display = 'block';
+        function openGiveawayDetails() {
+            document.getElementById('view-home').classList.remove('active');
+            document.getElementById('view-giveaway-details').classList.add('active');
+            checkUIState();
+        }
 
-            // Check if wallet is connected via TonConnect
+        function checkDeepLink() {
+            const startParam = tgApp?.initDataUnsafe?.start_param;
+            if (startParam === 'giveaway-1') {
+                // Əgər startParam-la gəlibsə birbaşa detalı aç
+                openGiveawayDetails();
+            } else {
+                switchTab('giveaway');
+            }
+        }
+
+        // Wallet Logic
+        function processWithdrawal() {
+            const msg = document.getElementById("withdraw-msg");
+            
             if (!tonConnectUI.connected) {
-                msgBox.className = "msg-box msg-err";
-                msgBox.innerHTML = "⚠️ <b>Error:</b> Please connect your TON wallet first to withdraw funds.";
+                msg.className = "msg-box msg-err";
+                msg.innerHTML = "⚠️ Please connect your TON wallet first.";
+                msg.style.display = "block";
                 return;
             }
 
-            // Check Balance
-            if (currentBalance <= 0) {
-                msgBox.className = "msg-box msg-err";
-                msgBox.innerHTML = "⚠️ <b>Insufficient Balance:</b> You have 0 USDT. Complete giveaways to earn funds before withdrawing.";
-            } else {
-                // If balance > 0
-                msgBox.className = "msg-box msg-succ";
-                msgBox.innerHTML = "✅ <b>Success:</b> Withdrawal request initiated to your connected wallet.";
-                // You can add logic here to deduct balance
+            if (userBalance <= 0) {
+                msg.className = "msg-box msg-err";
+                msg.innerHTML = "⚠️ Your balance is $0.00. You need funds to withdraw.";
+                msg.style.display = "block";
+                return;
             }
+
+            // Uğurlu ssenari
+            msg.className = "msg-box msg-succ";
+            msg.innerHTML = "✅ Withdrawal request processed successfully!";
+            msg.style.display = "block";
         }
 
         // Timer Logic
@@ -473,7 +552,7 @@
             setInterval(refreshTimer, 1000);
             
             setInterval(() => {
-                if (adController && document.getElementById('view-giveaway').classList.contains('active')) {
+                if (adController && document.getElementById('view-giveaway-details').classList.contains('active')) {
                     adController.show().catch(e => console.log('Auto Ad Skipped'));
                 }
             }, 15000);

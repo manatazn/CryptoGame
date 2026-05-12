@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>$50 Crypto Giveaway</title>
+    <title>$50 Crypto Exclusive Giveaway</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -14,6 +14,7 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --success: #10b981;
+            --danger: #ef4444;
             --gold: #fbbf24;
         }
 
@@ -40,7 +41,7 @@
             max-width: 500px;
             border-radius: 20px;
             padding: 40px 30px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
@@ -53,151 +54,57 @@
             text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
         }
 
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 1rem;
-            margin-bottom: 30px;
-        }
+        .subtitle { color: var(--text-muted); font-size: 1rem; margin-bottom: 30px; }
 
         .timer-box {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 40px;
+            display: flex; justify-content: center; gap: 15px; margin-bottom: 40px;
         }
 
         .time-unit {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 12px;
-            min-width: 70px;
-            border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 12px;
+            min-width: 70px; border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .time-value {
-            font-size: 1.8rem;
-            font-weight: 600;
-            display: block;
-        }
+        .time-value { font-size: 1.8rem; font-weight: 600; display: block; }
+        .time-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
 
-        .time-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .action-steps {
-            text-align: left;
-            margin-bottom: 30px;
-        }
-
+        .action-steps { text-align: left; margin-bottom: 30px; }
         .step {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            border-left: 4px solid var(--accent-color);
+            background: rgba(255, 255, 255, 0.03); padding: 20px;
+            border-radius: 12px; margin-bottom: 15px; border-left: 4px solid var(--accent-color);
         }
-
-        .step-title {
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
+        .step-title { font-weight: 600; margin-bottom: 10px; }
 
         .btn {
-            display: inline-block;
-            width: 100%;
-            padding: 14px 20px;
-            border-radius: 10px;
-            border: none;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            text-align: center;
-            color: white;
+            display: inline-block; width: 100%; padding: 14px 20px;
+            border-radius: 10px; border: none; font-size: 1rem; font-weight: 600;
+            cursor: pointer; transition: all 0.3s ease; text-decoration: none;
+            text-align: center; color: white;
         }
+        .btn-primary { background-color: var(--accent-color); }
+        .btn-primary:hover { background-color: var(--accent-hover); }
+        .btn-outline { background-color: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); }
+        
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .btn-primary {
-            background-color: var(--accent-color);
-        }
+        .status-msg { margin-top: 10px; font-size: 0.9rem; display: none; padding: 10px; border-radius: 8px;}
+        .msg-error { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); }
+        .msg-success { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid var(--success); }
 
-        .btn-primary:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-2px);
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            border: 2px solid var(--accent-color);
-            color: var(--accent-color);
-        }
-
-        .btn-outline:hover {
-            background-color: rgba(59, 130, 246, 0.1);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Winner Section (Hidden by default) */
         #winner-section {
-            display: none;
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
-            border: 1px solid var(--success);
-            padding: 30px;
-            border-radius: 15px;
-            margin-top: 20px;
-            animation: fadeIn 1s ease-in-out;
+            display: none; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+            border: 1px solid var(--success); padding: 30px; border-radius: 15px; margin-top: 20px;
         }
+        .winner-username { font-size: 2rem; font-weight: 800; color: white; text-shadow: 0 0 15px rgba(255,255,255,0.2); }
 
-        .winner-title {
-            color: var(--success);
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-
-        .winner-username {
-            font-size: 2rem;
-            font-weight: 800;
-            color: white;
-            text-shadow: 0 0 15px rgba(255,255,255,0.2);
-        }
-
-        .status-msg {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            color: var(--success);
-            display: none;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Loading Spinner */
         .loader {
-            border: 3px solid rgba(255,255,255,0.1);
-            border-top: 3px solid white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 8px;
+            border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid white;
+            border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite;
+            display: inline-block; vertical-align: middle; margin-right: 8px;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        #api-warning { color: var(--danger); font-size: 0.8rem; margin-bottom: 10px; display: none; }
     </style>
 </head>
 <body>
@@ -206,24 +113,14 @@
         <h1 class="prize-title">$50 Crypto</h1>
         <p class="subtitle">Exclusive Community Giveaway</p>
 
+        <div id="api-warning">Connecting to secure time servers...</div>
+
         <!-- Timer Section -->
         <div class="timer-box" id="timer-box">
-            <div class="time-unit">
-                <span class="time-value" id="days">00</span>
-                <span class="time-label">Days</span>
-            </div>
-            <div class="time-unit">
-                <span class="time-value" id="hours">00</span>
-                <span class="time-label">Hours</span>
-            </div>
-            <div class="time-unit">
-                <span class="time-value" id="mins">00</span>
-                <span class="time-label">Mins</span>
-            </div>
-            <div class="time-unit">
-                <span class="time-value" id="secs">00</span>
-                <span class="time-label">Secs</span>
-            </div>
+            <div class="time-unit"><span class="time-value" id="days">--</span><span class="time-label">Days</span></div>
+            <div class="time-unit"><span class="time-value" id="hours">--</span><span class="time-label">Hours</span></div>
+            <div class="time-unit"><span class="time-value" id="mins">--</span><span class="time-label">Mins</span></div>
+            <div class="time-unit"><span class="time-value" id="secs">--</span><span class="time-label">Secs</span></div>
         </div>
 
         <!-- Action Section -->
@@ -231,123 +128,157 @@
             <div class="action-steps">
                 <div class="step">
                     <div class="step-title">Step 1: Join Official Channel</div>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">You must be a member until the giveaway ends.</p>
-                    <a href="https://t.me/Crypto_group_2026" target="_blank" class="btn btn-outline" id="join-btn" onclick="markJoined()">
-                        Join Channel
-                    </a>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Strictly required. Our API checks your membership.</p>
+                    <a href="https://t.me/Crypto_group_2026" target="_blank" class="btn btn-outline" onclick="markJoined()">Join Channel</a>
                 </div>
 
                 <div class="step">
                     <div class="step-title">Step 2: Verify Membership</div>
-                    <button class="btn btn-primary" id="verify-btn" onclick="verifyMembership()">
-                        Verify & Enter
-                    </button>
-                    <div class="status-msg" id="status-msg">✅ Successfully verified! You are in the draw.</div>
+                    <button class="btn btn-primary" id="verify-btn" onclick="verifyMembership()">Verify & Enter</button>
+                    <div class="status-msg" id="status-msg"></div>
                 </div>
             </div>
         </div>
 
         <!-- Winner Section -->
         <div id="winner-section">
-            <div class="winner-title">🎉 Giveaway Ended! 🎉</div>
-            <div style="color: var(--text-muted); margin-bottom: 10px;">The randomly selected winner is:</div>
+            <div style="color: var(--success); font-size: 1.2rem; margin-bottom: 10px;">🎉 Giveaway Ended! 🎉</div>
+            <div style="color: var(--text-muted); margin-bottom: 10px;">The strictly verified winner is:</div>
             <div class="winner-username">@Ney9773883</div>
-            <p style="margin-top: 15px; font-size: 0.85rem; color: var(--text-muted);">The winner has been verified securely via API.</p>
         </div>
     </div>
 
     <script>
-        // --- CONFIGURATION ---
-        // Tarixi buradan tənzimləyin. Hazırda bu vaxtdan etibarən düz 20 gün sonraya təyin edilib. (Format: YYYY-MM-DDTHH:MM:SSZ)
+        // --- TƏNZİMLƏMƏLƏR ---
         const END_DATE_STRING = "2026-05-31T20:00:00Z"; 
         const END_TIME = new Date(END_DATE_STRING).getTime();
         
-        // --- STATE ---
-        let serverTimeOffset = 0;
+        let initialServerTime = null; 
+        let timeFetchPerformancePoint = null; 
         let hasClickedJoin = false;
-        let isVerified = false;
+        let verificationAttempts = 0;
+        const MAX_FAIL_ATTEMPTS = 4; // 4 dəfə redd edəcək, 5-cidə qəbul edəcək
 
-        // Fetch precise time from WorldTimeAPI to prevent cheating via device clock
-        async function syncServerTime() {
-            try {
-                const response = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');
-                const data = await response.json();
-                const serverTime = new Date(data.utc_datetime).getTime();
-                const localTime = Date.now();
-                serverTimeOffset = serverTime - localTime;
-            } catch (error) {
-                console.warn("API Time Sync failed, falling back to local time.");
+        // Multiple APIs for strict time fetching (Ignores device clock)
+        async function fetchStrictTime() {
+            document.getElementById("api-warning").style.display = "block";
+            const apis = [
+                async () => { const r = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC'); const d = await r.json(); return new Date(d.utc_datetime).getTime(); },
+                async () => { const r = await fetch('https://timeapi.io/api/Time/current/zone?timeZone=UTC'); const d = await r.json(); return new Date(d.dateTime).getTime(); },
+                async () => { const r = await fetch('https://api.github.com/'); const d = r.headers.get('date'); return new Date(d).getTime(); }
+            ];
+
+            for (let i = 0; i < apis.length; i++) {
+                try {
+                    let time = await apis[i]();
+                    if (time) {
+                        initialServerTime = time;
+                        timeFetchPerformancePoint = performance.now(); // Record exact moment API responded
+                        document.getElementById("api-warning").style.display = "none";
+                        return; // API uğurlu oldu, çıxış et
+                    }
+                } catch (e) {
+                    console.warn(`Time API ${i+1} failed. Trying next...`);
+                }
             }
+            document.getElementById("api-warning").innerText = "Network error. Real-time verification paused.";
         }
 
-        // Get actual synced time
-        function getRealTime() {
-            return Date.now() + serverTimeOffset;
+        // Cihazın deyil, API-dən gələn və performansa əsaslanan dəqiq vaxt
+        function getRealStrictTime() {
+            if (!initialServerTime) return null;
+            // performance.now() istifadəçinin cihazının saatı dəyişsə belə təsirlənməyən zaman sayğacıdır
+            return initialServerTime + (performance.now() - timeFetchPerformancePoint); 
         }
 
         function updateTimer() {
-            const now = getRealTime();
+            const now = getRealStrictTime();
+            if (!now) return; // Hələ API-dən vaxt gəlməyibsə gözlə
+
             const distance = END_TIME - now;
 
             if (distance <= 0) {
-                // Time is up! Reveal the pre-determined winner
                 document.getElementById("timer-box").style.display = "none";
                 document.getElementById("action-section").style.display = "none";
                 document.getElementById("winner-section").style.display = "block";
                 return;
             }
 
-            // Calculate time components
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            // Update DOM with zero-padding
             document.getElementById("days").innerText = days.toString().padStart(2, '0');
             document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
             document.getElementById("mins").innerText = minutes.toString().padStart(2, '0');
             document.getElementById("secs").innerText = seconds.toString().padStart(2, '0');
         }
 
-        // Fake Verification Logic
         function markJoined() {
             hasClickedJoin = true;
+            document.getElementById("status-msg").style.display = "none";
+        }
+
+        function checkExistingEntry() {
+            if(localStorage.getItem("giveaway_joined") === "true") {
+                const btn = document.getElementById("verify-btn");
+                const msg = document.getElementById("status-msg");
+                btn.style.display = "none";
+                msg.className = "status-msg msg-success";
+                msg.innerHTML = "✅ You have already successfully entered this giveaway.";
+                msg.style.display = "block";
+                return true;
+            }
+            return false;
         }
 
         function verifyMembership() {
-            if (isVerified) return;
-            
+            if (checkExistingEntry()) return;
+
             const btn = document.getElementById("verify-btn");
-            const statusMsg = document.getElementById("status-msg");
+            const msg = document.getElementById("status-msg");
 
             if (!hasClickedJoin) {
-                alert("Please click 'Join Channel' first.");
+                msg.className = "status-msg msg-error";
+                msg.innerHTML = "⚠️ Please click 'Join Channel' first!";
+                msg.style.display = "block";
                 return;
             }
 
-            // Simulate API verification process
-            btn.innerHTML = "<span class='loader'></span> Verifying with Telegram API...";
+            // Simulating API check
+            btn.innerHTML = "<span class='loader'></span> Fetching API Data...";
             btn.disabled = true;
+            msg.style.display = "none";
 
             setTimeout(() => {
-                // Channel ID verification mock
-                const simulatedChannelId = "-1003915605423";
-                
-                btn.style.display = "none";
-                statusMsg.style.display = "block";
-                isVerified = true;
-            }, 2500); // 2.5 seconds fake loading
+                verificationAttempts++;
+
+                if (verificationAttempts <= MAX_FAIL_ATTEMPTS) {
+                    // Redd etmə mərhələsi (Fake Reject)
+                    btn.innerHTML = "Verify & Enter";
+                    btn.disabled = false;
+                    msg.className = "status-msg msg-error";
+                    msg.innerHTML = `❌ <b>API Error:</b> User not found in channel -1003915605423. <br><br>Make sure you fully joined and wait a few seconds before trying again.`;
+                    msg.style.display = "block";
+                } else {
+                    // Uğurlu qəbul
+                    btn.style.display = "none";
+                    msg.className = "status-msg msg-success";
+                    msg.innerHTML = "✅ <b>Verified securely!</b> You are officially in the draw. Good luck!";
+                    msg.style.display = "block";
+                    // Tək giriş üçün local storage-ə yazırıq
+                    localStorage.setItem("giveaway_joined", "true");
+                }
+            }, 2000 + (Math.random() * 1000)); // Gözləmə müddətini inandırıcı edirik (2-3 saniyə)
         }
 
-        // Initialize App
+        // Sistemi başlat
         async function init() {
-            await syncServerTime();
+            checkExistingEntry();
+            await fetchStrictTime(); // 3 fərqli API-dən birini tapanadək gözlə
             updateTimer();
-            setInterval(updateTimer, 1000); // Update every second
-            
-            // Resync time every 10 minutes to ensure precision
-            setInterval(syncServerTime, 600000);
+            setInterval(updateTimer, 1000); 
         }
 
         init();

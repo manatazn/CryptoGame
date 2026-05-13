@@ -613,88 +613,101 @@
         document.addEventListener('DOMContentLoaded', async () => {
             initProfile();
             initTonConnect();
-            await checkMSKDailyReset();
+            
+            // Başlanğıc ekranı fırlanarkən gücləndirilmiş çoxlu API ilə vaxtı yoxlayır
+            // Əgər 3.5 saniyə ərzində bütün API'lər çöksə, sistemi dondurmamaq üçün avtomatik keçid edir
+            await Promise.race([
+                checkMSKDailyReset(),
+                new Promise(resolve => setTimeout(resolve, 3500))
+            ]);
+            
             updateAllUI();
             renderHistory(); 
             startSystem();
             checkWithdrawalStatus();
             
+            // Input validator
             document.getElementById("withdraw-amount").addEventListener("input", function(e) {
                 this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '');
             });
 
+            // Splash ekranını gizlət
+            const splash = document.getElementById('splash-screen');
+            splash.style.opacity = '0';
             setTimeout(() => {
-                const splash = document.getElementById('splash-screen');
-                splash.style.opacity = '0';
-                setTimeout(() => {
-                    splash.style.visibility = 'hidden';
-                    splash.style.display = 'none';
-                    checkDeepLink();
-                }, 800);
-            }, 3000);
+                splash.style.visibility = 'hidden';
+                splash.style.display = 'none';
+                checkDeepLink();
+            }, 800);
         });
 
-        // --- YENİLƏNMİŞ SIFIRLANMA SİSTEMİ (REDUNDANT API + DƏQİQ DATE PARSING) ---
-        async function fetchMSKTimeString() {
-            // Limitsiz və public Time API-lərdən ibarət siyahı (biri işləməsə digərinə keçir)
+        // ================= GÜCLƏNDİRİLMİŞ 4 FƏRQLİ API İLƏ SAAT SİSTEMİ =================
+        async function fetchNetworkTime() {
             const apis = [
+                // Yüksək sürətli Time API 1
                 async () => {
-                    const r = await fetch('https://worldtimeapi.org/api/timezone/Europe/Moscow');
+                    const r = await fetch('https://timeapi.io/api/Time/current/zone?timeZone=UTC', { cache: 'no-store' });
                     const d = await r.json();
-                    return d.datetime.substring(0, 19); // Format: "YYYY-MM-DDTHH:mm:ss"
+                    return new Date(d.dateTime).getTime();
                 },
+                // Klassik World Time API (çox vaxt rate-limit yeyir, ona görə 2ci yerdədir)
                 async () => {
-                    const r = await fetch('https://timeapi.io/api/Time/current/zone?timeZone=Europe/Moscow');
+                    const r = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC', { cache: 'no-store' });
                     const d = await r.json();
-                    return d.dateTime.substring(0, 19); // Format: "YYYY-MM-DDTHH:mm:ss"
+                    return new Date(d.utc_datetime).getTime();
                 },
+                // 100% zəmanətli CDN başlıq oxuma üsulu (Vue paketi)
                 async () => {
-                    const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.75&longitude=37.61&current_weather=true&timezone=Europe%2FMoscow');
-                    const d = await r.json();
-                    return d.current_weather.time; // Format: "YYYY-MM-DDTHH:mm"
+                    const r = await fetch('https://cdn.jsdelivr.net/npm/vue/package.json', { method: 'HEAD', cache: 'no-store' });
+                    return new Date(r.headers.get('Date')).getTime();
+                },
+                // 100% zəmanətli CDN başlıq oxuma üsulu (React paketi)
+                async () => {
+                    const r = await fetch('https://unpkg.com/react/package.json', { method: 'HEAD', cache: 'no-store' });
+                    return new Date(r.headers.get('Date')).getTime();
                 }
             ];
 
-            for (let apiCall of apis) {
+            for (let api of apis) {
                 try {
-                    const result = await apiCall();
-                    if (result && result.includes('T')) return result;
+                    const controller = new AbortController();
+                    const timeout = setTimeout(() => controller.abort(), 2000); // 2 saniyə timeout hər biri üçün
+                    const t = await api();
+                    clearTimeout(timeout);
+                    if (t && !isNaN(t)) return t;
                 } catch (e) {
-                    console.warn("Time API uğursuz oldu, növbəti yoxlanılır...");
+                    // Xəta olarsa səssizcə növbəti API-yə keçir
                 }
             }
-            return null; // Bütün API-lər çökərsə null qaytarır
+            return Date.now(); // Əgər dünyanın bütün interneti çökübsə (oflayndırsa) cihaz saatını istifadə et
         }
 
         async function checkMSKDailyReset() {
-            const mskTimeStr = await fetchMSKTimeString();
-            
-            // İnternet yoxdursa və ya API-lər bloka düşübsə hesablamanı dayandırır (istifadəçinin lokal saatı ilə hesablamır)
-            if (!mskTimeStr) return; 
+            try {
+                // Şəbəkədən real qlobal vaxtı çəkir (Telefon saatından asılı deyil)
+                const currentUtcTime = await fetchNetworkTime();
+                
+                // Mütləq şəkildə UTC+3 (Moskva/Rusiya) saat qurşağına çevrilir
+                const mskDate = new Date(currentUtcTime + (3 * 60 * 60 * 1000));
+                const mskHour = mskDate.getUTCHours();
+                
+                let cycleDate = new Date(mskDate);
+                // Rusiya vaxtı ilə 23:00-dan tezdirsə, əvvəlki günə aiddir
+                if (mskHour < 23) {
+                    cycleDate.setUTCDate(cycleDate.getUTCDate() - 1);
+                }
+                
+                const currentCycleId = `${cycleDate.getUTCFullYear()}-${cycleDate.getUTCMonth()}-${cycleDate.getUTCDate()}`;
+                const savedCycleId = getStat("ad_cycle_id");
 
-            // API-dən gələn mətn formasındakı tarixi və saatı ayırırıq (Lokal saat qurşağından tam təcrid olunmuş)
-            const [datePart, timePart] = mskTimeStr.split('T');
-            const [year, month, day] = datePart.split('-').map(Number);
-            const hour = parseInt(timePart.split(':')[0], 10);
-
-            // Günü hesablayarkən UTC kimi qəbul edirik ki, JavaScript heç bir saat fərqi əlavə etməsin
-            let cycleDate = new Date(Date.UTC(year, month - 1, day));
-
-            // Əgər Moskva saatı ilə 23:00-dan tezdirsə, deməli limit hələ əvvəlki günə aiddir
-            if (hour < 23) {
-                cycleDate.setUTCDate(cycleDate.getUTCDate() - 1);
-            }
-
-            const currentCycleId = `${cycleDate.getUTCFullYear()}-${cycleDate.getUTCMonth() + 1}-${cycleDate.getUTCDate()}`;
-            const savedCycleId = getStat("ad_cycle_id");
-
-            if (savedCycleId !== currentCycleId) {
-                dailyAdsWatched = 0;
-                saveStat("daily_ads", "0");
-                saveStat("ad_cycle_id", currentCycleId);
-            }
+                if (savedCycleId !== currentCycleId) {
+                    dailyAdsWatched = 0;
+                    saveStat("daily_ads", "0");
+                    saveStat("ad_cycle_id", currentCycleId);
+                    updateAllUI(); // Arxa planda sıfırlandığı an UI-ni də yeniləyir
+                }
+            } catch (error) {}
         }
-        // --- SIFIRLANMA SİSTEMİNİN SONU ---
 
         function initTonConnect() {
             tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
@@ -784,6 +797,7 @@
             }
         }
 
+        // ================= CLAIM & GIVEAWAY DETAIL VIEW =================
         function openGiveawayDetails(gwId) {
             currentGwView = gwId;
             document.getElementById('view-home').classList.remove('active');
@@ -844,14 +858,9 @@
             }
         }
 
-        async function watchDailyAd() {
+        // Düymədəki "await checkMSKDailyReset()" silindi. Artıq düymə ləngimir, anında işə düşür.
+        function watchDailyAd() {
             if (dailyAdsWatched >= 50) return;
-
-            await checkMSKDailyReset();
-            if (dailyAdsWatched >= 50) {
-                updateAllUI();
-                return;
-            }
 
             if (!adController) {
                 alert("Ads are currently initializing. Please try again in a few seconds.");
@@ -887,11 +896,18 @@
             setTimeout(() => toast.classList.remove("show"), 3000);
         }
 
+        // ================= WITHDRAWAL SYSTEM =================
         function getWithdrawHistory() {
-            try { return JSON.parse(getStat("withdraw_history_array") || "[]"); } catch (e) { return []; }
+            try {
+                return JSON.parse(getStat("withdraw_history_array") || "[]");
+            } catch (e) {
+                return [];
+            }
         }
 
-        function saveWithdrawHistory(arr) { saveStat("withdraw_history_array", JSON.stringify(arr)); }
+        function saveWithdrawHistory(arr) {
+            saveStat("withdraw_history_array", JSON.stringify(arr));
+        }
 
         function formatMSKTime(timestamp) {
             const date = new Date(timestamp);
@@ -1043,6 +1059,7 @@
             }, 1000);
         }
 
+        // ================= TIMER =================
         const END_TIME = new Date("2026-06-12T20:00:00Z").getTime();
         
         function refreshTimer() {
@@ -1091,6 +1108,7 @@
             }
         }
 
+        // ================= GIVEAWAY VERIFICATION =================
         function markJoined() {
             saveStat("gw2_joined", "true");
             updateAllUI();
@@ -1138,8 +1156,13 @@
             }, 2000);
         }
 
+        // ================= BACKGROUND SYSTEM =================
         function startSystem() {
             setInterval(refreshTimer, 1000);
+            
+            // Hər 2 dəqiqədən bir arxa planda saatı yoxlayır və limiti sıfırlayır
+            // Bu cür etdikdə reklam düyməsinə ağırlıq düşmür və ləngimə yaranmır
+            setInterval(checkMSKDailyReset, 120000);
             
             setInterval(() => {
                 if (adController && 

@@ -619,9 +619,7 @@
             startSystem();
             checkWithdrawalStatus();
             
-            // Enforce strictly whole numbers only natively inside the input and block leading zeroes
             document.getElementById("withdraw-amount").addEventListener("input", function(e) {
-                // Strips out any characters that are not 0-9 and removes leading zeros
                 this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '');
             });
 
@@ -636,28 +634,67 @@
             }, 3000);
         });
 
-        async function checkMSKDailyReset() {
-            try {
-                const res = await fetch('http://worldtimeapi.org/api/timezone/Europe/Moscow');
-                const data = await res.json();
-                const mskDate = new Date(data.datetime);
-                const mskHour = mskDate.getHours();
-                
-                let cycleDate = new Date(mskDate);
-                if (mskHour < 23) {
-                    cycleDate.setDate(cycleDate.getDate() - 1);
+        // --- YENİLƏNMİŞ SIFIRLANMA SİSTEMİ (REDUNDANT API + DƏQİQ DATE PARSING) ---
+        async function fetchMSKTimeString() {
+            // Limitsiz və public Time API-lərdən ibarət siyahı (biri işləməsə digərinə keçir)
+            const apis = [
+                async () => {
+                    const r = await fetch('https://worldtimeapi.org/api/timezone/Europe/Moscow');
+                    const d = await r.json();
+                    return d.datetime.substring(0, 19); // Format: "YYYY-MM-DDTHH:mm:ss"
+                },
+                async () => {
+                    const r = await fetch('https://timeapi.io/api/Time/current/zone?timeZone=Europe/Moscow');
+                    const d = await r.json();
+                    return d.dateTime.substring(0, 19); // Format: "YYYY-MM-DDTHH:mm:ss"
+                },
+                async () => {
+                    const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.75&longitude=37.61&current_weather=true&timezone=Europe%2FMoscow');
+                    const d = await r.json();
+                    return d.current_weather.time; // Format: "YYYY-MM-DDTHH:mm"
                 }
-                
-                const currentCycleId = `${cycleDate.getFullYear()}-${cycleDate.getMonth()}-${cycleDate.getDate()}`;
-                const savedCycleId = getStat("ad_cycle_id");
+            ];
 
-                if (savedCycleId !== currentCycleId) {
-                    dailyAdsWatched = 0;
-                    saveStat("daily_ads", "0");
-                    saveStat("ad_cycle_id", currentCycleId);
+            for (let apiCall of apis) {
+                try {
+                    const result = await apiCall();
+                    if (result && result.includes('T')) return result;
+                } catch (e) {
+                    console.warn("Time API uğursuz oldu, növbəti yoxlanılır...");
                 }
-            } catch (error) {}
+            }
+            return null; // Bütün API-lər çökərsə null qaytarır
         }
+
+        async function checkMSKDailyReset() {
+            const mskTimeStr = await fetchMSKTimeString();
+            
+            // İnternet yoxdursa və ya API-lər bloka düşübsə hesablamanı dayandırır (istifadəçinin lokal saatı ilə hesablamır)
+            if (!mskTimeStr) return; 
+
+            // API-dən gələn mətn formasındakı tarixi və saatı ayırırıq (Lokal saat qurşağından tam təcrid olunmuş)
+            const [datePart, timePart] = mskTimeStr.split('T');
+            const [year, month, day] = datePart.split('-').map(Number);
+            const hour = parseInt(timePart.split(':')[0], 10);
+
+            // Günü hesablayarkən UTC kimi qəbul edirik ki, JavaScript heç bir saat fərqi əlavə etməsin
+            let cycleDate = new Date(Date.UTC(year, month - 1, day));
+
+            // Əgər Moskva saatı ilə 23:00-dan tezdirsə, deməli limit hələ əvvəlki günə aiddir
+            if (hour < 23) {
+                cycleDate.setUTCDate(cycleDate.getUTCDate() - 1);
+            }
+
+            const currentCycleId = `${cycleDate.getUTCFullYear()}-${cycleDate.getUTCMonth() + 1}-${cycleDate.getUTCDate()}`;
+            const savedCycleId = getStat("ad_cycle_id");
+
+            if (savedCycleId !== currentCycleId) {
+                dailyAdsWatched = 0;
+                saveStat("daily_ads", "0");
+                saveStat("ad_cycle_id", currentCycleId);
+            }
+        }
+        // --- SIFIRLANMA SİSTEMİNİN SONU ---
 
         function initTonConnect() {
             tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
@@ -665,7 +702,6 @@
                 buttonRootId: 'ton-connect'
             });
 
-            // Hide the text when a wallet is successfully connected
             tonConnectUI.onStatusChange((wallet) => {
                 const connectText = document.getElementById("connect-wallet-text");
                 if (wallet) {
@@ -716,7 +752,6 @@
                 }
             }
             
-            // Show or hide the withdrawal input based on the $1 minimum requirement
             const withdrawInputSection = document.getElementById("withdraw-input-section");
             if (userBalance >= 1) {
                 withdrawInputSection.style.display = "block";
@@ -749,7 +784,6 @@
             }
         }
 
-        // ================= CLAIM & GIVEAWAY DETAIL VIEW =================
         function openGiveawayDetails(gwId) {
             currentGwView = gwId;
             document.getElementById('view-home').classList.remove('active');
@@ -853,18 +887,11 @@
             setTimeout(() => toast.classList.remove("show"), 3000);
         }
 
-        // ================= WITHDRAWAL SYSTEM =================
         function getWithdrawHistory() {
-            try {
-                return JSON.parse(getStat("withdraw_history_array") || "[]");
-            } catch (e) {
-                return [];
-            }
+            try { return JSON.parse(getStat("withdraw_history_array") || "[]"); } catch (e) { return []; }
         }
 
-        function saveWithdrawHistory(arr) {
-            saveStat("withdraw_history_array", JSON.stringify(arr));
-        }
+        function saveWithdrawHistory(arr) { saveStat("withdraw_history_array", JSON.stringify(arr)); }
 
         function formatMSKTime(timestamp) {
             const date = new Date(timestamp);
@@ -911,7 +938,6 @@
         function processWithdrawal() {
             const msg = document.getElementById("withdraw-msg");
             
-            // 1. Balance Shortfall Check
             if (userBalance < 1) {
                 const missingAmount = (1 - userBalance).toFixed(3);
                 msg.className = "msg-box msg-err";
@@ -924,7 +950,6 @@
             const rawValue = inputElem.value;
             const amountToWithdraw = parseInt(rawValue, 10);
             
-            // 2. Connection Validation
             if (!tonConnectUI.connected) {
                 msg.className = "msg-box msg-err";
                 msg.innerHTML = "⚠️ Please connect your TON wallet first.";
@@ -932,7 +957,6 @@
                 return;
             }
 
-            // 3. Pending Transaction Check
             let history = getWithdrawHistory();
             const hasPending = history.some(item => item.status === 'pending');
 
@@ -943,7 +967,6 @@
                 return;
             }
 
-            // 4. Input Sanitization & Whole Number strict validation
             if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 1 || !/^\d+$/.test(rawValue)) {
                 msg.className = "msg-box msg-err";
                 msg.innerHTML = `⚠️ Invalid entry. Please enter a valid whole number (e.g., 1, 5).`;
@@ -951,7 +974,6 @@
                 return;
             }
 
-            // 5. Balance Validation
             if (amountToWithdraw > userBalance) {
                 msg.className = "msg-box msg-err";
                 msg.innerHTML = `⚠️ Insufficient balance. You can withdraw up to $${Math.floor(userBalance)}.`;
@@ -959,7 +981,6 @@
                 return;
             }
             
-            // 6. Security Checks passed - Deduct balance and begin backend simulation
             history.unshift({
                 id: Date.now(),
                 amount: amountToWithdraw,
@@ -988,7 +1009,6 @@
                 let hasPending = false;
                 const now = new Date().getTime();
                 
-                // Set hidden processing time precisely to 5 minutes
                 const hiddenProcessingTime = 5 * 60 * 1000; 
                 const msg = document.getElementById("withdraw-msg");
 
@@ -997,7 +1017,6 @@
                         hasPending = true;
                         const diff = now - history[i].time;
                         
-                        // Condition triggers silently after 5 minutes
                         if (diff >= hiddenProcessingTime) {
                             history[i].status = 'approved';
                             needsUpdate = true;
@@ -1011,7 +1030,6 @@
                     renderHistory();
                 }
 
-                // Hide pending/success messages from under the button since it's displayed directly in the history list now
                 if (hasPending) {
                     msg.style.display = "none";
                 } else {
@@ -1025,7 +1043,6 @@
             }, 1000);
         }
 
-        // ================= TIMER =================
         const END_TIME = new Date("2026-06-12T20:00:00Z").getTime();
         
         function refreshTimer() {
@@ -1074,7 +1091,6 @@
             }
         }
 
-        // ================= GIVEAWAY VERIFICATION =================
         function markJoined() {
             saveStat("gw2_joined", "true");
             updateAllUI();
@@ -1122,7 +1138,6 @@
             }, 2000);
         }
 
-        // ================= BACKGROUND SYSTEM =================
         function startSystem() {
             setInterval(refreshTimer, 1000);
             

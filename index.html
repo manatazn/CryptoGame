@@ -352,6 +352,34 @@
         .history-status { font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 8px; }
         .status-pending { background: rgba(245, 158, 11, 0.15); color: var(--accent-gold); border: 1px solid rgba(245, 158, 11, 0.2);}
         .status-approved { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2);}
+
+        /* --- WITHDRAW INPUT --- */
+        .withdraw-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            text-align: center;
+            transition: var(--transition);
+            outline: none;
+        }
+        .withdraw-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+        .withdraw-input::-webkit-outer-spin-button,
+        .withdraw-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .withdraw-input[type=number] {
+            -moz-appearance: textfield;
+        }
     </style>
 </head>
 <body>
@@ -472,7 +500,7 @@
             </div>
 
             <div id="gw-winner-ui" class="gw-winner-ui">
-                </div>
+            </div>
 
             <div class="steps-container" id="gw-actions">
                 <div class="step-card">
@@ -506,9 +534,11 @@
 
         <div class="giveaway-card" style="padding: 25px 20px;">
             <h3 style="color: white; margin-bottom: 8px; font-family: 'Poppins', sans-serif; font-size: 1.1rem;">Withdraw Funds</h3>
-            <p style="color: var(--text-gray); font-size: 0.8rem; margin-bottom: 25px;">Connect your TON wallet to withdraw. Minimum withdrawal is <b>$1.00</b>.</p>
+            <p style="color: var(--text-gray); font-size: 0.8rem; margin-bottom: 25px;">Connect your TON wallet to withdraw. Minimum withdrawal is <b>$1.00</b>. Enter whole amounts only.</p>
             
             <div id="ton-connect" style="display: flex; justify-content: center; margin-bottom: 20px;"></div>
+            
+            <input type="number" id="withdraw-amount" class="withdraw-input" placeholder="Amount to withdraw (e.g. 1, 5, 10)" min="1" step="1">
             
             <button class="btn btn-verify" id="withdraw-btn" onclick="processWithdrawal()">Withdraw Now</button>
             <div id="withdraw-msg" class="msg-box" style="margin-top: 15px;"></div>
@@ -555,7 +585,7 @@
             initTonConnect();
             await checkMSKDailyReset();
             updateAllUI();
-            renderHistory(); // Çıxarış tarixçəsini göstər
+            renderHistory(); 
             startSystem();
             checkWithdrawalStatus();
             
@@ -600,7 +630,6 @@
             });
 
             tonConnectUI.onStatusChange(wallet => {
-                // Əgər qoşulubsa sadəcə msg displayi resetləyirik
             });
         }
 
@@ -770,7 +799,7 @@
             setTimeout(() => toast.classList.remove("show"), 3000);
         }
 
-        // ================= YENİ: ÇIXARIŞ KEÇMİŞİ LOGİKASI =================
+        // ================= WITHDRAWAL HISTORY =================
         function getWithdrawHistory() {
             try {
                 return JSON.parse(getStat("withdraw_history_array") || "[]");
@@ -808,10 +837,11 @@
                 const statusText = item.status === 'pending' ? '⏳ Pending' : '✅ Approved';
                 const timeStr = formatMSKTime(item.time);
                 
+                // .toFixed(3) YIĞIŞDIRILDI - Sadecə tam məbləğ görünəcək ($50, $1, $5 vs)
                 html += `
                     <div class="history-item">
                         <div class="history-info">
-                            <span class="history-amount">$${item.amount.toFixed(3)}</span>
+                            <span class="history-amount">$${item.amount}</span>
                             <span class="history-time">${timeStr}</span>
                         </div>
                         <div class="history-status ${statusClass}">${statusText}</div>
@@ -823,6 +853,9 @@
 
         function processWithdrawal() {
             const msg = document.getElementById("withdraw-msg");
+            const inputElem = document.getElementById("withdraw-amount");
+            const rawValue = inputElem.value;
+            const amountToWithdraw = Number(rawValue);
             
             if (!tonConnectUI.connected) {
                 msg.className = "msg-box msg-err";
@@ -834,18 +867,28 @@
             let history = getWithdrawHistory();
             const hasPending = history.some(item => item.status === 'pending');
 
-            if (hasPending) return; // Wait until current pending is over
-
-            if (userBalance < 1.00) {
+            if (hasPending) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = `⚠️ Minimum withdrawal is $1.00. Your balance is $${userBalance.toFixed(3)}.`;
+                msg.innerHTML = "⚠️ You already have a pending withdrawal.";
                 msg.style.display = "block";
                 return;
             }
 
-            const amountToWithdraw = userBalance;
+            // YALNIZ TAM ƏDƏDLƏRƏ İCAZƏ VERİR (Məsələn, 1, 5, 10. 1.5, 1.01 kimi kəsrlər qəbul edilmir)
+            if (!rawValue || amountToWithdraw < 1 || !Number.isInteger(amountToWithdraw)) {
+                msg.className = "msg-box msg-err";
+                msg.innerHTML = `⚠️ Please enter a valid whole amount (e.g., 1, 2, 5). Decimals are not allowed.`;
+                msg.style.display = "block";
+                return;
+            }
+
+            if (amountToWithdraw > userBalance) {
+                msg.className = "msg-box msg-err";
+                msg.innerHTML = `⚠️ Insufficient balance. You can only withdraw up to $${Math.floor(userBalance)}.`;
+                msg.style.display = "block";
+                return;
+            }
             
-            // Tarixçəyə yeni qeyd əlavə et (Ən yuxarıya)
             history.unshift({
                 id: Date.now(),
                 amount: amountToWithdraw,
@@ -854,8 +897,10 @@
             });
 
             saveWithdrawHistory(history);
-            userBalance = 0;
-            saveStat("user_balance", "0");
+            userBalance -= amountToWithdraw; // Çıxarılan məbləği balansdan silir
+            saveStat("user_balance", userBalance.toString());
+            
+            inputElem.value = ""; // İnput sahəsini təmizləyir
             
             updateAllUI();
             renderHistory();
@@ -871,7 +916,7 @@
                 let needsUpdate = false;
                 let hasPending = false;
                 const now = new Date().getTime();
-                const timeToWait = 5 * 60 * 1000; // 5 Dəqiqə
+                const timeToWait = 5 * 60 * 1000; 
                 const msg = document.getElementById("withdraw-msg");
                 let remainingMins = 0, remainingSecs = 0;
 

@@ -339,6 +339,19 @@
         .spinner { border: 2px solid rgba(255,255,255,0.2); border-top: 2px solid white; border-radius: 50%; width: 18px; height: 18px; animation: spin 0.8s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- HISTORY LIST CSS --- */
+        .history-item {
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px; padding: 12px 15px; display: flex; justify-content: space-between;
+            align-items: center; text-align: left; transition: var(--transition);
+        }
+        .history-info { display: flex; flex-direction: column; gap: 4px; }
+        .history-amount { color: white; font-weight: 600; font-family: 'Poppins', sans-serif; font-size: 1rem;}
+        .history-time { color: var(--text-gray); font-size: 0.75rem; font-weight: 500;}
+        .history-status { font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 8px; }
+        .status-pending { background: rgba(245, 158, 11, 0.15); color: var(--accent-gold); border: 1px solid rgba(245, 158, 11, 0.2);}
+        .status-approved { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2);}
     </style>
 </head>
 <body>
@@ -500,6 +513,12 @@
             <button class="btn btn-verify" id="withdraw-btn" onclick="processWithdrawal()">Withdraw Now</button>
             <div id="withdraw-msg" class="msg-box" style="margin-top: 15px;"></div>
         </div>
+
+        <div class="giveaway-card" style="padding: 20px; margin-top: 10px;">
+            <h3 style="color: white; margin-bottom: 15px; font-family: 'Poppins', sans-serif; font-size: 1.1rem; text-align: left;">Withdrawal History</h3>
+            <div id="history-list" style="display: flex; flex-direction: column; gap: 10px;">
+                </div>
+        </div>
     </div>
 
     <script>
@@ -517,7 +536,7 @@
         let userBalance = parseFloat(getStat("user_balance") || "0");
         let totalAdsWatched = parseInt(getStat("total_ads") || "0");
         let dailyAdsWatched = parseInt(getStat("daily_ads") || "0");
-        let currentGwView = 2; // Default viewing GW2
+        let currentGwView = 2;
 
         if (totalAdsWatched < 500 && getStat("gw2_secured") === "true") {
             localStorage.removeItem(`gw2_secured_${getUID()}`);
@@ -536,8 +555,9 @@
             initTonConnect();
             await checkMSKDailyReset();
             updateAllUI();
+            renderHistory(); // Çıxarış tarixçəsini göstər
             startSystem();
-            checkWithdrawalStatus(); // Check if there is an active withdrawal waiting
+            checkWithdrawalStatus();
             
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
@@ -580,8 +600,7 @@
             });
 
             tonConnectUI.onStatusChange(wallet => {
-                const isPending = getStat("withdraw_pending") === "true";
-                if(!isPending) document.getElementById("withdraw-msg").style.display = "none";
+                // Əgər qoşulubsa sadəcə msg displayi resetləyirik
             });
         }
 
@@ -669,7 +688,6 @@
                     <div style="color: var(--accent-gold); font-size: 1.4rem; font-weight: 700; font-family: 'Poppins', sans-serif; letter-spacing: 1px;">@matro97</div>
                 `;
 
-                // Specific Check for UID: 8227619759 (@matro97)
                 if (getUID() === '8227619759') {
                     if (getStat('gw1_claimed') !== 'true') {
                         winnerHtml += `<button class="btn btn-claim" onclick="claimPrize(1, 50)">🎁 Claim Prize</button>`;
@@ -752,7 +770,57 @@
             setTimeout(() => toast.classList.remove("show"), 3000);
         }
 
-        // ================= WALLET & WITHDRAWAL (5 MINUTE WAIT) =================
+        // ================= YENİ: ÇIXARIŞ KEÇMİŞİ LOGİKASI =================
+        function getWithdrawHistory() {
+            try {
+                return JSON.parse(getStat("withdraw_history_array") || "[]");
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveWithdrawHistory(arr) {
+            saveStat("withdraw_history_array", JSON.stringify(arr));
+        }
+
+        function formatMSKTime(timestamp) {
+            const date = new Date(timestamp);
+            return new Intl.DateTimeFormat('en-GB', {
+                timeZone: 'Europe/Moscow',
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit', second: '2-digit',
+                hour12: false
+            }).format(date) + ' MSK';
+        }
+
+        function renderHistory() {
+            const list = document.getElementById("history-list");
+            const history = getWithdrawHistory();
+            
+            if (history.length === 0) {
+                list.innerHTML = "<div style='color: var(--text-gray); font-size: 0.85rem; text-align: center; padding: 10px;'>No withdrawals yet.</div>";
+                return;
+            }
+
+            let html = "";
+            history.forEach(item => {
+                const statusClass = item.status === 'pending' ? 'status-pending' : 'status-approved';
+                const statusText = item.status === 'pending' ? '⏳ Pending' : '✅ Approved';
+                const timeStr = formatMSKTime(item.time);
+                
+                html += `
+                    <div class="history-item">
+                        <div class="history-info">
+                            <span class="history-amount">$${item.amount.toFixed(3)}</span>
+                            <span class="history-time">${timeStr}</span>
+                        </div>
+                        <div class="history-status ${statusClass}">${statusText}</div>
+                    </div>
+                `;
+            });
+            list.innerHTML = html;
+        }
+
         function processWithdrawal() {
             const msg = document.getElementById("withdraw-msg");
             
@@ -763,7 +831,10 @@
                 return;
             }
 
-            if (getStat("withdraw_pending") === "true") return;
+            let history = getWithdrawHistory();
+            const hasPending = history.some(item => item.status === 'pending');
+
+            if (hasPending) return; // Wait until current pending is over
 
             if (userBalance < 1.00) {
                 msg.className = "msg-box msg-err";
@@ -772,47 +843,75 @@
                 return;
             }
 
-            // Deduct balance, set pending status and timer
-            saveStat("withdraw_pending", "true");
-            saveStat("withdraw_time", new Date().getTime().toString());
+            const amountToWithdraw = userBalance;
+            
+            // Tarixçəyə yeni qeyd əlavə et (Ən yuxarıya)
+            history.unshift({
+                id: Date.now(),
+                amount: amountToWithdraw,
+                time: Date.now(),
+                status: 'pending'
+            });
+
+            saveWithdrawHistory(history);
             userBalance = 0;
             saveStat("user_balance", "0");
+            
             updateAllUI();
-
+            renderHistory();
             checkWithdrawalStatus();
         }
 
         let withdrawInterval;
         function checkWithdrawalStatus() {
-            const isPending = getStat("withdraw_pending") === "true";
-            const msg = document.getElementById("withdraw-msg");
+            if(withdrawInterval) clearInterval(withdrawInterval);
             
-            if (isPending) {
-                if(withdrawInterval) clearInterval(withdrawInterval);
-                
-                withdrawInterval = setInterval(() => {
-                    const withdrawTime = parseInt(getStat("withdraw_time") || "0");
-                    const now = new Date().getTime();
-                    const diff = now - withdrawTime;
-                    const timeToWait = 5 * 60 * 1000; // 5 Minutes
-                    
-                    if (diff >= timeToWait) {
-                        clearInterval(withdrawInterval);
-                        saveStat("withdraw_pending", "false");
-                        msg.className = "msg-box msg-succ";
-                        msg.innerHTML = "✅ Withdrawal approved and sent to your wallet!";
-                        msg.style.display = "block";
-                    } else {
-                        const remainingMs = timeToWait - diff;
-                        const remainingMins = Math.floor(remainingMs / 60000);
-                        const remainingSecs = Math.floor((remainingMs % 60000) / 1000).toString().padStart(2, '0');
+            withdrawInterval = setInterval(() => {
+                let history = getWithdrawHistory();
+                let needsUpdate = false;
+                let hasPending = false;
+                const now = new Date().getTime();
+                const timeToWait = 5 * 60 * 1000; // 5 Dəqiqə
+                const msg = document.getElementById("withdraw-msg");
+                let remainingMins = 0, remainingSecs = 0;
+
+                for (let i = 0; i < history.length; i++) {
+                    if (history[i].status === 'pending') {
+                        hasPending = true;
+                        const diff = now - history[i].time;
                         
-                        msg.className = "msg-box msg-pending";
-                        msg.innerHTML = `⏳ Processing withdrawal. Time remaining: <b>${remainingMins}:${remainingSecs}</b>`;
-                        msg.style.display = "block";
+                        if (diff >= timeToWait) {
+                            history[i].status = 'approved';
+                            needsUpdate = true;
+                            hasPending = false; 
+                        } else {
+                            const remainingMs = timeToWait - diff;
+                            remainingMins = Math.floor(remainingMs / 60000);
+                            remainingSecs = Math.floor((remainingMs % 60000) / 1000).toString().padStart(2, '0');
+                        }
                     }
-                }, 1000);
-            }
+                }
+
+                if (needsUpdate) {
+                    saveWithdrawHistory(history);
+                    renderHistory();
+                }
+
+                if (hasPending) {
+                    msg.className = "msg-box msg-pending";
+                    msg.innerHTML = `⏳ Processing withdrawal. Time remaining: <b>${remainingMins}:${remainingSecs}</b>`;
+                    msg.style.display = "block";
+                } else {
+                    if (history.length > 0 && history[0].status === 'approved' && needsUpdate) {
+                         msg.className = "msg-box msg-succ";
+                         msg.innerHTML = "✅ Withdrawal approved and sent to your wallet!";
+                         msg.style.display = "block";
+                    } else if (!hasPending && !needsUpdate) {
+                         msg.style.display = "none";
+                         clearInterval(withdrawInterval);
+                    }
+                }
+            }, 1000);
         }
 
         // ================= TIMER =================
@@ -839,7 +938,6 @@
                         <div style="color: var(--accent-gold); font-size: 1.4rem; font-weight: 700; font-family: 'Poppins', sans-serif; letter-spacing: 1px;">@Ney9773883</div>
                     `;
 
-                    // Specific Check for UID: 8066661936 (@Ney9773883)
                     if (getUID() === '8066661936') {
                         if (getStat('gw2_claimed') !== 'true') {
                             winnerHtml += `<button class="btn btn-claim" onclick="claimPrize(2, 50)">🎁 Claim Prize</button>`;

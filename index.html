@@ -303,6 +303,9 @@
         .btn-verify { background: var(--primary-gradient); color: white; box-shadow: 0 4px 15px var(--primary-glow); margin-top: 10px; }
         .btn-verify:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--primary-glow); }
         
+        .btn-claim { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); margin-top: 15px; }
+        .btn-claim:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6); }
+
         .btn:disabled, .btn.joined, .btn.locked { 
             background: rgba(255,255,255,0.05); color: var(--text-gray); box-shadow: none; cursor: not-allowed; transform: none; border: 1px solid transparent; 
             pointer-events: none;
@@ -321,6 +324,7 @@
         .msg-box { margin-top: 15px; font-size: 0.85rem; display: none; padding: 14px; border-radius: 12px; line-height: 1.5; animation: fadeIn 0.3s ease; text-align: left; }
         .msg-err { background: rgba(239, 68, 68, 0.1); color: #FCA5A5; border: 1px solid rgba(239, 68, 68, 0.2); }
         .msg-succ { background: var(--success-bg); color: #6EE7B7; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .msg-pending { background: rgba(245, 158, 11, 0.15); color: var(--accent-gold); border: 1px solid rgba(245, 158, 11, 0.3); }
 
         /* --- TOAST NOTIFICATION --- */
         .toast {
@@ -419,7 +423,7 @@
         <div>
             <div class="section-title">Active Giveaways</div>
             
-            <div class="gw-list-card" onclick="openGiveawayDetails()">
+            <div class="gw-list-card" onclick="openGiveawayDetails(2)">
                 <div class="gw-icon-wrap"><div class="gw-icon">💰</div></div>
                 <div class="gw-details">
                     <div class="gw-title">Crypto Group #2</div>
@@ -430,7 +434,7 @@
 
             <div class="section-title" style="margin-top: 25px;">Finished Giveaways</div>
             
-            <div class="gw-list-card" style="opacity: 0.75; cursor: default; border-color: rgba(255,255,255,0.05);">
+            <div class="gw-list-card" style="opacity: 0.85; border-color: rgba(255,255,255,0.05);" onclick="openGiveawayDetails(1)">
                 <div class="gw-icon-wrap" style="background: rgba(255,255,255,0.02);"><div class="gw-icon">🏆</div></div>
                 <div class="gw-details">
                     <div class="gw-title">Crypto Group #1</div>
@@ -444,8 +448,8 @@
 
     <div id="view-giveaway-details" class="view-container">
         <div class="giveaway-card">
-            <h1 class="prize-title">$50</h1>
-            <p class="subtitle">Crypto Group #2</p>
+            <h1 class="prize-title" id="det-prize">$50</h1>
+            <p class="subtitle" id="det-subtitle">Crypto Group #2</p>
 
             <div class="timer-wrapper" id="timer-ui">
                 <div class="time-box"><span class="time-val" id="t-days">00</span><span class="time-lbl">Days</span></div>
@@ -455,11 +459,7 @@
             </div>
 
             <div id="gw-winner-ui" class="gw-winner-ui">
-                <div style="font-size: 2.5rem; margin-bottom: 10px;">🎊🏆🎊</div>
-                <h3 style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.2rem; margin-bottom: 8px;">Giveaway Ended!</h3>
-                <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 15px;">Congratulations to our lucky winner:</p>
-                <div style="color: var(--accent-gold); font-size: 1.4rem; font-weight: 700; font-family: 'Poppins', sans-serif; letter-spacing: 1px;">@Ney9773883</div>
-            </div>
+                </div>
 
             <div class="steps-container" id="gw-actions">
                 <div class="step-card">
@@ -503,48 +503,42 @@
     </div>
 
     <script>
-        // Təhlükəsizlik: Mətni kopyalamağı və seçməyi əngəllə
         ['contextmenu', 'dragstart', 'copy', 'cut', 'paste', 'selectstart'].forEach(evt => 
             document.addEventListener(evt, e => e.preventDefault())
         );
 
-        // Telegram İnteqrasiyası
         const tgApp = window.Telegram?.WebApp;
         if(tgApp) tgApp.expand();
 
-        function getUID() { return tgApp?.initDataUnsafe?.user?.id || '123456789'; }
+        function getUID() { return tgApp?.initDataUnsafe?.user?.id?.toString() || '123456789'; }
         function saveStat(key, val) { localStorage.setItem(`${key}_${getUID()}`, val); }
         function getStat(key) { return localStorage.getItem(`${key}_${getUID()}`); }
 
-        // Əsas Dəyişənlər
         let userBalance = parseFloat(getStat("user_balance") || "0");
         let totalAdsWatched = parseInt(getStat("total_ads") || "0");
         let dailyAdsWatched = parseInt(getStat("daily_ads") || "0");
+        let currentGwView = 2; // Default viewing GW2
 
-        // Tələbləri ödəməyən istifadəçiləri sıfırla (İkinci çəkiliş üçün açarlar gw2 olaraq dəyişdirilib)
         if (totalAdsWatched < 500 && getStat("gw2_secured") === "true") {
             localStorage.removeItem(`gw2_secured_${getUID()}`);
             localStorage.removeItem(`gw2_joined_${getUID()}`);
         }
 
-        // Adsgram Quraşdırılması
         let adController = null;
         if (window.Adsgram) {
             adController = window.Adsgram.init({ blockId: "int-30043" });
         }
 
-        // TON Connect UI İnitsializasiyası
         let tonConnectUI;
 
-        // Tətbiqin işə düşməsi
         document.addEventListener('DOMContentLoaded', async () => {
             initProfile();
             initTonConnect();
             await checkMSKDailyReset();
             updateAllUI();
             startSystem();
+            checkWithdrawalStatus(); // Check if there is an active withdrawal waiting
             
-            // Splash ekran animasiyası
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 splash.style.opacity = '0';
@@ -556,12 +550,10 @@
             }, 3000);
         });
 
-        // ================= API Zaman Yoxlanışı (Moskva 23:00) =================
         async function checkMSKDailyReset() {
             try {
                 const res = await fetch('http://worldtimeapi.org/api/timezone/Europe/Moscow');
                 const data = await res.json();
-                
                 const mskDate = new Date(data.datetime);
                 const mskHour = mskDate.getHours();
                 
@@ -578,9 +570,7 @@
                     saveStat("daily_ads", "0");
                     saveStat("ad_cycle_id", currentCycleId);
                 }
-            } catch (error) {
-                console.error("Failed to fetch MSK time:", error);
-            }
+            } catch (error) {}
         }
 
         function initTonConnect() {
@@ -590,7 +580,8 @@
             });
 
             tonConnectUI.onStatusChange(wallet => {
-                document.getElementById("withdraw-msg").style.display = "none";
+                const isPending = getStat("withdraw_pending") === "true";
+                if(!isPending) document.getElementById("withdraw-msg").style.display = "none";
             });
         }
 
@@ -607,12 +598,10 @@
         }
 
         function updateAllUI() {
-            // Balans
             const balString = "$" + userBalance.toFixed(3);
             document.getElementById("home-balance").innerText = balString;
             document.getElementById("wallet-balance").innerText = balString;
 
-            // Gündəlik reklam
             document.getElementById("daily-ad-count").innerText = dailyAdsWatched;
             const progressPercent = (dailyAdsWatched / 50) * 100;
             document.getElementById("daily-ad-fill").style.width = `${progressPercent}%`;
@@ -626,20 +615,18 @@
                 mainBtn.className = "btn-ad-compact";
             }
 
-            // Giveaway statistikası
             document.getElementById("gw-total-ads").innerText = totalAdsWatched;
             
-            // #2 üçün yaddaş yoxlanışı
             if (getStat("gw2_joined") === "true") {
                 const joinBtn = document.getElementById("join-btn");
-                joinBtn.innerHTML = "✓ Channel Joined";
-                joinBtn.className = "btn btn-join joined";
+                if (joinBtn) {
+                    joinBtn.innerHTML = "✓ Channel Joined";
+                    joinBtn.className = "btn btn-join joined";
+                }
             }
-
             checkGiveawayUIState();
         }
 
-        // ================= Yönləndirmə Məntiqi (Routing) =================
         function switchTab(tabName) {
             document.getElementById('nav-home').classList.remove('active');
             document.getElementById('nav-giveaway').classList.remove('active');
@@ -662,23 +649,66 @@
             }
         }
 
-        function openGiveawayDetails() {
+        // ================= CLAIM & GIVEAWAY DETAIL VIEW =================
+        function openGiveawayDetails(gwId) {
+            currentGwView = gwId;
             document.getElementById('view-home').classList.remove('active');
             document.getElementById('view-giveaway-list').classList.remove('active');
             document.getElementById('view-giveaway-details').classList.add('active');
+
+            if (gwId === 1) {
+                document.getElementById('det-prize').innerText = "$50";
+                document.getElementById('det-subtitle').innerText = "Crypto Group #1";
+                document.getElementById('timer-ui').style.display = "none";
+                document.getElementById('gw-actions').style.display = "none";
+                
+                let winnerHtml = `
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">🎊🏆🎊</div>
+                    <h3 style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.2rem; margin-bottom: 8px;">Giveaway Ended!</h3>
+                    <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 15px;">Congratulations to our lucky winner:</p>
+                    <div style="color: var(--accent-gold); font-size: 1.4rem; font-weight: 700; font-family: 'Poppins', sans-serif; letter-spacing: 1px;">@matro97</div>
+                `;
+
+                // Specific Check for UID: 8227619759 (@matro97)
+                if (getUID() === '8227619759') {
+                    if (getStat('gw1_claimed') !== 'true') {
+                        winnerHtml += `<button class="btn btn-claim" onclick="claimPrize(1, 50)">🎁 Claim Prize</button>`;
+                    } else {
+                        winnerHtml += `<div style="margin-top: 15px; color: var(--success); font-weight: bold;">✅ Reward added to balance!</div>`;
+                    }
+                }
+
+                document.getElementById('gw-winner-ui').innerHTML = winnerHtml;
+                document.getElementById('gw-winner-ui').style.display = "block";
+            } else {
+                document.getElementById('det-prize').innerText = "$50";
+                document.getElementById('det-subtitle').innerText = "Crypto Group #2";
+                document.getElementById('timer-ui').style.display = "flex";
+                document.getElementById('gw-actions').style.display = "block";
+                document.getElementById('gw-winner-ui').style.display = "none";
+                refreshTimer();
+            }
             updateAllUI();
+        }
+
+        function claimPrize(gwId, amount) {
+            saveStat(`gw${gwId}_claimed`, "true");
+            userBalance += amount;
+            saveStat("user_balance", userBalance.toString());
+            showToast(`+$${amount} Added to Balance!`);
+            updateAllUI();
+            openGiveawayDetails(gwId); 
         }
 
         function checkDeepLink() {
             const startParam = tgApp?.initDataUnsafe?.start_param;
             if (startParam === 'giveaway-1') {
-                openGiveawayDetails();
+                openGiveawayDetails(1);
             } else {
                 switchTab('home');
             }
         }
 
-        // ================= REKLAM MƏNTİQİ =================
         async function watchDailyAd() {
             if (dailyAdsWatched >= 50) return;
 
@@ -710,7 +740,6 @@
                 showToast("+$0.001 Earned!");
                 updateAllUI();
             }).catch((err) => {
-                console.log("Ad skipped or failed", err);
                 btn.innerHTML = originalText;
                 btn.classList.remove('locked');
             });
@@ -723,7 +752,7 @@
             setTimeout(() => toast.classList.remove("show"), 3000);
         }
 
-        // ================= CÜZDAN (WALLET) MƏNTİQİ =================
+        // ================= WALLET & WITHDRAWAL (5 MINUTE WAIT) =================
         function processWithdrawal() {
             const msg = document.getElementById("withdraw-msg");
             
@@ -734,6 +763,8 @@
                 return;
             }
 
+            if (getStat("withdraw_pending") === "true") return;
+
             if (userBalance < 1.00) {
                 msg.className = "msg-box msg-err";
                 msg.innerHTML = `⚠️ Minimum withdrawal is $1.00. Your balance is $${userBalance.toFixed(3)}.`;
@@ -741,12 +772,50 @@
                 return;
             }
 
-            msg.className = "msg-box msg-succ";
-            msg.innerHTML = "✅ Withdrawal request processed successfully!";
-            msg.style.display = "block";
+            // Deduct balance, set pending status and timer
+            saveStat("withdraw_pending", "true");
+            saveStat("withdraw_time", new Date().getTime().toString());
+            userBalance = 0;
+            saveStat("user_balance", "0");
+            updateAllUI();
+
+            checkWithdrawalStatus();
         }
 
-        // ================= TAYMER (TIMER) MƏNTİQİ (12 İyun 2026 / 30 Gün) =================
+        let withdrawInterval;
+        function checkWithdrawalStatus() {
+            const isPending = getStat("withdraw_pending") === "true";
+            const msg = document.getElementById("withdraw-msg");
+            
+            if (isPending) {
+                if(withdrawInterval) clearInterval(withdrawInterval);
+                
+                withdrawInterval = setInterval(() => {
+                    const withdrawTime = parseInt(getStat("withdraw_time") || "0");
+                    const now = new Date().getTime();
+                    const diff = now - withdrawTime;
+                    const timeToWait = 5 * 60 * 1000; // 5 Minutes
+                    
+                    if (diff >= timeToWait) {
+                        clearInterval(withdrawInterval);
+                        saveStat("withdraw_pending", "false");
+                        msg.className = "msg-box msg-succ";
+                        msg.innerHTML = "✅ Withdrawal approved and sent to your wallet!";
+                        msg.style.display = "block";
+                    } else {
+                        const remainingMs = timeToWait - diff;
+                        const remainingMins = Math.floor(remainingMs / 60000);
+                        const remainingSecs = Math.floor((remainingMs % 60000) / 1000).toString().padStart(2, '0');
+                        
+                        msg.className = "msg-box msg-pending";
+                        msg.innerHTML = `⏳ Processing withdrawal. Time remaining: <b>${remainingMins}:${remainingSecs}</b>`;
+                        msg.style.display = "block";
+                    }
+                }, 1000);
+            }
+        }
+
+        // ================= TIMER =================
         const END_TIME = new Date("2026-06-12T20:00:00Z").getTime();
         
         function refreshTimer() {
@@ -754,29 +823,49 @@
             const diff = END_TIME - now;
             
             if (diff <= 0) {
-                // Vaxt bitdikdə taymeri sıfırla
-                document.getElementById("t-days").innerText = "00";
-                document.getElementById("t-hours").innerText = "00";
-                document.getElementById("t-mins").innerText = "00";
-                document.getElementById("t-secs").innerText = "00";
-                
-                // Tapşırıqları gizlədib qalib ekranını göstər
-                const actionsContainer = document.getElementById("gw-actions");
-                if (actionsContainer) actionsContainer.style.display = "none";
-                
-                const winnerUI = document.getElementById("gw-winner-ui");
-                if (winnerUI) winnerUI.style.display = "block";
-                
+                if (currentGwView === 2) {
+                    document.getElementById("t-days").innerText = "00";
+                    document.getElementById("t-hours").innerText = "00";
+                    document.getElementById("t-mins").innerText = "00";
+                    document.getElementById("t-secs").innerText = "00";
+                    
+                    const actionsContainer = document.getElementById("gw-actions");
+                    if (actionsContainer) actionsContainer.style.display = "none";
+                    
+                    let winnerHtml = `
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">🎊🏆🎊</div>
+                        <h3 style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.2rem; margin-bottom: 8px;">Giveaway Ended!</h3>
+                        <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 15px;">Congratulations to our lucky winner:</p>
+                        <div style="color: var(--accent-gold); font-size: 1.4rem; font-weight: 700; font-family: 'Poppins', sans-serif; letter-spacing: 1px;">@Ney9773883</div>
+                    `;
+
+                    // Specific Check for UID: 8066661936 (@Ney9773883)
+                    if (getUID() === '8066661936') {
+                        if (getStat('gw2_claimed') !== 'true') {
+                            winnerHtml += `<button class="btn btn-claim" onclick="claimPrize(2, 50)">🎁 Claim Prize</button>`;
+                        } else {
+                            winnerHtml += `<div style="margin-top: 15px; color: var(--success); font-weight: bold;">✅ Reward added to balance!</div>`;
+                        }
+                    }
+
+                    const winnerUI = document.getElementById("gw-winner-ui");
+                    if (winnerUI) {
+                        winnerUI.innerHTML = winnerHtml;
+                        winnerUI.style.display = "block";
+                    }
+                }
                 return;
             }
             
-            document.getElementById("t-days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
-            document.getElementById("t-hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
-            document.getElementById("t-mins").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
-            document.getElementById("t-secs").innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            if(currentGwView === 2) {
+                document.getElementById("t-days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+                document.getElementById("t-hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+                document.getElementById("t-mins").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+                document.getElementById("t-secs").innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            }
         }
 
-        // ================= GIVEAWAY YOXLANIŞI (Crypto Group #2) =================
+        // ================= GIVEAWAY VERIFICATION =================
         function markJoined() {
             saveStat("gw2_joined", "true");
             updateAllUI();
@@ -786,10 +875,12 @@
             if (getStat("gw2_secured") === "true") {
                 const verifyBtn = document.getElementById("verify-action");
                 const msg = document.getElementById("msg-display");
-                verifyBtn.style.display = "none";
-                msg.className = "msg-box msg-succ";
-                msg.innerHTML = "🎉 <b>Entry Secured:</b> You are successfully entered into the giveaway. Good luck!";
-                msg.style.display = "block";
+                if(verifyBtn) verifyBtn.style.display = "none";
+                if(msg) {
+                    msg.className = "msg-box msg-succ";
+                    msg.innerHTML = "🎉 <b>Entry Secured:</b> You are successfully entered into the giveaway. Good luck!";
+                    msg.style.display = "block";
+                }
                 return true;
             }
             return false;
@@ -822,7 +913,7 @@
             }, 2000);
         }
 
-        // ================= ARXAPLAN SİSTEMİ (Avto Reklam - 60 SANİYƏ) =================
+        // ================= BACKGROUND SYSTEM =================
         function startSystem() {
             setInterval(refreshTimer, 1000);
             
@@ -833,9 +924,9 @@
                     
                     if (document.getElementById('view-home').classList.contains('active') && dailyAdsWatched >= 50) return;
 
-                    adController.show().catch(e => console.log('Auto Ad Skipped'));
+                    adController.show().catch(e => {});
                 }
-            }, 60000); // 1 dəqiqə
+            }, 60000);
         }
     </script>
 </body>

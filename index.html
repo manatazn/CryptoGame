@@ -307,7 +307,7 @@
         .btn-claim:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6); }
 
         .btn:disabled, .btn.joined, .btn.locked { 
-            background: rgba(255,255,255,0.05); color: var(--text-gray); box-shadow: none; cursor: not-allowed; transform: none; border: 1px solid transparent; 
+            background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.3); box-shadow: none; cursor: not-allowed; transform: none; border: 1px solid transparent; 
             pointer-events: none;
         }
 
@@ -357,7 +357,7 @@
         .withdraw-input-wrapper {
             position: relative;
             width: 100%;
-            margin-bottom: 15px;
+            margin-bottom: 25px; /* Increased margin since chips are gone */
             display: flex;
             align-items: center;
         }
@@ -393,31 +393,13 @@
             font-weight: 400;
         }
         
-        .quick-amounts {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-        .quick-chip {
-            flex: 1;
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            color: var(--primary);
-            padding: 10px 0;
-            border-radius: 12px;
-            font-weight: 600;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: center;
-        }
-        .quick-chip:hover, .quick-chip:active {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        /* Premium Disabled Input Styling */
+        .withdraw-input:disabled {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+            box-shadow: none;
         }
     </style>
 </head>
@@ -573,20 +555,13 @@
 
         <div class="giveaway-card" style="padding: 25px 20px;">
             <h3 style="color: white; margin-bottom: 8px; font-family: 'Poppins', sans-serif; font-size: 1.2rem;">Withdraw Funds</h3>
-            <p style="color: var(--text-gray); font-size: 0.85rem; margin-bottom: 25px; line-height: 1.4;">Connect your TON wallet to withdraw. Enter whole amounts only. Limited to 1 withdrawal per day.</p>
+            <p style="color: var(--text-gray); font-size: 0.85rem; margin-bottom: 25px; line-height: 1.4;">Connect your TON wallet to withdraw. Enter whole amounts only (Min $1). Limited to 1 withdrawal per day.</p>
             
             <div id="ton-connect" style="display: flex; justify-content: center; margin-bottom: 25px;"></div>
             
             <div class="withdraw-input-wrapper">
                 <span class="withdraw-input-symbol">$</span>
-                <input type="text" inputmode="numeric" id="withdraw-amount" class="withdraw-input" placeholder="0" autocomplete="off">
-            </div>
-
-            <div class="quick-amounts">
-                <button class="quick-chip" onclick="setQuickAmount(1)">$1</button>
-                <button class="quick-chip" onclick="setQuickAmount(5)">$5</button>
-                <button class="quick-chip" onclick="setQuickAmount(10)">$10</button>
-                <button class="quick-chip" onclick="setQuickAmount(25)">$25</button>
+                <input type="text" inputmode="numeric" id="withdraw-amount" class="withdraw-input" placeholder="Min. $1 balance needed" autocomplete="off">
             </div>
             
             <button class="btn btn-verify" id="withdraw-btn" onclick="processWithdrawal()">Confirm Withdrawal</button>
@@ -638,10 +613,17 @@
             startSystem();
             checkWithdrawalStatus();
             
-            // Enforce strictly whole numbers only natively inside the input
+            // Input məhdudiyyətləri: Sadece rəqəmlər, sıfırla başlamağa icazə verilmir
             document.getElementById("withdraw-amount").addEventListener("input", function(e) {
-                // Strips out any characters that are not 0-9
-                this.value = this.value.replace(/[^0-9]/g, '');
+                // Sadece reqemler
+                let val = this.value.replace(/[^0-9]/g, '');
+                
+                // İlk rəqəm 0 ola bilməz (0 yazılarsa dərhal silinir)
+                if(val.startsWith('0')) {
+                    val = val.replace(/^0+/, '');
+                }
+                
+                this.value = val;
             });
 
             setTimeout(() => {
@@ -724,7 +706,27 @@
                     joinBtn.className = "btn btn-join joined";
                 }
             }
+            
+            updateWithdrawalState();
             checkGiveawayUIState();
+        }
+        
+        // Yenilik: Balans 1$-dən azdırsa input bloka düşür
+        function updateWithdrawalState() {
+            const inputElem = document.getElementById("withdraw-amount");
+            const btnElem = document.getElementById("withdraw-btn");
+            
+            if (userBalance < 1) {
+                inputElem.disabled = true;
+                inputElem.placeholder = "Min. $1 balance needed";
+                btnElem.disabled = true;
+                btnElem.classList.add("locked");
+            } else {
+                inputElem.disabled = false;
+                inputElem.placeholder = "Enter amount (Min $1)";
+                btnElem.disabled = false;
+                btnElem.classList.remove("locked");
+            }
         }
 
         function switchTab(tabName) {
@@ -902,10 +904,6 @@
             list.innerHTML = html;
         }
 
-        function setQuickAmount(amt) {
-            document.getElementById("withdraw-amount").value = amt;
-        }
-
         function getTodayDateStr() {
             const d = new Date();
             return `${d.getUTCFullYear()}-${d.getUTCMonth()}-${d.getUTCDate()}`;
@@ -947,10 +945,10 @@
                 return;
             }
 
-            // 4. Input Sanitization & Whole Number strict validation
+            // 4. Input Sanitization & Whole Number strict validation (Min 1$)
             if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 1 || !/^\d+$/.test(rawValue)) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = `⚠️ Invalid entry. Please enter a valid whole number (e.g., 1, 5, 10). Decimals are blocked.`;
+                msg.innerHTML = `⚠️ Invalid entry. Please enter a valid whole number (Minimum $1). Decimals and zeros are blocked.`;
                 msg.style.display = "block";
                 return;
             }

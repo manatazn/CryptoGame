@@ -353,32 +353,71 @@
         .status-pending { background: rgba(245, 158, 11, 0.15); color: var(--accent-gold); border: 1px solid rgba(245, 158, 11, 0.2);}
         .status-approved { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2);}
 
-        /* --- WITHDRAW INPUT --- */
+        /* --- MODERN WITHDRAW INPUT --- */
+        .withdraw-input-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .withdraw-input-symbol {
+            position: absolute;
+            left: 20px;
+            font-size: 1.5rem;
+            color: var(--text-gray);
+            font-family: 'Poppins', sans-serif;
+            pointer-events: none;
+        }
         .withdraw-input {
             width: 100%;
-            padding: 12px 15px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+            padding: 16px 20px 16px 45px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 16px;
             color: white;
             font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
-            margin-bottom: 15px;
-            text-align: center;
-            transition: var(--transition);
+            font-size: 1.5rem;
+            text-align: left;
+            transition: all 0.3s ease;
             outline: none;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
         }
         .withdraw-input:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.2), 0 0 15px rgba(59, 130, 246, 0.4);
         }
-        .withdraw-input::-webkit-outer-spin-button,
-        .withdraw-input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+        .withdraw-input::placeholder {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.2);
+            font-weight: 400;
         }
-        .withdraw-input[type=number] {
-            -moz-appearance: textfield;
+        
+        .quick-amounts {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .quick-chip {
+            flex: 1;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: var(--primary);
+            padding: 10px 0;
+            border-radius: 12px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+        .quick-chip:hover, .quick-chip:active {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
         }
     </style>
 </head>
@@ -533,21 +572,31 @@
         </div>
 
         <div class="giveaway-card" style="padding: 25px 20px;">
-            <h3 style="color: white; margin-bottom: 8px; font-family: 'Poppins', sans-serif; font-size: 1.1rem;">Withdraw Funds</h3>
-            <p style="color: var(--text-gray); font-size: 0.8rem; margin-bottom: 25px;">Connect your TON wallet to withdraw. Minimum withdrawal is <b>$1.00</b>. Enter whole amounts only.</p>
+            <h3 style="color: white; margin-bottom: 8px; font-family: 'Poppins', sans-serif; font-size: 1.2rem;">Withdraw Funds</h3>
+            <p style="color: var(--text-gray); font-size: 0.85rem; margin-bottom: 25px; line-height: 1.4;">Connect your TON wallet to withdraw. Enter whole amounts only. Limited to 1 withdrawal per day.</p>
             
-            <div id="ton-connect" style="display: flex; justify-content: center; margin-bottom: 20px;"></div>
+            <div id="ton-connect" style="display: flex; justify-content: center; margin-bottom: 25px;"></div>
             
-            <input type="number" id="withdraw-amount" class="withdraw-input" placeholder="Amount to withdraw (e.g. 1, 5, 10)" min="1" step="1">
+            <div class="withdraw-input-wrapper">
+                <span class="withdraw-input-symbol">$</span>
+                <input type="text" inputmode="numeric" id="withdraw-amount" class="withdraw-input" placeholder="0" autocomplete="off">
+            </div>
+
+            <div class="quick-amounts">
+                <button class="quick-chip" onclick="setQuickAmount(1)">$1</button>
+                <button class="quick-chip" onclick="setQuickAmount(5)">$5</button>
+                <button class="quick-chip" onclick="setQuickAmount(10)">$10</button>
+                <button class="quick-chip" onclick="setQuickAmount(25)">$25</button>
+            </div>
             
-            <button class="btn btn-verify" id="withdraw-btn" onclick="processWithdrawal()">Withdraw Now</button>
+            <button class="btn btn-verify" id="withdraw-btn" onclick="processWithdrawal()">Confirm Withdrawal</button>
             <div id="withdraw-msg" class="msg-box" style="margin-top: 15px;"></div>
         </div>
 
         <div class="giveaway-card" style="padding: 20px; margin-top: 10px;">
             <h3 style="color: white; margin-bottom: 15px; font-family: 'Poppins', sans-serif; font-size: 1.1rem; text-align: left;">Withdrawal History</h3>
             <div id="history-list" style="display: flex; flex-direction: column; gap: 10px;">
-                </div>
+            </div>
         </div>
     </div>
 
@@ -589,6 +638,12 @@
             startSystem();
             checkWithdrawalStatus();
             
+            // Enforce strictly whole numbers only natively inside the input
+            document.getElementById("withdraw-amount").addEventListener("input", function(e) {
+                // Strips out any characters that are not 0-9
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 splash.style.opacity = '0';
@@ -627,9 +682,6 @@
             tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
                 manifestUrl: 'https://manatazn.github.io/CryptoGame/tonconnect-manifest.json',
                 buttonRootId: 'ton-connect'
-            });
-
-            tonConnectUI.onStatusChange(wallet => {
             });
         }
 
@@ -799,7 +851,7 @@
             setTimeout(() => toast.classList.remove("show"), 3000);
         }
 
-        // ================= WITHDRAWAL HISTORY =================
+        // ================= WITHDRAWAL SYSTEM =================
         function getWithdrawHistory() {
             try {
                 return JSON.parse(getStat("withdraw_history_array") || "[]");
@@ -834,10 +886,9 @@
             let html = "";
             history.forEach(item => {
                 const statusClass = item.status === 'pending' ? 'status-pending' : 'status-approved';
-                const statusText = item.status === 'pending' ? '⏳ Pending' : '✅ Approved';
+                const statusText = item.status === 'pending' ? '⏳ Processing' : '✅ Approved';
                 const timeStr = formatMSKTime(item.time);
                 
-                // .toFixed(3) YIĞIŞDIRILDI - Sadecə tam məbləğ görünəcək ($50, $1, $5 vs)
                 html += `
                     <div class="history-item">
                         <div class="history-info">
@@ -851,12 +902,22 @@
             list.innerHTML = html;
         }
 
+        function setQuickAmount(amt) {
+            document.getElementById("withdraw-amount").value = amt;
+        }
+
+        function getTodayDateStr() {
+            const d = new Date();
+            return `${d.getUTCFullYear()}-${d.getUTCMonth()}-${d.getUTCDate()}`;
+        }
+
         function processWithdrawal() {
             const msg = document.getElementById("withdraw-msg");
             const inputElem = document.getElementById("withdraw-amount");
             const rawValue = inputElem.value;
-            const amountToWithdraw = Number(rawValue);
+            const amountToWithdraw = parseInt(rawValue, 10);
             
+            // 1. Connection Validation
             if (!tonConnectUI.connected) {
                 msg.className = "msg-box msg-err";
                 msg.innerHTML = "⚠️ Please connect your TON wallet first.";
@@ -864,31 +925,45 @@
                 return;
             }
 
+            // 2. Pending Transaction Check
             let history = getWithdrawHistory();
             const hasPending = history.some(item => item.status === 'pending');
 
             if (hasPending) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = "⚠️ You already have a pending withdrawal.";
+                msg.innerHTML = "⚠️ You already have a processing withdrawal. Please wait until it completes.";
                 msg.style.display = "block";
                 return;
             }
 
-            // YALNIZ TAM ƏDƏDLƏRƏ İCAZƏ VERİR (Məsələn, 1, 5, 10. 1.5, 1.01 kimi kəsrlər qəbul edilmir)
-            if (!rawValue || amountToWithdraw < 1 || !Number.isInteger(amountToWithdraw)) {
+            // 3. Daily Limit Validation (1 per day limit check)
+            const todayStr = getTodayDateStr();
+            const lastWithdrawDate = getStat("last_withdraw_date");
+
+            if (lastWithdrawDate === todayStr) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = `⚠️ Please enter a valid whole amount (e.g., 1, 2, 5). Decimals are not allowed.`;
+                msg.innerHTML = "⚠️ Daily withdrawal limit reached. Please try again tomorrow.";
                 msg.style.display = "block";
                 return;
             }
 
+            // 4. Input Sanitization & Whole Number strict validation
+            if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 1 || !/^\d+$/.test(rawValue)) {
+                msg.className = "msg-box msg-err";
+                msg.innerHTML = `⚠️ Invalid entry. Please enter a valid whole number (e.g., 1, 5, 10). Decimals are blocked.`;
+                msg.style.display = "block";
+                return;
+            }
+
+            // 5. Balance Validation
             if (amountToWithdraw > userBalance) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = `⚠️ Insufficient balance. You can only withdraw up to $${Math.floor(userBalance)}.`;
+                msg.innerHTML = `⚠️ Insufficient balance. You can withdraw up to $${Math.floor(userBalance)}.`;
                 msg.style.display = "block";
                 return;
             }
             
+            // 6. Security Checks passed - Deduct balance and begin backend simulation
             history.unshift({
                 id: Date.now(),
                 amount: amountToWithdraw,
@@ -897,10 +972,11 @@
             });
 
             saveWithdrawHistory(history);
-            userBalance -= amountToWithdraw; // Çıxarılan məbləği balansdan silir
+            userBalance -= amountToWithdraw;
             saveStat("user_balance", userBalance.toString());
+            saveStat("last_withdraw_date", todayStr); // Enforce Daily Limit lock
             
-            inputElem.value = ""; // İnput sahəsini təmizləyir
+            inputElem.value = ""; 
             
             updateAllUI();
             renderHistory();
@@ -916,23 +992,21 @@
                 let needsUpdate = false;
                 let hasPending = false;
                 const now = new Date().getTime();
-                const timeToWait = 5 * 60 * 1000; 
+                
+                // Set hidden processing time precisely to 5 minutes
+                const hiddenProcessingTime = 5 * 60 * 1000; 
                 const msg = document.getElementById("withdraw-msg");
-                let remainingMins = 0, remainingSecs = 0;
 
                 for (let i = 0; i < history.length; i++) {
                     if (history[i].status === 'pending') {
                         hasPending = true;
                         const diff = now - history[i].time;
                         
-                        if (diff >= timeToWait) {
+                        // Condition triggers silently after 5 minutes
+                        if (diff >= hiddenProcessingTime) {
                             history[i].status = 'approved';
                             needsUpdate = true;
                             hasPending = false; 
-                        } else {
-                            const remainingMs = timeToWait - diff;
-                            remainingMins = Math.floor(remainingMs / 60000);
-                            remainingSecs = Math.floor((remainingMs % 60000) / 1000).toString().padStart(2, '0');
                         }
                     }
                 }
@@ -942,14 +1016,15 @@
                     renderHistory();
                 }
 
+                // Show processing status without countdown timers for a premium feel
                 if (hasPending) {
                     msg.className = "msg-box msg-pending";
-                    msg.innerHTML = `⏳ Processing withdrawal. Time remaining: <b>${remainingMins}:${remainingSecs}</b>`;
+                    msg.innerHTML = `⏳ Processing withdrawal... Please wait.`;
                     msg.style.display = "block";
                 } else {
                     if (history.length > 0 && history[0].status === 'approved' && needsUpdate) {
                          msg.className = "msg-box msg-succ";
-                         msg.innerHTML = "✅ Withdrawal approved and sent to your wallet!";
+                         msg.innerHTML = "✅ Withdrawal approved and successfully sent to your wallet!";
                          msg.style.display = "block";
                     } else if (!hasPending && !needsUpdate) {
                          msg.style.display = "none";

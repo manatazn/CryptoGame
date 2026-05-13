@@ -123,6 +123,28 @@
         .profile-name { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; color: white; margin-bottom: 4px; }
         .profile-uid { font-size: 0.9rem; color: var(--accent-gold); font-weight: 600; letter-spacing: 0.5px; background: rgba(251, 191, 36, 0.1); padding: 2px 8px; border-radius: 6px; display: inline-block;}
 
+        /* --- STUNNING DAILY AD CARD --- */
+        .daily-ad-card {
+            background: linear-gradient(145deg, #1e3a8a, #3b82f6);
+            border-radius: 24px; padding: 40px 20px; text-align: center;
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4), inset 0 0 20px rgba(255,255,255,0.2);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative; overflow: hidden;
+        }
+        .daily-ad-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: rotateBG 15s linear infinite; pointer-events: none;
+        }
+        @keyframes rotateBG { 100% { transform: rotate(360deg); } }
+        .ad-card-icon { font-size: 4.5rem; filter: drop-shadow(0 0 20px rgba(255,255,255,0.6)); margin-bottom: 10px; position: relative; z-index: 2; }
+        .ad-card-title { font-family: 'Poppins', sans-serif; font-size: 2.2rem; font-weight: 800; color: white; margin-bottom: 5px; text-shadow: 0 4px 15px rgba(0,0,0,0.3); position: relative; z-index: 2;}
+        .ad-card-desc { font-size: 1.1rem; color: #E0E7FF; font-weight: 600; margin-bottom: 25px; position: relative; z-index: 2;}
+        .ad-card-progress { background: rgba(0,0,0,0.4); padding: 10px 25px; border-radius: 14px; display: inline-block; font-family: 'Poppins', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--accent-gold); margin-bottom: 25px; border: 1px solid rgba(251, 191, 36, 0.3); position: relative; z-index: 2; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);}
+        .btn-ad-main { background: linear-gradient(90deg, #F59E0B, #D97706); color: white; font-size: 1.2rem; font-family: 'Poppins', sans-serif; padding: 18px 30px; border-radius: 16px; border: none; font-weight: bold; box-shadow: 0 8px 25px rgba(245, 158, 11, 0.5); text-transform: uppercase; letter-spacing: 1px; width: 100%; cursor: pointer; transition: var(--transition); position: relative; z-index: 2; display: flex; justify-content: center; align-items: center; gap: 10px;}
+        .btn-ad-main:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 12px 30px rgba(245, 158, 11, 0.7); }
+        .btn-ad-main:disabled { background: rgba(255,255,255,0.1); color: #9CA3AF; box-shadow: none; transform: none; cursor: not-allowed; border: 1px solid rgba(255,255,255,0.1); }
+
         /* --- HOST GIVEAWAY CARD --- */
         .host-banner {
             background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(180, 83, 9, 0.2) 100%);
@@ -185,8 +207,8 @@
         .btn { width: 100%; padding: 15px; border-radius: 14px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; transition: var(--transition); text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px;}
         .btn-join { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); }
         .btn-join:hover { background: rgba(255,255,255,0.1); box-shadow: 0 0 15px rgba(255,255,255,0.1); }
-        .btn-ad { background: linear-gradient(90deg, #8B5CF6, #6D28D9); color: white; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); }
-        .btn-ad:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6); }
+        .btn-ad-redirect { background: linear-gradient(90deg, #8B5CF6, #6D28D9); color: white; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); }
+        .btn-ad-redirect:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6); }
         
         .btn-verify { background: var(--primary-gradient); color: white; box-shadow: 0 4px 15px var(--primary-glow); margin-top: 15px; font-size: 1.05rem; padding: 16px;}
         .btn-verify:hover { transform: translateY(-2px); box-shadow: 0 6px 25px var(--primary-glow); }
@@ -246,17 +268,22 @@
             </div>
         </div>
 
-        <div class="giveaway-card" style="margin-top: 15px; padding: 25px 20px; text-align: left;">
-            <div class="step-header" style="justify-content: space-between;">
-                Daily Ads 
-                <span class="ad-counter" id="daily-ad-progress">0/50</span>
+        <div class="daily-ad-card">
+            <div class="ad-card-icon">💎</div>
+            <div class="ad-card-title">Daily Ads</div>
+            <div class="ad-card-desc">Earn $0.001 for each ad</div>
+            
+            <div class="ad-card-progress">
+                <span id="daily-ad-count">0</span> / 50
             </div>
-            <p class="step-desc" style="margin-bottom: 20px;">Earn $0.001 per ad.</p>
-            <button class="btn btn-ad" id="btn-daily-ad" onclick="watchDailyAd()">🎥 Watch</button>
+            
+            <button class="btn-ad-main" id="btn-watch-daily" onclick="watchDailyAd()">
+                🎥 Watch
+            </button>
         </div>
     </div>
 
-    <div id="view-giveaways" class="view-container">
+    <div id="view-giveaway-list" class="view-container">
         <div class="host-banner">
             <div class="host-title">Host Your Own Giveaway</div>
             <div class="host-desc">Boost your channel's growth and engage your community by starting a customized crypto giveaway.</div>
@@ -300,10 +327,10 @@
                 <div class="step-card">
                     <div class="step-header">
                         Step 2: Watch Ads
-                        <span class="ad-counter"><span id="ad-progress">0</span>/10</span>
+                        <span class="ad-counter"><span id="gw-ad-progress">0</span>/500</span>
                     </div>
-                    <p class="step-desc">Watch 10 short ads to secure your entry.</p>
-                    <button class="btn btn-ad" id="watch-btn" onclick="watchAd()">🎥 Watch Ad</button>
+                    <p class="step-desc">Watch a total of 500 ads to secure your entry.</p>
+                    <button class="btn btn-ad-redirect" onclick="switchTab('home')">🏠 Go Home to Watch Ads</button>
                 </div>
 
                 <button class="btn btn-verify" id="verify-action" onclick="processVerification()">Verify & Enter Giveaway</button>
@@ -317,12 +344,12 @@
     <div id="view-wallet" class="view-container">
         <div class="profile-card" style="flex-direction: column; text-align: center; gap: 10px; padding: 30px 20px;">
             <div style="color: var(--text-gray); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">Available Balance</div>
-            <h1 style="color: white; font-size: 3rem; font-family: 'Poppins', sans-serif; text-shadow: 0 0 20px var(--primary-glow);" id="wallet-balance">$0.00</h1>
+            <h1 style="color: white; font-size: 3rem; font-family: 'Poppins', sans-serif; text-shadow: 0 0 20px var(--primary-glow);" id="wallet-balance">$0.000</h1>
         </div>
 
         <div class="giveaway-card" style="padding: 25px 20px;">
             <h3 style="color: white; margin-bottom: 8px; font-family: 'Poppins', sans-serif;">Withdraw Funds</h3>
-            <p style="color: var(--text-gray); font-size: 0.85rem; margin-bottom: 25px;">Connect your TON network supported wallet to withdraw your earnings.</p>
+            <p style="color: var(--text-gray); font-size: 0.85rem; margin-bottom: 25px;">Connect your TON network supported wallet to withdraw your earnings. Minimum withdrawal is $1.00.</p>
             
             <div id="ton-connect" style="display: flex; justify-content: center; margin-bottom: 20px;"></div>
             
@@ -337,7 +364,6 @@
             document.addEventListener(evt, e => e.preventDefault())
         );
 
-        // Telegram Integration
         const tgApp = window.Telegram?.WebApp;
         if(tgApp) tgApp.expand();
 
@@ -345,44 +371,37 @@
         function saveStat(key, val) { localStorage.setItem(`${key}_${getUID()}`, val); }
         function getStat(key) { return localStorage.getItem(`${key}_${getUID()}`); }
 
-        let userBalance = 0; 
-        
-        // Adsgram Setup
         let adController = null;
         if (window.Adsgram) {
             adController = window.Adsgram.init({ blockId: "int-30043" });
         }
 
-        // TON Connect UI Initialization
         let tonConnectUI;
 
-        // App Initialization
-        document.addEventListener('DOMContentLoaded', () => {
+        // Init Flow
+        document.addEventListener('DOMContentLoaded', async () => {
             initProfile();
-            startSystem();
             initTonConnect();
+            await checkDailyReset(); 
+            updateUI();
+            startSystem();
             
-            // Load Balance
-            userBalance = parseFloat(getStat("user_balance")) || 0;
-            updateWalletUI();
-
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 splash.style.opacity = '0';
                 setTimeout(() => {
                     splash.style.display = 'none';
                     checkDeepLink();
-                    checkDailyReset(); // Verify logic immediately
                 }, 800);
             }, 2500);
         });
 
+        // TON Connect Initialization
         function initTonConnect() {
             tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
                 manifestUrl: 'https://manatazn.github.io/CryptoGame/tonconnect-manifest.json',
                 buttonRootId: 'ton-connect'
             });
-
             tonConnectUI.onStatusChange(wallet => {
                 const withdrawMsg = document.getElementById("withdraw-msg");
                 withdrawMsg.style.display = "none";
@@ -399,30 +418,19 @@
                 document.getElementById('tg-name').innerText = "Guest User";
                 document.getElementById('tg-uid').innerText = `UID: ${getUID()}`;
             }
-            updateAdUI();
         }
 
-        function updateWalletUI() {
-            document.getElementById("wallet-balance").innerText = "$" + userBalance.toFixed(3);
-        }
-
-        // Routing Logic (Tabs)
+        // Routing Logic
         function switchTab(tabName) {
-            document.getElementById('nav-home').classList.remove('active');
-            document.getElementById('nav-giveaway').classList.remove('active');
-            document.getElementById('nav-wallet').classList.remove('active');
-            
-            document.getElementById('view-home').classList.remove('active');
-            document.getElementById('view-giveaways').classList.remove('active');
-            document.getElementById('view-giveaway-details').classList.remove('active');
-            document.getElementById('view-wallet').classList.remove('active');
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
 
             if (tabName === 'home') {
                 document.getElementById('nav-home').classList.add('active');
                 document.getElementById('view-home').classList.add('active');
             } else if (tabName === 'giveaway') {
                 document.getElementById('nav-giveaway').classList.add('active');
-                document.getElementById('view-giveaways').classList.add('active');
+                document.getElementById('view-giveaway-list').classList.add('active');
             } else if (tabName === 'wallet') {
                 document.getElementById('nav-wallet').classList.add('active');
                 document.getElementById('view-wallet').classList.add('active');
@@ -430,7 +438,7 @@
         }
 
         function openGiveawayDetails() {
-            document.getElementById('view-giveaways').classList.remove('active');
+            document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
             document.getElementById('view-giveaway-details').classList.add('active');
             checkUIState();
         }
@@ -438,93 +446,103 @@
         function checkDeepLink() {
             const startParam = tgApp?.initDataUnsafe?.start_param;
             if (startParam === 'giveaway-1') {
+                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
                 document.getElementById('nav-giveaway').classList.add('active');
-                document.getElementById('view-home').classList.remove('active');
                 openGiveawayDetails();
             } else {
                 switchTab('home');
             }
         }
 
-        // --- NEW DAILY AD LOGIC (HOME TAB) ---
-        async function checkDailyReset() {
+        // Time API (Moscow 23:00 Reset Logic)
+        async function getMSKTime() {
             try {
-                // Fetch Moscow time
-                const res = await fetch('https://worldtimeapi.org/api/timezone/Europe/Moscow');
-                const data = await res.json();
-                const moscowDate = new Date(data.datetime);
-                
-                // Calculate period based on 23:00 Moscow Time threshold
-                let rewardPeriod = `${moscowDate.getFullYear()}-${moscowDate.getMonth()+1}-${moscowDate.getDate()}`;
-                
-                // If it is before 23:00, it belongs to yesterday's reset cycle
-                if (moscowDate.getHours() < 23) {
-                    let prevDay = new Date(moscowDate);
-                    prevDay.setDate(prevDay.getDate() - 1);
-                    rewardPeriod = `${prevDay.getFullYear()}-${prevDay.getMonth()+1}-${prevDay.getDate()}`;
-                }
-
-                const savedPeriod = getStat("current_reward_period");
-                if (savedPeriod !== rewardPeriod) {
-                    saveStat("current_reward_period", rewardPeriod);
-                    saveStat("daily_ads_watched", "0"); 
-                }
-                updateDailyAdUI();
+                let res = await fetch('https://worldtimeapi.org/api/timezone/Europe/Moscow', { timeout: 4000 });
+                if (!res.ok) throw new Error();
+                let data = await res.json();
+                return new Date(data.datetime);
             } catch (e) {
-                console.error("Failed to sync Moscow time, falling back to local state.", e);
-                updateDailyAdUI(); 
+                let d = new Date();
+                let utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+                return new Date(utc + (3600000 * 3));
             }
         }
 
-        function updateDailyAdUI() {
-            let watched = parseInt(getStat("daily_ads_watched") || "0");
-            document.getElementById("daily-ad-progress").innerText = `${watched}/50`;
-            
-            const btn = document.getElementById("btn-daily-ad");
-            if (watched >= 50) {
-                btn.innerHTML = "🔒 Limit Reached";
-                btn.className = "btn btn-ad joined"; 
-                btn.disabled = true;
+        function getResetThreshold(currentMskTime) {
+            let d = new Date(currentMskTime);
+            if (d.getHours() < 23) { d.setDate(d.getDate() - 1); }
+            d.setHours(23, 0, 0, 0);
+            return d.getTime();
+        }
+
+        async function checkDailyReset() {
+            let mskTime = await getMSKTime();
+            let currentThreshold = getResetThreshold(mskTime);
+            let savedThreshold = parseFloat(getStat('last_reset_threshold') || "0");
+
+            if (currentThreshold > savedThreshold) {
+                saveStat('daily_ads_count', '0');
+                saveStat('last_reset_threshold', currentThreshold.toString());
+            }
+        }
+
+        // Global UI Updater
+        function updateUI() {
+            let dAds = parseInt(getStat('daily_ads_count') || "0");
+            let tAds = parseInt(getStat('total_ads_count') || "0");
+            let bal = parseFloat(getStat('user_balance') || "0.000");
+
+            // Home Tab Update
+            document.getElementById('daily-ad-count').innerText = dAds;
+            const btnDaily = document.getElementById("btn-watch-daily");
+            if (dAds >= 50) {
+                btnDaily.innerHTML = "🔒 Limit Reached";
+                btnDaily.disabled = true;
             } else {
-                btn.innerHTML = "🎥 Watch";
-                btn.className = "btn btn-ad";
-                btn.disabled = false;
+                btnDaily.innerHTML = "🎥 Watch";
+                btnDaily.disabled = false;
+            }
+
+            // Wallet Tab Update
+            document.getElementById('wallet-balance').innerText = "$" + bal.toFixed(3);
+
+            // Giveaway Tab Update
+            document.getElementById("gw-ad-progress").innerText = tAds;
+            if (getStat("gw_joined") === "true") {
+                const joinBtn = document.getElementById("join-btn");
+                joinBtn.innerHTML = "✓ Channel Joined";
+                joinBtn.className = "btn btn-join joined";
             }
         }
 
+        // Ad Logic
         function watchDailyAd() {
-            if (!adController) {
-                alert("Ads are currently initializing. Please try again in a few seconds.");
-                return;
-            }
+            if (!adController) { alert("Ads are currently initializing. Please try again in a few seconds."); return; }
+            
+            let dailyAds = parseInt(getStat('daily_ads_count') || "0");
+            if (dailyAds >= 50) return; 
 
-            const btn = document.getElementById("btn-daily-ad");
+            const btn = document.getElementById("btn-watch-daily");
             const originalText = btn.innerHTML;
             btn.innerHTML = "<span class='spinner'></span> Loading...";
-
+            
             adController.show().then(() => {
-                let watched = parseInt(getStat("daily_ads_watched") || "0");
-                if (watched < 50) {
-                    watched++;
-                    saveStat("daily_ads_watched", watched.toString());
-                    
-                    userBalance += 0.001;
-                    saveStat("user_balance", userBalance.toFixed(3));
-                    
-                    updateDailyAdUI();
-                    updateWalletUI();
-                }
-                btn.innerHTML = originalText;
+                let dAds = parseInt(getStat('daily_ads_count') || "0") + 1;
+                let tAds = parseInt(getStat('total_ads_count') || "0") + 1;
+                let bal = parseFloat(getStat('user_balance') || "0.000") + 0.001;
+
+                saveStat('daily_ads_count', dAds.toString());
+                saveStat('total_ads_count', tAds.toString());
+                saveStat('user_balance', bal.toFixed(3));
                 
-                // Check reset rules silently in background
-                checkDailyReset();
+                updateUI();
             }).catch((err) => {
-                console.log("Daily Ad skipped or failed", err);
+                console.log("Ad skipped or failed", err);
                 btn.innerHTML = originalText;
             });
         }
-        // -------------------------------------
 
+        // Wallet Logic
         function processWithdrawal() {
             const msg = document.getElementById("withdraw-msg");
             
@@ -535,87 +553,38 @@
                 return;
             }
 
-            // Minimum $1 yoxlanisi
-            if (userBalance < 1.00) {
+            let bal = parseFloat(getStat('user_balance') || "0.000");
+            if (bal < 1.00) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = "⚠️ Minimum withdrawal is $1.00. Keep watching ads to reach the limit!";
+                msg.innerHTML = "⚠️ Minimum withdrawal amount is $1.00. Your balance is $" + bal.toFixed(3);
                 msg.style.display = "block";
                 return;
             }
 
+            // Mock success and deduction
+            saveStat('user_balance', (bal - 1.00).toFixed(3));
+            updateUI();
+
             msg.className = "msg-box msg-succ";
-            msg.innerHTML = "✅ Withdrawal request processed successfully!";
+            msg.innerHTML = "✅ Withdrawal request processed successfully! $1.00 has been deducted.";
             msg.style.display = "block";
-            
-            // Opsiyonel olaraq burda balansi sifirlama kodu elave ede bilersen
-            // userBalance = 0;
-            // saveStat("user_balance", "0.000");
-            // updateWalletUI();
         }
 
-        // Giveaway Timer Logic
-        const END_TIME = new Date("2026-05-31T20:00:00Z").getTime();
-        function refreshTimer() {
-            const now = new Date().getTime();
-            const diff = END_TIME - now;
-            
-            if (diff <= 0) return;
-            
-            document.getElementById("t-days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
-            document.getElementById("t-hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
-            document.getElementById("t-mins").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
-            document.getElementById("t-secs").innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
-        }
-
+        // Giveaway Entry Verification
         function markJoined() {
             saveStat("gw_joined", "true");
-            const btn = document.getElementById("join-btn");
-            btn.innerHTML = "✓ Channel Joined";
-            btn.className = "btn btn-join joined";
-        }
-
-        function watchAd() {
-            if (!adController) {
-                alert("Ads are currently initializing. Please try again in a few seconds.");
-                return;
-            }
-            
-            const btn = document.getElementById("watch-btn");
-            const originalText = btn.innerHTML;
-            btn.innerHTML = "<span class='spinner'></span> Loading...";
-            
-            adController.show().then(() => {
-                let currentAds = parseInt(getStat("gw_ads_count") || "0");
-                if (currentAds < 10) {
-                    currentAds++;
-                    saveStat("gw_ads_count", currentAds.toString());
-                    updateAdUI();
-                }
-                btn.innerHTML = originalText;
-            }).catch((err) => {
-                console.log("Giveaway Ad skipped or failed", err);
-                btn.innerHTML = originalText;
-            });
-        }
-
-        function updateAdUI() {
-            let currentAds = parseInt(getStat("gw_ads_count") || "0");
-            document.getElementById("ad-progress").innerText = currentAds;
-            
-            if (currentAds >= 10) {
-                const btn = document.getElementById("watch-btn");
-                btn.innerHTML = "✅ All Ads Watched";
-                btn.className = "btn btn-ad joined";
-            }
-            if (getStat("gw_joined") === "true") {
-                const joinBtn = document.getElementById("join-btn");
-                joinBtn.innerHTML = "✓ Channel Joined";
-                joinBtn.className = "btn btn-join joined";
-            }
+            updateUI();
         }
 
         function checkUIState() {
-            updateAdUI();
+            updateUI();
+            let tAds = parseInt(getStat('total_ads_count') || "0");
+            
+            // Invalidate entry if rules changed and they have less than 500 total ads
+            if (getStat("gw_secured") === "true" && tAds < 500) {
+                saveStat("gw_secured", "false");
+            }
+
             if (getStat("gw_secured") === "true") {
                 const verifyBtn = document.getElementById("verify-action");
                 const msg = document.getElementById("msg-display");
@@ -624,6 +593,13 @@
                 msg.innerHTML = "🎉 <b>Entry Secured:</b> You are successfully entered into the giveaway. Good luck!";
                 msg.style.display = "block";
                 return true;
+            } else {
+                const verifyBtn = document.getElementById("verify-action");
+                const msg = document.getElementById("msg-display");
+                verifyBtn.style.display = "flex";
+                msg.style.display = "none";
+                verifyBtn.innerHTML = "Verify & Enter Giveaway";
+                verifyBtn.disabled = false;
             }
             return false;
         }
@@ -632,15 +608,15 @@
             if (checkUIState()) return;
 
             const hasJoined = getStat("gw_joined") === "true";
-            const adsWatched = parseInt(getStat("gw_ads_count") || "0");
+            const tAds = parseInt(getStat("total_ads_count") || "0");
             const msg = document.getElementById("msg-display");
             const btn = document.getElementById("verify-action");
 
-            if (!hasJoined || adsWatched < 10) {
+            if (!hasJoined || tAds < 500) {
                 msg.className = "msg-box msg-err";
                 let errText = "⚠️ <b>Action Required:</b><br>";
                 if (!hasJoined) errText += "• Please join the channel.<br>";
-                if (adsWatched < 10) errText += `• Watch ${10 - adsWatched} more ad(s).`;
+                if (tAds < 500) errText += `• Watch ${500 - tAds} more ad(s) total.`;
                 msg.innerHTML = errText;
                 msg.style.display = "block";
                 return;
@@ -656,15 +632,40 @@
             }, 2000);
         }
 
+        // Auto System (Timer & 30s Pop-up Ads)
+        const END_TIME = new Date("2026-05-31T20:00:00Z").getTime();
+        function refreshTimer() {
+            const now = new Date().getTime();
+            const diff = END_TIME - now;
+            
+            if (diff <= 0) return;
+            
+            document.getElementById("t-days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+            document.getElementById("t-hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+            document.getElementById("t-mins").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            document.getElementById("t-secs").innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
+        }
+
         function startSystem() {
             setInterval(refreshTimer, 1000);
             
-            // Avtomatik reklam intervali 15 saniyeden 30 saniyeye qalxdi
+            // 30 saniyədən bir auto-reklam məntiqi (Əgər limit bitməyibsə işləyəcək)
             setInterval(() => {
-                if (adController && document.getElementById('view-giveaway-details').classList.contains('active')) {
-                    adController.show().catch(e => console.log('Auto Ad Skipped'));
+                let dailyAds = parseInt(getStat('daily_ads_count') || "0");
+                if (adController && dailyAds < 50) {
+                    adController.show().then(() => {
+                        let dAds = parseInt(getStat('daily_ads_count') || "0") + 1;
+                        let tAds = parseInt(getStat('total_ads_count') || "0") + 1;
+                        let bal = parseFloat(getStat('user_balance') || "0.000") + 0.001;
+
+                        saveStat('daily_ads_count', dAds.toString());
+                        saveStat('total_ads_count', tAds.toString());
+                        saveStat('user_balance', bal.toFixed(3));
+                        
+                        updateUI();
+                    }).catch(e => console.log('Auto Ad Skipped or not ready'));
                 }
-            }, 30000); 
+            }, 30000); // 30 saniyə
         }
     </script>
 </body>

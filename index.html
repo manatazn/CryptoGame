@@ -357,7 +357,7 @@
         .withdraw-input-wrapper {
             position: relative;
             width: 100%;
-            margin-bottom: 15px;
+            margin-bottom: 25px;
             display: flex;
             align-items: center;
         }
@@ -545,23 +545,18 @@
         </div>
 
         <div class="giveaway-card" style="padding: 25px 20px;">
-            <h3 style="color: white; margin-bottom: 25px; font-family: 'Poppins', sans-serif; font-size: 1.2rem;">Withdraw</h3>
+            <h3 style="color: white; margin-bottom: 20px; font-family: 'Poppins', sans-serif; font-size: 1.2rem;">Withdraw Funds</h3>
             
             <div id="ton-connect" style="display: flex; justify-content: center; margin-bottom: 25px;"></div>
             
-            <div id="low-balance-msg" style="color: var(--text-gray); font-size: 0.9rem; line-height: 1.5; margin-bottom: 15px; display: none;">
-                Reach $1.00 to unlock withdrawals.
-            </div>
-
-            <div id="withdraw-action-area" style="display: none;">
+            <div id="withdraw-input-section" style="display: none;">
                 <div class="withdraw-input-wrapper">
                     <span class="withdraw-input-symbol">$</span>
                     <input type="text" inputmode="numeric" id="withdraw-amount" class="withdraw-input" placeholder="Enter amount" autocomplete="off">
                 </div>
-                
-                <button class="btn btn-verify" id="withdraw-btn" onclick="processWithdrawal()">Confirm Withdrawal</button>
             </div>
             
+            <button class="btn btn-verify" id="withdraw-btn" onclick="processWithdrawal()">Withdraw</button>
             <div id="withdraw-msg" class="msg-box" style="margin-top: 15px;"></div>
         </div>
 
@@ -610,7 +605,7 @@
             startSystem();
             checkWithdrawalStatus();
             
-            // Enforce strictly whole numbers only natively inside the input and prevent 0
+            // Enforce strictly whole numbers only natively inside the input and block leading zeroes
             document.getElementById("withdraw-amount").addEventListener("input", function(e) {
                 // Strips out any characters that are not 0-9 and removes leading zeros
                 this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '');
@@ -674,15 +669,6 @@
             document.getElementById("home-balance").innerText = balString;
             document.getElementById("wallet-balance").innerText = balString;
 
-            // Conditional display for withdraw section based on balance
-            if (userBalance >= 1) {
-                document.getElementById('withdraw-action-area').style.display = 'block';
-                document.getElementById('low-balance-msg').style.display = 'none';
-            } else {
-                document.getElementById('withdraw-action-area').style.display = 'none';
-                document.getElementById('low-balance-msg').style.display = 'block';
-            }
-
             document.getElementById("daily-ad-count").innerText = dailyAdsWatched;
             const progressPercent = (dailyAdsWatched / 50) * 100;
             document.getElementById("daily-ad-fill").style.width = `${progressPercent}%`;
@@ -705,6 +691,15 @@
                     joinBtn.className = "btn btn-join joined";
                 }
             }
+            
+            // Show or hide the withdrawal input based on the $1 minimum requirement
+            const withdrawInputSection = document.getElementById("withdraw-input-section");
+            if (userBalance >= 1) {
+                withdrawInputSection.style.display = "block";
+            } else {
+                withdrawInputSection.style.display = "none";
+            }
+
             checkGiveawayUIState();
         }
 
@@ -883,18 +878,23 @@
             list.innerHTML = html;
         }
 
-        function getTodayDateStr() {
-            const d = new Date();
-            return `${d.getUTCFullYear()}-${d.getUTCMonth()}-${d.getUTCDate()}`;
-        }
-
         function processWithdrawal() {
             const msg = document.getElementById("withdraw-msg");
+            
+            // 1. Balance Shortfall Check
+            if (userBalance < 1) {
+                const missingAmount = (1 - userBalance).toFixed(3);
+                msg.className = "msg-box msg-err";
+                msg.innerHTML = `⚠️ Minimum withdrawal is $1.00. You need $${missingAmount} more.`;
+                msg.style.display = "block";
+                return;
+            }
+
             const inputElem = document.getElementById("withdraw-amount");
             const rawValue = inputElem.value;
             const amountToWithdraw = parseInt(rawValue, 10);
             
-            // 1. Connection Validation
+            // 2. Connection Validation
             if (!tonConnectUI.connected) {
                 msg.className = "msg-box msg-err";
                 msg.innerHTML = "⚠️ Please connect your TON wallet first.";
@@ -902,7 +902,7 @@
                 return;
             }
 
-            // 2. Pending Transaction Check
+            // 3. Pending Transaction Check
             let history = getWithdrawHistory();
             const hasPending = history.some(item => item.status === 'pending');
 
@@ -913,21 +913,10 @@
                 return;
             }
 
-            // 3. Daily Limit Validation
-            const todayStr = getTodayDateStr();
-            const lastWithdrawDate = getStat("last_withdraw_date");
-
-            if (lastWithdrawDate === todayStr) {
-                msg.className = "msg-box msg-err";
-                msg.innerHTML = "⚠️ Daily withdrawal limit reached. Please try again tomorrow.";
-                msg.style.display = "block";
-                return;
-            }
-
             // 4. Input Sanitization & Whole Number strict validation
             if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 1 || !/^\d+$/.test(rawValue)) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = `⚠️ Minimum withdrawal amount is $1.`;
+                msg.innerHTML = `⚠️ Invalid entry. Please enter a valid whole number (e.g., 1, 5).`;
                 msg.style.display = "block";
                 return;
             }
@@ -951,7 +940,6 @@
             saveWithdrawHistory(history);
             userBalance -= amountToWithdraw;
             saveStat("user_balance", userBalance.toString());
-            saveStat("last_withdraw_date", todayStr); // Enforce Daily Limit lock
             
             inputElem.value = ""; 
             

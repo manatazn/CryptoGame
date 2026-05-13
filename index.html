@@ -143,15 +143,13 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             gap: 4px; transition: var(--transition);
             font-size: 0.75rem; width: 30%; height: 60px;
-            border-radius: 20px; /* Soft square/pill shape */
+            border-radius: 20px; 
             position: relative;
-            will-change: transform, background-color;
         }
         .nav-item svg {
             width: 24px; height: 24px;
             transition: var(--transition);
             stroke-width: 2.2;
-            will-change: transform;
         }
         .nav-item:active { transform: scale(0.92); }
         
@@ -170,11 +168,11 @@
         .view-container {
             width: 100%; max-width: 480px; padding: 20px; padding-bottom: 110px;
             display: none; flex-direction: column; gap: 20px;
-            animation: fadeInView 0.3s ease forwards;
-            will-change: opacity, transform;
+            /* Glitchleri yox etmək üçün transform və will-change silindi */
+            animation: fadeView 0.3s ease forwards;
         }
         .view-container.active { display: flex; }
-        @keyframes fadeInView { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeView { from { opacity: 0; } to { opacity: 1; } }
 
         /* --- COMPACT PROFILE HEADER --- */
         .app-header {
@@ -308,7 +306,7 @@
             border-radius: 20px;
             padding: 25px 20px;
             margin-bottom: 20px;
-            animation: fadeInView 0.5s ease;
+            animation: fadeView 0.5s ease;
         }
 
         /* Steps */
@@ -331,7 +329,7 @@
         .btn-claim:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6); }
 
         .btn:disabled, .btn.joined, .btn.locked { 
-            background: rgba(255,255,255,0.05); color: var(--text-gray); box-shadow: none; cursor: not-allowed; transform: none; border: 1px solid transparent; 
+            background: rgba(255,255,255,0.05); color: var(--text-gray); box-shadow: none; cursor: not-allowed; transform: none !important; border: 1px solid transparent; 
             pointer-events: none;
         }
 
@@ -520,7 +518,7 @@
         <div class="host-banner">
             <div class="host-title">Host Your Own Giveaway</div>
             <div class="host-desc">Boost your channel's growth and engage your community by starting a customized crypto giveaway.</div>
-            <a href="https://t.me/cryptogiveawayadmin" target="_blank" class="btn-host">💬 Contact Support</a>
+            <a href="#" onclick="openTgLink('https://t.me/cryptogiveawayadmin'); return false;" class="btn-host">💬 Contact Support</a>
         </div>
 
         <div>
@@ -568,7 +566,7 @@
                 <div class="step-card">
                     <div class="step-header">Step 1: Join Channel</div>
                     <p class="step-desc">Required to participate in the draw.</p>
-                    <a href="https://t.me/Crypto_group_2026" target="_blank" class="btn btn-join" id="join-btn" onclick="markJoined()">🔗 Join Channel</a>
+                    <a href="#" class="btn btn-join" id="join-btn" onclick="openTgLink('https://t.me/Crypto_group_2026'); markJoined(); return false;">🔗 Join Channel</a>
                 </div>
 
                 <div class="step-card">
@@ -601,7 +599,7 @@
             
             <div class="withdraw-step" id="connect-wallet-step">
                 <div id="connect-wallet-text" style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 15px; text-align: center; font-weight: 500;">Connect your wallet to withdraw funds</div>
-                <div id="ton-connect" style="display: flex; justify-content: center;"></div>
+                <div id="ton-connect" style="display: flex; justify-content: center; min-height: 48px;"></div>
             </div>
             
             <div id="withdraw-input-section" style="display: none;">
@@ -633,6 +631,16 @@
         const tgApp = window.Telegram?.WebApp;
         if(tgApp) tgApp.expand();
 
+        function openTgLink(url) {
+            if (tgApp && tgApp.openTelegramLink) {
+                tgApp.openTelegramLink(url);
+            } else if (tgApp && tgApp.openLink) {
+                tgApp.openLink(url);
+            } else {
+                window.open(url, '_blank');
+            }
+        }
+
         function getUID() { return tgApp?.initDataUnsafe?.user?.id?.toString() || '123456789'; }
         function saveStat(key, val) { localStorage.setItem(`${key}_${getUID()}`, val); }
         function getStat(key) { return localStorage.getItem(`${key}_${getUID()}`); }
@@ -658,7 +666,6 @@
             initProfile();
             initTonConnect();
             
-            // Başlanğıc ekranı fırlanarkən gücləndirilmiş çoxlu API ilə vaxtı yoxlayır
             await Promise.race([
                 checkMSKDailyReset(),
                 new Promise(resolve => setTimeout(resolve, 3500))
@@ -673,7 +680,6 @@
                 this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '');
             });
 
-            // Splash ekranını gizlət - Tam 4.5 saniyə (4500ms)
             const splash = document.getElementById('splash-screen');
             setTimeout(() => {
                 splash.style.opacity = '0';
@@ -681,8 +687,8 @@
                     splash.style.visibility = 'hidden';
                     splash.style.display = 'none';
                     checkDeepLink();
-                }, 800); // Bu sadəcə opacity fade effekti üçündür (0.8s animasiya)
-            }, 4500); // 4.5 saniyə burada tənzimlənib
+                }, 800);
+            }, 4500); 
         });
 
         async function fetchNetworkTime() {
@@ -809,7 +815,6 @@
         }
 
         function switchTab(tabName) {
-            // Tam sürətli və problemsiz keçid üçün klasslarla işləyirik
             document.getElementById('nav-home').classList.remove('active');
             document.getElementById('nav-giveaway').classList.remove('active');
             document.getElementById('nav-wallet').classList.remove('active');

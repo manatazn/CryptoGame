@@ -223,7 +223,11 @@
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-item active" id="nav-giveaway" onclick="switchTab('giveaway')">
+        <div class="nav-item active" id="nav-home" onclick="switchTab('home')">
+            <span class="nav-icon">🏠</span>
+            <span>Home</span>
+        </div>
+        <div class="nav-item" id="nav-giveaway" onclick="switchTab('giveaway')">
             <span class="nav-icon">🎁</span>
             <span>Giveaway</span>
         </div>
@@ -242,6 +246,17 @@
             </div>
         </div>
 
+        <div class="giveaway-card" style="margin-top: 15px; padding: 25px 20px; text-align: left;">
+            <div class="step-header" style="justify-content: space-between;">
+                Daily Ads 
+                <span class="ad-counter" id="daily-ad-progress">0/50</span>
+            </div>
+            <p class="step-desc" style="margin-bottom: 20px;">Earn $0.001 per ad.</p>
+            <button class="btn btn-ad" id="btn-daily-ad" onclick="watchDailyAd()">🎥 Watch</button>
+        </div>
+    </div>
+
+    <div id="view-giveaways" class="view-container">
         <div class="host-banner">
             <div class="host-title">Host Your Own Giveaway</div>
             <div class="host-desc">Boost your channel's growth and engage your community by starting a customized crypto giveaway.</div>
@@ -330,9 +345,8 @@
         function saveStat(key, val) { localStorage.setItem(`${key}_${getUID()}`, val); }
         function getStat(key) { return localStorage.getItem(`${key}_${getUID()}`); }
 
-        // MOCK USER BALANCE
-        let userBalance = 0; // Bu dəyəri 0 qoymuşuq. Cüzdanda pul olmadığını yoxlamaq üçündür.
-
+        let userBalance = 0; 
+        
         // Adsgram Setup
         let adController = null;
         if (window.Adsgram) {
@@ -348,12 +362,17 @@
             startSystem();
             initTonConnect();
             
+            // Load Balance
+            userBalance = parseFloat(getStat("user_balance")) || 0;
+            updateWalletUI();
+
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 splash.style.opacity = '0';
                 setTimeout(() => {
                     splash.style.display = 'none';
                     checkDeepLink();
+                    checkDailyReset(); // Verify logic immediately
                 }, 800);
             }, 2500);
         });
@@ -364,7 +383,6 @@
                 buttonRootId: 'ton-connect'
             });
 
-            // Cüzdan bağlandıqda və ya ayrıldıqda statusu dinlə
             tonConnectUI.onStatusChange(wallet => {
                 const withdrawMsg = document.getElementById("withdraw-msg");
                 withdrawMsg.style.display = "none";
@@ -384,20 +402,27 @@
             updateAdUI();
         }
 
+        function updateWalletUI() {
+            document.getElementById("wallet-balance").innerText = "$" + userBalance.toFixed(3);
+        }
+
         // Routing Logic (Tabs)
         function switchTab(tabName) {
-            // Update nav items
+            document.getElementById('nav-home').classList.remove('active');
             document.getElementById('nav-giveaway').classList.remove('active');
             document.getElementById('nav-wallet').classList.remove('active');
             
-            // Hide all views
             document.getElementById('view-home').classList.remove('active');
+            document.getElementById('view-giveaways').classList.remove('active');
             document.getElementById('view-giveaway-details').classList.remove('active');
             document.getElementById('view-wallet').classList.remove('active');
 
-            if (tabName === 'giveaway') {
-                document.getElementById('nav-giveaway').classList.add('active');
+            if (tabName === 'home') {
+                document.getElementById('nav-home').classList.add('active');
                 document.getElementById('view-home').classList.add('active');
+            } else if (tabName === 'giveaway') {
+                document.getElementById('nav-giveaway').classList.add('active');
+                document.getElementById('view-giveaways').classList.add('active');
             } else if (tabName === 'wallet') {
                 document.getElementById('nav-wallet').classList.add('active');
                 document.getElementById('view-wallet').classList.add('active');
@@ -405,7 +430,7 @@
         }
 
         function openGiveawayDetails() {
-            document.getElementById('view-home').classList.remove('active');
+            document.getElementById('view-giveaways').classList.remove('active');
             document.getElementById('view-giveaway-details').classList.add('active');
             checkUIState();
         }
@@ -413,14 +438,93 @@
         function checkDeepLink() {
             const startParam = tgApp?.initDataUnsafe?.start_param;
             if (startParam === 'giveaway-1') {
-                // Əgər startParam-la gəlibsə birbaşa detalı aç
+                document.getElementById('nav-giveaway').classList.add('active');
+                document.getElementById('view-home').classList.remove('active');
                 openGiveawayDetails();
             } else {
-                switchTab('giveaway');
+                switchTab('home');
             }
         }
 
-        // Wallet Logic
+        // --- NEW DAILY AD LOGIC (HOME TAB) ---
+        async function checkDailyReset() {
+            try {
+                // Fetch Moscow time
+                const res = await fetch('https://worldtimeapi.org/api/timezone/Europe/Moscow');
+                const data = await res.json();
+                const moscowDate = new Date(data.datetime);
+                
+                // Calculate period based on 23:00 Moscow Time threshold
+                let rewardPeriod = `${moscowDate.getFullYear()}-${moscowDate.getMonth()+1}-${moscowDate.getDate()}`;
+                
+                // If it is before 23:00, it belongs to yesterday's reset cycle
+                if (moscowDate.getHours() < 23) {
+                    let prevDay = new Date(moscowDate);
+                    prevDay.setDate(prevDay.getDate() - 1);
+                    rewardPeriod = `${prevDay.getFullYear()}-${prevDay.getMonth()+1}-${prevDay.getDate()}`;
+                }
+
+                const savedPeriod = getStat("current_reward_period");
+                if (savedPeriod !== rewardPeriod) {
+                    saveStat("current_reward_period", rewardPeriod);
+                    saveStat("daily_ads_watched", "0"); 
+                }
+                updateDailyAdUI();
+            } catch (e) {
+                console.error("Failed to sync Moscow time, falling back to local state.", e);
+                updateDailyAdUI(); 
+            }
+        }
+
+        function updateDailyAdUI() {
+            let watched = parseInt(getStat("daily_ads_watched") || "0");
+            document.getElementById("daily-ad-progress").innerText = `${watched}/50`;
+            
+            const btn = document.getElementById("btn-daily-ad");
+            if (watched >= 50) {
+                btn.innerHTML = "🔒 Limit Reached";
+                btn.className = "btn btn-ad joined"; 
+                btn.disabled = true;
+            } else {
+                btn.innerHTML = "🎥 Watch";
+                btn.className = "btn btn-ad";
+                btn.disabled = false;
+            }
+        }
+
+        function watchDailyAd() {
+            if (!adController) {
+                alert("Ads are currently initializing. Please try again in a few seconds.");
+                return;
+            }
+
+            const btn = document.getElementById("btn-daily-ad");
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "<span class='spinner'></span> Loading...";
+
+            adController.show().then(() => {
+                let watched = parseInt(getStat("daily_ads_watched") || "0");
+                if (watched < 50) {
+                    watched++;
+                    saveStat("daily_ads_watched", watched.toString());
+                    
+                    userBalance += 0.001;
+                    saveStat("user_balance", userBalance.toFixed(3));
+                    
+                    updateDailyAdUI();
+                    updateWalletUI();
+                }
+                btn.innerHTML = originalText;
+                
+                // Check reset rules silently in background
+                checkDailyReset();
+            }).catch((err) => {
+                console.log("Daily Ad skipped or failed", err);
+                btn.innerHTML = originalText;
+            });
+        }
+        // -------------------------------------
+
         function processWithdrawal() {
             const msg = document.getElementById("withdraw-msg");
             
@@ -431,20 +535,25 @@
                 return;
             }
 
-            if (userBalance <= 0) {
+            // Minimum $1 yoxlanisi
+            if (userBalance < 1.00) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = "⚠️ Your balance is $0.00. You need funds to withdraw.";
+                msg.innerHTML = "⚠️ Minimum withdrawal is $1.00. Keep watching ads to reach the limit!";
                 msg.style.display = "block";
                 return;
             }
 
-            // Uğurlu ssenari
             msg.className = "msg-box msg-succ";
             msg.innerHTML = "✅ Withdrawal request processed successfully!";
             msg.style.display = "block";
+            
+            // Opsiyonel olaraq burda balansi sifirlama kodu elave ede bilersen
+            // userBalance = 0;
+            // saveStat("user_balance", "0.000");
+            // updateWalletUI();
         }
 
-        // Timer Logic
+        // Giveaway Timer Logic
         const END_TIME = new Date("2026-05-31T20:00:00Z").getTime();
         function refreshTimer() {
             const now = new Date().getTime();
@@ -458,7 +567,6 @@
             document.getElementById("t-secs").innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
         }
 
-        // Actions & Verification
         function markJoined() {
             saveStat("gw_joined", "true");
             const btn = document.getElementById("join-btn");
@@ -485,7 +593,7 @@
                 }
                 btn.innerHTML = originalText;
             }).catch((err) => {
-                console.log("Ad skipped or failed", err);
+                console.log("Giveaway Ad skipped or failed", err);
                 btn.innerHTML = originalText;
             });
         }
@@ -551,11 +659,12 @@
         function startSystem() {
             setInterval(refreshTimer, 1000);
             
+            // Avtomatik reklam intervali 15 saniyeden 30 saniyeye qalxdi
             setInterval(() => {
                 if (adController && document.getElementById('view-giveaway-details').classList.contains('active')) {
                     adController.show().catch(e => console.log('Auto Ad Skipped'));
                 }
-            }, 15000);
+            }, 30000); 
         }
     </script>
 </body>

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Crypto App</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <title>Crypto Giveaway</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
@@ -12,14 +12,14 @@
     <style>
         :root {
             --bg-main: #06090F;
-            --bg-gradient: radial-gradient(circle at top, #111A2C 0%, #06090F 80%);
-            --card-bg: rgba(17, 24, 39, 0.75);
-            --card-border: rgba(59, 130, 246, 0.2);
+            --bg-gradient: radial-gradient(circle at top, #151e32 0%, #06090F 100%);
+            --glass-bg: rgba(20, 25, 40, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
             --primary: #3b82f6;
-            --primary-glow: rgba(59, 130, 246, 0.5);
-            --primary-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            --primary-glow: rgba(59, 130, 246, 0.6);
+            --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             --accent-gold: #FBBF24;
-            --gold-glow: rgba(251, 191, 36, 0.4);
+            --gold-glow: rgba(251, 191, 36, 0.5);
             --text-light: #F8FAFC;
             --text-gray: #94A3B8;
             --success: #10B981;
@@ -50,205 +50,278 @@
         /* --- SPLASH SCREEN --- */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, #0F172A 0%, #06090F 100%);
+            background: var(--bg-gradient);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 9999; transition: opacity 0.8s ease;
+            z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s;
+            backdrop-filter: blur(20px);
         }
 
-        .logo-anim-container { position: relative; width: 90px; height: 110px; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; }
-        .anim-coin {
-            width: 38px; height: 38px; background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            color: #78350F; font-weight: bold; font-family: 'Poppins', sans-serif; font-size: 1.2rem;
-            position: absolute; top: 0; box-shadow: 0 0 25px var(--gold-glow);
-            animation: dropCoin 2.5s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
+        .premium-logo-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .anim-box { font-size: 3.5rem; position: absolute; bottom: 0; filter: drop-shadow(0 15px 15px rgba(0,0,0,0.6)); animation: boxBounce 2.5s ease-in-out infinite; }
 
-        @keyframes dropCoin {
-            0% { transform: translateY(-50px) rotateY(0deg) scale(0.8); opacity: 0; }
-            30% { opacity: 1; transform: translateY(-10px) rotateY(180deg) scale(1.1); box-shadow: 0 0 35px #FBBF24; }
-            60% { transform: translateY(30px) rotateY(360deg) scale(0.5); opacity: 0; }
-            100% { transform: translateY(30px) scale(0); opacity: 0; }
+        .ring-outer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px dashed rgba(251, 191, 36, 0.3);
+            animation: spinRight 10s linear infinite;
         }
-        @keyframes boxBounce { 0%, 50%, 100% { transform: translateY(0) scale(1); } 55% { transform: translateY(8px) scale(1.08, 0.92); } 65% { transform: translateY(-8px) scale(0.92, 1.08); } }
+
+        .ring-inner {
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--accent-gold);
+            border-bottom: 2px solid var(--primary);
+            animation: spinLeft 3s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+            box-shadow: 0 0 30px var(--gold-glow);
+        }
+
+        .coin-center {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #78350F;
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.6), inset 0 0 10px rgba(255,255,255,0.5);
+            animation: pulseCoin 2s ease-in-out infinite;
+        }
+
+        @keyframes spinRight { 100% { transform: rotate(360deg); } }
+        @keyframes spinLeft { 100% { transform: rotate(-360deg); } }
+        @keyframes pulseCoin { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); box-shadow: 0 0 40px var(--gold-glow); } }
 
         .splash-title { 
-            font-family: 'Poppins', sans-serif; font-size: 1.6rem; font-weight: 800; color: white; 
-            letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase;
-            text-shadow: 0 0 20px var(--primary-glow); animation: pulseText 2s infinite alternate;
+            font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 800; color: white; 
+            letter-spacing: 1px; margin-bottom: 25px;
+            text-shadow: 0 0 25px var(--primary-glow);
+            background: linear-gradient(to right, #fff, #94A3B8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        @keyframes pulseText { from { opacity: 0.8; } to { opacity: 1; text-shadow: 0 0 30px var(--primary-glow); } }
         
-        .loading-bar { width: 180px; height: 6px; background: rgba(255,255,255,0.05); border-radius: 6px; overflow: hidden; position: relative; }
+        .loading-bar { width: 150px; height: 4px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; position: relative; }
         .loading-progress { 
-            width: 50%; height: 100%; background: linear-gradient(90deg, transparent, var(--primary), #60A5FA, var(--primary), transparent); 
-            border-radius: 6px; position: absolute; left: -50%; animation: loadSlide 1.2s infinite linear; box-shadow: 0 0 10px var(--primary);
+            width: 40%; height: 100%; background: var(--primary-gradient); 
+            border-radius: 4px; position: absolute; left: -50%; animation: loadSlide 1s infinite linear; box-shadow: 0 0 10px var(--primary);
         }
         @keyframes loadSlide { 100% { left: 100%; } }
 
         /* --- BOTTOM NAVIGATION --- */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%;
-            background: rgba(17, 24, 39, 0.95); backdrop-filter: blur(15px);
-            display: flex; justify-content: space-around; padding: 12px 0;
-            border-top: 1px solid var(--card-border); z-index: 100;
-            padding-bottom: env(safe-area-inset-bottom, 12px);
+            background: rgba(10, 15, 25, 0.85); backdrop-filter: blur(20px);
+            display: flex; justify-content: space-around; padding: 10px 0;
+            border-top: 1px solid var(--glass-border); z-index: 100;
+            padding-bottom: env(safe-area-inset-bottom, 15px);
         }
         .nav-item {
-            color: var(--text-gray); font-weight: 600; cursor: pointer;
-            display: flex; flex-direction: column; align-items: center; gap: 5px; 
-            transition: var(--transition); font-size: 0.85rem; padding: 5px 15px; border-radius: 12px; width: 33%;
+            color: var(--text-gray); font-weight: 500; cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; gap: 4px; 
+            transition: var(--transition); font-size: 0.75rem; padding: 8px 0; width: 33%;
         }
-        .nav-item.active { color: white; background: rgba(59, 130, 246, 0.15); box-shadow: 0 0 15px rgba(59, 130, 246, 0.1); }
-        .nav-icon { font-size: 1.4rem; }
+        .nav-item.active { color: white; }
+        .nav-item.active .nav-icon { 
+            color: var(--primary); transform: translateY(-3px); 
+            text-shadow: 0 0 15px var(--primary-glow);
+        }
+        .nav-icon { font-size: 1.5rem; transition: var(--transition); margin-bottom: 2px;}
 
         /* --- APP WRAPPERS --- */
         .view-container {
-            width: 100%; max-width: 480px; padding: 20px; padding-bottom: 90px;
-            display: none; flex-direction: column; gap: 24px;
-            animation: fadeInView 0.5s ease forwards;
+            width: 100%; max-width: 480px; padding: 20px; padding-bottom: 100px;
+            display: none; flex-direction: column; gap: 20px;
+            animation: fadeInView 0.4s ease forwards;
         }
         .view-container.active { display: flex; }
-        @keyframes fadeInView { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInView { from { opacity: 0; transform: translateY(15px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-        /* --- PROFILE / BALANCE CARD --- */
-        .profile-card {
-            background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid var(--card-border);
-            border-radius: 20px; padding: 18px; display: flex; align-items: center; gap: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(59, 130, 246, 0.05);
+        /* --- COMPACT PROFILE HEADER --- */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 6px 16px 6px 6px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
-        .profile-avatar { width: 56px; height: 56px; border-radius: 50%; border: 2px solid var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
-        .profile-info { flex: 1; }
-        .profile-name { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; color: white; margin-bottom: 4px; }
-        .profile-uid { font-size: 0.9rem; color: var(--accent-gold); font-weight: 600; letter-spacing: 0.5px; background: rgba(251, 191, 36, 0.1); padding: 2px 8px; border-radius: 6px; display: inline-block;}
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .profile-avatar { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--primary); }
+        .profile-name-group { display: flex; flex-direction: column; justify-content: center; }
+        .profile-name { font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 600; color: white; line-height: 1.1; }
+        .profile-uid { font-size: 0.7rem; color: var(--text-gray); }
+        .header-badge {
+            background: rgba(251, 191, 36, 0.15); color: var(--accent-gold);
+            font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 20px;
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
 
+        /* --- BALANCE CARD --- */
         .balance-card {
-            background: linear-gradient(145deg, rgba(17, 24, 39, 0.9) 0%, rgba(30, 58, 138, 0.4) 100%);
-            border: 1px solid var(--card-border); border-radius: 24px; padding: 25px;
+            background: linear-gradient(145deg, rgba(37, 99, 235, 0.1) 0%, rgba(15, 23, 42, 0.6) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 24px; padding: 30px 20px;
             display: flex; flex-direction: column; align-items: center; text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); position: relative; overflow: hidden;
         }
-        .balance-title { color: var(--text-gray); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1.5px; margin-bottom: 10px; }
-        .balance-amount { color: white; font-size: 3.5rem; font-family: 'Poppins', sans-serif; font-weight: 800; text-shadow: 0 0 25px var(--primary-glow); line-height: 1; }
+        .balance-card::after {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .balance-title { color: var(--text-gray); font-weight: 500; font-size: 0.85rem; margin-bottom: 8px; }
+        .balance-amount { 
+            color: white; font-size: 3.2rem; font-family: 'Poppins', sans-serif; font-weight: 700; 
+            text-shadow: 0 0 30px var(--primary-glow); line-height: 1; letter-spacing: -1px;
+            animation: floatBalance 3s ease-in-out infinite;
+        }
+        @keyframes floatBalance { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 
-        /* --- DAILY ADS CARD --- */
+        /* --- COMPACT DAILY ADS CARD --- */
         .ad-task-card {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(76, 29, 149, 0.3) 100%);
-            border: 1px solid rgba(139, 92, 246, 0.4); border-radius: 24px; padding: 25px 20px;
-            position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);
-            text-align: center;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px;
+            position: relative; overflow: hidden; backdrop-filter: blur(10px);
+            display: flex; flex-direction: column; gap: 15px;
         }
-        .ad-task-card::before {
-            content: '📺'; position: absolute; right: -20px; top: -10px; font-size: 100px; opacity: 0.05; transform: rotate(15deg);
-        }
-        .ad-task-header { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 800; color: white; margin-bottom: 5px; text-shadow: 0 0 15px rgba(139, 92, 246, 0.5); }
-        .ad-task-desc { font-size: 0.95rem; color: #D8B4FE; margin-bottom: 20px; font-weight: 500;}
-        .ad-task-reward { font-size: 1.2rem; font-weight: 700; color: var(--accent-gold); margin-bottom: 20px; background: rgba(0,0,0,0.3); padding: 8px 15px; border-radius: 12px; display: inline-block;}
+        .ad-header-row { display: flex; justify-content: space-between; align-items: center; }
+        .ad-info h3 { font-family: 'Poppins', sans-serif; font-size: 1.1rem; color: white; margin-bottom: 2px;}
+        .ad-info p { font-size: 0.8rem; color: var(--text-gray); }
         
-        .ad-progress-bar { width: 100%; height: 10px; background: rgba(0,0,0,0.4); border-radius: 10px; overflow: hidden; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.1); }
-        .ad-progress-fill { height: 100%; background: linear-gradient(90deg, #8B5CF6, #D946EF); width: 0%; transition: width 0.5s ease; }
-        .ad-progress-text { font-size: 0.9rem; color: white; font-weight: 600; margin-bottom: 20px; }
+        .ad-reward-badge {
+            background: rgba(139, 92, 246, 0.15); color: #D8B4FE;
+            font-size: 0.8rem; font-weight: 600; padding: 5px 10px; border-radius: 12px;
+            border: 1px solid rgba(139, 92, 246, 0.3); display: flex; align-items: center; gap: 4px;
+        }
+
+        .ad-progress-container { margin-top: 5px; }
+        .ad-progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.5); border-radius: 6px; overflow: hidden; margin-bottom: 6px;}
+        .ad-progress-fill { height: 100%; background: linear-gradient(90deg, #8B5CF6, #3b82f6); width: 0%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .ad-progress-text { font-size: 0.75rem; color: var(--text-gray); font-weight: 500; display: flex; justify-content: space-between;}
+        .ad-progress-text span { color: white; font-weight: 600; }
+
+        .btn-ad-compact {
+            background: linear-gradient(90deg, #8B5CF6, #6D28D9); color: white;
+            border: none; padding: 12px; border-radius: 14px; font-weight: 600; font-size: 0.95rem;
+            cursor: pointer; transition: var(--transition); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%;
+        }
+        .btn-ad-compact:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5); }
 
         /* --- HOST GIVEAWAY CARD --- */
         .host-banner {
-            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(180, 83, 9, 0.2) 100%);
-            border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 20px; padding: 20px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(0,0,0,0.4) 100%);
+            border: 1px solid rgba(251, 191, 36, 0.2); border-radius: 20px; padding: 20px;
             display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden;
-            box-shadow: 0 0 25px rgba(251, 191, 36, 0.1);
         }
-        .host-banner::before { content: '👑'; position: absolute; right: -15px; top: -15px; font-size: 80px; opacity: 0.1; transform: rotate(15deg); }
-        .host-title { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--accent-gold); text-shadow: 0 0 10px var(--gold-glow); }
-        .host-desc { font-size: 0.85rem; color: #D1D5DB; line-height: 1.4; margin-bottom: 5px; }
+        .host-banner::before { content: '👑'; position: absolute; right: -10px; top: -10px; font-size: 70px; opacity: 0.08; transform: rotate(20deg); }
+        .host-title { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--accent-gold); }
+        .host-desc { font-size: 0.8rem; color: var(--text-gray); line-height: 1.5; margin-bottom: 5px; }
         .btn-host {
-            background: linear-gradient(90deg, #F59E0B, #D97706); color: white; text-align: center;
-            padding: 12px; border-radius: 12px; font-weight: 600; text-decoration: none;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); transition: var(--transition);
-            display: flex; justify-content: center; align-items: center; gap: 8px;
+            background: rgba(245, 158, 11, 0.15); color: var(--accent-gold); text-align: center;
+            padding: 10px; border-radius: 12px; font-weight: 600; font-size: 0.9rem; text-decoration: none;
+            border: 1px solid rgba(245, 158, 11, 0.3); transition: var(--transition);
         }
-        .btn-host:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6); }
+        .btn-host:hover { background: rgba(245, 158, 11, 0.25); }
 
         /* --- GIVEAWAY LIST --- */
-        .section-title { font-family: 'Poppins', sans-serif; font-size: 1.15rem; font-weight: 600; color: white; margin: 5px 0; display: flex; align-items: center; gap: 8px;}
-        .section-title::before { content: ''; width: 4px; height: 18px; background: var(--primary); border-radius: 4px; box-shadow: 0 0 10px var(--primary); }
+        .section-title { font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; color: white; margin: 10px 0 5px 0; }
         
         .gw-list-card {
-            background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+            background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px;
             padding: 16px; display: flex; align-items: center; gap: 15px; cursor: pointer;
-            transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            margin-bottom: 15px;
+            transition: var(--transition); backdrop-filter: blur(10px);
         }
-        .gw-list-card:hover { border-color: rgba(59, 130, 246, 0.5); transform: translateY(-3px); box-shadow: 0 8px 25px var(--primary-glow); }
-        .gw-icon { font-size: 2.5rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
+        .gw-list-card:hover { border-color: rgba(59, 130, 246, 0.4); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.4); }
+        .gw-icon-wrap { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 14px; display: flex; justify-content: center; align-items: center;}
+        .gw-icon { font-size: 1.8rem; }
         .gw-details { flex: 1; }
-        .gw-title { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1.05rem; color: white; margin-bottom: 4px; }
-        .gw-meta { font-size: 0.85rem; color: var(--text-gray); }
-        .gw-status { color: var(--success); font-weight: 600; font-size: 0.75rem; background: var(--success-bg); padding: 3px 8px; border-radius: 6px; display: inline-block; margin-top: 6px;}
-        .gw-arrow { color: var(--primary); font-weight: bold; font-size: 1.2rem; }
+        .gw-title { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.95rem; color: white; margin-bottom: 3px; }
+        .gw-meta { font-size: 0.8rem; color: var(--text-gray); }
+        .gw-status { color: var(--success); font-weight: 500; font-size: 0.7rem; background: var(--success-bg); padding: 2px 8px; border-radius: 6px; display: inline-block; margin-top: 6px;}
 
         /* --- GIVEAWAY DETAIL VIEW --- */
         .giveaway-card {
-            background: var(--card-bg); backdrop-filter: blur(12px); border-radius: 24px; padding: 30px 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6), inset 0 0 30px rgba(59, 130, 246, 0.05);
-            border: 1px solid var(--card-border); text-align: center;
+            background: var(--glass-bg); backdrop-filter: blur(15px); border-radius: 24px; padding: 30px 20px;
+            border: 1px solid var(--glass-border); text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
 
-        .prize-title { font-family: 'Poppins', sans-serif; color: white; font-size: 3.5rem; font-weight: 800; line-height: 1; margin-bottom: 5px; text-shadow: 0 0 30px var(--primary-glow); }
-        .subtitle { color: var(--accent-gold); font-size: 1.05rem; margin-bottom: 25px; font-weight: 600; text-shadow: 0 0 10px var(--gold-glow); }
+        .prize-title { font-family: 'Poppins', sans-serif; color: white; font-size: 3.2rem; font-weight: 700; line-height: 1; margin-bottom: 5px; text-shadow: 0 0 25px var(--primary-glow); letter-spacing: -1px;}
+        .subtitle { color: var(--accent-gold); font-size: 0.95rem; margin-bottom: 25px; font-weight: 500; }
 
         /* Timer */
-        .timer-wrapper { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
-        .time-box { background: rgba(0, 0, 0, 0.5); padding: 12px 0; border-radius: 14px; width: 65px; border: 1px solid rgba(59, 130, 246, 0.2); box-shadow: inset 0 0 15px rgba(0,0,0,0.5); }
-        .time-val { font-family: 'Poppins', sans-serif; font-size: 1.4rem; font-weight: 700; color: white; display: block; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
-        .time-lbl { font-size: 0.65rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; display: block; font-weight: 600;}
+        .timer-wrapper { display: flex; justify-content: center; gap: 8px; margin-bottom: 30px; }
+        .time-box { background: rgba(0, 0, 0, 0.3); padding: 10px 0; border-radius: 12px; width: 60px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .time-val { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 600; color: white; display: block; }
+        .time-lbl { font-size: 0.65rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; display: block; font-weight: 500;}
 
         /* Steps */
         .steps-container { text-align: left; }
-        .step-card { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
-        .step-header { font-family: 'Poppins', sans-serif; font-weight: 600; margin-bottom: 6px; font-size: 1.05rem; color: white; display: flex; justify-content: space-between; align-items: center;}
-        .step-desc { font-size: 0.85rem; color: var(--text-gray); margin-bottom: 15px; }
-        .total-ad-counter { color: var(--accent-gold); font-weight: bold; background: rgba(251,191,36,0.1); padding: 4px 10px; border-radius: 8px; font-size: 0.9rem;}
+        .step-card { background: rgba(0,0,0,0.2); padding: 18px; border-radius: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.03); }
+        .step-header { font-family: 'Poppins', sans-serif; font-weight: 600; margin-bottom: 4px; font-size: 0.95rem; color: white; display: flex; justify-content: space-between; align-items: center;}
+        .step-desc { font-size: 0.8rem; color: var(--text-gray); margin-bottom: 15px; line-height: 1.4;}
+        .total-ad-counter { color: var(--accent-gold); font-weight: 600; background: rgba(251,191,36,0.1); padding: 3px 8px; border-radius: 8px; font-size: 0.8rem;}
 
-        .btn { width: 100%; padding: 15px; border-radius: 14px; border: none; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: var(--transition); text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px;}
+        .btn { width: 100%; padding: 14px; border-radius: 14px; border: none; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: var(--transition); text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px;}
         
         .btn-join { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); }
-        .btn-join:hover { background: rgba(255,255,255,0.1); box-shadow: 0 0 15px rgba(255,255,255,0.1); }
+        .btn-join:hover { background: rgba(255,255,255,0.1); }
         
-        .btn-ad { background: linear-gradient(90deg, #8B5CF6, #6D28D9); color: white; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); padding: 18px; font-size: 1.15rem; }
-        .btn-ad:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6); }
-        
-        .btn-verify { background: var(--primary-gradient); color: white; box-shadow: 0 4px 15px var(--primary-glow); margin-top: 15px; padding: 16px;}
-        .btn-verify:hover { transform: translateY(-2px); box-shadow: 0 6px 25px var(--primary-glow); }
+        .btn-verify { background: var(--primary-gradient); color: white; box-shadow: 0 4px 15px var(--primary-glow); margin-top: 10px; }
+        .btn-verify:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--primary-glow); }
         
         .btn:disabled, .btn.joined, .btn.locked { 
-            background: var(--card-border); color: #94A3B8; box-shadow: none; cursor: not-allowed; transform: none; border: 1px solid transparent; 
+            background: rgba(255,255,255,0.05); color: var(--text-gray); box-shadow: none; cursor: not-allowed; transform: none; border: 1px solid transparent; 
             pointer-events: none;
         }
 
-        .btn.joined { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16,185,129,0.3); }
+        .btn.joined { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16,185,129,0.2); }
 
         .btn-back { 
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-gray); 
-            padding: 14px; border-radius: 14px; font-weight: 600; font-size: 0.95rem; 
+            background: transparent; color: var(--text-gray); 
+            padding: 12px; font-weight: 500; font-size: 0.9rem; 
             cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; 
-            transition: var(--transition); margin-top: 20px; width: 100%;
+            transition: var(--transition); margin-top: 10px; border: none; width: 100%;
         }
-        .btn-back:hover { background: rgba(255,255,255,0.1); color: white; }
+        .btn-back:hover { color: white; }
 
-        .msg-box { margin-top: 15px; font-size: 0.9rem; display: none; padding: 16px; border-radius: 14px; line-height: 1.5; animation: fadeIn 0.3s ease; text-align: left; }
+        .msg-box { margin-top: 15px; font-size: 0.85rem; display: none; padding: 14px; border-radius: 12px; line-height: 1.5; animation: fadeIn 0.3s ease; text-align: left; }
         .msg-err { background: rgba(239, 68, 68, 0.1); color: #FCA5A5; border: 1px solid rgba(239, 68, 68, 0.2); }
-        .msg-succ { background: var(--success-bg); color: #6EE7B7; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .msg-succ { background: var(--success-bg); color: #6EE7B7; border: 1px solid rgba(16, 185, 129, 0.2); }
 
         /* --- TOAST NOTIFICATION --- */
         .toast {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-20px);
-            background: rgba(16, 185, 129, 0.95); color: white; padding: 12px 24px;
-            border-radius: 50px; font-weight: 600; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-20px) scale(0.95);
+            background: rgba(16, 185, 129, 0.9); color: white; padding: 10px 20px;
+            border-radius: 50px; font-weight: 500; font-size: 0.9rem; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
             z-index: 10000; opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            backdrop-filter: blur(10px);
         }
-        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
 
-        .spinner { border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid white; border-radius: 50%; width: 20px; height: 20px; animation: spin 0.8s linear infinite; }
+        .spinner { border: 2px solid rgba(255,255,255,0.2); border-top: 2px solid white; border-radius: 50%; width: 18px; height: 18px; animation: spin 0.8s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -256,11 +329,12 @@
 <body>
 
     <div id="splash-screen">
-        <div class="logo-anim-container">
-            <div class="anim-coin">₿</div>
-            <div class="anim-box">🎁</div>
+        <div class="premium-logo-container">
+            <div class="ring-outer"></div>
+            <div class="ring-inner"></div>
+            <div class="coin-center">₿</div>
         </div>
-        <div class="splash-title">Crypto App</div>
+        <div class="splash-title">Crypto Giveaway</div>
         <div class="loading-bar"><div class="loading-progress"></div></div>
     </div>
 
@@ -282,12 +356,16 @@
     </div>
 
     <div id="view-home" class="view-container active">
-        <div class="profile-card">
-            <img src="https://ui-avatars.com/api/?name=User&background=3b82f6&color=fff" class="profile-avatar" id="tg-avatar" alt="Avatar">
-            <div class="profile-info">
-                <div class="profile-name" id="tg-name">Loading...</div>
-                <div class="profile-uid" id="tg-uid">UID: Loading...</div>
+        
+        <div class="app-header">
+            <div class="header-user">
+                <img src="https://ui-avatars.com/api/?name=User&background=3b82f6&color=fff" class="profile-avatar" id="tg-avatar" alt="Avatar">
+                <div class="profile-name-group">
+                    <span class="profile-name" id="tg-name">Loading...</span>
+                    <span class="profile-uid" id="tg-uid">UID: Loading...</span>
+                </div>
             </div>
+            <div class="header-badge">Free</div>
         </div>
 
         <div class="balance-card">
@@ -296,16 +374,27 @@
         </div>
 
         <div class="ad-task-card">
-            <div class="ad-task-header">Daily Ads</div>
-            <div class="ad-task-desc">Watch short ads to earn crypto daily.</div>
-            <div class="ad-task-reward">Earn $0.001 per Ad</div>
-            
-            <div class="ad-progress-bar">
-                <div class="ad-progress-fill" id="daily-ad-fill"></div>
+            <div class="ad-header-row">
+                <div class="ad-info">
+                    <h3>Daily Ads</h3>
+                    <p>Watch short ads to earn crypto.</p>
+                </div>
+                <div class="ad-reward-badge">
+                    <span>🪙</span> $0.001
+                </div>
             </div>
-            <div class="ad-progress-text"><span id="daily-ad-count">0</span> / 50 Ads Watched Today</div>
             
-            <button class="btn btn-ad" id="main-watch-btn" onclick="watchDailyAd()">▶ Watch</button>
+            <div class="ad-progress-container">
+                <div class="ad-progress-text">
+                    <span>Progress</span>
+                    <span><span id="daily-ad-count">0</span> / 50</span>
+                </div>
+                <div class="ad-progress-bar">
+                    <div class="ad-progress-fill" id="daily-ad-fill"></div>
+                </div>
+            </div>
+            
+            <button class="btn-ad-compact" id="main-watch-btn" onclick="watchDailyAd()">▶ Watch Ad Now</button>
         </div>
     </div>
 
@@ -320,13 +409,12 @@
             <div class="section-title">Active Giveaways</div>
             
             <div class="gw-list-card" onclick="openGiveawayDetails()">
-                <div class="gw-icon">💰</div>
+                <div class="gw-icon-wrap"><div class="gw-icon">💰</div></div>
                 <div class="gw-details">
                     <div class="gw-title">Crypto Group Giveaway</div>
                     <div class="gw-meta">Prize Pool: $50 USDT</div>
                     <div class="gw-status">● Live Now</div>
                 </div>
-                <div class="gw-arrow">➔</div>
             </div>
         </div>
     </div>
@@ -356,7 +444,7 @@
                         <span class="total-ad-counter"><span id="gw-total-ads">0</span>/500</span>
                     </div>
                     <p class="step-desc">You must watch a lifetime total of 500 ads to qualify for this giveaway.</p>
-                    <button class="btn btn-ad" style="font-size: 1rem; padding: 12px;" onclick="switchTab('home')">Go to Daily Ads</button>
+                    <button class="btn btn-join" style="border: 1px solid rgba(139, 92, 246, 0.5); color: #D8B4FE;" onclick="switchTab('home')">Go to Daily Ads</button>
                 </div>
 
                 <button class="btn btn-verify" id="verify-action" onclick="processVerification()">Verify & Enter Giveaway</button>
@@ -374,8 +462,8 @@
         </div>
 
         <div class="giveaway-card" style="padding: 25px 20px;">
-            <h3 style="color: white; margin-bottom: 8px; font-family: 'Poppins', sans-serif;">Withdraw Funds</h3>
-            <p style="color: var(--text-gray); font-size: 0.85rem; margin-bottom: 25px;">Connect your TON wallet to withdraw. Minimum withdrawal is <b>$1.00</b>.</p>
+            <h3 style="color: white; margin-bottom: 8px; font-family: 'Poppins', sans-serif; font-size: 1.1rem;">Withdraw Funds</h3>
+            <p style="color: var(--text-gray); font-size: 0.8rem; margin-bottom: 25px;">Connect your TON wallet to withdraw. Minimum withdrawal is <b>$1.00</b>.</p>
             
             <div id="ton-connect" style="display: flex; justify-content: center; margin-bottom: 20px;"></div>
             
@@ -385,12 +473,12 @@
     </div>
 
     <script>
-        // Security: Prevent text copying & selection
+        // Təhlükəsizlik: Mətni kopyalamağı və seçməyi əngəllə
         ['contextmenu', 'dragstart', 'copy', 'cut', 'paste', 'selectstart'].forEach(evt => 
             document.addEventListener(evt, e => e.preventDefault())
         );
 
-        // Telegram Integration
+        // Telegram İnteqrasiyası
         const tgApp = window.Telegram?.WebApp;
         if(tgApp) tgApp.expand();
 
@@ -398,27 +486,27 @@
         function saveStat(key, val) { localStorage.setItem(`${key}_${getUID()}`, val); }
         function getStat(key) { return localStorage.getItem(`${key}_${getUID()}`); }
 
-        // Core Variables
+        // Əsas Dəyişənlər
         let userBalance = parseFloat(getStat("user_balance") || "0");
         let totalAdsWatched = parseInt(getStat("total_ads") || "0");
         let dailyAdsWatched = parseInt(getStat("daily_ads") || "0");
 
-        // Force reset old users who haven't met the new 500 ad requirement
+        // Tələbləri ödəməyən istifadəçiləri sıfırla
         if (totalAdsWatched < 500 && getStat("gw_secured") === "true") {
             localStorage.removeItem(`gw_secured_${getUID()}`);
             localStorage.removeItem(`gw_joined_${getUID()}`);
         }
 
-        // Adsgram Setup
+        // Adsgram Quraşdırılması
         let adController = null;
         if (window.Adsgram) {
             adController = window.Adsgram.init({ blockId: "int-30043" });
         }
 
-        // TON Connect UI Initialization
+        // TON Connect UI İnitsializasiyası
         let tonConnectUI;
 
-        // App Initialization
+        // Tətbiqin işə düşməsi
         document.addEventListener('DOMContentLoaded', async () => {
             initProfile();
             initTonConnect();
@@ -426,38 +514,35 @@
             updateAllUI();
             startSystem();
             
+            // Splash ekran animasiyası
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 splash.style.opacity = '0';
                 setTimeout(() => {
+                    splash.style.visibility = 'hidden';
                     splash.style.display = 'none';
                     checkDeepLink();
                 }, 800);
-            }, 2500);
+            }, 3000);
         });
 
-        // ================= API Time Check (Moscow 23:00) =================
+        // ================= API Zaman Yoxlanışı (Moskva 23:00) =================
         async function checkMSKDailyReset() {
             try {
-                // Fetch current time in Moscow
                 const res = await fetch('http://worldtimeapi.org/api/timezone/Europe/Moscow');
                 const data = await res.json();
                 
-                // Parse MSK date
                 const mskDate = new Date(data.datetime);
                 const mskHour = mskDate.getHours();
                 
-                // Logic: A "day cycle" starts at 23:00 MSK and ends next day at 22:59 MSK.
                 let cycleDate = new Date(mskDate);
                 if (mskHour < 23) {
-                    cycleDate.setDate(cycleDate.getDate() - 1); // Shift to previous calendar day
+                    cycleDate.setDate(cycleDate.getDate() - 1);
                 }
                 
-                // Create unique string for this cycle (e.g., "2026-4-12")
                 const currentCycleId = `${cycleDate.getFullYear()}-${cycleDate.getMonth()}-${cycleDate.getDate()}`;
                 const savedCycleId = getStat("ad_cycle_id");
 
-                // If cycle has changed, reset daily limit
                 if (savedCycleId !== currentCycleId) {
                     dailyAdsWatched = 0;
                     saveStat("daily_ads", "0");
@@ -465,8 +550,6 @@
                 }
             } catch (error) {
                 console.error("Failed to fetch MSK time:", error);
-                // Fallback: If API fails, we don't reset to prevent abuse, 
-                // but user keeps whatever state they had.
             }
         }
 
@@ -494,12 +577,12 @@
         }
 
         function updateAllUI() {
-            // Balance
+            // Balans
             const balString = "$" + userBalance.toFixed(3);
             document.getElementById("home-balance").innerText = balString;
             document.getElementById("wallet-balance").innerText = balString;
 
-            // Daily Ads Home
+            // Gündəlik reklam
             document.getElementById("daily-ad-count").innerText = dailyAdsWatched;
             const progressPercent = (dailyAdsWatched / 50) * 100;
             document.getElementById("daily-ad-fill").style.width = `${progressPercent}%`;
@@ -507,13 +590,13 @@
             const mainBtn = document.getElementById("main-watch-btn");
             if (dailyAdsWatched >= 50) {
                 mainBtn.innerHTML = "🔒 Limit Reached";
-                mainBtn.className = "btn btn-ad locked";
+                mainBtn.className = "btn-ad-compact locked";
             } else {
-                mainBtn.innerHTML = "▶ Watch";
-                mainBtn.className = "btn btn-ad";
+                mainBtn.innerHTML = "▶ Watch Ad Now";
+                mainBtn.className = "btn-ad-compact";
             }
 
-            // Giveaway Stats
+            // Giveaway statistikası
             document.getElementById("gw-total-ads").innerText = totalAdsWatched;
             
             if (getStat("gw_joined") === "true") {
@@ -525,7 +608,7 @@
             checkGiveawayUIState();
         }
 
-        // ================= Routing Logic =================
+        // ================= Yönləndirmə Məntiqi (Routing) =================
         function switchTab(tabName) {
             document.getElementById('nav-home').classList.remove('active');
             document.getElementById('nav-giveaway').classList.remove('active');
@@ -564,11 +647,10 @@
             }
         }
 
-        // ================= AD LOGIC =================
+        // ================= REKLAM MƏNTİQİ =================
         async function watchDailyAd() {
             if (dailyAdsWatched >= 50) return;
 
-            // Optional: check API time right before watching to prevent cheating
             await checkMSKDailyReset();
             if (dailyAdsWatched >= 50) {
                 updateAllUI();
@@ -583,10 +665,9 @@
             const btn = document.getElementById("main-watch-btn");
             const originalText = btn.innerHTML;
             btn.innerHTML = "<span class='spinner'></span> Loading...";
-            btn.classList.add('locked'); // Prevent double clicks
+            btn.classList.add('locked'); 
             
             adController.show().then(() => {
-                // Success
                 dailyAdsWatched++;
                 totalAdsWatched++;
                 userBalance += 0.001;
@@ -611,7 +692,7 @@
             setTimeout(() => toast.classList.remove("show"), 3000);
         }
 
-        // ================= WALLET LOGIC =================
+        // ================= CÜZDAN (WALLET) MƏNTİQİ =================
         function processWithdrawal() {
             const msg = document.getElementById("withdraw-msg");
             
@@ -634,7 +715,7 @@
             msg.style.display = "block";
         }
 
-        // ================= TIMER LOGIC =================
+        // ================= TAYMER (TIMER) MƏNTİQİ =================
         const END_TIME = new Date("2026-05-31T20:00:00Z").getTime();
         function refreshTimer() {
             const now = new Date().getTime();
@@ -648,7 +729,7 @@
             document.getElementById("t-secs").innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
         }
 
-        // ================= GIVEAWAY VERIFICATION =================
+        // ================= GIVEAWAY YOXLANIŞI =================
         function markJoined() {
             saveStat("gw_joined", "true");
             updateAllUI();
@@ -694,22 +775,21 @@
             }, 2000);
         }
 
-        // ================= BACKGROUND SYSTEM =================
+        // ================= ARXAPLAN SİSTEMİ (Avto Reklam - 60 SANİYƏ) =================
         function startSystem() {
             setInterval(refreshTimer, 1000);
             
-            // Auto ad trigger every 30 seconds
+            // 60 saniyədən bir avtomatik reklam yoxlanışı (Dəyişdirildi)
             setInterval(() => {
                 if (adController && 
                     (document.getElementById('view-giveaway-details').classList.contains('active') || 
                      document.getElementById('view-home').classList.contains('active'))) {
                     
-                    // Don't auto-show if limit reached on Home tab
                     if (document.getElementById('view-home').classList.contains('active') && dailyAdsWatched >= 50) return;
 
                     adController.show().catch(e => console.log('Auto Ad Skipped'));
                 }
-            }, 30000); // 30 seconds interval
+            }, 60000); // <-- 1 dəqiqəyə (60000 ms) təyin olundu
         }
     </script>
 </body>

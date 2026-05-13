@@ -277,6 +277,17 @@
         .time-val { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 600; color: white; display: block; }
         .time-lbl { font-size: 0.65rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; display: block; font-weight: 500;}
 
+        /* Winner Reveal Box */
+        .gw-winner-ui {
+            display: none;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            padding: 25px 20px;
+            margin-bottom: 20px;
+            animation: fadeInView 0.5s ease;
+        }
+
         /* Steps */
         .steps-container { text-align: left; }
         .step-card { background: rgba(0,0,0,0.2); padding: 18px; border-radius: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.03); }
@@ -443,7 +454,14 @@
                 <div class="time-box"><span class="time-val" id="t-secs">00</span><span class="time-lbl">Secs</span></div>
             </div>
 
-            <div class="steps-container">
+            <div id="gw-winner-ui" class="gw-winner-ui">
+                <div style="font-size: 2.5rem; margin-bottom: 10px;">🎊🏆🎊</div>
+                <h3 style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.2rem; margin-bottom: 8px;">Giveaway Ended!</h3>
+                <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 15px;">Congratulations to our lucky winner:</p>
+                <div style="color: var(--accent-gold); font-size: 1.4rem; font-weight: 700; font-family: 'Poppins', sans-serif; letter-spacing: 1px;">@Ney9773883</div>
+            </div>
+
+            <div class="steps-container" id="gw-actions">
                 <div class="step-card">
                     <div class="step-header">Step 1: Join Channel</div>
                     <p class="step-desc">Required to participate in the draw.</p>
@@ -461,9 +479,9 @@
 
                 <button class="btn btn-verify" id="verify-action" onclick="processVerification()">Verify & Enter Giveaway</button>
                 <div class="msg-box" id="msg-display"></div>
-
-                <button class="btn-back" onclick="switchTab('giveaway')">🔙 Back to List</button>
             </div>
+
+            <button class="btn-back" onclick="switchTab('giveaway')">🔙 Back to List</button>
         </div>
     </div>
 
@@ -503,7 +521,7 @@
         let totalAdsWatched = parseInt(getStat("total_ads") || "0");
         let dailyAdsWatched = parseInt(getStat("daily_ads") || "0");
 
-        // Tələbləri ödəməyən istifadəçiləri sıfırla (Yenilənib: Crypto Group #2 üçün)
+        // Tələbləri ödəməyən istifadəçiləri sıfırla (İkinci çəkiliş üçün açarlar gw2 olaraq dəyişdirilib)
         if (totalAdsWatched < 500 && getStat("gw2_secured") === "true") {
             localStorage.removeItem(`gw2_secured_${getUID()}`);
             localStorage.removeItem(`gw2_joined_${getUID()}`);
@@ -611,6 +629,7 @@
             // Giveaway statistikası
             document.getElementById("gw-total-ads").innerText = totalAdsWatched;
             
+            // #2 üçün yaddaş yoxlanışı
             if (getStat("gw2_joined") === "true") {
                 const joinBtn = document.getElementById("join-btn");
                 joinBtn.innerHTML = "✓ Channel Joined";
@@ -727,13 +746,29 @@
             msg.style.display = "block";
         }
 
-        // ================= TAYMER (TIMER) MƏNTİQİ (30 GÜN) =================
+        // ================= TAYMER (TIMER) MƏNTİQİ (12 İyun 2026 / 30 Gün) =================
         const END_TIME = new Date("2026-06-12T20:00:00Z").getTime();
+        
         function refreshTimer() {
             const now = new Date().getTime();
             const diff = END_TIME - now;
             
-            if (diff <= 0) return;
+            if (diff <= 0) {
+                // Vaxt bitdikdə taymeri sıfırla
+                document.getElementById("t-days").innerText = "00";
+                document.getElementById("t-hours").innerText = "00";
+                document.getElementById("t-mins").innerText = "00";
+                document.getElementById("t-secs").innerText = "00";
+                
+                // Tapşırıqları gizlədib qalib ekranını göstər
+                const actionsContainer = document.getElementById("gw-actions");
+                if (actionsContainer) actionsContainer.style.display = "none";
+                
+                const winnerUI = document.getElementById("gw-winner-ui");
+                if (winnerUI) winnerUI.style.display = "block";
+                
+                return;
+            }
             
             document.getElementById("t-days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
             document.getElementById("t-hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
@@ -741,7 +776,7 @@
             document.getElementById("t-secs").innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
         }
 
-        // ================= GIVEAWAY YOXLANIŞI =================
+        // ================= GIVEAWAY YOXLANIŞI (Crypto Group #2) =================
         function markJoined() {
             saveStat("gw2_joined", "true");
             updateAllUI();

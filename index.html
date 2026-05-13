@@ -307,7 +307,7 @@
         .btn-claim:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6); }
 
         .btn:disabled, .btn.joined, .btn.locked { 
-            background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.3); box-shadow: none; cursor: not-allowed; transform: none; border: 1px solid transparent; 
+            background: rgba(255,255,255,0.05); color: var(--text-gray); box-shadow: none; cursor: not-allowed; transform: none; border: 1px solid transparent; 
             pointer-events: none;
         }
 
@@ -357,7 +357,7 @@
         .withdraw-input-wrapper {
             position: relative;
             width: 100%;
-            margin-bottom: 25px; /* Increased margin since chips are gone */
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
         }
@@ -391,15 +391,6 @@
             font-size: 1.1rem;
             color: rgba(255, 255, 255, 0.2);
             font-weight: 400;
-        }
-        
-        /* Premium Disabled Input Styling */
-        .withdraw-input:disabled {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            color: rgba(255, 255, 255, 0.2);
-            cursor: not-allowed;
-            box-shadow: none;
         }
     </style>
 </head>
@@ -554,17 +545,23 @@
         </div>
 
         <div class="giveaway-card" style="padding: 25px 20px;">
-            <h3 style="color: white; margin-bottom: 8px; font-family: 'Poppins', sans-serif; font-size: 1.2rem;">Withdraw Funds</h3>
-            <p style="color: var(--text-gray); font-size: 0.85rem; margin-bottom: 25px; line-height: 1.4;">Connect your TON wallet to withdraw. Enter whole amounts only (Min $1). Limited to 1 withdrawal per day.</p>
+            <h3 style="color: white; margin-bottom: 25px; font-family: 'Poppins', sans-serif; font-size: 1.2rem;">Withdraw</h3>
             
             <div id="ton-connect" style="display: flex; justify-content: center; margin-bottom: 25px;"></div>
             
-            <div class="withdraw-input-wrapper">
-                <span class="withdraw-input-symbol">$</span>
-                <input type="text" inputmode="numeric" id="withdraw-amount" class="withdraw-input" placeholder="Min. $1 balance needed" autocomplete="off">
+            <div id="low-balance-msg" style="color: var(--text-gray); font-size: 0.9rem; line-height: 1.5; margin-bottom: 15px; display: none;">
+                Reach $1.00 to unlock withdrawals.
+            </div>
+
+            <div id="withdraw-action-area" style="display: none;">
+                <div class="withdraw-input-wrapper">
+                    <span class="withdraw-input-symbol">$</span>
+                    <input type="text" inputmode="numeric" id="withdraw-amount" class="withdraw-input" placeholder="Enter amount" autocomplete="off">
+                </div>
+                
+                <button class="btn btn-verify" id="withdraw-btn" onclick="processWithdrawal()">Confirm Withdrawal</button>
             </div>
             
-            <button class="btn btn-verify" id="withdraw-btn" onclick="processWithdrawal()">Confirm Withdrawal</button>
             <div id="withdraw-msg" class="msg-box" style="margin-top: 15px;"></div>
         </div>
 
@@ -613,17 +610,10 @@
             startSystem();
             checkWithdrawalStatus();
             
-            // Input məhdudiyyətləri: Sadece rəqəmlər, sıfırla başlamağa icazə verilmir
+            // Enforce strictly whole numbers only natively inside the input and prevent 0
             document.getElementById("withdraw-amount").addEventListener("input", function(e) {
-                // Sadece reqemler
-                let val = this.value.replace(/[^0-9]/g, '');
-                
-                // İlk rəqəm 0 ola bilməz (0 yazılarsa dərhal silinir)
-                if(val.startsWith('0')) {
-                    val = val.replace(/^0+/, '');
-                }
-                
-                this.value = val;
+                // Strips out any characters that are not 0-9 and removes leading zeros
+                this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '');
             });
 
             setTimeout(() => {
@@ -684,6 +674,15 @@
             document.getElementById("home-balance").innerText = balString;
             document.getElementById("wallet-balance").innerText = balString;
 
+            // Conditional display for withdraw section based on balance
+            if (userBalance >= 1) {
+                document.getElementById('withdraw-action-area').style.display = 'block';
+                document.getElementById('low-balance-msg').style.display = 'none';
+            } else {
+                document.getElementById('withdraw-action-area').style.display = 'none';
+                document.getElementById('low-balance-msg').style.display = 'block';
+            }
+
             document.getElementById("daily-ad-count").innerText = dailyAdsWatched;
             const progressPercent = (dailyAdsWatched / 50) * 100;
             document.getElementById("daily-ad-fill").style.width = `${progressPercent}%`;
@@ -706,27 +705,7 @@
                     joinBtn.className = "btn btn-join joined";
                 }
             }
-            
-            updateWithdrawalState();
             checkGiveawayUIState();
-        }
-        
-        // Yenilik: Balans 1$-dən azdırsa input bloka düşür
-        function updateWithdrawalState() {
-            const inputElem = document.getElementById("withdraw-amount");
-            const btnElem = document.getElementById("withdraw-btn");
-            
-            if (userBalance < 1) {
-                inputElem.disabled = true;
-                inputElem.placeholder = "Min. $1 balance needed";
-                btnElem.disabled = true;
-                btnElem.classList.add("locked");
-            } else {
-                inputElem.disabled = false;
-                inputElem.placeholder = "Enter amount (Min $1)";
-                btnElem.disabled = false;
-                btnElem.classList.remove("locked");
-            }
         }
 
         function switchTab(tabName) {
@@ -934,7 +913,7 @@
                 return;
             }
 
-            // 3. Daily Limit Validation (1 per day limit check)
+            // 3. Daily Limit Validation
             const todayStr = getTodayDateStr();
             const lastWithdrawDate = getStat("last_withdraw_date");
 
@@ -945,10 +924,10 @@
                 return;
             }
 
-            // 4. Input Sanitization & Whole Number strict validation (Min 1$)
+            // 4. Input Sanitization & Whole Number strict validation
             if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 1 || !/^\d+$/.test(rawValue)) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = `⚠️ Invalid entry. Please enter a valid whole number (Minimum $1). Decimals and zeros are blocked.`;
+                msg.innerHTML = `⚠️ Minimum withdrawal amount is $1.`;
                 msg.style.display = "block";
                 return;
             }

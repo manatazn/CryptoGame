@@ -173,11 +173,6 @@
         .profile-name-group { display: flex; flex-direction: column; justify-content: center; }
         .profile-name { font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 600; color: white; line-height: 1.1; }
         .profile-uid { font-size: 0.7rem; color: var(--text-gray); }
-        .header-badge {
-            background: rgba(251, 191, 36, 0.15); color: var(--accent-gold);
-            font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 20px;
-            border: 1px solid rgba(251, 191, 36, 0.2);
-        }
 
         /* --- BALANCE CARD --- */
         .balance-card {
@@ -346,7 +341,6 @@
             border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); 
             text-align: left;
         }
-        .step-label { color: var(--text-gray); font-size: 0.85rem; margin-bottom: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 
         .withdraw-input-wrapper {
             position: relative;
@@ -446,7 +440,6 @@
                     <span class="profile-uid" id="tg-uid">UID: Loading...</span>
                 </div>
             </div>
-            <div class="header-badge">Free</div>
         </div>
 
         <div class="balance-card">
@@ -562,14 +555,13 @@
                 <span style="font-size: 1.6rem;">💸</span> Withdraw Funds
             </h3>
             
-            <div class="withdraw-step">
-                <div class="step-label">Step 1: Connect Wallet</div>
-                <div id="ton-connect" style="display: flex; justify-content: flex-start;"></div>
+            <div class="withdraw-step" id="connect-wallet-step">
+                <div id="connect-wallet-text" style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 15px; text-align: center; font-weight: 500;">Connect your wallet to withdraw funds</div>
+                <div id="ton-connect" style="display: flex; justify-content: center;"></div>
             </div>
             
             <div id="withdraw-input-section" style="display: none;">
                 <div class="withdraw-step">
-                    <div class="step-label">Step 2: Enter Amount</div>
                     <div class="withdraw-input-wrapper">
                         <span class="withdraw-input-symbol">$</span>
                         <input type="text" inputmode="numeric" id="withdraw-amount" class="withdraw-input" placeholder="0" autocomplete="off">
@@ -578,7 +570,7 @@
                 </div>
             </div>
             
-            <button class="btn btn-verify" id="withdraw-btn" onclick="processWithdrawal()" style="font-size: 1.1rem; padding: 16px; margin-top: 10px;">Submit Withdrawal</button>
+            <button class="btn btn-verify" id="withdraw-btn" onclick="processWithdrawal()" style="font-size: 1.1rem; padding: 16px; margin-top: 10px;">Withdraw</button>
             <div id="withdraw-msg" class="msg-box" style="margin-top: 15px;"></div>
         </div>
 
@@ -671,6 +663,16 @@
             tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
                 manifestUrl: 'https://manatazn.github.io/CryptoGame/tonconnect-manifest.json',
                 buttonRootId: 'ton-connect'
+            });
+
+            // Hide the text when a wallet is successfully connected
+            tonConnectUI.onStatusChange((wallet) => {
+                const connectText = document.getElementById("connect-wallet-text");
+                if (wallet) {
+                    if (connectText) connectText.style.display = 'none';
+                } else {
+                    if (connectText) connectText.style.display = 'block';
+                }
             });
         }
 

@@ -12,28 +12,26 @@
     <style>
         :root {
             --bg-main: #06090F;
-            --bg-gradient: radial-gradient(circle at top, #151e32 0%, #06090F 100%);
-            --glass-bg: rgba(20, 25, 40, 0.4);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --primary: #3b82f6;
-            --primary-glow: rgba(59, 130, 246, 0.6);
-            --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            --nav-active-bg: rgba(56, 189, 248, 0.15);
-            --nav-active-color: #38bdf8;
+            --bg-gradient: radial-gradient(circle at top, #111827 0%, #06090F 100%);
+            --glass-bg: rgba(17, 24, 39, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --primary: #38bdf8; /* Şəkildəki canlı mavi */
+            --primary-glow: rgba(56, 189, 248, 0.5);
+            --primary-gradient: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
             --accent-gold: #FBBF24;
-            --gold-glow: rgba(251, 191, 36, 0.5);
+            --gold-glow: rgba(251, 191, 36, 0.4);
             --text-light: #F8FAFC;
             --text-gray: #94A3B8;
             --success: #10B981;
             --success-bg: rgba(16, 185, 129, 0.15);
             --error: #EF4444;
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * { 
             margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; 
             -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
-            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
         }
 
         body {
@@ -41,7 +39,6 @@
             background-color: var(--bg-main);
             color: var(--text-light);
             min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
@@ -53,381 +50,309 @@
         /* --- SPLASH SCREEN --- */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-gradient);
+            background: var(--bg-main);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s;
+            z-index: 9999; transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
             backdrop-filter: blur(20px);
-            will-change: opacity, visibility;
         }
 
         .premium-logo-container {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            position: relative; width: 120px; height: 120px; margin-bottom: 30px;
+            display: flex; justify-content: center; align-items: center;
+            will-change: transform; transform: translateZ(0);
         }
 
         .ring-outer {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
+            position: absolute; width: 100%; height: 100%; border-radius: 50%;
             border: 2px dashed rgba(251, 191, 36, 0.3);
-            animation: spinRight 10s linear infinite;
+            animation: spinRight 12s linear infinite;
         }
 
         .ring-inner {
-            position: absolute;
-            width: 80%;
-            height: 80%;
-            border-radius: 50%;
-            border: 2px solid transparent;
-            border-top: 2px solid var(--accent-gold);
-            border-bottom: 2px solid var(--primary);
+            position: absolute; width: 80%; height: 80%; border-radius: 50%;
+            border: 2px solid transparent; border-top: 2px solid var(--accent-gold); border-bottom: 2px solid var(--primary);
             animation: spinLeft 3s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
             box-shadow: 0 0 30px var(--gold-glow);
         }
 
         .coin-center {
-            width: 50px;
-            height: 50px;
+            width: 54px; height: 54px;
             background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #78350F;
-            font-family: 'Poppins', sans-serif;
-            font-size: 2rem;
-            font-weight: 800;
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.6), inset 0 0 10px rgba(255,255,255,0.5);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            color: #78350F; font-family: 'Poppins', sans-serif; font-size: 2.2rem; font-weight: 800;
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.6), inset 0 0 12px rgba(255,255,255,0.6);
             animation: pulseCoin 2s ease-in-out infinite;
         }
 
         @keyframes spinRight { 100% { transform: rotate(360deg); } }
         @keyframes spinLeft { 100% { transform: rotate(-360deg); } }
-        @keyframes pulseCoin { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); box-shadow: 0 0 40px var(--gold-glow); } }
+        @keyframes pulseCoin { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); box-shadow: 0 0 45px var(--gold-glow); } }
 
         .splash-title { 
             font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 800; color: white; 
-            letter-spacing: 1px; margin-bottom: 25px;
-            text-shadow: 0 0 25px var(--primary-glow);
-            background: linear-gradient(to right, #fff, #94A3B8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px; margin-bottom: 25px; text-shadow: 0 0 20px rgba(255,255,255,0.2);
+            background: linear-gradient(to right, #fff, #CBD5E1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         
-        .loading-bar { width: 150px; height: 4px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; position: relative; }
+        .loading-bar { width: 160px; height: 4px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; position: relative; }
         .loading-progress { 
             width: 40%; height: 100%; background: var(--primary-gradient); 
-            border-radius: 4px; position: absolute; left: -50%; animation: loadSlide 1s infinite linear; box-shadow: 0 0 10px var(--primary);
+            border-radius: 4px; position: absolute; left: -50%; animation: loadSlide 1s infinite cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 10px var(--primary);
         }
         @keyframes loadSlide { 100% { left: 100%; } }
 
-        /* --- ENHANCED BOTTOM NAVIGATION --- */
+        /* --- PREMIUM BOTTOM NAVIGATION --- */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%;
-            background: rgba(10, 15, 25, 0.95);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            display: flex; justify-content: space-evenly; align-items: center;
-            padding: 10px 8px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06); z-index: 100;
-            padding-bottom: env(safe-area-inset-bottom, 15px);
-            box-shadow: 0 -5px 25px rgba(0,0,0,0.3);
+            background: rgba(10, 15, 25, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            display: flex; justify-content: space-around; padding: 12px 10px;
+            border-top: 1px solid var(--glass-border); z-index: 100;
+            padding-bottom: env(safe-area-inset-bottom, 16px);
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.4);
         }
-        .nav-item {
-            color: #64748b; font-weight: 600; cursor: pointer;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 4px; transition: var(--transition);
-            font-size: 0.75rem; width: 30%; height: 60px;
-            border-radius: 20px; 
-            position: relative;
-        }
-        .nav-item svg {
-            width: 24px; height: 24px;
-            transition: var(--transition);
-            stroke-width: 2.2;
-        }
-        .nav-item:active { transform: scale(0.92); }
         
-        .nav-item.active { 
-            color: var(--nav-active-color); 
-            background: var(--nav-active-bg);
-            box-shadow: inset 0 0 10px rgba(56, 189, 248, 0.05);
+        .nav-item {
+            color: #64748B; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; gap: 4px; 
+            transition: var(--transition); font-size: 0.75rem; width: 30%;
+            -webkit-tap-highlight-color: transparent;
         }
-        .nav-item.active svg { 
-            stroke: var(--nav-active-color); 
-            transform: translateY(-2px) scale(1.05); 
-            filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4));
+        
+        .nav-icon-bg {
+            width: 52px; height: 52px; border-radius: 18px;
+            display: flex; justify-content: center; align-items: center;
+            transition: var(--transition); background: transparent;
+            will-change: background-color, transform; transform: translateZ(0);
         }
+
+        .nav-icon {
+            width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.2; fill: none;
+            stroke-linecap: round; stroke-linejoin: round;
+            transition: var(--transition);
+        }
+
+        .nav-item.active { color: var(--primary); }
+        .nav-item.active .nav-icon-bg {
+            background: rgba(56, 189, 248, 0.12);
+            box-shadow: inset 0 0 15px rgba(56, 189, 248, 0.05);
+        }
+        .nav-item.active .nav-icon { 
+            stroke-width: 2.8; transform: scale(1.1); 
+            filter: drop-shadow(0 0 6px var(--primary-glow));
+        }
+
+        .nav-item:active .nav-icon-bg { transform: scale(0.92); } /* Toxunma effekti */
 
         /* --- APP WRAPPERS --- */
         .view-container {
-            width: 100%; max-width: 480px; padding: 20px; padding-bottom: 110px;
+            width: 100%; max-width: 480px; padding: 20px; padding-bottom: 120px;
             display: none; flex-direction: column; gap: 20px;
-            /* Glitchleri yox etmək üçün transform və will-change silindi */
-            animation: fadeView 0.3s ease forwards;
+            animation: fadeInView 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            will-change: opacity, transform; transform: translateZ(0);
         }
         .view-container.active { display: flex; }
-        @keyframes fadeView { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInView { from { opacity: 0; transform: translateY(15px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
         /* --- COMPACT PROFILE HEADER --- */
         .app-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 50px;
-            padding: 6px 16px 6px 6px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border-radius: 50px; padding: 6px 16px 6px 6px; backdrop-filter: blur(16px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
-        .header-user {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .profile-avatar { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover;}
+        .header-user { display: flex; align-items: center; gap: 10px; }
+        .profile-avatar { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary); padding: 1px;}
         .profile-name-group { display: flex; flex-direction: column; justify-content: center; }
-        .profile-name { font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 600; color: white; line-height: 1.1; }
+        .profile-name { font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 600; color: white; line-height: 1.1; }
         .profile-uid { font-size: 0.7rem; color: var(--text-gray); }
 
         /* --- BALANCE CARD --- */
         .balance-card {
-            background: linear-gradient(145deg, rgba(37, 99, 235, 0.1) 0%, rgba(15, 23, 42, 0.6) 100%);
-            border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 24px; padding: 30px 20px;
+            background: linear-gradient(145deg, rgba(2, 132, 199, 0.15) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 28px; padding: 35px 20px;
             display: flex; flex-direction: column; align-items: center; text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); position: relative; overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); position: relative; overflow: hidden;
         }
         .balance-card::after {
             content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 60%);
-            pointer-events: none;
+            background: radial-gradient(circle, rgba(56,189,248,0.1) 0%, transparent 60%); pointer-events: none;
         }
-        .balance-title { color: var(--text-gray); font-weight: 500; font-size: 0.85rem; margin-bottom: 8px; }
+        .balance-title { color: var(--text-gray); font-weight: 500; font-size: 0.9rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;}
         .balance-amount { 
-            color: white; font-size: 3.2rem; font-family: 'Poppins', sans-serif; font-weight: 700; 
+            color: white; font-size: 3.5rem; font-family: 'Poppins', sans-serif; font-weight: 700; 
             text-shadow: 0 0 30px var(--primary-glow); line-height: 1; letter-spacing: -1px;
-            animation: floatBalance 3s ease-in-out infinite;
+            animation: floatBalance 3s ease-in-out infinite; will-change: transform;
         }
-        @keyframes floatBalance { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+        @keyframes floatBalance { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
         /* --- COMPACT DAILY ADS CARD --- */
         .ad-task-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px;
-            position: relative; overflow: hidden; backdrop-filter: blur(10px);
-            display: flex; flex-direction: column; gap: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 24px; padding: 24px;
+            position: relative; overflow: hidden; backdrop-filter: blur(12px);
+            display: flex; flex-direction: column; gap: 16px; transition: transform 0.2s;
         }
         .ad-header-row { display: flex; justify-content: space-between; align-items: center; }
-        .ad-info h3 { font-family: 'Poppins', sans-serif; font-size: 1.1rem; color: white; margin-bottom: 2px;}
+        .ad-info h3 { font-family: 'Poppins', sans-serif; font-size: 1.15rem; color: white; margin-bottom: 2px;}
         .ad-info p { font-size: 0.8rem; color: var(--text-gray); }
         
         .ad-reward-badge {
-            background: rgba(139, 92, 246, 0.15); color: #D8B4FE;
-            font-size: 0.8rem; font-weight: 600; padding: 5px 10px; border-radius: 12px;
-            border: 1px solid rgba(139, 92, 246, 0.3); display: flex; align-items: center; gap: 4px;
+            background: rgba(168, 85, 247, 0.15); color: #D8B4FE;
+            font-size: 0.85rem; font-weight: 600; padding: 6px 12px; border-radius: 12px;
+            border: 1px solid rgba(168, 85, 247, 0.3); display: flex; align-items: center; gap: 4px;
         }
 
         .ad-progress-container { margin-top: 5px; }
-        .ad-progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.5); border-radius: 6px; overflow: hidden; margin-bottom: 6px;}
-        .ad-progress-fill { height: 100%; background: linear-gradient(90deg, #8B5CF6, #3b82f6); width: 0%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-        .ad-progress-text { font-size: 0.75rem; color: var(--text-gray); font-weight: 500; display: flex; justify-content: space-between;}
+        .ad-progress-bar { width: 100%; height: 8px; background: rgba(0,0,0,0.5); border-radius: 8px; overflow: hidden; margin-bottom: 8px;}
+        .ad-progress-fill { height: 100%; background: linear-gradient(90deg, #A855F7, #38bdf8); width: 0%; transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .ad-progress-text { font-size: 0.8rem; color: var(--text-gray); font-weight: 500; display: flex; justify-content: space-between;}
         .ad-progress-text span { color: white; font-weight: 600; }
 
         .btn-ad-compact {
-            background: linear-gradient(90deg, #8B5CF6, #6D28D9); color: white;
-            border: none; padding: 12px; border-radius: 14px; font-weight: 600; font-size: 0.95rem;
-            cursor: pointer; transition: var(--transition); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            background: linear-gradient(90deg, #9333EA, #6D28D9); color: white;
+            border: none; padding: 14px; border-radius: 16px; font-weight: 600; font-size: 1rem;
+            cursor: pointer; transition: var(--transition); box-shadow: 0 6px 20px rgba(147, 51, 234, 0.3);
             display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%;
         }
-        .btn-ad-compact:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5); }
         .btn-ad-compact:active { transform: scale(0.96); }
+        .btn-ad-compact:hover { box-shadow: 0 8px 25px rgba(147, 51, 234, 0.5); filter: brightness(1.1); }
 
         /* --- HOST GIVEAWAY CARD --- */
         .host-banner {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(0,0,0,0.4) 100%);
-            border: 1px solid rgba(251, 191, 36, 0.25); border-radius: 20px; padding: 20px;
-            display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(0,0,0,0.6) 100%);
+            border: 1px solid rgba(251, 191, 36, 0.25); border-radius: 24px; padding: 22px;
+            display: flex; flex-direction: column; gap: 14px; position: relative; overflow: hidden;
         }
-        .host-banner::before { content: '👑'; position: absolute; right: -10px; top: -10px; font-size: 70px; opacity: 0.08; transform: rotate(20deg); }
-        .host-title { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--accent-gold); }
-        .host-desc { font-size: 0.8rem; color: var(--text-gray); line-height: 1.5; margin-bottom: 5px; }
+        .host-banner::before { content: '👑'; position: absolute; right: -15px; top: -15px; font-size: 85px; opacity: 0.08; transform: rotate(20deg); }
+        .host-title { font-family: 'Poppins', sans-serif; font-size: 1.15rem; font-weight: 600; color: var(--accent-gold); }
+        .host-desc { font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; margin-bottom: 5px; }
         .btn-host {
             background: rgba(245, 158, 11, 0.15); color: var(--accent-gold); text-align: center;
-            padding: 10px; border-radius: 12px; font-weight: 600; font-size: 0.9rem; text-decoration: none;
-            border: 1px solid rgba(245, 158, 11, 0.3); transition: var(--transition);
+            padding: 12px; border-radius: 14px; font-weight: 600; font-size: 0.95rem; text-decoration: none;
+            border: 1px solid rgba(245, 158, 11, 0.3); transition: var(--transition); display: block;
         }
-        .btn-host:hover { background: rgba(245, 158, 11, 0.25); }
         .btn-host:active { transform: scale(0.96); }
 
         /* --- GIVEAWAY LIST --- */
-        .section-title { font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; color: white; margin: 10px 0 5px 0; }
+        .section-title { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600; color: white; margin: 15px 0 5px 0; }
         
         .gw-list-card {
-            background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px;
-            padding: 16px; display: flex; align-items: center; gap: 15px; cursor: pointer;
-            transition: var(--transition); backdrop-filter: blur(10px);
+            background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 18px; display: flex; align-items: center; gap: 16px; cursor: pointer;
+            transition: var(--transition); backdrop-filter: blur(12px); -webkit-tap-highlight-color: transparent;
         }
-        .gw-list-card:hover { border-color: rgba(59, 130, 246, 0.5); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.4); }
-        .gw-list-card:active { transform: scale(0.98); }
-        .gw-icon-wrap { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 14px; display: flex; justify-content: center; align-items: center;}
-        .gw-icon { font-size: 1.8rem; }
+        .gw-list-card:active { transform: scale(0.96); }
+        .gw-icon-wrap { background: rgba(255,255,255,0.05); padding: 14px; border-radius: 16px; display: flex; justify-content: center; align-items: center;}
+        .gw-icon { font-size: 2rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
         .gw-details { flex: 1; }
-        .gw-title { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.95rem; color: white; margin-bottom: 3px; }
-        .gw-meta { font-size: 0.8rem; color: var(--text-gray); }
-        .gw-status { color: var(--success); font-weight: 500; font-size: 0.7rem; background: var(--success-bg); padding: 2px 8px; border-radius: 6px; display: inline-block; margin-top: 6px;}
+        .gw-title { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1.05rem; color: white; margin-bottom: 4px; }
+        .gw-meta { font-size: 0.85rem; color: var(--text-gray); }
+        .gw-status { color: var(--success); font-weight: 600; font-size: 0.75rem; background: var(--success-bg); padding: 4px 10px; border-radius: 8px; display: inline-block; margin-top: 8px;}
 
         /* --- GIVEAWAY DETAIL VIEW --- */
         .giveaway-card {
-            background: var(--glass-bg); backdrop-filter: blur(15px); border-radius: 24px; padding: 30px 20px;
-            border: 1px solid var(--glass-border); text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            background: var(--glass-bg); backdrop-filter: blur(20px); border-radius: 28px; padding: 35px 24px;
+            border: 1px solid var(--glass-border); text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
 
-        .prize-title { font-family: 'Poppins', sans-serif; color: white; font-size: 3.2rem; font-weight: 700; line-height: 1; margin-bottom: 5px; text-shadow: 0 0 25px var(--primary-glow); letter-spacing: -1px;}
-        .subtitle { color: var(--accent-gold); font-size: 0.95rem; margin-bottom: 25px; font-weight: 500; }
+        .prize-title { font-family: 'Poppins', sans-serif; color: white; font-size: 3.5rem; font-weight: 700; line-height: 1; margin-bottom: 8px; text-shadow: 0 0 25px var(--primary-glow); letter-spacing: -1px;}
+        .subtitle { color: var(--accent-gold); font-size: 1rem; margin-bottom: 30px; font-weight: 600; }
 
         /* Timer */
-        .timer-wrapper { display: flex; justify-content: center; gap: 8px; margin-bottom: 30px; }
-        .time-box { background: rgba(0, 0, 0, 0.3); padding: 10px 0; border-radius: 12px; width: 60px; border: 1px solid rgba(255, 255, 255, 0.05); }
-        .time-val { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 600; color: white; display: block; }
-        .time-lbl { font-size: 0.65rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; display: block; font-weight: 500;}
+        .timer-wrapper { display: flex; justify-content: center; gap: 10px; margin-bottom: 35px; }
+        .time-box { background: rgba(0, 0, 0, 0.4); padding: 12px 0; border-radius: 14px; width: 65px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: inset 0 0 15px rgba(0,0,0,0.5); }
+        .time-val { font-family: 'Poppins', sans-serif; font-size: 1.3rem; font-weight: 700; color: white; display: block; }
+        .time-lbl { font-size: 0.7rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; display: block; font-weight: 600;}
 
         /* Winner Reveal Box */
-        .gw-winner-ui {
-            display: none;
-            background: rgba(16, 185, 129, 0.15);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 20px;
-            padding: 25px 20px;
-            margin-bottom: 20px;
-            animation: fadeView 0.5s ease;
-        }
+        .gw-winner-ui { display: none; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 24px; padding: 25px 20px; margin-bottom: 25px; animation: fadeInView 0.5s ease; }
 
         /* Steps */
         .steps-container { text-align: left; }
-        .step-card { background: rgba(0,0,0,0.2); padding: 18px; border-radius: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.03); }
-        .step-header { font-family: 'Poppins', sans-serif; font-weight: 600; margin-bottom: 4px; font-size: 0.95rem; color: white; display: flex; justify-content: space-between; align-items: center;}
-        .step-desc { font-size: 0.8rem; color: var(--text-gray); margin-bottom: 15px; line-height: 1.4;}
-        .total-ad-counter { color: var(--accent-gold); font-weight: 600; background: rgba(251,191,36,0.1); padding: 3px 8px; border-radius: 8px; font-size: 0.8rem;}
+        .step-card { background: rgba(0,0,0,0.25); padding: 20px; border-radius: 20px; margin-bottom: 14px; border: 1px solid rgba(255,255,255,0.04); }
+        .step-header { font-family: 'Poppins', sans-serif; font-weight: 600; margin-bottom: 6px; font-size: 1rem; color: white; display: flex; justify-content: space-between; align-items: center;}
+        .step-desc { font-size: 0.85rem; color: var(--text-gray); margin-bottom: 16px; line-height: 1.5;}
+        .total-ad-counter { color: var(--accent-gold); font-weight: 600; background: rgba(251,191,36,0.15); padding: 4px 10px; border-radius: 10px; font-size: 0.85rem;}
 
-        .btn { width: 100%; padding: 14px; border-radius: 14px; border: none; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: var(--transition); text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px;}
-        .btn:active:not(:disabled) { transform: scale(0.96); }
+        .btn { width: 100%; padding: 16px; border-radius: 16px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; transition: var(--transition); text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 10px;}
+        .btn:active { transform: scale(0.96); }
         
-        .btn-join { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); }
-        .btn-join:hover { background: rgba(255,255,255,0.1); }
+        .btn-join { background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-join:hover { background: rgba(255,255,255,0.12); }
         
-        .btn-verify { background: var(--primary-gradient); color: white; box-shadow: 0 4px 15px var(--primary-glow); margin-top: 10px; }
-        .btn-verify:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--primary-glow); }
+        .btn-verify { background: var(--primary-gradient); color: white; box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4); margin-top: 15px; }
+        .btn-verify:hover { filter: brightness(1.1); box-shadow: 0 8px 25px rgba(56, 189, 248, 0.5); }
         
-        .btn-claim { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); margin-top: 15px; }
-        .btn-claim:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6); }
+        .btn-claim { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4); margin-top: 15px; }
 
         .btn:disabled, .btn.joined, .btn.locked { 
-            background: rgba(255,255,255,0.05); color: var(--text-gray); box-shadow: none; cursor: not-allowed; transform: none !important; border: 1px solid transparent; 
-            pointer-events: none;
+            background: rgba(255,255,255,0.05); color: var(--text-gray); box-shadow: none; cursor: not-allowed; border: 1px solid transparent; 
+            pointer-events: none; transform: none !important;
         }
-
-        .btn.joined { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16,185,129,0.2); }
+        .btn.joined { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16,185,129,0.25); }
 
         .btn-back { 
-            background: transparent; color: var(--text-gray); 
-            padding: 12px; font-weight: 500; font-size: 0.9rem; 
+            background: transparent; color: var(--text-gray); padding: 14px; font-weight: 500; font-size: 0.95rem; 
             cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; 
-            transition: var(--transition); margin-top: 10px; border: none; width: 100%;
+            transition: var(--transition); margin-top: 15px; border: none; width: 100%; border-radius: 16px;
         }
-        .btn-back:hover { color: white; }
-        .btn-back:active { transform: scale(0.96); }
+        .btn-back:hover { color: white; background: rgba(255,255,255,0.05); }
 
-        .msg-box { margin-top: 15px; font-size: 0.85rem; display: none; padding: 14px; border-radius: 12px; line-height: 1.5; animation: fadeIn 0.3s ease; text-align: left; }
-        .msg-err { background: rgba(239, 68, 68, 0.1); color: #FCA5A5; border: 1px solid rgba(239, 68, 68, 0.2); }
-        .msg-succ { background: var(--success-bg); color: #6EE7B7; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .msg-box { margin-top: 15px; font-size: 0.9rem; display: none; padding: 16px; border-radius: 16px; line-height: 1.5; animation: fadeInView 0.3s cubic-bezier(0.16, 1, 0.3, 1); text-align: left; }
+        .msg-err { background: rgba(239, 68, 68, 0.15); color: #FCA5A5; border: 1px solid rgba(239, 68, 68, 0.25); }
+        .msg-succ { background: var(--success-bg); color: #6EE7B7; border: 1px solid rgba(16, 185, 129, 0.25); }
         .msg-pending { background: rgba(245, 158, 11, 0.15); color: var(--accent-gold); border: 1px solid rgba(245, 158, 11, 0.3); }
 
         /* --- TOAST NOTIFICATION --- */
         .toast {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-20px) scale(0.95);
             background: rgba(16, 185, 129, 0.95); color: white; padding: 12px 24px;
-            border-radius: 50px; font-weight: 600; font-size: 0.9rem; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
-            z-index: 10000; opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            backdrop-filter: blur(10px);
+            border-radius: 50px; font-weight: 600; font-size: 0.95rem; box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4);
+            z-index: 10000; opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(12px);
         }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
 
-        .spinner { border: 2px solid rgba(255,255,255,0.2); border-top: 2px solid white; border-radius: 50%; width: 18px; height: 18px; animation: spin 0.8s linear infinite; }
+        .spinner { border: 2px solid rgba(255,255,255,0.2); border-top: 2px solid white; border-radius: 50%; width: 20px; height: 20px; animation: spin 0.8s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- PREMIUM WALLET & HISTORY UI --- */
         .withdraw-step { 
-            background: rgba(255,255,255,0.02); padding: 18px 15px; 
-            border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); 
+            background: rgba(255,255,255,0.03); padding: 20px 16px; 
+            border-radius: 20px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.06); 
             text-align: left;
         }
 
-        .withdraw-input-wrapper {
-            position: relative;
-            width: 100%;
-            display: flex;
-            align-items: center;
-        }
-        .withdraw-input-symbol {
-            position: absolute;
-            left: 20px;
-            font-size: 1.5rem;
-            color: var(--text-gray);
-            font-family: 'Poppins', sans-serif;
-            pointer-events: none;
-        }
+        .withdraw-input-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
+        .withdraw-input-symbol { position: absolute; left: 22px; font-size: 1.6rem; color: var(--text-gray); font-family: 'Poppins', sans-serif; pointer-events: none; }
         .withdraw-input {
-            width: 100%;
-            padding: 16px 85px 16px 45px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 14px;
-            color: white;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.5rem;
-            text-align: left;
-            transition: all 0.3s ease;
-            outline: none;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+            width: 100%; padding: 18px 95px 18px 50px; background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 16px; color: white;
+            font-family: 'Poppins', sans-serif; font-size: 1.6rem; text-align: left;
+            transition: all 0.3s ease; outline: none; box-shadow: inset 0 2px 15px rgba(0,0,0,0.3);
         }
-        .withdraw-input:focus {
-            border-color: var(--primary);
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.2), 0 0 15px rgba(59, 130, 246, 0.4);
-        }
-        .withdraw-input::placeholder {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.2);
-            font-weight: 400;
-        }
+        .withdraw-input:focus { border-color: var(--primary); box-shadow: inset 0 2px 15px rgba(0,0,0,0.3), 0 0 20px rgba(56, 189, 248, 0.3); }
+        .withdraw-input::placeholder { font-size: 1.2rem; color: rgba(255, 255, 255, 0.2); font-weight: 400; }
         .btn-max { 
-            position: absolute; right: 12px; top: 50%; transform: translateY(-50%); 
-            background: rgba(59, 130, 246, 0.2); color: var(--primary); border: none; 
-            padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; 
+            position: absolute; right: 14px; top: 50%; transform: translateY(-50%); 
+            background: rgba(56, 189, 248, 0.15); color: var(--primary); border: none; 
+            padding: 10px 16px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; 
             cursor: pointer; transition: all 0.3s; 
         }
-        .btn-max:hover { background: var(--primary); color: white; box-shadow: 0 0 10px var(--primary-glow); }
         .btn-max:active { transform: translateY(-50%) scale(0.9); }
+        .btn-max:hover { background: var(--primary); color: white; box-shadow: 0 0 15px var(--primary-glow); }
 
         .history-item {
-            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 16px; padding: 14px 16px; display: flex; justify-content: space-between;
+            background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px; padding: 16px 18px; display: flex; justify-content: space-between;
             align-items: center; text-align: left; transition: var(--transition);
         }
-        .history-item:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); }
-        .history-info { display: flex; flex-direction: column; gap: 4px; }
-        .history-amount { color: white; font-weight: 700; font-family: 'Poppins', sans-serif; font-size: 1.05rem;}
-        .history-time { color: var(--text-gray); font-size: 0.75rem; font-weight: 500;}
-        .history-status { font-size: 0.75rem; font-weight: 600; padding: 5px 12px; border-radius: 10px; }
-        .status-pending { background: rgba(245, 158, 11, 0.15); color: var(--accent-gold); border: 1px solid rgba(245, 158, 11, 0.2);}
-        .status-approved { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2);}
+        .history-item:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.15); background: rgba(0,0,0,0.5); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+        .history-info { display: flex; flex-direction: column; gap: 5px; }
+        .history-amount { color: white; font-weight: 700; font-family: 'Poppins', sans-serif; font-size: 1.1rem;}
+        .history-time { color: var(--text-gray); font-size: 0.8rem; font-weight: 500;}
+        .history-status { font-size: 0.75rem; font-weight: 700; padding: 6px 14px; border-radius: 12px; }
+        .status-pending { background: rgba(245, 158, 11, 0.15); color: var(--accent-gold); border: 1px solid rgba(245, 158, 11, 0.25);}
+        .status-approved { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.25);}
     </style>
 </head>
 <body>
@@ -446,28 +371,34 @@
 
     <div class="bottom-nav">
         <div class="nav-item active" id="nav-home" onclick="switchTab('home')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-            </svg>
+            <div class="nav-icon-bg">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M3 9.5L12 3l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-10.5z"></path>
+                    <path d="M10 22V12h4v10"></path>
+                </svg>
+            </div>
             <span>Home</span>
         </div>
         <div class="nav-item" id="nav-giveaway" onclick="switchTab('giveaway')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="20 12 20 22 4 22 4 12"></polyline>
-                <rect x="2" y="7" width="20" height="5"></rect>
-                <line x1="12" y1="22" x2="12" y2="7"></line>
-                <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
-                <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
-            </svg>
+            <div class="nav-icon-bg">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                    <rect x="2" y="7" width="20" height="5"></rect>
+                    <line x1="12" y1="22" x2="12" y2="7"></line>
+                    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+                </svg>
+            </div>
             <span>Giveaway</span>
         </div>
         <div class="nav-item" id="nav-wallet" onclick="switchTab('wallet')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path>
-                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path>
-                <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path>
-            </svg>
+            <div class="nav-icon-bg">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path>
+                    <path d="M4 6v12a2 2 0 0 0 2 2h14v-4"></path>
+                    <path d="M18 12a2 2 0 0 0-2 2v0a2 2 0 0 0 2 2h4v-4h-4z"></path>
+                </svg>
+            </div>
             <span>Wallet</span>
         </div>
     </div>
@@ -476,7 +407,7 @@
         
         <div class="app-header">
             <div class="header-user">
-                <img src="https://ui-avatars.com/api/?name=User&background=3b82f6&color=fff" class="profile-avatar" id="tg-avatar" alt="Avatar">
+                <img src="https://ui-avatars.com/api/?name=User&background=38bdf8&color=fff" class="profile-avatar" id="tg-avatar" alt="Avatar">
                 <div class="profile-name-group">
                     <span class="profile-name" id="tg-name">Loading...</span>
                     <span class="profile-uid" id="tg-uid">UID: Loading...</span>
@@ -518,7 +449,7 @@
         <div class="host-banner">
             <div class="host-title">Host Your Own Giveaway</div>
             <div class="host-desc">Boost your channel's growth and engage your community by starting a customized crypto giveaway.</div>
-            <a href="#" onclick="openTgLink('https://t.me/cryptogiveawayadmin'); return false;" class="btn-host">💬 Contact Support</a>
+            <a href="https://t.me/cryptogiveawayadmin" target="_blank" class="btn-host">💬 Contact Support</a>
         </div>
 
         <div>
@@ -541,7 +472,7 @@
                     <div class="gw-title">Crypto Group #1</div>
                     <div class="gw-meta">Prize Pool: $50 USDT</div>
                     <div class="gw-status" style="color: var(--error); background: rgba(239, 68, 68, 0.15);">● Ended</div>
-                    <div style="font-size: 0.85rem; color: var(--accent-gold); margin-top: 6px; font-weight: 500;">🎉 Winner: <b>@matro97</b></div>
+                    <div style="font-size: 0.85rem; color: var(--accent-gold); margin-top: 8px; font-weight: 600;">🎉 Winner: <b>@matro97</b></div>
                 </div>
             </div>
         </div>
@@ -566,7 +497,7 @@
                 <div class="step-card">
                     <div class="step-header">Step 1: Join Channel</div>
                     <p class="step-desc">Required to participate in the draw.</p>
-                    <a href="#" class="btn btn-join" id="join-btn" onclick="openTgLink('https://t.me/Crypto_group_2026'); markJoined(); return false;">🔗 Join Channel</a>
+                    <a href="https://t.me/Crypto_group_2026" target="_blank" class="btn btn-join" id="join-btn" onclick="markJoined()">🔗 Join Channel</a>
                 </div>
 
                 <div class="step-card">
@@ -575,7 +506,7 @@
                         <span class="total-ad-counter"><span id="gw-total-ads">0</span>/500</span>
                     </div>
                     <p class="step-desc">You must watch a lifetime total of 500 ads to qualify for this giveaway.</p>
-                    <button class="btn btn-join" style="border: 1px solid rgba(139, 92, 246, 0.5); color: #D8B4FE;" onclick="switchTab('home')">Go to Daily Ads</button>
+                    <button class="btn btn-join" style="border: 1px solid rgba(168, 85, 247, 0.5); color: #D8B4FE;" onclick="switchTab('home')">Go to Daily Ads</button>
                 </div>
 
                 <button class="btn btn-verify" id="verify-action" onclick="processVerification()">Verify & Enter Giveaway</button>
@@ -592,14 +523,14 @@
             <div class="balance-amount" id="wallet-balance">$0.00</div>
         </div>
 
-        <div class="giveaway-card" style="padding: 25px 20px;">
-            <h3 style="color: white; margin-bottom: 20px; font-family: 'Poppins', sans-serif; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <span style="font-size: 1.6rem;">💸</span> Withdraw Funds
+        <div class="giveaway-card" style="padding: 30px 24px;">
+            <h3 style="color: white; margin-bottom: 24px; font-family: 'Poppins', sans-serif; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <span style="font-size: 1.8rem;">💸</span> Withdraw Funds
             </h3>
             
             <div class="withdraw-step" id="connect-wallet-step">
-                <div id="connect-wallet-text" style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 15px; text-align: center; font-weight: 500;">Connect your wallet to withdraw funds</div>
-                <div id="ton-connect" style="display: flex; justify-content: center; min-height: 48px;"></div>
+                <div id="connect-wallet-text" style="color: var(--text-gray); font-size: 0.95rem; margin-bottom: 18px; text-align: center; font-weight: 500;">Connect your wallet to withdraw funds</div>
+                <div id="ton-connect" style="display: flex; justify-content: center;"></div>
             </div>
             
             <div id="withdraw-input-section" style="display: none;">
@@ -612,13 +543,13 @@
                 </div>
             </div>
             
-            <button class="btn btn-verify" id="withdraw-btn" onclick="processWithdrawal()" style="font-size: 1.1rem; padding: 16px; margin-top: 10px;">Withdraw</button>
+            <button class="btn btn-verify" id="withdraw-btn" onclick="processWithdrawal()" style="font-size: 1.15rem; padding: 18px; margin-top: 10px;">Withdraw</button>
             <div id="withdraw-msg" class="msg-box" style="margin-top: 15px;"></div>
         </div>
 
-        <div class="giveaway-card" style="padding: 25px 20px; margin-top: 10px;">
-            <h3 style="color: white; margin-bottom: 15px; font-family: 'Poppins', sans-serif; font-size: 1.1rem; text-align: left;">Withdrawal History</h3>
-            <div id="history-list" style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="giveaway-card" style="padding: 25px 24px; margin-top: 10px;">
+            <h3 style="color: white; margin-bottom: 18px; font-family: 'Poppins', sans-serif; font-size: 1.15rem; text-align: left;">Withdrawal History</h3>
+            <div id="history-list" style="display: flex; flex-direction: column; gap: 14px;">
             </div>
         </div>
     </div>
@@ -630,16 +561,6 @@
 
         const tgApp = window.Telegram?.WebApp;
         if(tgApp) tgApp.expand();
-
-        function openTgLink(url) {
-            if (tgApp && tgApp.openTelegramLink) {
-                tgApp.openTelegramLink(url);
-            } else if (tgApp && tgApp.openLink) {
-                tgApp.openLink(url);
-            } else {
-                window.open(url, '_blank');
-            }
-        }
 
         function getUID() { return tgApp?.initDataUnsafe?.user?.id?.toString() || '123456789'; }
         function saveStat(key, val) { localStorage.setItem(`${key}_${getUID()}`, val); }
@@ -666,6 +587,7 @@
             initProfile();
             initTonConnect();
             
+            // Vaxt yoxlaması
             await Promise.race([
                 checkMSKDailyReset(),
                 new Promise(resolve => setTimeout(resolve, 3500))
@@ -680,37 +602,24 @@
                 this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '');
             });
 
+            // GÜCLƏNDİRİLMİŞ SPLASH EKRAN GECİKMƏSİ (3.5 Saniyə)
             const splash = document.getElementById('splash-screen');
             setTimeout(() => {
-                splash.style.opacity = '0';
+                splash.style.opacity = '0'; 
                 setTimeout(() => {
                     splash.style.visibility = 'hidden';
                     splash.style.display = 'none';
                     checkDeepLink();
-                }, 800);
-            }, 4500); 
+                }, 600); // Transition bitməsini gözləyir
+            }, 3500); // 3.5 saniyə ekranda qalır
         });
 
         async function fetchNetworkTime() {
             const apis = [
-                async () => {
-                    const r = await fetch('https://timeapi.io/api/Time/current/zone?timeZone=UTC', { cache: 'no-store' });
-                    const d = await r.json();
-                    return new Date(d.dateTime).getTime();
-                },
-                async () => {
-                    const r = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC', { cache: 'no-store' });
-                    const d = await r.json();
-                    return new Date(d.utc_datetime).getTime();
-                },
-                async () => {
-                    const r = await fetch('https://cdn.jsdelivr.net/npm/vue/package.json', { method: 'HEAD', cache: 'no-store' });
-                    return new Date(r.headers.get('Date')).getTime();
-                },
-                async () => {
-                    const r = await fetch('https://unpkg.com/react/package.json', { method: 'HEAD', cache: 'no-store' });
-                    return new Date(r.headers.get('Date')).getTime();
-                }
+                async () => { const r = await fetch('https://timeapi.io/api/Time/current/zone?timeZone=UTC', { cache: 'no-store' }); const d = await r.json(); return new Date(d.dateTime).getTime(); },
+                async () => { const r = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC', { cache: 'no-store' }); const d = await r.json(); return new Date(d.utc_datetime).getTime(); },
+                async () => { const r = await fetch('https://cdn.jsdelivr.net/npm/vue/package.json', { method: 'HEAD', cache: 'no-store' }); return new Date(r.headers.get('Date')).getTime(); },
+                async () => { const r = await fetch('https://unpkg.com/react/package.json', { method: 'HEAD', cache: 'no-store' }); return new Date(r.headers.get('Date')).getTime(); }
             ];
 
             for (let api of apis) {
@@ -732,9 +641,7 @@
                 const mskHour = mskDate.getUTCHours();
                 
                 let cycleDate = new Date(mskDate);
-                if (mskHour < 23) {
-                    cycleDate.setUTCDate(cycleDate.getUTCDate() - 1);
-                }
+                if (mskHour < 23) { cycleDate.setUTCDate(cycleDate.getUTCDate() - 1); }
                 
                 const currentCycleId = `${cycleDate.getUTCFullYear()}-${cycleDate.getUTCMonth()}-${cycleDate.getUTCDate()}`;
                 const savedCycleId = getStat("ad_cycle_id");
@@ -743,7 +650,7 @@
                     dailyAdsWatched = 0;
                     saveStat("daily_ads", "0");
                     saveStat("ad_cycle_id", currentCycleId);
-                    updateAllUI(); 
+                    updateAllUI();
                 }
             } catch (error) {}
         }
@@ -849,17 +756,17 @@
                 document.getElementById('gw-actions').style.display = "none";
                 
                 let winnerHtml = `
-                    <div style="font-size: 2.5rem; margin-bottom: 10px;">🎊🏆🎊</div>
-                    <h3 style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.2rem; margin-bottom: 8px;">Giveaway Ended!</h3>
-                    <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 15px;">Congratulations to our lucky winner:</p>
-                    <div style="color: var(--accent-gold); font-size: 1.4rem; font-weight: 700; font-family: 'Poppins', sans-serif; letter-spacing: 1px;">@matro97</div>
+                    <div style="font-size: 3rem; margin-bottom: 15px;">🎊🏆🎊</div>
+                    <h3 style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.3rem; margin-bottom: 10px;">Giveaway Ended!</h3>
+                    <p style="color: var(--text-gray); font-size: 0.95rem; margin-bottom: 18px;">Congratulations to our lucky winner:</p>
+                    <div style="color: var(--accent-gold); font-size: 1.5rem; font-weight: 700; font-family: 'Poppins', sans-serif; letter-spacing: 1px;">@matro97</div>
                 `;
 
                 if (getUID() === '8227619759') {
                     if (getStat('gw1_claimed') !== 'true') {
                         winnerHtml += `<button class="btn btn-claim" onclick="claimPrize(1, 50)">🎁 Claim Prize</button>`;
                     } else {
-                        winnerHtml += `<div style="margin-top: 15px; color: var(--success); font-weight: bold;">✅ Reward added to balance!</div>`;
+                        winnerHtml += `<div style="margin-top: 18px; color: var(--success); font-weight: bold; font-size: 1.1rem;">✅ Reward added to balance!</div>`;
                     }
                 }
 
@@ -937,9 +844,7 @@
             try { return JSON.parse(getStat("withdraw_history_array") || "[]"); } catch (e) { return []; }
         }
 
-        function saveWithdrawHistory(arr) {
-            saveStat("withdraw_history_array", JSON.stringify(arr));
-        }
+        function saveWithdrawHistory(arr) { saveStat("withdraw_history_array", JSON.stringify(arr)); }
 
         function formatMSKTime(timestamp) {
             const date = new Date(timestamp);
@@ -956,7 +861,7 @@
             const history = getWithdrawHistory();
             
             if (history.length === 0) {
-                list.innerHTML = "<div style='color: var(--text-gray); font-size: 0.85rem; text-align: center; padding: 10px;'>No withdrawals yet.</div>";
+                list.innerHTML = "<div style='color: var(--text-gray); font-size: 0.9rem; text-align: center; padding: 15px;'>No withdrawals yet.</div>";
                 return;
             }
 
@@ -969,8 +874,8 @@
                 
                 html += `
                     <div class="history-item">
-                        <div style="display: flex; align-items: center; gap: 14px;">
-                            <div style="background: rgba(255,255,255,0.05); width: 42px; height: 42px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.2rem;">${icon}</div>
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <div style="background: rgba(255,255,255,0.05); width: 46px; height: 46px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 1.3rem;">${icon}</div>
                             <div class="history-info">
                                 <span class="history-amount">-$${item.amount}.00</span>
                                 <span class="history-time">${timeStr}</span>
@@ -1056,6 +961,7 @@
                 let needsUpdate = false;
                 let hasPending = false;
                 const now = new Date().getTime();
+                
                 const hiddenProcessingTime = 5 * 60 * 1000; 
                 const msg = document.getElementById("withdraw-msg");
 
@@ -1107,17 +1013,17 @@
                     if (actionsContainer) actionsContainer.style.display = "none";
                     
                     let winnerHtml = `
-                        <div style="font-size: 2.5rem; margin-bottom: 10px;">🎊🏆🎊</div>
-                        <h3 style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.2rem; margin-bottom: 8px;">Giveaway Ended!</h3>
-                        <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 15px;">Congratulations to our lucky winner:</p>
-                        <div style="color: var(--accent-gold); font-size: 1.4rem; font-weight: 700; font-family: 'Poppins', sans-serif; letter-spacing: 1px;">@Ney9773883</div>
+                        <div style="font-size: 3rem; margin-bottom: 15px;">🎊🏆🎊</div>
+                        <h3 style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.3rem; margin-bottom: 10px;">Giveaway Ended!</h3>
+                        <p style="color: var(--text-gray); font-size: 0.95rem; margin-bottom: 18px;">Congratulations to our lucky winner:</p>
+                        <div style="color: var(--accent-gold); font-size: 1.5rem; font-weight: 700; font-family: 'Poppins', sans-serif; letter-spacing: 1px;">@Ney9773883</div>
                     `;
 
                     if (getUID() === '8066661936') {
                         if (getStat('gw2_claimed') !== 'true') {
                             winnerHtml += `<button class="btn btn-claim" onclick="claimPrize(2, 50)">🎁 Claim Prize</button>`;
                         } else {
-                            winnerHtml += `<div style="margin-top: 15px; color: var(--success); font-weight: bold;">✅ Reward added to balance!</div>`;
+                            winnerHtml += `<div style="margin-top: 18px; color: var(--success); font-weight: bold; font-size: 1.1rem;">✅ Reward added to balance!</div>`;
                         }
                     }
 

@@ -614,11 +614,14 @@
             initProfile();
             initTonConnect();
             
-            // Başlanğıc ekranı fırlanarkən gücləndirilmiş çoxlu API ilə vaxtı yoxlayır
-            // Əgər 3.5 saniyə ərzində bütün API'lər çöksə, sistemi dondurmamaq üçün avtomatik keçid edir
-            await Promise.race([
-                checkMSKDailyReset(),
-                new Promise(resolve => setTimeout(resolve, 3500))
+            // Başlanğıc ekranı fırlanarkən API ilə vaxtı yoxlayır VƏ
+            // ən azı 4.5 saniyə ekranda qalmasını təmin edir
+            await Promise.all([
+                Promise.race([
+                    checkMSKDailyReset(),
+                    new Promise(resolve => setTimeout(resolve, 3500))
+                ]),
+                new Promise(resolve => setTimeout(resolve, 4500)) // <--- 4.5 saniyə gözləmə əlavə edildi
             ]);
             
             updateAllUI();
@@ -644,24 +647,20 @@
         // ================= GÜCLƏNDİRİLMİŞ 4 FƏRQLİ API İLƏ SAAT SİSTEMİ =================
         async function fetchNetworkTime() {
             const apis = [
-                // Yüksək sürətli Time API 1
                 async () => {
                     const r = await fetch('https://timeapi.io/api/Time/current/zone?timeZone=UTC', { cache: 'no-store' });
                     const d = await r.json();
                     return new Date(d.dateTime).getTime();
                 },
-                // Klassik World Time API (çox vaxt rate-limit yeyir, ona görə 2ci yerdədir)
                 async () => {
                     const r = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC', { cache: 'no-store' });
                     const d = await r.json();
                     return new Date(d.utc_datetime).getTime();
                 },
-                // 100% zəmanətli CDN başlıq oxuma üsulu (Vue paketi)
                 async () => {
                     const r = await fetch('https://cdn.jsdelivr.net/npm/vue/package.json', { method: 'HEAD', cache: 'no-store' });
                     return new Date(r.headers.get('Date')).getTime();
                 },
-                // 100% zəmanətli CDN başlıq oxuma üsulu (React paketi)
                 async () => {
                     const r = await fetch('https://unpkg.com/react/package.json', { method: 'HEAD', cache: 'no-store' });
                     return new Date(r.headers.get('Date')).getTime();
@@ -675,24 +674,18 @@
                     const t = await api();
                     clearTimeout(timeout);
                     if (t && !isNaN(t)) return t;
-                } catch (e) {
-                    // Xəta olarsa səssizcə növbəti API-yə keçir
-                }
+                } catch (e) {}
             }
-            return Date.now(); // Əgər dünyanın bütün interneti çökübsə (oflayndırsa) cihaz saatını istifadə et
+            return Date.now();
         }
 
         async function checkMSKDailyReset() {
             try {
-                // Şəbəkədən real qlobal vaxtı çəkir (Telefon saatından asılı deyil)
                 const currentUtcTime = await fetchNetworkTime();
-                
-                // Mütləq şəkildə UTC+3 (Moskva/Rusiya) saat qurşağına çevrilir
                 const mskDate = new Date(currentUtcTime + (3 * 60 * 60 * 1000));
                 const mskHour = mskDate.getUTCHours();
                 
                 let cycleDate = new Date(mskDate);
-                // Rusiya vaxtı ilə 23:00-dan tezdirsə, əvvəlki günə aiddir
                 if (mskHour < 23) {
                     cycleDate.setUTCDate(cycleDate.getUTCDate() - 1);
                 }
@@ -704,7 +697,7 @@
                     dailyAdsWatched = 0;
                     saveStat("daily_ads", "0");
                     saveStat("ad_cycle_id", currentCycleId);
-                    updateAllUI(); // Arxa planda sıfırlandığı an UI-ni də yeniləyir
+                    updateAllUI();
                 }
             } catch (error) {}
         }
@@ -858,7 +851,6 @@
             }
         }
 
-        // Düymədəki "await checkMSKDailyReset()" silindi. Artıq düymə ləngimir, anında işə düşür.
         function watchDailyAd() {
             if (dailyAdsWatched >= 50) return;
 
@@ -1160,8 +1152,6 @@
         function startSystem() {
             setInterval(refreshTimer, 1000);
             
-            // Hər 2 dəqiqədən bir arxa planda saatı yoxlayır və limiti sıfırlayır
-            // Bu cür etdikdə reklam düyməsinə ağırlıq düşmür və ləngimə yaranmır
             setInterval(checkMSKDailyReset, 120000);
             
             setInterval(() => {

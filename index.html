@@ -380,7 +380,7 @@
                     <p>Watch short ads to earn crypto.</p>
                 </div>
                 <div class="ad-reward-badge">
-                    <span>🪙</span> $0.001
+                    $0.001
                 </div>
             </div>
             
@@ -411,9 +411,21 @@
             <div class="gw-list-card" onclick="openGiveawayDetails()">
                 <div class="gw-icon-wrap"><div class="gw-icon">💰</div></div>
                 <div class="gw-details">
-                    <div class="gw-title">Crypto Group Giveaway</div>
+                    <div class="gw-title">Crypto Group #2</div>
                     <div class="gw-meta">Prize Pool: $50 USDT</div>
                     <div class="gw-status">● Live Now</div>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-top: 25px;">Finished Giveaways</div>
+            
+            <div class="gw-list-card" style="opacity: 0.75; cursor: default; border-color: rgba(255,255,255,0.05);">
+                <div class="gw-icon-wrap" style="background: rgba(255,255,255,0.02);"><div class="gw-icon">🏆</div></div>
+                <div class="gw-details">
+                    <div class="gw-title">Crypto Group #1</div>
+                    <div class="gw-meta">Prize Pool: $50 USDT</div>
+                    <div class="gw-status" style="color: var(--error); background: rgba(239, 68, 68, 0.15);">● Ended</div>
+                    <div style="font-size: 0.85rem; color: var(--accent-gold); margin-top: 6px; font-weight: 500;">🎉 Winner: <b>@matro97</b></div>
                 </div>
             </div>
         </div>
@@ -422,7 +434,7 @@
     <div id="view-giveaway-details" class="view-container">
         <div class="giveaway-card">
             <h1 class="prize-title">$50</h1>
-            <p class="subtitle">Crypto Group Giveaway</p>
+            <p class="subtitle">Crypto Group #2</p>
 
             <div class="timer-wrapper" id="timer-ui">
                 <div class="time-box"><span class="time-val" id="t-days">00</span><span class="time-lbl">Days</span></div>
@@ -491,10 +503,10 @@
         let totalAdsWatched = parseInt(getStat("total_ads") || "0");
         let dailyAdsWatched = parseInt(getStat("daily_ads") || "0");
 
-        // Tələbləri ödəməyən istifadəçiləri sıfırla
-        if (totalAdsWatched < 500 && getStat("gw_secured") === "true") {
-            localStorage.removeItem(`gw_secured_${getUID()}`);
-            localStorage.removeItem(`gw_joined_${getUID()}`);
+        // Tələbləri ödəməyən istifadəçiləri sıfırla (Yenilənib: Crypto Group #2 üçün)
+        if (totalAdsWatched < 500 && getStat("gw2_secured") === "true") {
+            localStorage.removeItem(`gw2_secured_${getUID()}`);
+            localStorage.removeItem(`gw2_joined_${getUID()}`);
         }
 
         // Adsgram Quraşdırılması
@@ -599,7 +611,7 @@
             // Giveaway statistikası
             document.getElementById("gw-total-ads").innerText = totalAdsWatched;
             
-            if (getStat("gw_joined") === "true") {
+            if (getStat("gw2_joined") === "true") {
                 const joinBtn = document.getElementById("join-btn");
                 joinBtn.innerHTML = "✓ Channel Joined";
                 joinBtn.className = "btn btn-join joined";
@@ -715,8 +727,8 @@
             msg.style.display = "block";
         }
 
-        // ================= TAYMER (TIMER) MƏNTİQİ =================
-        const END_TIME = new Date("2026-05-31T20:00:00Z").getTime();
+        // ================= TAYMER (TIMER) MƏNTİQİ (30 GÜN) =================
+        const END_TIME = new Date("2026-06-12T20:00:00Z").getTime();
         function refreshTimer() {
             const now = new Date().getTime();
             const diff = END_TIME - now;
@@ -731,12 +743,12 @@
 
         // ================= GIVEAWAY YOXLANIŞI =================
         function markJoined() {
-            saveStat("gw_joined", "true");
+            saveStat("gw2_joined", "true");
             updateAllUI();
         }
 
         function checkGiveawayUIState() {
-            if (getStat("gw_secured") === "true") {
+            if (getStat("gw2_secured") === "true") {
                 const verifyBtn = document.getElementById("verify-action");
                 const msg = document.getElementById("msg-display");
                 verifyBtn.style.display = "none";
@@ -751,7 +763,7 @@
         function processVerification() {
             if (checkGiveawayUIState()) return;
 
-            const hasJoined = getStat("gw_joined") === "true";
+            const hasJoined = getStat("gw2_joined") === "true";
             const msg = document.getElementById("msg-display");
             const btn = document.getElementById("verify-action");
 
@@ -770,7 +782,7 @@
             msg.style.display = "none";
 
             setTimeout(() => {
-                saveStat("gw_secured", "true");
+                saveStat("gw2_secured", "true");
                 checkGiveawayUIState();
             }, 2000);
         }
@@ -779,7 +791,6 @@
         function startSystem() {
             setInterval(refreshTimer, 1000);
             
-            // 60 saniyədən bir avtomatik reklam yoxlanışı (Dəyişdirildi)
             setInterval(() => {
                 if (adController && 
                     (document.getElementById('view-giveaway-details').classList.contains('active') || 
@@ -789,7 +800,7 @@
 
                     adController.show().catch(e => console.log('Auto Ad Skipped'));
                 }
-            }, 60000); // <-- 1 dəqiqəyə (60000 ms) təyin olundu
+            }, 60000); // 1 dəqiqə
         }
     </script>
 </body>

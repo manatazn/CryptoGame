@@ -159,7 +159,7 @@
             background: var(--glass-bg); border: 1px solid var(--glass-border);
             border-radius: 50px; padding: 6px 20px 6px 6px; backdrop-filter: blur(20px);
             box-shadow: 0 8px 30px rgba(0,0,0,0.4); 
-            margin-bottom: 5px; margin-top: 25px; /* Profile bir az asagi cekildi */
+            margin-bottom: 5px; margin-top: 25px;
         }
         .header-user { display: flex; align-items: center; gap: 12px; }
         .profile-avatar { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--primary); padding: 2px; background: rgba(0,0,0,0.5);}
@@ -310,14 +310,15 @@
         .msg-succ { background: rgba(16, 185, 129, 0.1); color: #6EE7B7; border-color: rgba(16, 185, 129, 0.2); }
         .msg-pending { background: rgba(255, 215, 0, 0.1); color: var(--accent-gold); border-color: rgba(255, 215, 0, 0.2); }
 
-        /* --- PREMIUM TOAST NOTIFICATION --- */
+        /* --- PREMIUM TOAST NOTIFICATION (YELLOW/PURPLE THEME) --- */
         .toast {
-            position: fixed; top: 25px; left: 50%; transform: translateX(-50%) translateY(-20px) scale(0.95);
-            background: rgba(24, 24, 27, 0.9); color: white; padding: 14px 24px;
-            border-radius: 16px; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.95rem; 
+            position: fixed; top: 200px; /* Reklam kartına daha yaxın */
+            left: 50%; transform: translateX(-50%) translateY(-20px) scale(0.95);
+            color: white; padding: 14px 28px;
+            border-radius: 16px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1.05rem; 
             z-index: 10000; opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08);
-            border-left: 4px solid var(--primary); display: flex; align-items: center; gap: 10px;
+            backdrop-filter: blur(20px); 
+            display: flex; align-items: center; gap: 10px; text-align: center; white-space: nowrap;
         }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
 
@@ -800,7 +801,7 @@
             saveStat(`gw${gwId}_claimed`, "true");
             userBalance += amount;
             saveStat("user_balance", userBalance.toString());
-            showToast(`+$${amount} Added to Balance!`, "success");
+            showToast(`🎉 <span style='color: #FFD700;'>+$${amount} Added to Balance!</span>`, "success");
             updateAllUI();
             openGiveawayDetails(gwId); 
         }
@@ -840,7 +841,7 @@
                 saveStat("total_ads", totalAdsWatched.toString());
                 saveStat("user_balance", userBalance.toString());
                 
-                showToast("🎉 +$0.001 Earned!", "success");
+                showToast("🎉 <span style='color: #FFD700;'>+$0.001 Earned!</span>", "success");
                 updateAllUI(); 
                 
                 if (dailyAdsWatched < 50) {
@@ -848,7 +849,7 @@
                     btn.classList.remove('locked');
                 }
             }).catch((err) => {
-                showToast("❌ Failed to load ad. Try again.", "error");
+                /* Səhv mesajı silindi - Adsgram öz xətasını göstərir */
                 btn.innerHTML = "▶ Watch Ad";
                 btn.classList.remove('locked');
             });
@@ -860,13 +861,19 @@
             toast.className = "toast"; 
             
             if (type === 'success') {
-                toast.style.borderLeftColor = "var(--success)";
-                toast.style.boxShadow = "0 10px 30px rgba(16, 185, 129, 0.2)";
+                /* Premium Yellow & Purple Theme */
+                toast.style.background = "linear-gradient(135deg, rgba(66, 10, 118, 0.95) 0%, rgba(31, 4, 60, 0.95) 100%)";
+                toast.style.border = "1px solid rgba(255, 215, 0, 0.4)";
+                toast.style.boxShadow = "0 15px 30px rgba(66, 10, 118, 0.4), 0 0 20px rgba(255, 215, 0, 0.15)";
             } else if (type === 'error') {
-                toast.style.borderLeftColor = "var(--error)";
+                toast.style.background = "rgba(24, 24, 27, 0.9)";
+                toast.style.border = "1px solid rgba(255,255,255,0.08)";
+                toast.style.borderLeft = "4px solid var(--error)";
                 toast.style.boxShadow = "0 10px 30px rgba(239, 68, 68, 0.2)";
             } else if (type === 'warning') {
-                toast.style.borderLeftColor = "var(--accent-gold)";
+                toast.style.background = "rgba(24, 24, 27, 0.9)";
+                toast.style.border = "1px solid rgba(255,255,255,0.08)";
+                toast.style.borderLeft = "4px solid var(--accent-gold)";
                 toast.style.boxShadow = "0 10px 30px rgba(255, 215, 0, 0.2)";
             }
             

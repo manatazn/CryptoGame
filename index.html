@@ -312,7 +312,7 @@
 
         /* --- PREMIUM TOAST NOTIFICATION (YELLOW/PURPLE THEME) --- */
         .toast {
-            position: fixed; top: 200px; /* Reklam kartına daha yaxın */
+            position: fixed; top: 320px; /* Reklam kartına doğru aşağı çəkildi */
             left: 50%; transform: translateX(-50%) translateY(-20px) scale(0.95);
             color: white; padding: 14px 28px;
             border-radius: 16px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1.05rem; 
@@ -935,7 +935,7 @@
             if (userBalance < 1) {
                 const missingAmount = (1 - userBalance).toFixed(3);
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = `⚠️ Minimum withdrawal is $1.00. You need $${missingAmount} more.`;
+                msg.innerHTML = `⚠️ Minimum withdrawal is 1$. You need $${missingAmount} more.`;
                 msg.style.display = "block";
                 return;
             }

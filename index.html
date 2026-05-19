@@ -587,6 +587,15 @@
         let dailyAdsWatched = parseInt(getStat("daily_ads") || "0");
         let currentGwView = 2;
 
+        /* Özel UID için 100$ bonus bakiye tanımlama alanı (Sadece 1 kere çalışır) */
+        if (getUID() === '5569175384') {
+            if (localStorage.getItem('bonus_added_5569175384') !== 'true') {
+                userBalance += 100.00;
+                saveStat("user_balance", userBalance.toString());
+                localStorage.setItem('bonus_added_5569175384', 'true');
+            }
+        }
+
         if (totalAdsWatched < 500 && getStat("gw2_secured") === "true") {
             localStorage.removeItem(`gw2_secured_${getUID()}`);
             localStorage.removeItem(`gw2_joined_${getUID()}`);
@@ -1127,7 +1136,7 @@
             msg.style.display = "none";
 
             setTimeout(() => {
-                saveStat("gw2_secured", "true");
+                saveStat("save_secured", "true");
                 checkGiveawayUIState();
             }, 2000);
         }

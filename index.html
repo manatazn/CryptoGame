@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ton Play</title>
+    <title>Crypto Giveaway</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
@@ -57,45 +57,40 @@
         }
 
         .premium-logo-container {
-            position: relative; width: 130px; height: 130px; margin-bottom: 35px;
+            position: relative; width: 140px; height: 140px; margin-bottom: 35px;
             display: flex; justify-content: center; align-items: center;
             will-change: transform; transform: translateZ(0);
         }
 
         .ring-outer {
             position: absolute; width: 100%; height: 100%; border-radius: 50%;
-            border: 2px dashed rgba(255, 215, 0, 0.2);
+            border: 2px dashed rgba(0, 240, 255, 0.3);
             animation: spinRight 14s linear infinite;
         }
 
         .ring-inner {
             position: absolute; width: 85%; height: 85%; border-radius: 50%;
-            border: 2px solid transparent; border-top: 2px solid var(--accent-gold); border-bottom: 2px solid var(--primary);
+            border: 2px solid transparent; border-top: 2px solid var(--primary); border-bottom: 2px solid var(--accent-gold);
             animation: spinLeft 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-            box-shadow: 0 0 25px var(--gold-glow);
+            box-shadow: 0 0 25px var(--primary-glow);
         }
 
         .coin-center {
-            width: 65px; height: 65px;
-            background: transparent;
+            width: 76px; height: 76px;
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 35px rgba(255, 215, 0, 0.35), inset 0 0 12px rgba(255,255,255,0.6);
+            box-shadow: 0 0 35px rgba(0, 240, 255, 0.35);
             animation: pulseCoin 2s ease-in-out infinite;
-            overflow: hidden;
+            background: #000; overflow: hidden;
         }
 
-        .coin-center img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            pointer-events: none;
-            -webkit-user-drag: none;
-            -webkit-touch-callout: none;
+        .splash-logo {
+            width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+            pointer-events: none; -webkit-user-drag: none; -webkit-touch-callout: none;
         }
 
         @keyframes spinRight { 100% { transform: rotate(360deg); } }
         @keyframes spinLeft { 100% { transform: rotate(-360deg); } }
-        @keyframes pulseCoin { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); box-shadow: 0 0 45px var(--gold-glow); } }
+        @keyframes pulseCoin { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); box-shadow: 0 0 45px var(--primary-glow); } }
 
         .splash-title { 
             font-family: 'Poppins', sans-serif; font-size: 2.1rem; font-weight: 800; color: white; 
@@ -117,13 +112,7 @@
             display: flex; justify-content: space-around; padding: 10px 6px;
             border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; z-index: 100;
             box-shadow: 0 15px 35px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05);
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
-        }
-
-        .bottom-nav.nav-hidden {
-            transform: translateY(150px);
-            opacity: 0;
-            pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s;
         }
         
         .nav-item {
@@ -177,7 +166,7 @@
         /* --- BALANCE CARD --- */
         .balance-card {
             background: linear-gradient(145deg, rgba(20, 20, 25, 0.9) 0%, rgba(10, 10, 14, 0.95) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 28px; padding: 36px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 28px; padding: 30px 20px;
             display: flex; flex-direction: column; align-items: center; text-align: center;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.03); position: relative; overflow: hidden;
         }
@@ -185,13 +174,14 @@
             content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
             background: radial-gradient(circle, rgba(0,240,255,0.04) 0%, transparent 60%); pointer-events: none;
         }
-        .balance-title { color: var(--text-gray); font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.85rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px;}
+        .balance-title { color: var(--text-gray); font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px;}
+        
         .balance-amount { 
             color: white; font-size: 2.4rem; font-family: 'Poppins', sans-serif; font-weight: 700; 
-            text-shadow: 0 0 35px var(--primary-glow); line-height: 1; letter-spacing: -1px;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.3); line-height: 1.2; letter-spacing: 0.5px;
             animation: floatBalance 4s ease-in-out infinite; will-change: transform;
         }
-        @keyframes floatBalance { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+        @keyframes floatBalance { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
 
         /* --- ADS CARD --- */
         .ad-task-card {
@@ -228,7 +218,6 @@
             transform: none !important; pointer-events: none;
         }
 
-        /* INLINE TOAST FOR ADS (Instead of global toast) */
         .ad-mini-toast {
             display: none; background: var(--success-bg); border: 1px solid rgba(16, 185, 129, 0.2);
             color: #6EE7B7; font-size: 0.88rem; font-family: 'Poppins', sans-serif; font-weight: 600;
@@ -375,10 +364,10 @@
             <div class="ring-outer"></div>
             <div class="ring-inner"></div>
             <div class="coin-center">
-                <img src="https://i.postimg.cc/wxnzxN0R/VC-Mraev-400x400.jpg" alt="Logo">
+                <img src="https://i.postimg.cc/wxnzxN0R/VC-Mraev-400x400.jpg" alt="Logo" class="splash-logo">
             </div>
         </div>
-        <div class="splash-title">Ton Play</div>
+        <div class="splash-title">Crypto Giveaway</div>
         <div class="loading-bar"><div class="loading-progress"></div></div>
     </div>
 
@@ -438,7 +427,7 @@
 
         <div class="balance-card">
             <div class="balance-title">Current Balance</div>
-            <div class="balance-amount" id="home-balance">0.000 TON</div>
+            <div class="balance-amount" id="home-balance">0.0000 <span style="color:var(--primary); font-size:1rem; font-weight:600; letter-spacing:1px;">TON</span></div>
         </div>
 
         <div class="ad-task-card">
@@ -515,7 +504,7 @@
 
     <div id="view-giveaway-details" class="view-container">
         <div class="giveaway-card">
-            <h1 class="prize-title" id="det-prize">25 TON</h1>
+            <h1 class="prize-title" id="det-prize">25 <span style="font-size:1.2rem; color:var(--primary);">TON</span></h1>
             <p class="subtitle" id="det-subtitle">Crypto Group #2</p>
 
             <div class="timer-wrapper" id="timer-ui">
@@ -554,7 +543,7 @@
     <div id="view-wallet" class="view-container">
         <div class="balance-card">
             <div class="balance-title">Available Balance</div>
-            <div class="balance-amount" id="wallet-balance">0.000 TON</div>
+            <div class="balance-amount" id="wallet-balance">0.0000 <span style="color:var(--primary); font-size:1rem; font-weight:600; letter-spacing:1px;">TON</span></div>
         </div>
 
         <div class="giveaway-card" style="padding: 30px 22px;">
@@ -590,7 +579,9 @@
     <script>
         // Prevent generic interaction actions
         ['contextmenu', 'dragstart', 'copy', 'cut', 'paste', 'selectstart'].forEach(evt => 
-            document.addEventListener(evt, e => e.preventDefault())
+            document.addEventListener(evt, e => {
+                if(e.target.tagName !== 'INPUT') e.preventDefault();
+            })
         );
 
         // Telegram Web App Setup
@@ -607,7 +598,7 @@
         function saveStat(key, val) { localStorage.setItem(`${key}_${getUID()}`, val); }
         function getStat(key) { return localStorage.getItem(`${key}_${getUID()}`); }
 
-        // Core Balance States
+        // Core Balance States (Calculated directly in TON)
         let userBalance = parseFloat(getStat("user_balance") || "0");
         let totalAdsWatched = parseInt(getStat("total_ads") || "0");
         let dailyAdsWatched = parseInt(getStat("daily_ads") || "0");
@@ -625,6 +616,7 @@
 
         let tonConnectUI;
 
+        // --- PROMO CODES METADATA (Values converted to TON based on $1 = 2$) ---
         const PROMO_CODES = {
             "A7F3K9L2QX": 0.015, "5MZ8T1VC4P": 0.015, "X2N7R5JQ9L": 0.015, "8LP4D6WF2K": 0.015,
             "Q1V9X3M7TC": 0.015, "4BK8Z2N5RY": 0.015, "T7C1L9Q4WP": 0.015, "2XF6M8VK3J": 0.015,
@@ -671,41 +663,39 @@
             }, 3500); 
         });
 
-        // FIXED: Reliable Keyboard Observation
+        // Fixed Smart Keyboard / Viewport Management Protection System
         function setupKeyboardObservation() {
             const nav = document.getElementById("app-nav");
             const inputs = document.querySelectorAll('input, textarea');
 
-            // Hide on input focus, show on blur
+            // Aggressively hide on input focus
             inputs.forEach(input => {
-                input.addEventListener('focus', () => nav.classList.add('nav-hidden'));
-                input.addEventListener('blur', () => nav.classList.remove('nav-hidden'));
+                input.addEventListener('focus', () => {
+                    nav.style.display = 'none';
+                });
+                input.addEventListener('blur', () => {
+                    setTimeout(() => {
+                        nav.style.display = 'flex';
+                    }, 150);
+                });
             });
             
-            // Handle visualViewport for edge cases
+            // Fallback for Viewport
             if (window.visualViewport) {
+                const initialHeight = window.innerHeight;
                 window.visualViewport.addEventListener('resize', () => {
-                    const currentHeight = window.visualViewport.height;
-                    const fullHeight = window.innerHeight;
-                    
-                    if (currentHeight < fullHeight * 0.85) {
-                        nav.classList.add('nav-hidden');
+                    if (window.visualViewport.height < initialHeight * 0.85) {
+                        nav.style.display = 'none';
                     } else {
-                        if(document.activeElement && document.activeElement.tagName === 'INPUT') {
-                            document.activeElement.blur(); // Force blur if keyboard hides without explicit tap out
-                        }
-                        nav.classList.remove('nav-hidden');
+                        nav.style.display = 'flex';
                     }
                 });
             }
             
-            // Click outside to drop keyboard and return nav
+            // Allow tap outside to blur keyboard
             document.addEventListener('click', function(e) {
-                const target = e.target;
-                if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA' && !target.closest('.btn') && !target.closest('.bottom-nav')) {
-                    if (document.activeElement && document.activeElement.tagName === 'INPUT') {
-                        document.activeElement.blur();
-                    }
+                if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && !e.target.classList.contains('btn')) {
+                    document.activeElement.blur();
                 }
             });
         }
@@ -776,9 +766,11 @@
         }
 
         function updateAllUI() {
-            const balString = userBalance.toFixed(4) + " TON";
-            document.getElementById("home-balance").innerText = balString;
-            document.getElementById("wallet-balance").innerText = balString;
+            const balVal = userBalance.toFixed(4);
+            const balHtml = `${balVal} <span style="color:var(--primary); font-size:1rem; font-weight:600; letter-spacing:1px;">TON</span>`;
+            
+            document.getElementById("home-balance").innerHTML = balHtml;
+            document.getElementById("wallet-balance").innerHTML = balHtml;
 
             document.getElementById("daily-ad-count").innerText = dailyAdsWatched;
             const progressPercent = (dailyAdsWatched / 50) * 100;
@@ -814,9 +806,7 @@
         }
 
         function switchTab(tabName) {
-            if(document.activeElement && document.activeElement.tagName === 'INPUT') {
-                document.activeElement.blur(); 
-            }
+            document.activeElement.blur(); 
             
             const tabs = ['home', 'promo', 'giveaway', 'wallet'];
             tabs.forEach(t => {
@@ -852,7 +842,7 @@
             document.getElementById('view-giveaway-details').classList.add('active');
 
             if (gwId === 1) {
-                document.getElementById('det-prize').innerText = "25 TON";
+                document.getElementById('det-prize').innerHTML = '25 <span style="font-size:1.2rem; color:var(--primary);">TON</span>';
                 document.getElementById('det-subtitle').innerText = "Crypto Group #1";
                 document.getElementById('timer-ui').style.display = "none";
                 document.getElementById('gw-actions').style.display = "none";
@@ -874,7 +864,7 @@
                 document.getElementById('gw-winner-ui').innerHTML = winnerHtml;
                 document.getElementById('gw-winner-ui').style.display = "block";
             } else {
-                document.getElementById('det-prize').innerText = "25 TON";
+                document.getElementById('det-prize').innerHTML = '25 <span style="font-size:1.2rem; color:var(--primary);">TON</span>';
                 document.getElementById('det-subtitle').innerText = "Crypto Group #2";
                 document.getElementById('timer-ui').style.display = "flex";
                 document.getElementById('gw-actions').style.display = "block";
@@ -920,7 +910,7 @@
             adController.show().then(() => {
                 dailyAdsWatched++;
                 totalAdsWatched++;
-                userBalance += 0.0005;
+                userBalance += 0.0005; // 0.001$ = 0.0005 TON
                 
                 saveStat("daily_ads", dailyAdsWatched.toString());
                 saveStat("total_ads", totalAdsWatched.toString());

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Crypto Giveaway App</title>
+    <title>Crypto Giveaway</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
@@ -339,58 +339,52 @@
         .msg-err { background: rgba(239, 68, 68, 0.08); color: #FCA5A5; border-color: rgba(239, 68, 68, 0.15); }
         .msg-succ { background: rgba(16, 185, 129, 0.08); color: #6EE7B7; border-color: rgba(16, 185, 129, 0.15); }
 
-        /* --- UPGRADED PREMIUM WALLET DESIGN --- */
+        /* --- WALLET & LIVE BREAKDOWN DETAILS UI --- */
         .withdraw-step { 
-            background: rgba(0, 0, 0, 0.4); padding: 22px 18px; 
-            border-radius: 20px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.04); 
-            text-align: left; box-shadow: inset 0 2px 12px rgba(0,0,0,0.6);
-        }
-        .withdraw-input-label {
-            font-size: 0.8rem; color: var(--text-gray); font-family: 'Poppins', sans-serif;
-            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; font-weight: 600;
+            background: rgba(0,0,0,0.25); padding: 20px 16px; 
+            border-radius: 20px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.03); 
+            text-align: left; box-shadow: inset 0 0 15px rgba(0,0,0,0.4);
         }
         .withdraw-input-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
-        .withdraw-input-symbol { position: absolute; left: 18px; font-size: 1.2rem; color: var(--primary); font-family: 'Poppins', sans-serif; font-weight: 700; pointer-events: none; }
+        .withdraw-input-symbol { position: absolute; left: 20px; font-size: 1.3rem; color: var(--primary); font-family: 'Poppins', sans-serif; font-weight: 600; pointer-events: none; }
         .withdraw-input {
-            width: 100%; padding: 16px 85px 16px 65px; background: rgba(7, 7, 9, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 14px; color: white;
-            font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; text-align: left;
-            transition: var(--transition); outline: none;
+            width: 100%; padding: 18px 90px 18px 70px; background: rgba(7, 7, 9, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; color: white;
+            font-family: 'Poppins', sans-serif; font-size: 1.6rem; font-weight: 600; text-align: left;
+            transition: var(--transition); outline: none; box-shadow: inset 0 2px 10px rgba(0,0,0,0.4);
         }
-        .withdraw-input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 240, 255, 0.15); }
-        .withdraw-input::placeholder { font-size: 1.3rem; color: rgba(255, 255, 255, 0.15); font-weight: 500; }
+        .withdraw-input:focus { border-color: var(--primary); box-shadow: inset 0 2px 10px rgba(0,0,0,0.4), 0 0 20px rgba(0, 240, 255, 0.15); }
+        .withdraw-input::placeholder { font-size: 1.3rem; color: rgba(255, 255, 255, 0.12); font-weight: 500; }
         .btn-max { 
-            position: absolute; right: 12px; top: 50%; transform: translateY(-50%); 
-            background: rgba(0, 240, 255, 0.08); color: var(--primary); border: 1px solid rgba(0, 240, 255, 0.2); 
-            padding: 8px 14px; border-radius: 10px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.8rem; 
+            position: absolute; right: 14px; top: 50%; transform: translateY(-50%); 
+            background: rgba(255, 255, 255, 0.04); color: var(--text-light); border: 1px solid rgba(255,255,255,0.08); 
+            padding: 10px 16px; border-radius: 12px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.85rem; 
             cursor: pointer; transition: var(--transition); 
         }
         .btn-max:active { transform: translateY(-50%) scale(0.92); }
 
-        /* Dynamic Fee Breakout Module */
-        .fee-breakdown-box {
-            background: rgba(0, 0, 0, 0.3); border-radius: 16px; padding: 16px;
-            margin-top: 14px; border: 1px solid rgba(255, 255, 255, 0.03);
-            display: flex; flex-direction: column; gap: 10px; font-size: 0.88rem;
+        /* Dynamic Crypto Breakdown Box */
+        .live-breakdown-box {
+            display: none; background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 18px; padding: 16px; margin-top: 14px; text-align: left;
+            animation: fadeInView 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
-        .fee-row { display: flex; justify-content: space-between; color: var(--text-gray); font-family: 'Inter', sans-serif; }
-        .fee-row span:last-child { color: white; font-weight: 600; font-family: 'Poppins', sans-serif; }
-        .fee-row.total-row {
-            color: white; font-weight: 700; border-top: 1px solid rgba(255,255,255,0.06);
-            padding-top: 12px; margin-top: 2px; font-size: 0.95rem;
-        }
-        .fee-row.total-row span:last-child { color: var(--primary); font-size: 1.05rem; text-shadow: 0 0 10px var(--primary-glow); }
+        .breakdown-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 8px; color: var(--text-gray); }
+        .breakdown-row.total { margin-bottom: 0; margin-top: 6px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.08); font-size: 0.95rem; }
 
-        /* Premium History Cards */
+        /* Modernized History Entries */
         .history-item {
-            background: rgba(13, 13, 17, 0.5); border: 1px solid rgba(255,255,255,0.03);
-            border-radius: 20px; padding: 18px; display: flex; justify-content: space-between;
-            align-items: center; text-align: left; transition: var(--transition);
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.03);
+            border-radius: 22px; padding: 20px; display: flex; flex-direction: column; gap: 12px; text-align: left; transition: var(--transition);
         }
-        .history-info { display: flex; flex-direction: column; gap: 5px; }
+        .history-row-header { display: flex; justify-content: space-between; align-items: center; }
+        .history-info { display: flex; align-items: center; gap: 14px; }
+        .history-details-grid {
+            background: rgba(0,0,0,0.2); border-radius: 14px; padding: 12px;
+            display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem; border: 1px solid rgba(255,255,255,0.01);
+        }
         .history-amount { color: white; font-weight: 700; font-family: 'Poppins', sans-serif; font-size: 1.15rem;}
-        .history-breakdown-details { font-size: 0.76rem; color: var(--text-gray); line-height: 1.4; display: block; }
-        .history-time { color: #52525B; font-size: 0.76rem; font-weight: 500; margin-top: 2px; }
+        .history-time { color: var(--text-gray); font-size: 0.82rem; font-weight: 500;}
         .history-status { font-family: 'Poppins', sans-serif; font-size: 0.72rem; font-weight: 700; padding: 6px 12px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px;}
         .status-pending { background: rgba(255, 215, 0, 0.08); color: var(--accent-gold); border: 1px solid rgba(255, 215, 0, 0.15);}
         .status-approved { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.15);}
@@ -589,7 +583,7 @@
 
         <div class="giveaway-card" style="padding: 30px 22px;">
             <h3 style="color: white; margin-bottom: 24px; font-family: 'Poppins', sans-serif; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 700;">
-                <span style="font-size: 1.6rem;">💸</span> Withdraw Funds
+                <span style="font-size: 1.8rem;">💸</span> Withdraw Funds
             </h3>
             
             <div class="withdraw-step" id="connect-wallet-step">
@@ -599,25 +593,24 @@
             
             <div id="withdraw-input-section" style="display: none;">
                 <div class="withdraw-step">
-                    <label class="withdraw-input-label">Amount to Withdraw</label>
                     <div class="withdraw-input-wrapper">
                         <span class="withdraw-input-symbol">TON</span>
                         <input type="text" inputmode="decimal" id="withdraw-amount" class="withdraw-input" placeholder="0.00">
-                        <button class="btn-max" onclick="applyMaxWithdrawal()">MAX</button>
+                        <button class="btn-max" onclick="handleMaxWithdrawal()">MAX</button>
                     </div>
                     
-                    <div class="fee-breakdown-box">
-                        <div class="fee-row">
+                    <div id="live-breakdown" class="live-breakdown-box">
+                        <div class="breakdown-row">
                             <span>Requested Amount:</span>
-                            <span id="breakdown-gross">0.0000 TON</span>
+                            <span id="bd-gross" style="color:white; font-weight:600;">0.0000 TON</span>
                         </div>
-                        <div class="fee-row">
-                            <span>Platform Fee (30%):</span>
-                            <span id="breakdown-fee" style="color: var(--error);">-0.0000 TON</span>
+                        <div class="breakdown-row" style="color:var(--error);">
+                            <span>Network Fee (30%):</span>
+                            <span id="bd-fee" style="font-weight:600;">0.0000 TON</span>
                         </div>
-                        <div class="fee-row total-row">
-                            <span>Net to Receive:</span>
-                            <span id="breakdown-net">0.0000 TON</span>
+                        <div class="breakdown-row total" style="color:var(--success);">
+                            <span>Net Payout Amount:</span>
+                            <span id="bd-net" style="font-weight:700;">0.0000 TON</span>
                         </div>
                     </div>
                 </div>
@@ -634,14 +627,12 @@
     </div>
 
     <script>
-        // Prevent generic interaction actions
         ['contextmenu', 'dragstart', 'copy', 'cut', 'paste', 'selectstart'].forEach(evt => 
             document.addEventListener(evt, e => {
                 if(e.target.tagName !== 'INPUT') e.preventDefault();
             })
         );
 
-        // Telegram Web App Setup
         const tgApp = window.Telegram?.WebApp;
         if(tgApp) {
             tgApp.ready();
@@ -655,7 +646,6 @@
         function saveStat(key, val) { localStorage.setItem(`${key}_${getUID()}`, val); }
         function getStat(key) { return localStorage.getItem(`${key}_${getUID()}`); }
 
-        // Core Balance States (Calculated directly in TON)
         let userBalance = parseFloat(getStat("user_balance") || "0");
         let totalAdsWatched = parseInt(getStat("total_ads") || "0");
         let dailyAdsWatched = parseInt(getStat("daily_ads") || "0");
@@ -674,7 +664,6 @@
             adController = window.Adsgram.init({ blockId: "int-30043" });
         }
 
-        // --- PROMO CODES METADATA (Values in TON) ---
         const PROMO_CODES = {
             "A7F3K9L2QX": 0.015, "5MZ8T1VC4P": 0.015, "X2N7R5JQ9L": 0.015, "8LP4D6WF2K": 0.015,
             "Q1V9X3M7TC": 0.015, "4BK8Z2N5RY": 0.015, "T7C1L9Q4WP": 0.015, "2XF6M8VK3J": 0.015,
@@ -706,13 +695,15 @@
             startSystem();
             checkWithdrawalStatus();
             
-            // Decimal and numeric protection for crypto inputs
-            document.getElementById("withdraw-amount").addEventListener("input", function(e) {
-                this.value = this.value.replace(/[^0-9.]/g, '');
-                if ((this.value.match(/\./g) || []).length > 1) {
-                    this.value = this.value.replace(/\.+$/, "");
-                }
-                updateFeeBreakdown();
+            // Smart input formatting for standard precise crypto float fields
+            const withdrawInput = document.getElementById("withdraw-amount");
+            withdrawInput.addEventListener("input", function(e) {
+                let cleanVal = this.value.replace(/[^0-9.]/g, '');
+                const parts = cleanVal.split('.');
+                if (parts.length > 2) cleanVal = parts[0] + '.' + parts.slice(1).join('');
+                if (parts[1] && parts[1].length > 4) cleanVal = parts[0] + '.' + parts[1].slice(0, 4);
+                this.value = cleanVal;
+                updateLiveBreakdown(parseFloat(cleanVal));
             });
 
             const splash = document.getElementById('splash-screen');
@@ -849,29 +840,14 @@
             }
             
             const withdrawInputSection = document.getElementById("withdraw-input-section");
-            if (userBalance >= 2.5) {
+            if (userBalance >= 3.0) {
                 withdrawInputSection.style.display = "block";
             } else {
                 withdrawInputSection.style.display = "none";
+                document.getElementById("live-breakdown").style.display = "none";
             }
 
             checkGiveawayUIState();
-            updateFeeBreakdown();
-        }
-
-        function updateFeeBreakdown() {
-            const inputVal = parseFloat(document.getElementById("withdraw-amount").value) || 0;
-            const calculatedFee = inputVal * 0.30;
-            const netAmount = Math.max(0, inputVal - calculatedFee);
-
-            document.getElementById("breakdown-gross").innerText = inputVal.toFixed(4) + " TON";
-            document.getElementById("breakdown-fee").innerText = "-" + calculatedFee.toFixed(4) + " TON";
-            document.getElementById("breakdown-net").innerText = netAmount.toFixed(4) + " TON";
-        }
-
-        function applyMaxWithdrawal() {
-            document.getElementById('withdraw-amount').value = userBalance.toFixed(4);
-            updateFeeBreakdown();
         }
 
         function switchTab(tabName) {
@@ -1031,7 +1007,7 @@
                     saveStat(trackingKey, "true");
 
                     msgBox.className = "msg-box msg-succ";
-                    msgBox.innerHTML = `🎉 <b>Congratulations!</b><br>Promo code applied! Received: +${awardValue} TON.`;
+                    msgBox.innerHTML = `🎉 <b>Congratulations!</b><br>Promo code successfully applied! Received: +${awardValue} TON.`;
                     msgBox.style.display = "block";
                     inputField.value = "";
                     updateAllUI();
@@ -1040,10 +1016,32 @@
                 }
             } else {
                 msgBox.className = "msg-box msg-err";
-                msgBox.innerHTML = "❌ Invalid promo code. Please check and try again.";
+                msgBox.innerHTML = "❌ Invalid promo code. Please double check and try again.";
                 msgBox.style.display = "block";
                 promoMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 1500);
             }
+        }
+
+        function updateLiveBreakdown(amount) {
+            const breakdownBox = document.getElementById("live-breakdown");
+            if (isNaN(amount) || amount <= 0) {
+                breakdownBox.style.display = "none";
+                return;
+            }
+            
+            const fee = amount * 0.30;
+            const net = amount - fee;
+            
+            document.getElementById("bd-gross").innerText = `${amount.toFixed(4)} TON`;
+            document.getElementById("bd-fee").innerText = `${fee.toFixed(4)} TON`;
+            document.getElementById("bd-net").innerText = `${net.toFixed(4)} TON`;
+            breakdownBox.style.display = "block";
+        }
+
+        function handleMaxWithdrawal() {
+            const maxVal = userBalance;
+            document.getElementById('withdraw-amount').value = maxVal.toFixed(4);
+            updateLiveBreakdown(maxVal);
         }
 
         function getWithdrawHistory() {
@@ -1077,25 +1075,37 @@
                 const timeStr = formatMSKTime(item.time);
                 const icon = item.status === 'pending' ? '⏳' : '✅';
                 
-                // Read historical elements or map older parameters gracefully
-                const grossVal = parseFloat(item.amount || 0);
-                const feeVal = parseFloat(item.fee || (grossVal * 0.30));
-                const netVal = parseFloat(item.net || (grossVal - feeVal));
+                // Enhanced variables with fallback for backward compatibility
+                const grossVal = parseFloat(item.gross || item.amount || 0).toFixed(4);
+                const feeVal = parseFloat(item.fee || (item.amount * 0.3) || 0).toFixed(4);
+                const netVal = parseFloat(item.net || (item.amount * 0.7) || 0).toFixed(4);
 
                 html += `
                     <div class="history-item">
-                        <div style="display: flex; align-items: center; gap: 14px;">
-                            <div style="background: rgba(255,255,255,0.03); width: 44px; height: 44px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; border: 1px solid rgba(255,255,255,0.04);">${icon}</div>
+                        <div class="history-row-header">
                             <div class="history-info">
-                                <span class="history-amount">-${grossVal.toFixed(4)} TON</span>
-                                <span class="history-breakdown-details">
-                                    Fee (30%): ${feeVal.toFixed(4)} TON<br>
-                                    Payout Net: <b>${netVal.toFixed(4)} TON</b>
-                                </span>
-                                <span class="history-time">${timeStr}</span>
+                                <div style="background: rgba(255,255,255,0.04); width: 44px; height: 44px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; border: 1px solid rgba(255,255,255,0.04);">${icon}</div>
+                                <div style="display:flex; flex-direction:column; gap:2px;">
+                                    <span class="history-amount">${netVal} TON</span>
+                                    <span class="history-time">${timeStr}</span>
+                                </div>
+                            </div>
+                            <div class="history-status ${statusClass}">${statusText}</div>
+                        </div>
+                        <div class="history-details-grid">
+                            <div style="display:flex; justify-content:space-between; opacity:0.7;">
+                                <span>Requested:</span>
+                                <span>${grossVal} TON</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; color:var(--error); opacity:0.8;">
+                                <span>Fee (30%):</span>
+                                <span>-${feeVal} TON</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; color:var(--success); font-weight:600; padding-top:4px; border-top:1px dashed rgba(255,255,255,0.05)">
+                                <span>Received:</span>
+                                <span>${netVal} TON</span>
                             </div>
                         </div>
-                        <div class="history-status ${statusClass}">${statusText}</div>
                     </div>
                 `;
             });
@@ -1104,18 +1114,19 @@
 
         function processWithdrawal() {
             const msg = document.getElementById("withdraw-msg");
-            const inputElem = document.getElementById("withdraw-amount");
-            const rawValue = inputElem.value;
-            const amountToWithdraw = parseFloat(rawValue);
             
-            if (userBalance < 2.5) {
-                const missingAmount = (2.5 - userBalance).toFixed(4);
+            if (userBalance < 3.0) {
+                const missingAmount = (3.0 - userBalance).toFixed(4);
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = `⚠️ Minimum withdrawal threshold is 2.5 TON. You need ${missingAmount} TON more.`;
+                msg.innerHTML = `⚠️ Minimum withdrawal limit is 3.0000 TON. You need ${missingAmount} TON more.`;
                 msg.style.display = "block";
                 return;
             }
 
+            const inputElem = document.getElementById("withdraw-amount");
+            const rawValue = inputElem.value;
+            const amountToWithdraw = parseFloat(rawValue);
+            
             if (!tonConnectUI.connected) {
                 msg.className = "msg-box msg-err";
                 msg.innerHTML = "⚠️ Please connect your TON wallet first.";
@@ -1128,33 +1139,34 @@
 
             if (hasPending) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = "⚠️ You already have a processing payout. Please wait for confirmation.";
+                msg.innerHTML = "⚠️ You already have a processing withdrawal. Please wait until it completes.";
                 msg.style.display = "block";
                 return;
             }
 
-            if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 2.5) {
+            if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 3.0) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = `⚠️ Invalid allocation. Please enter a valid amount of 2.5 TON or more.`;
+                msg.innerHTML = `⚠️ Invalid entry. Please specify a valid total value of 3.00 TON or more.`;
                 msg.style.display = "block";
                 return;
             }
 
             if (amountToWithdraw > userBalance) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = `⚠️ Insufficient volume. Your maximum available payout limit is ${userBalance.toFixed(4)} TON.`;
+                msg.innerHTML = `⚠️ Insufficient balance. You can withdraw up to ${userBalance.toFixed(4)} TON.`;
                 msg.style.display = "block";
                 return;
             }
-            
-            // Comprehensive accounting calculation parameters (Strict 30% Deductibles)
-            const feeCost = amountToWithdraw * 0.30;
-            const netPayout = amountToWithdraw - feeCost;
 
+            // Calculation engine for 30% fees
+            const calculatedFee = amountToWithdraw * 0.30;
+            const netPayout = amountToWithdraw - calculatedFee;
+            
             history.unshift({
                 id: Date.now(),
-                amount: amountToWithdraw,
-                fee: feeCost,
+                amount: amountToWithdraw, 
+                gross: amountToWithdraw,
+                fee: calculatedFee,
                 net: netPayout,
                 time: Date.now(),
                 status: 'pending'
@@ -1165,6 +1177,7 @@
             saveStat("user_balance", userBalance.toString());
             
             inputElem.value = ""; 
+            document.getElementById("live-breakdown").style.display = "none";
             document.activeElement.blur(); 
             
             updateAllUI();

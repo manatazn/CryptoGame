@@ -468,7 +468,6 @@
             <button class="btn btn-verify" style="margin-top:0;" onclick="submitPromoCode()">Claim Reward</button>
             <div id="promo-msg" class="msg-box"></div>
         </div>
-        <button class="btn-back" onclick="switchTab('home')">🔙 Back to Home</button>
     </div>
 
     <div id="view-giveaway-list" class="view-container">
@@ -603,6 +602,9 @@
         let totalAdsWatched = parseInt(getStat("total_ads") || "0");
         let dailyAdsWatched = parseInt(getStat("daily_ads") || "0");
         let currentGwView = 2;
+        let promoMsgTimeout; // Global timeout variable for promo codes
+
+        let tonConnectUI;
 
         if (totalAdsWatched < 500 && getStat("gw2_secured") === "true") {
             localStorage.removeItem(`gw2_secured_${getUID()}`);
@@ -613,8 +615,6 @@
         if (window.Adsgram) {
             adController = window.Adsgram.init({ blockId: "int-30043" });
         }
-
-        let tonConnectUI;
 
         // --- PROMO CODES METADATA (Values converted to TON based on $1 = 2$) ---
         const PROMO_CODES = {
@@ -937,11 +937,14 @@
             const msgBox = document.getElementById("promo-msg");
             const codeInput = inputField.value.trim();
 
+            // Clear any existing timeouts to prevent message overlapping
+            if (promoMsgTimeout) clearTimeout(promoMsgTimeout);
+
             if(!codeInput) {
                 msgBox.className = "msg-box msg-err";
                 msgBox.innerHTML = "⚠️ Please enter a promo code.";
                 msgBox.style.display = "block";
-                setTimeout(() => { msgBox.style.display = "none"; }, 3000);
+                promoMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 1500);
                 return;
             }
 
@@ -952,7 +955,7 @@
                     msgBox.className = "msg-box msg-err";
                     msgBox.innerHTML = "❌ You have already redeemed this promo code!";
                     msgBox.style.display = "block";
-                    setTimeout(() => { msgBox.style.display = "none"; }, 4000);
+                    promoMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 1500);
                 } else {
                     const awardValue = PROMO_CODES[codeInput];
                     userBalance += awardValue;
@@ -965,13 +968,13 @@
                     inputField.value = "";
                     updateAllUI();
 
-                    setTimeout(() => { msgBox.style.display = "none"; }, 5000);
+                    promoMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 1500);
                 }
             } else {
                 msgBox.className = "msg-box msg-err";
                 msgBox.innerHTML = "❌ Invalid promo code. Please double check and try again.";
                 msgBox.style.display = "block";
-                setTimeout(() => { msgBox.style.display = "none"; }, 4000);
+                promoMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 1500);
             }
         }
 

@@ -11,13 +11,12 @@
     
     <style>
         :root {
-            /* Premium Fintech Color Palette */
             --bg-main: #070709;
             --bg-gradient: radial-gradient(circle at top center, #141419 0%, #070709 100%);
             --glass-bg: rgba(18, 18, 22, 0.75);
             --glass-border: rgba(255, 255, 255, 0.06);
-            --primary: #00F0FF; /* Electric Cyan */
-            --primary-glow: rgba(0, 240, 255, 0.35);
+            --primary: #00F0FF; 
+            --primary-glow: rgba(0, 240, 255, 0.25);
             --primary-gradient: linear-gradient(135deg, #00F0FF 0%, #0066FF 100%);
             --accent-gold: #FFD700;
             --gold-glow: rgba(255, 215, 0, 0.25);
@@ -78,16 +77,16 @@
 
         .coin-center {
             width: 65px; height: 65px;
-            background: linear-gradient(135deg, #0088CC 0%, #005580 100%);
+            background: linear-gradient(135deg, #FFE44D 0%, #C59B27 100%);
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            color: #FFFFFF; font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 800;
-            box-shadow: 0 0 35px rgba(0, 136, 204, 0.35), inset 0 0 12px rgba(255,255,255,0.6);
+            color: #0F0F12; font-family: 'Poppins', sans-serif; font-size: 2.1rem; font-weight: 800;
+            box-shadow: 0 0 35px rgba(255, 215, 0, 0.35), inset 0 0 12px rgba(255,255,255,0.6);
             animation: pulseCoin 2s ease-in-out infinite;
         }
 
         @keyframes spinRight { 100% { transform: rotate(360deg); } }
         @keyframes spinLeft { 100% { transform: rotate(-360deg); } }
-        @keyframes pulseCoin { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); box-shadow: 0 0 45px rgba(0, 136, 204, 0.5); } }
+        @keyframes pulseCoin { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); box-shadow: 0 0 45px var(--gold-glow); } }
 
         .splash-title { 
             font-family: 'Poppins', sans-serif; font-size: 2.1rem; font-weight: 800; color: white; 
@@ -102,19 +101,20 @@
         }
         @keyframes loadSlide { 100% { left: 100%; } }
 
-        /* --- PREMIUM FLOATING BOTTOM NAVIGATION --- */
+        /* --- NAVIGATION --- */
         .bottom-nav {
             position: fixed; bottom: 24px; left: 5%; width: 90%;
-            background: rgba(13, 13, 17, 0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            background: rgba(13, 13, 17, 0.9); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             display: flex; justify-content: space-around; padding: 10px 6px;
             border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; z-index: 100;
             box-shadow: 0 15px 35px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05);
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s;
         }
         
         .nav-item {
             color: #71717A; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer;
             display: flex; flex-direction: column; align-items: center; gap: 4px; 
-            transition: var(--transition); font-size: 0.75rem; width: 30%;
+            transition: var(--transition); font-size: 0.75rem; width: 23%;
             -webkit-tap-highlight-color: transparent;
         }
         
@@ -132,14 +132,8 @@
         }
 
         .nav-item.active { color: var(--primary); }
-        .nav-item.active .nav-icon-bg {
-            background: rgba(0, 240, 255, 0.08);
-        }
-        .nav-item.active .nav-icon { 
-            stroke-width: 2.6; transform: scale(1.1); 
-            filter: drop-shadow(0 0 6px var(--primary-glow));
-        }
-
+        .nav-item.active .nav-icon-bg { background: rgba(0, 240, 255, 0.08); }
+        .nav-item.active .nav-icon { stroke-width: 2.6; transform: scale(1.1); filter: drop-shadow(0 0 6px var(--primary-glow)); }
         .nav-item:active .nav-icon-bg { transform: scale(0.92); }
 
         /* --- APP WRAPPERS --- */
@@ -152,13 +146,12 @@
         .view-container.active { display: flex; }
         @keyframes fadeInView { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- COMPACT PROFILE HEADER --- */
+        /* --- HEADER --- */
         .app-header {
             display: flex; justify-content: space-between; align-items: center;
             background: var(--glass-bg); border: 1px solid var(--glass-border);
             border-radius: 50px; padding: 6px 20px 6px 6px; backdrop-filter: blur(20px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3); 
-            margin-bottom: 5px; margin-top: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3); margin-bottom: 5px; margin-top: 25px;
         }
         .header-user { display: flex; align-items: center; gap: 12px; }
         .profile-avatar { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--primary); padding: 2px; background: rgba(0,0,0,0.4);}
@@ -179,13 +172,13 @@
         }
         .balance-title { color: var(--text-gray); font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.85rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px;}
         .balance-amount { 
-            color: white; font-size: 3.2rem; font-family: 'Poppins', sans-serif; font-weight: 700; 
+            color: white; font-size: 3.4rem; font-family: 'Poppins', sans-serif; font-weight: 700; 
             text-shadow: 0 0 35px var(--primary-glow); line-height: 1; letter-spacing: -1px;
             animation: floatBalance 4s ease-in-out infinite; will-change: transform;
         }
         @keyframes floatBalance { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 
-        /* --- COMPACT DAILY ADS CARD --- */
+        /* --- ADS CARD --- */
         .ad-task-card {
             background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 24px; padding: 24px;
             position: relative; overflow: hidden; backdrop-filter: blur(16px);
@@ -196,22 +189,9 @@
         .ad-info p { font-size: 0.85rem; color: var(--text-gray); }
         
         .ad-reward-badge {
-            background: rgba(0, 136, 204, 0.15); color: #00A3FF;
+            background: rgba(0, 240, 255, 0.08); color: var(--primary);
             font-size: 0.9rem; font-family: 'Poppins', sans-serif; font-weight: 600; padding: 6px 12px; border-radius: 12px;
-            border: 1px solid rgba(0, 136, 204, 0.25); display: flex; align-items: center; gap: 4px;
-        }
-
-        /* Ad Toast (Localized) */
-        .ad-card-msg {
-            position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
-            background: rgba(16, 185, 129, 0.95); color: white; padding: 8px 16px; border-radius: 12px;
-            font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 600;
-            opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3); border: 1px solid rgba(255,255,255,0.2);
-            white-space: nowrap; z-index: 10;
-        }
-        .ad-card-msg.show {
-            opacity: 1; top: 15px; transform: translateX(-50%);
+            border: 1px solid rgba(0, 240, 255, 0.15); display: flex; align-items: center; gap: 4px;
         }
 
         .ad-progress-container { margin-top: 2px; }
@@ -220,7 +200,6 @@
         .ad-progress-text { font-size: 0.85rem; color: var(--text-gray); font-family: 'Poppins', sans-serif; font-weight: 500; display: flex; justify-content: space-between;}
         .ad-progress-text span { color: white; font-weight: 600; }
 
-        /* Watch Ad Button Optimization */
         .btn-ad-compact {
             background: var(--text-light); color: var(--bg-main);
             border: none; padding: 14px; border-radius: 16px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.95rem;
@@ -228,28 +207,49 @@
             display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%;
         }
         .btn-ad-compact:active { transform: scale(0.96); filter: brightness(0.9); }
-        
         .btn-ad-compact.locked {
             background: rgba(255,255,255,0.04); color: #52525B;
             box-shadow: none; cursor: not-allowed; border: 1px solid rgba(255,255,255,0.05); 
             transform: none !important; pointer-events: none;
         }
 
+        /* INLINE TOAST FOR ADS (Instead of global toast) */
+        .ad-mini-toast {
+            display: none; background: var(--success-bg); border: 1px solid rgba(16, 185, 129, 0.2);
+            color: #6EE7B7; font-size: 0.88rem; font-family: 'Poppins', sans-serif; font-weight: 600;
+            padding: 10px; border-radius: 12px; text-align: center; animation: fadeInView 0.3s ease;
+        }
+
+        /* --- PROMO CODE SECTION --- */
+        .promo-input-card {
+            background: rgba(20, 20, 25, 0.7); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 24px; padding: 24px;
+            display: flex; flex-direction: column; gap: 16px; backdrop-filter: blur(15px);
+        }
+        .promo-input-wrapper { position: relative; width: 100%; }
+        .promo-field {
+            width: 100%; padding: 16px 16px 16px 45px; background: rgba(7, 7, 9, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; color: white;
+            font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600; outline: none;
+            transition: var(--transition); letter-spacing: 1px;
+        }
+        .promo-field:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 240, 255, 0.1); }
+        .promo-icon-prefix { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; pointer-events: none; opacity: 0.7; }
+
         /* --- HOST GIVEAWAY CARD --- */
         .host-banner {
-            background: linear-gradient(135deg, rgba(0, 136, 204, 0.1) 0%, rgba(13, 13, 17, 0.7) 100%);
-            border: 1px solid rgba(0, 136, 204, 0.2); border-radius: 24px; padding: 24px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.08) 0%, rgba(13, 13, 17, 0.7) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.15); border-radius: 24px; padding: 24px;
             display: flex; flex-direction: column; gap: 14px; position: relative; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.3);
         }
         .host-banner::before { content: '👑'; position: absolute; right: -15px; top: -15px; font-size: 80px; opacity: 0.04; transform: rotate(20deg); }
-        .host-title { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 600; color: #00A3FF; letter-spacing: 0.3px;}
+        .host-title { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 600; color: var(--accent-gold); letter-spacing: 0.3px;}
         .host-desc { font-size: 0.88rem; color: var(--text-gray); line-height: 1.5; }
         .btn-host {
-            background: rgba(0, 136, 204, 0.1); color: #00A3FF; text-align: center;
+            background: rgba(255, 215, 0, 0.06); color: var(--accent-gold); text-align: center;
             padding: 12px; border-radius: 14px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.95rem; text-decoration: none;
-            border: 1px solid rgba(0, 136, 204, 0.2); transition: var(--transition); display: block;
+            border: 1px solid rgba(255, 215, 0, 0.15); transition: var(--transition); display: block;
         }
-        .btn-host:active { transform: scale(0.96); background: rgba(0, 136, 204, 0.15); }
+        .btn-host:active { transform: scale(0.96); background: rgba(255, 215, 0, 0.1); }
 
         /* --- GIVEAWAY LIST --- */
         .section-title { font-family: 'Poppins', sans-serif; font-size: 1.15rem; font-weight: 600; color: white; margin: 16px 0 8px 0; letter-spacing: 0.3px;}
@@ -272,9 +272,8 @@
             background: var(--glass-bg); backdrop-filter: blur(25px); border-radius: 28px; padding: 36px 22px;
             border: 1px solid var(--glass-border); text-align: center; box-shadow: 0 20px 45px rgba(0,0,0,0.5);
         }
-
-        .prize-title { font-family: 'Poppins', sans-serif; color: white; font-size: 2.8rem; font-weight: 700; line-height: 1; margin-bottom: 8px; text-shadow: 0 0 35px var(--primary-glow); letter-spacing: -1px;}
-        .subtitle { color: #00A3FF; font-family: 'Poppins', sans-serif; font-size: 1.05rem; margin-bottom: 30px; font-weight: 600; letter-spacing: 0.5px;}
+        .prize-title { font-family: 'Poppins', sans-serif; color: white; font-size: 3.2rem; font-weight: 700; line-height: 1; margin-bottom: 8px; text-shadow: 0 0 35px var(--primary-glow); letter-spacing: -1px;}
+        .subtitle { color: var(--accent-gold); font-family: 'Poppins', sans-serif; font-size: 1.05rem; margin-bottom: 30px; font-weight: 600; letter-spacing: 0.5px;}
 
         /* Timer */
         .timer-wrapper { display: flex; justify-content: center; gap: 10px; margin-bottom: 35px; }
@@ -282,7 +281,6 @@
         .time-val { font-family: 'Poppins', sans-serif; font-size: 1.4rem; font-weight: 700; color: white; display: block;}
         .time-lbl { font-size: 0.72rem; color: var(--text-gray); font-family: 'Poppins', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; display: block; font-weight: 600;}
 
-        /* Winner Reveal Box */
         .gw-winner-ui { display: none; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.15); border-radius: 24px; padding: 26px 20px; margin-bottom: 25px; animation: fadeInView 0.4s ease; }
 
         /* Steps */
@@ -294,13 +292,8 @@
 
         .btn { width: 100%; padding: 16px; border-radius: 16px; border: none; font-size: 1rem; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer; transition: var(--transition); text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px; letter-spacing: 0.3px;}
         .btn:active { transform: scale(0.96); filter: brightness(0.9); }
-        
         .btn-join { background: rgba(255,255,255,0.04); color: white; border: 1px solid rgba(255,255,255,0.08); }
-        .btn-join:hover { background: rgba(255,255,255,0.08); }
-        
         .btn-verify { background: var(--primary-gradient); color: var(--bg-main); box-shadow: 0 8px 25px rgba(0, 240, 255, 0.25); margin-top: 16px; }
-        .btn-verify:hover { filter: brightness(1.1); box-shadow: 0 10px 30px rgba(0, 240, 255, 0.35); }
-        
         .btn-claim { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; box-shadow: 0 8px 25px rgba(16, 185, 129, 0.25); margin-top: 16px; }
 
         .btn:disabled, .btn.joined { 
@@ -320,25 +313,22 @@
         .msg-err { background: rgba(239, 68, 68, 0.08); color: #FCA5A5; border-color: rgba(239, 68, 68, 0.15); }
         .msg-succ { background: rgba(16, 185, 129, 0.08); color: #6EE7B7; border-color: rgba(16, 185, 129, 0.15); }
 
-        .spinner { border: 2px solid rgba(255,255,255,0.2); border-top: 2px solid currentColor; border-radius: 50%; width: 18px; height: 18px; animation: spin 0.7s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* --- PREMIUM WALLET & HISTORY UI --- */
+        /* --- WALLET & HISTORY UI --- */
         .withdraw-step { 
             background: rgba(0,0,0,0.25); padding: 20px 16px; 
             border-radius: 20px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.03); 
             text-align: left; box-shadow: inset 0 0 15px rgba(0,0,0,0.4);
         }
-
         .withdraw-input-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
+        .withdraw-input-symbol { position: absolute; left: 20px; font-size: 1.3rem; color: var(--text-gray); font-family: 'Poppins', sans-serif; font-weight: 600; pointer-events: none; }
         .withdraw-input {
-            width: 100%; padding: 18px 80px 18px 20px; background: rgba(7, 7, 9, 0.8);
+            width: 100%; padding: 18px 90px 18px 65px; background: rgba(7, 7, 9, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; color: white;
-            font-family: 'Poppins', sans-serif; font-size: 1.4rem; font-weight: 600; text-align: left;
+            font-family: 'Poppins', sans-serif; font-size: 1.6rem; font-weight: 600; text-align: left;
             transition: var(--transition); outline: none; box-shadow: inset 0 2px 10px rgba(0,0,0,0.4);
         }
         .withdraw-input:focus { border-color: var(--primary); box-shadow: inset 0 2px 10px rgba(0,0,0,0.4), 0 0 20px rgba(0, 240, 255, 0.15); }
-        .withdraw-input::placeholder { font-size: 1.1rem; color: rgba(255, 255, 255, 0.2); font-weight: 500; }
+        .withdraw-input::placeholder { font-size: 1.3rem; color: rgba(255, 255, 255, 0.12); font-weight: 500; }
         .btn-max { 
             position: absolute; right: 14px; top: 50%; transform: translateY(-50%); 
             background: rgba(255, 255, 255, 0.04); color: var(--text-light); border: 1px solid rgba(255,255,255,0.08); 
@@ -346,20 +336,21 @@
             cursor: pointer; transition: var(--transition); 
         }
         .btn-max:active { transform: translateY(-50%) scale(0.92); }
-        .btn-max:hover { background: var(--text-light); color: var(--bg-main); }
 
         .history-item {
             background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.03);
             border-radius: 20px; padding: 18px; display: flex; justify-content: space-between;
             align-items: center; text-align: left; transition: var(--transition);
         }
-        .history-item:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.08); background: rgba(0,0,0,0.4); }
         .history-info { display: flex; flex-direction: column; gap: 4px; }
         .history-amount { color: white; font-weight: 700; font-family: 'Poppins', sans-serif; font-size: 1.15rem;}
         .history-time { color: var(--text-gray); font-size: 0.82rem; font-weight: 500;}
         .history-status { font-family: 'Poppins', sans-serif; font-size: 0.72rem; font-weight: 700; padding: 6px 12px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px;}
         .status-pending { background: rgba(255, 215, 0, 0.08); color: var(--accent-gold); border: 1px solid rgba(255, 215, 0, 0.15);}
         .status-approved { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.15);}
+
+        .spinner { border: 2px solid rgba(255,255,255,0.2); border-top: 2px solid currentColor; border-radius: 50%; width: 18px; height: 18px; animation: spin 0.7s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -374,7 +365,7 @@
         <div class="loading-bar"><div class="loading-progress"></div></div>
     </div>
 
-    <div class="bottom-nav" id="bottom-nav-bar">
+    <div class="bottom-nav" id="app-nav">
         <div class="nav-item active" id="nav-home" onclick="switchTab('home')">
             <div class="nav-icon-bg">
                 <svg class="nav-icon" viewBox="0 0 24 24">
@@ -383,6 +374,15 @@
                 </svg>
             </div>
             <span>Home</span>
+        </div>
+        <div class="nav-item" id="nav-promo" onclick="switchTab('promo')">
+            <div class="nav-icon-bg">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                </svg>
+            </div>
+            <span>Promo</span>
         </div>
         <div class="nav-item" id="nav-giveaway" onclick="switchTab('giveaway')">
             <div class="nav-icon-bg">
@@ -394,7 +394,7 @@
                     <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
                 </svg>
             </div>
-            <span>Giveaway</span>
+            <span>Draws</span>
         </div>
         <div class="nav-item" id="nav-wallet" onclick="switchTab('wallet')">
             <div class="nav-icon-bg">
@@ -409,7 +409,6 @@
     </div>
 
     <div id="view-home" class="view-container active">
-        
         <div class="app-header">
             <div class="header-user">
                 <img src="https://ui-avatars.com/api/?name=User&background=00F0FF&color=070709" class="profile-avatar" id="tg-avatar" alt="Avatar">
@@ -422,19 +421,16 @@
 
         <div class="balance-card">
             <div class="balance-title">Current Balance</div>
-            <div class="balance-amount" id="home-balance">0.00 TON</div>
+            <div class="balance-amount" id="home-balance">0.000 TON</div>
         </div>
 
         <div class="ad-task-card">
-            <div id="ad-card-msg" class="ad-card-msg"></div>
             <div class="ad-header-row">
                 <div class="ad-info">
-                    <h3>Daily Ads</h3>
-                    <p>Watch short ads to earn crypto.</p>
+                    <h3>Daily Rewards</h3>
+                    <p>Watch short ads to earn TON fractions.</p>
                 </div>
-                <div class="ad-reward-badge">
-                    0.0005 TON
-                </div>
+                <div class="ad-reward-badge">0.0005 TON</div>
             </div>
             
             <div class="ad-progress-container">
@@ -448,27 +444,25 @@
             </div>
             
             <button class="btn-ad-compact" id="main-watch-btn" onclick="watchDailyAd()">▶ Watch Ad</button>
+            <div id="ad-mini-alert" class="ad-mini-toast"></div>
         </div>
-
-        <button class="btn btn-join" style="margin-top: -10px; background: rgba(0, 240, 255, 0.05); border: 1px dashed rgba(0, 240, 255, 0.3); color: var(--primary);" onclick="openPromoView()">🎟️ Promo Kod İstifadə Et</button>
     </div>
 
     <div id="view-promo" class="view-container">
-        <div class="giveaway-card" style="padding: 30px 22px;">
-            <h3 style="color: white; margin-bottom: 24px; font-family: 'Poppins', sans-serif; font-size: 1.4rem; font-weight: 700;">
-                🎟️ Promo Kod
-            </h3>
-            <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 20px;">Əgər promo kodunuz varsa, aşağıdakı xanaya daxil edib mükafatınızı alın.</p>
-            
-            <div class="withdraw-step" style="padding: 10px;">
-                <input type="text" id="promo-input" class="withdraw-input" placeholder="Kodu daxil edin" style="padding: 18px 20px; font-size: 1.1rem; text-align: center; text-transform: uppercase;">
-            </div>
-            
-            <button class="btn btn-verify" onclick="applyPromoCode()" style="font-size: 1.15rem; padding: 18px; margin-top: 10px;">Təsdiqlə</button>
-            <div id="promo-msg" class="msg-box" style="margin-top: 16px;"></div>
-
-            <button class="btn-back" onclick="closePromoView()">🔙 Geri Qayıt</button>
+        <div class="balance-card" style="padding: 24px;">
+            <div class="balance-title">Redeem Code</div>
+            <p style="font-size:0.85rem; color:var(--text-gray); margin-top:4px;">Enter your code below to receive an instant TON credit.</p>
         </div>
+
+        <div class="promo-input-card">
+            <div class="promo-input-wrapper">
+                <span class="promo-icon-prefix">🎫</span>
+                <input type="text" id="promo-code-input" class="promo-field" placeholder="ENTER PROMO CODE" autocomplete="off" spellcheck="false">
+            </div>
+            <button class="btn btn-verify" style="margin-top:0;" onclick="submitPromoCode()">Claim Reward</button>
+            <div id="promo-msg" class="msg-box"></div>
+        </div>
+        <button class="btn-back" onclick="switchTab('home')">🔙 Back to Home</button>
     </div>
 
     <div id="view-giveaway-list" class="view-container">
@@ -480,23 +474,21 @@
 
         <div>
             <div class="section-title">Active Giveaways</div>
-            
             <div class="gw-list-card" onclick="openGiveawayDetails(2)">
-                <div class="gw-icon-wrap"><div class="gw-icon">💰</div></div>
+                <div class="gw-icon-wrap"><div class="gw-icon">💎</div></div>
                 <div class="gw-details">
                     <div class="gw-title">Crypto Group #2</div>
-                    <div class="gw-meta">Prize Pool: 25 TON</div>
+                    <div class="gw-meta">Prize Pool: 25.00 TON</div>
                     <div class="gw-status">● Live Now</div>
                 </div>
             </div>
 
             <div class="section-title" style="margin-top: 30px;">Finished Giveaways</div>
-            
             <div class="gw-list-card" style="opacity: 0.65; border-color: rgba(255,255,255,0.01);" onclick="openGiveawayDetails(1)">
                 <div class="gw-icon-wrap" style="background: rgba(255,255,255,0.01);"><div class="gw-icon">🏆</div></div>
                 <div class="gw-details">
                     <div class="gw-title">Crypto Group #1</div>
-                    <div class="gw-meta">Prize Pool: 25 TON</div>
+                    <div class="gw-meta">Prize Pool: 25.00 TON</div>
                     <div class="gw-status" style="color: var(--error); background: rgba(239, 68, 68, 0.08);">● Ended</div>
                     <div style="font-size: 0.88rem; color: var(--accent-gold); margin-top: 8px; font-family: 'Poppins', sans-serif; font-weight: 600;">🎉 Winner: <b>@matro97</b></div>
                 </div>
@@ -506,7 +498,7 @@
 
     <div id="view-giveaway-details" class="view-container">
         <div class="giveaway-card">
-            <h1 class="prize-title" id="det-prize">25 TON</h1>
+            <h1 class="prize-title" id="det-prize">25.00 TON</h1>
             <p class="subtitle" id="det-subtitle">Crypto Group #2</p>
 
             <div class="timer-wrapper" id="timer-ui">
@@ -516,8 +508,7 @@
                 <div class="time-box"><span class="time-val" id="t-secs">00</span><span class="time-lbl">Secs</span></div>
             </div>
 
-            <div id="gw-winner-ui" class="gw-winner-ui">
-            </div>
+            <div id="gw-winner-ui" class="gw-winner-ui"></div>
 
             <div class="steps-container" id="gw-actions">
                 <div class="step-card">
@@ -531,11 +522,11 @@
                         Step 2: Total Ads Goal
                         <span class="total-ad-counter"><span id="gw-total-ads">0</span>/500</span>
                     </div>
-                    <p class="step-desc">You must watch a lifetime total of 500 ads to qualify for this giveaway.</p>
+                    <p class="step-desc">You must watch a lifetime total of 500 ads to qualify for this draw.</p>
                     <button class="btn btn-join" style="border: 1px solid rgba(255,255,255,0.15); color: white;" onclick="switchTab('home')">Go to Daily Ads</button>
                 </div>
 
-                <button class="btn btn-verify" id="verify-action" onclick="processVerification()">Verify & Enter Giveaway</button>
+                <button class="btn btn-verify" id="verify-action" onclick="processVerification()">Verify & Enter Draw</button>
                 <div class="msg-box" id="msg-display"></div>
             </div>
 
@@ -546,7 +537,7 @@
     <div id="view-wallet" class="view-container">
         <div class="balance-card">
             <div class="balance-title">Available Balance</div>
-            <div class="balance-amount" id="wallet-balance">0.00 TON</div>
+            <div class="balance-amount" id="wallet-balance">0.000 TON</div>
         </div>
 
         <div class="giveaway-card" style="padding: 30px 22px;">
@@ -555,48 +546,37 @@
             </h3>
             
             <div class="withdraw-step" id="connect-wallet-step">
-                <div id="connect-wallet-text" style="color: var(--text-gray); font-size: 0.95rem; margin-bottom: 18px; text-align: center; font-weight: 500;">Connect your wallet to withdraw funds</div>
+                <div id="connect-wallet-text" style="color: var(--text-gray); font-size: 0.95rem; margin-bottom: 18px; text-align: center; font-weight: 500;">Connect your TON wallet to withdraw funds</div>
                 <div id="ton-connect" style="display: flex; justify-content: center;"></div>
             </div>
             
             <div id="withdraw-input-section" style="display: none;">
                 <div class="withdraw-step">
                     <div class="withdraw-input-wrapper">
-                        <input type="text" inputmode="decimal" id="withdraw-amount" class="withdraw-input" placeholder="Məs: 2.5" autocomplete="off">
-                        <button class="btn-max" onclick="document.getElementById('withdraw-amount').value = Math.floor(userBalance * 100) / 100">MAX</button>
+                        <span class="withdraw-input-symbol" style="color:#00F0FF;">TON</span>
+                        <input type="text" inputmode="numeric" id="withdraw-amount" class="withdraw-input" placeholder="0" autocomplete="off">
+                        <button class="btn-max" onclick="document.getElementById('withdraw-amount').value = Math.floor(userBalance)">MAX</button>
                     </div>
                 </div>
             </div>
             
             <button class="btn btn-verify" id="withdraw-btn" onclick="processWithdrawal()" style="font-size: 1.15rem; padding: 18px; margin-top: 10px;">Withdraw</button>
-            <div id="withdraw-msg" class="msg-box" style="margin-top: 16px;"></div>
+            <div id="withdraw-msg" class="msg-box"></div>
         </div>
 
         <div class="giveaway-card" style="padding: 26px 22px; margin-top: 15px;">
             <h3 style="color: white; margin-bottom: 18px; font-family: 'Poppins', sans-serif; font-size: 1.2rem; text-align: left; font-weight: 700;">Withdrawal History</h3>
-            <div id="history-list" style="display: flex; flex-direction: column; gap: 14px;">
-            </div>
+            <div id="history-list" style="display: flex; flex-direction: column; gap: 14px;"></div>
         </div>
     </div>
 
     <script>
-        // Klaviatura yuxarı qalxanda naviqasiya panelini gizlətmək (Keyboard Fix)
-        const inputs = document.querySelectorAll('input');
-        const navBar = document.getElementById('bottom-nav-bar');
-
-        inputs.forEach(input => {
-            input.addEventListener('focus', () => {
-                navBar.style.display = 'none';
-            });
-            input.addEventListener('blur', () => {
-                setTimeout(() => { navBar.style.display = 'flex'; }, 100);
-            });
-        });
-
+        // Prevent generic interaction actions
         ['contextmenu', 'dragstart', 'copy', 'cut', 'paste', 'selectstart'].forEach(evt => 
             document.addEventListener(evt, e => e.preventDefault())
         );
 
+        // Telegram Web App Setup
         const tgApp = window.Telegram?.WebApp;
         if(tgApp) {
             tgApp.ready();
@@ -610,26 +590,11 @@
         function saveStat(key, val) { localStorage.setItem(`${key}_${getUID()}`, val); }
         function getStat(key) { return localStorage.getItem(`${key}_${getUID()}`); }
 
+        // Core Balance States (Calculated directly in TON)
         let userBalance = parseFloat(getStat("user_balance") || "0");
         let totalAdsWatched = parseInt(getStat("total_ads") || "0");
         let dailyAdsWatched = parseInt(getStat("daily_ads") || "0");
         let currentGwView = 2;
-
-        const PROMO_CODES = {
-            // 0.015 TON (0.03$ ekvivalenti)
-            "A7F3K9L2QX": 0.015, "5MZ8T1VC4P": 0.015, "X2N7R5JQ9L": 0.015, "8LP4D6WF2K": 0.015, "Q1V9X3M7TC": 0.015,
-            "4BK8Z2N5RY": 0.015, "T7C1L9Q4WP": 0.015, "2XF6M8VK3J": 0.015, "N5Q2R7Z1LD": 0.015, "9JW4T6XK8P": 0.015,
-            "V3L7C1N9QF": 0.015, "6PX2M8TR4K": 0.015, "K9D5W1X7LV": 0.015, "1QT8N4Z6MC": 0.015, "R7V2L9PK5X": 0.015,
-            "3MF1Q8TC7N": 0.015, "Z6K4X2W9LP": 0.015, "8NR5V1DJ3Q": 0.015, "L2T7M9XF4C": 0.015, "5QX8K1V6RP": 0.015,
-            // 0.005 TON (0.01$ ekvivalenti)
-            "H4L9T2X7QM": 0.005, "7VK3P8N1WD": 0.005, "B2Q6M9XF5L": 0.005, "1ZR8T4CV7K": 0.005, "P5X2N7L9QJ": 0.005,
-            "6MT4W8RK1X": 0.005, "C9V1Q5LP7Z": 0.005, "3XF7N2TK8M": 0.005, "W8L4Q1VC9P": 0.005, "2KR5X7MN4T": 0.005,
-            "T1Q9V6LP3X": 0.005, "7NM2K8WF5Q": 0.005, "X4P1T9LC6V": 0.005, "5VL7Q2XR8M": 0.005, "8QK3N1TP4Z": 0.005,
-            "M2X9L6VC7R": 0.005, "4TP8Q5WN1K": 0.005, "Z7L1X4RM9Q": 0.005, "1CV5K8TN2P": 0.005, "Q8X2L7MF4V": 0.005,
-            // 0.025 TON (0.05$ ekvivalenti)
-            "6NP9T1WK3X": 0.025, "R4M7Q8LC2T": 0.025, "3LK1V9XP5N": 0.025, "T9Q4X2WM7K": 0.025, "5XN8L1RC4P": 0.025,
-            "V2T7Q9MK6X": 0.025, "8LP1W4XN5R": 0.025, "K7Q3V2TM9L": 0.025, "2MX8P5QL1V": 0.025, "N4T1X7KC9Q": 0.025
-        };
 
         if (totalAdsWatched < 500 && getStat("gw2_secured") === "true") {
             localStorage.removeItem(`gw2_secured_${getUID()}`);
@@ -643,9 +608,30 @@
 
         let tonConnectUI;
 
+        // --- PROMO CODES METADATA (Values converted to TON based on $1 = 2$) ---
+        const PROMO_CODES = {
+            // 0.03 USD -> 0.015 TON
+            "A7F3K9L2QX": 0.015, "5MZ8T1VC4P": 0.015, "X2N7R5JQ9L": 0.015, "8LP4D6WF2K": 0.015,
+            "Q1V9X3M7TC": 0.015, "4BK8Z2N5RY": 0.015, "T7C1L9Q4WP": 0.015, "2XF6M8VK3J": 0.015,
+            "N5Q2R7Z1LD": 0.015, "9JW4T6XK8P": 0.015, "V3L7C1N9QF": 0.015, "6PX2M8TR4K": 0.015,
+            "K9D5W1X7LV": 0.015, "1QT8N4Z6MC": 0.015, "R7V2L9PK5X": 0.015, "3MF1Q8TC7N": 0.015,
+            "Z6K4X2W9LP": 0.015, "8NR5V1DJ3Q": 0.015, "L2T7M9XF4C": 0.015, "5QX8K1V6RP": 0.015,
+            // 0.01 USD -> 0.005 TON
+            "H4L9T2X7QM": 0.005, "7VK3P8N1WD": 0.005, "B2Q6M9XF5L": 0.005, "1ZR8T4CV7K": 0.005,
+            "P5X2N7L9QJ": 0.005, "6MT4W8RK1X": 0.005, "C9V1Q5LP7Z": 0.005, "3XF7N2TK8M": 0.005,
+            "W8L4Q1VC9P": 0.005, "2KR5X7MN4T": 0.005, "T1Q9V6LP3X": 0.005, "7NM2K8WF5Q": 0.005,
+            "X4P1T9LC6V": 0.005, "5VL7Q2XR8M": 0.005, "8QK3N1TP4Z": 0.005, "M2X9L6VC7R": 0.005,
+            "4TP8Q5WN1K": 0.005, "Z7L1X4RM9Q": 0.005, "1CV5K8TN2P": 0.005, "Q8X2L7MF4V": 0.005,
+            // 0.05 USD -> 0.025 TON
+            "6NP9T1WK3X": 0.025, "R4M7Q8LC2T": 0.025, "3LK1V9XP5N": 0.025, "T9Q4X2WM7K": 0.025,
+            "5XN8L1RC4P": 0.025, "V2T7Q9MK6X": 0.025, "8LP1W4XN5R": 0.025, "K7Q3V2TM9L": 0.025,
+            "2MX8P5QL1V": 0.025, "N4T1X7KC9Q": 0.025
+        };
+
         document.addEventListener('DOMContentLoaded', async () => {
             initProfile();
             initTonConnect();
+            setupKeyboardObservation();
             
             await Promise.race([
                 checkMSKDailyReset(),
@@ -657,12 +643,8 @@
             startSystem();
             checkWithdrawalStatus();
             
-            // Allow decimals for TON
             document.getElementById("withdraw-amount").addEventListener("input", function(e) {
-                this.value = this.value.replace(/[^0-9.]/g, '');
-                if ((this.value.match(/\./g) || []).length > 1) {
-                    this.value = this.value.replace(/\.$/, '');
-                }
+                this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '');
             });
 
             const splash = document.getElementById('splash-screen');
@@ -676,14 +658,40 @@
             }, 3500); 
         });
 
+        // Smart Keyboard / Viewport Management Protection System
+        function setupKeyboardObservation() {
+            const nav = document.getElementById("app-nav");
+            
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener('resize', () => {
+                    const currentHeight = window.visualViewport.height;
+                    const fullHeight = window.innerHeight;
+                    
+                    if (currentHeight < fullHeight * 0.85) {
+                        nav.style.opacity = "0";
+                        nav.style.transform = "translateY(100px)";
+                        nav.style.pointerEvents = "none";
+                    } else {
+                        nav.style.opacity = "1";
+                        nav.style.transform = "translateY(0)";
+                        nav.style.pointerEvents = "auto";
+                    }
+                });
+            }
+            
+            document.addEventListener('click', function(e) {
+                const target = e.target;
+                if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA' && !target.classList.contains('btn')) {
+                    document.activeElement.blur();
+                }
+            });
+        }
+
         async function fetchNetworkTime() {
             const apis = [
                 async () => { const r = await fetch('https://timeapi.io/api/Time/current/zone?timeZone=UTC', { cache: 'no-store' }); const d = await r.json(); return new Date(d.dateTime).getTime(); },
-                async () => { const r = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC', { cache: 'no-store' }); const d = await r.json(); return new Date(d.utc_datetime).getTime(); },
-                async () => { const r = await fetch('https://cdn.jsdelivr.net/npm/vue/package.json', { method: 'HEAD', cache: 'no-store' }); return new Date(r.headers.get('Date')).getTime(); },
-                async () => { const r = await fetch('https://unpkg.com/react/package.json', { method: 'HEAD', cache: 'no-store' }); return new Date(r.headers.get('Date')).getTime(); }
+                async () => { const r = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC', { cache: 'no-store' }); const d = await r.json(); return new Date(d.utc_datetime).getTime(); }
             ];
-
             for (let api of apis) {
                 try {
                     const controller = new AbortController();
@@ -722,7 +730,6 @@
                 manifestUrl: 'https://manatazn.github.io/CryptoGame/tonconnect-manifest.json',
                 buttonRootId: 'ton-connect'
             });
-
             tonConnectUI.onStatusChange((wallet) => {
                 const connectText = document.getElementById("connect-wallet-text");
                 if (wallet) {
@@ -746,8 +753,7 @@
         }
 
         function updateAllUI() {
-            // TON formatlama (4 rəqəmli dəqiqlik)
-            const balString = parseFloat(userBalance).toFixed(4).replace(/\.?0+$/, '') + " TON";
+            const balString = userBalance.toFixed(4) + " TON";
             document.getElementById("home-balance").innerText = balString;
             document.getElementById("wallet-balance").innerText = balString;
 
@@ -774,8 +780,8 @@
                 }
             }
             
-            // Withdrawal Minimum 2.5 TON
             const withdrawInputSection = document.getElementById("withdraw-input-section");
+            // Threshold 2.5 TON (= $5)
             if (userBalance >= 2.5) {
                 withdrawInputSection.style.display = "block";
             } else {
@@ -786,12 +792,16 @@
         }
 
         function switchTab(tabName) {
-            document.getElementById('nav-home').classList.remove('active');
-            document.getElementById('nav-giveaway').classList.remove('active');
-            document.getElementById('nav-wallet').classList.remove('active');
+            document.activeElement.blur(); 
+            
+            const tabs = ['home', 'promo', 'giveaway', 'wallet'];
+            tabs.forEach(t => {
+                const navEl = document.getElementById(`nav-${t === 'promo' ? 'promo' : t === 'giveaway' ? 'giveaway' : t}`);
+                if(navEl) navEl.classList.remove('active');
+            });
             
             document.getElementById('view-home').classList.remove('active');
-            document.getElementById('view-promo').classList.remove('active'); // Promo gizle
+            if(document.getElementById('view-promo')) document.getElementById('view-promo').classList.remove('active');
             document.getElementById('view-giveaway-list').classList.remove('active');
             document.getElementById('view-giveaway-details').classList.remove('active');
             document.getElementById('view-wallet').classList.remove('active');
@@ -799,6 +809,9 @@
             if (tabName === 'home') {
                 document.getElementById('nav-home').classList.add('active');
                 document.getElementById('view-home').classList.add('active');
+            } else if (tabName === 'promo') {
+                document.getElementById('nav-promo').classList.add('active');
+                document.getElementById('view-promo').classList.add('active');
             } else if (tabName === 'giveaway') {
                 document.getElementById('nav-giveaway').classList.add('active');
                 document.getElementById('view-giveaway-list').classList.add('active');
@@ -808,56 +821,6 @@
             }
         }
 
-        // Promo kod ekranını açmaq və bağlamaq
-        function openPromoView() {
-            document.getElementById('view-home').classList.remove('active');
-            document.getElementById('view-promo').classList.add('active');
-        }
-
-        function closePromoView() {
-            switchTab('home');
-        }
-
-        function applyPromoCode() {
-            const input = document.getElementById("promo-input");
-            const msg = document.getElementById("promo-msg");
-            const code = input.value.trim().toUpperCase();
-
-            if (!code) {
-                showPromoMsg("⚠️ Zəhmət olmasa promo kod daxil edin.", "err");
-                return;
-            }
-
-            if (PROMO_CODES.hasOwnProperty(code)) {
-                const status = getStat(`promo_${code}`);
-                if (status === "used") {
-                    showPromoMsg("⚠️ Bu promo kod artıq istifadə edilib.", "err");
-                } else {
-                    saveStat(`promo_${code}`, "used");
-                    const reward = PROMO_CODES[code];
-                    userBalance += reward;
-                    saveStat("user_balance", userBalance.toString());
-                    
-                    showPromoMsg(`🎉 Təbriklər! ${reward} TON balansa əlavə edildi.`, "succ");
-                    updateAllUI();
-                    input.value = ""; 
-                }
-            } else {
-                showPromoMsg("❌ Səhv promo kod.", "err");
-            }
-        }
-
-        function showPromoMsg(text, type) {
-            const msg = document.getElementById("promo-msg");
-            msg.className = `msg-box msg-${type}`;
-            msg.innerHTML = text;
-            msg.style.display = "block";
-            
-            setTimeout(() => {
-                msg.style.display = "none";
-            }, 3000);
-        }
-
         function openGiveawayDetails(gwId) {
             currentGwView = gwId;
             document.getElementById('view-home').classList.remove('active');
@@ -865,7 +828,7 @@
             document.getElementById('view-giveaway-details').classList.add('active');
 
             if (gwId === 1) {
-                document.getElementById('det-prize').innerText = "25 TON";
+                document.getElementById('det-prize').innerText = "25.00 TON";
                 document.getElementById('det-subtitle').innerText = "Crypto Group #1";
                 document.getElementById('timer-ui').style.display = "none";
                 document.getElementById('gw-actions').style.display = "none";
@@ -884,11 +847,10 @@
                         winnerHtml += `<div style="margin-top: 20px; color: var(--success); font-weight: bold; font-size: 1.2rem;">✅ Reward added to balance!</div>`;
                     }
                 }
-
                 document.getElementById('gw-winner-ui').innerHTML = winnerHtml;
                 document.getElementById('gw-winner-ui').style.display = "block";
             } else {
-                document.getElementById('det-prize').innerText = "25 TON";
+                document.getElementById('det-prize').innerText = "25.00 TON";
                 document.getElementById('det-subtitle').innerText = "Crypto Group #2";
                 document.getElementById('timer-ui').style.display = "flex";
                 document.getElementById('gw-actions').style.display = "block";
@@ -902,7 +864,6 @@
             saveStat(`gw${gwId}_claimed`, "true");
             userBalance += amount;
             saveStat("user_balance", userBalance.toString());
-            // Global toast for claims since it's a huge event
             updateAllUI();
             openGiveawayDetails(gwId); 
         }
@@ -919,9 +880,14 @@
         }
 
         function watchDailyAd() {
-            if (dailyAdsWatched >= 50) return;
-
-            if (!adController) return;
+            if (dailyAdsWatched >= 50) {
+                alert("Daily limit reached! Please come back tomorrow.");
+                return;
+            }
+            if (!adController) {
+                alert("Ads are initializing. Please wait...");
+                return;
+            }
             
             const btn = document.getElementById("main-watch-btn");
             btn.innerHTML = "<span class='spinner'></span> Loading...";
@@ -930,20 +896,18 @@
             adController.show().then(() => {
                 dailyAdsWatched++;
                 totalAdsWatched++;
-                userBalance += 0.0005; // 0.0005 TON
+                userBalance += 0.0005; // 0.001$ = 0.0005 TON
                 
                 saveStat("daily_ads", dailyAdsWatched.toString());
                 saveStat("total_ads", totalAdsWatched.toString());
                 saveStat("user_balance", userBalance.toString());
                 
-                // Məhdud, kiçik lokal bildiriş (Toast əvəzinə)
-                const adMsg = document.getElementById('ad-card-msg');
-                adMsg.innerHTML = `+0.0005 TON Qazanıldı! 🎉`;
-                adMsg.classList.add('show');
-                setTimeout(() => adMsg.classList.remove('show'), 2000);
+                const miniAlert = document.getElementById("ad-mini-alert");
+                miniAlert.innerHTML = "🎉 Credit Earned: +0.0005 TON";
+                miniAlert.style.display = "block";
+                setTimeout(() => { miniAlert.style.display = "none"; }, 4000);
 
                 updateAllUI(); 
-                
                 if (dailyAdsWatched < 50) {
                     btn.innerHTML = "▶ Watch Ad";
                     btn.classList.remove('locked');
@@ -954,10 +918,52 @@
             });
         }
 
+        function submitPromoCode() {
+            const inputField = document.getElementById("promo-code-input");
+            const msgBox = document.getElementById("promo-msg");
+            const codeInput = inputField.value.trim();
+
+            if(!codeInput) {
+                msgBox.className = "msg-box msg-err";
+                msgBox.innerHTML = "⚠️ Please enter a promo code.";
+                msgBox.style.display = "block";
+                setTimeout(() => { msgBox.style.display = "none"; }, 3000);
+                return;
+            }
+
+            if (PROMO_CODES.hasOwnProperty(codeInput)) {
+                const trackingKey = `promo_used_${codeInput}`;
+                
+                if (getStat(trackingKey) === "true") {
+                    msgBox.className = "msg-box msg-err";
+                    msgBox.innerHTML = "❌ You have already redeemed this promo code!";
+                    msgBox.style.display = "block";
+                    setTimeout(() => { msgBox.style.display = "none"; }, 4000);
+                } else {
+                    const awardValue = PROMO_CODES[codeInput];
+                    userBalance += awardValue;
+                    saveStat("user_balance", userBalance.toString());
+                    saveStat(trackingKey, "true");
+
+                    msgBox.className = "msg-box msg-succ";
+                    msgBox.innerHTML = `🎉 <b>Congratulations!</b><br>Promo code successfully applied! Received: +${awardValue} TON.`;
+                    msgBox.style.display = "block";
+                    inputField.value = "";
+                    updateAllUI();
+
+                    setTimeout(() => { msgBox.style.display = "none"; }, 5000);
+                }
+            } else {
+                msgBox.className = "msg-box msg-err";
+                msgBox.innerHTML = "❌ Invalid promo code. Please double check and try again.";
+                msgBox.style.display = "block";
+                setTimeout(() => { msgBox.style.display = "none"; }, 4000);
+            }
+        }
+
         function getWithdrawHistory() {
             try { return JSON.parse(getStat("withdraw_history_array") || "[]"); } catch (e) { return []; }
         }
-
         function saveWithdrawHistory(arr) { saveStat("withdraw_history_array", JSON.stringify(arr)); }
 
         function formatMSKTime(timestamp) {
@@ -991,7 +997,7 @@
                         <div style="display: flex; align-items: center; gap: 18px;">
                             <div style="background: rgba(255,255,255,0.04); width: 48px; height: 48px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 1.3rem; border: 1px solid rgba(255,255,255,0.04);">${icon}</div>
                             <div class="history-info">
-                                <span class="history-amount">-${item.amount} TON</span>
+                                <span class="history-amount">-${item.amount}.00 TON</span>
                                 <span class="history-time">${timeStr}</span>
                             </div>
                         </div>
@@ -1006,16 +1012,16 @@
             const msg = document.getElementById("withdraw-msg");
             
             if (userBalance < 2.5) {
-                const missingAmount = (2.5 - userBalance).toFixed(4).replace(/\.?0+$/, '');
+                const missingAmount = (2.5 - userBalance).toFixed(3);
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = `⚠️ Minimum withdrawal is 2.5 TON. You need ${missingAmount} TON more.`;
+                msg.innerHTML = `⚠️ Minimum withdrawal limit is 2.5 TON. You need ${missingAmount} TON more.`;
                 msg.style.display = "block";
                 return;
             }
 
             const inputElem = document.getElementById("withdraw-amount");
             const rawValue = inputElem.value;
-            const amountToWithdraw = parseFloat(rawValue);
+            const amountToWithdraw = parseInt(rawValue, 10);
             
             if (!tonConnectUI.connected) {
                 msg.className = "msg-box msg-err";
@@ -1034,16 +1040,16 @@
                 return;
             }
 
-            if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 2.5) {
+            if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 2.5 || !/^\d+$/.test(rawValue)) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = `⚠️ Invalid entry. Please enter a valid number of 2.5 or more.`;
+                msg.innerHTML = `⚠️ Invalid entry. Please enter a valid whole number of 3 TON or more.`;
                 msg.style.display = "block";
                 return;
             }
 
             if (amountToWithdraw > userBalance) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = `⚠️ Insufficient balance. You can withdraw up to ${parseFloat(userBalance).toFixed(4).replace(/\.?0+$/, '')} TON.`;
+                msg.innerHTML = `⚠️ Insufficient balance. You can withdraw up to ${Math.floor(userBalance)} TON.`;
                 msg.style.display = "block";
                 return;
             }
@@ -1060,6 +1066,7 @@
             saveStat("user_balance", userBalance.toString());
             
             inputElem.value = ""; 
+            document.activeElement.blur(); 
             
             updateAllUI();
             renderHistory();
@@ -1069,13 +1076,11 @@
         let withdrawInterval;
         function checkWithdrawalStatus() {
             if(withdrawInterval) clearInterval(withdrawInterval);
-            
             withdrawInterval = setInterval(() => {
                 let history = getWithdrawHistory();
                 let needsUpdate = false;
                 let hasPending = false;
                 const now = new Date().getTime();
-                
                 const hiddenProcessingTime = 5 * 60 * 1000; 
                 const msg = document.getElementById("withdraw-msg");
 
@@ -1083,7 +1088,6 @@
                     if (history[i].status === 'pending') {
                         hasPending = true;
                         const diff = now - history[i].time;
-                        
                         if (diff >= hiddenProcessingTime) {
                             history[i].status = 'approved';
                             needsUpdate = true;
@@ -1096,16 +1100,9 @@
                     saveWithdrawHistory(history);
                     renderHistory();
                 }
-
-                if (hasPending) {
+                if (!hasPending) {
                     msg.style.display = "none";
-                } else {
-                    if (history.length > 0 && history[0].status === 'approved' && needsUpdate) {
-                         msg.style.display = "none";
-                    } else if (!hasPending && !needsUpdate) {
-                         msg.style.display = "none";
-                         clearInterval(withdrawInterval);
-                    }
+                    clearInterval(withdrawInterval);
                 }
             }, 1000);
         }
@@ -1170,7 +1167,7 @@
                 if(verifyBtn) verifyBtn.style.display = "none";
                 if(msg) {
                     msg.className = "msg-box msg-succ";
-                    msg.innerHTML = "🎉 <b>Entry Secured:</b> You are successfully entered into the giveaway. Good luck!";
+                    msg.innerHTML = "🎉 <b>Entry Secured:</b> You are successfully entered into the giveaway draw. Good luck!";
                     msg.style.display = "block";
                 }
                 return true;
@@ -1213,9 +1210,7 @@
                 if (adController && 
                     (document.getElementById('view-giveaway-details').classList.contains('active') || 
                      document.getElementById('view-home').classList.contains('active'))) {
-                    
                     if (document.getElementById('view-home').classList.contains('active') && dailyAdsWatched >= 50) return;
-
                     adController.show().catch(e => {});
                 }
             }, 30000); 

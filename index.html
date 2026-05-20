@@ -11,21 +11,22 @@
     
     <style>
         :root {
-            --bg-main: #070709;
-            --bg-gradient: radial-gradient(circle at top center, #141419 0%, #070709 100%);
-            --glass-bg: rgba(18, 18, 22, 0.75);
-            --glass-border: rgba(255, 255, 255, 0.06);
-            --primary: #00F0FF; 
-            --primary-glow: rgba(0, 240, 255, 0.25);
-            --primary-gradient: linear-gradient(135deg, #00F0FF 0%, #0066FF 100%);
-            --accent-gold: #FFD700;
-            --gold-glow: rgba(255, 215, 0, 0.25);
-            --text-light: #F4F4F5;
-            --text-gray: #A1A1AA;
-            --success: #10B981;
-            --success-bg: rgba(16, 185, 129, 0.12);
-            --error: #EF4444;
+            /* YENİ PREMİUM RENK PALETİ: Derin Mavi, Beyaz ve Altın Sarısı */
+            --bg-main: #0B192C; 
+            --bg-gradient: radial-gradient(circle at top center, #1A365D 0%, #0B192C 100%);
+            --glass-bg: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --primary: #FFD700; /* Altın Sarısı */
+            --primary-glow: rgba(255, 215, 0, 0.35);
+            --primary-gradient: linear-gradient(135deg, #FFDF00 0%, #F59E0B 100%);
+            --accent-gold: #FACC15;
+            --text-light: #F8FAFC; /* Tam okunabilir parlak beyaz */
+            --text-gray: #CBD5E1; /* Mavi arka planda okunur açık gri/mavi */
+            --success: #34D399; 
+            --success-bg: rgba(52, 211, 153, 0.15);
+            --error: #F87171;
             --transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            --dark-text: #0B192C; /* Butonların üstü için */
         }
 
         * { 
@@ -64,13 +65,13 @@
 
         .ring-outer {
             position: absolute; width: 100%; height: 100%; border-radius: 50%;
-            border: 2px dashed rgba(0, 240, 255, 0.3);
+            border: 2px dashed rgba(255, 215, 0, 0.4);
             animation: spinRight 14s linear infinite;
         }
 
         .ring-inner {
             position: absolute; width: 85%; height: 85%; border-radius: 50%;
-            border: 2px solid transparent; border-top: 2px solid var(--primary); border-bottom: 2px solid var(--accent-gold);
+            border: 2px solid transparent; border-top: 2px solid var(--primary); border-bottom: 2px solid #FFFFFF;
             animation: spinLeft 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             box-shadow: 0 0 25px var(--primary-glow);
         }
@@ -78,14 +79,13 @@
         .coin-center {
             width: 76px; height: 76px;
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 35px rgba(0, 240, 255, 0.35);
+            box-shadow: 0 0 35px rgba(255, 215, 0, 0.35);
             animation: pulseCoin 2s ease-in-out infinite;
-            background: #000; overflow: hidden;
+            background: var(--bg-main); overflow: hidden;
         }
 
         .splash-logo {
             width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
-            pointer-events: none; -webkit-user-drag: none; -webkit-touch-callout: none;
         }
 
         @keyframes spinRight { 100% { transform: rotate(360deg); } }
@@ -95,10 +95,10 @@
         .splash-title { 
             font-family: 'Poppins', sans-serif; font-size: 2.1rem; font-weight: 800; color: white; 
             letter-spacing: 1.5px; margin-bottom: 30px; text-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            background: linear-gradient(to right, #FFFFFF, #D4D4D8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background: linear-gradient(to right, #FFFFFF, #FFD700); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         
-        .loading-bar { width: 160px; height: 5px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; position: relative; }
+        .loading-bar { width: 160px; height: 5px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; position: relative; }
         .loading-progress { 
             width: 45%; height: 100%; background: var(--primary-gradient); 
             border-radius: 10px; position: absolute; left: -50%; animation: loadSlide 1.4s infinite cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 15px var(--primary);
@@ -108,15 +108,15 @@
         /* --- NAVIGATION --- */
         .bottom-nav {
             position: fixed; bottom: 24px; left: 5%; width: 90%;
-            background: rgba(13, 13, 17, 0.9); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            background: rgba(11, 25, 44, 0.9); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             display: flex; justify-content: space-around; padding: 10px 6px;
-            border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; z-index: 100;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border); border-radius: 24px; z-index: 100;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
             transition: opacity 0.2s, transform 0.2s;
         }
         
         .nav-item {
-            color: #71717A; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer;
+            color: #94A3B8; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer;
             display: flex; flex-direction: column; align-items: center; gap: 4px; 
             transition: var(--transition); font-size: 0.75rem; width: 23%;
             -webkit-tap-highlight-color: transparent;
@@ -136,7 +136,7 @@
         }
 
         .nav-item.active { color: var(--primary); }
-        .nav-item.active .nav-icon-bg { background: rgba(0, 240, 255, 0.08); }
+        .nav-item.active .nav-icon-bg { background: rgba(255, 215, 0, 0.12); }
         .nav-item.active .nav-icon { stroke-width: 2.6; transform: scale(1.1); filter: drop-shadow(0 0 6px var(--primary-glow)); }
         .nav-item:active .nav-icon-bg { transform: scale(0.92); }
 
@@ -155,30 +155,30 @@
             display: flex; justify-content: space-between; align-items: center;
             background: var(--glass-bg); border: 1px solid var(--glass-border);
             border-radius: 50px; padding: 6px 20px 6px 6px; backdrop-filter: blur(20px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3); margin-bottom: 5px; margin-top: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2); margin-bottom: 5px; margin-top: 25px;
         }
         .header-user { display: flex; align-items: center; gap: 12px; }
-        .profile-avatar { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--primary); padding: 2px; background: rgba(0,0,0,0.4);}
+        .profile-avatar { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--primary); padding: 2px; background: rgba(0,0,0,0.2);}
         .profile-name-group { display: flex; flex-direction: column; justify-content: center; }
         .profile-name { font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; color: white; line-height: 1.2; letter-spacing: 0.2px;}
         .profile-uid { font-size: 0.75rem; color: var(--text-gray); font-family: 'Inter', sans-serif;}
 
         /* --- BALANCE CARD --- */
         .balance-card {
-            background: linear-gradient(145deg, rgba(20, 20, 25, 0.9) 0%, rgba(10, 10, 14, 0.95) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 28px; padding: 30px 20px;
+            background: linear-gradient(145deg, rgba(26, 54, 93, 0.9) 0%, rgba(11, 25, 44, 0.95) 100%);
+            border: 1px solid var(--glass-border); border-radius: 28px; padding: 30px 20px;
             display: flex; flex-direction: column; align-items: center; text-align: center;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.03); position: relative; overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.08); position: relative; overflow: hidden;
         }
         .balance-card::before {
             content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(0,240,255,0.04) 0%, transparent 60%); pointer-events: none;
+            background: radial-gradient(circle, rgba(255,215,0,0.06) 0%, transparent 60%); pointer-events: none;
         }
         .balance-title { color: var(--text-gray); font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px;}
         
         .balance-amount { 
             color: white; font-size: 2.4rem; font-family: 'Poppins', sans-serif; font-weight: 700; 
-            text-shadow: 0 0 20px rgba(0, 240, 255, 0.3); line-height: 1.2; letter-spacing: 0.5px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3); line-height: 1.2; letter-spacing: 0.5px;
             animation: floatBalance 4s ease-in-out infinite; will-change: transform;
         }
         @keyframes floatBalance { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
@@ -187,42 +187,42 @@
         .ad-task-card {
             background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 24px; padding: 24px;
             position: relative; overflow: hidden; backdrop-filter: blur(16px);
-            display: flex; flex-direction: column; gap: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            display: flex; flex-direction: column; gap: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
         .ad-header-row { display: flex; justify-content: space-between; align-items: center; }
         .ad-info h3 { font-family: 'Poppins', sans-serif; font-size: 1.15rem; color: white; margin-bottom: 4px; letter-spacing: 0.3px;}
         .ad-info p { font-size: 0.85rem; color: var(--text-gray); }
         
         .ad-reward-badge {
-            background: rgba(0, 240, 255, 0.08); color: var(--primary);
+            background: rgba(255, 215, 0, 0.12); color: var(--primary);
             font-size: 0.9rem; font-family: 'Poppins', sans-serif; font-weight: 600; padding: 6px 12px; border-radius: 12px;
-            border: 1px solid rgba(0, 240, 255, 0.15); display: flex; align-items: center; gap: 4px;
+            border: 1px solid rgba(255, 215, 0, 0.25); display: flex; align-items: center; gap: 4px;
         }
 
         .ad-progress-container { margin-top: 2px; }
-        .ad-progress-bar { width: 100%; height: 8px; background: rgba(0,0,0,0.5); border-radius: 10px; overflow: hidden; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.01);}
+        .ad-progress-bar { width: 100%; height: 8px; background: rgba(0,0,0,0.3); border-radius: 10px; overflow: hidden; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05);}
         .ad-progress-fill { height: 100%; background: var(--primary-gradient); width: 0%; transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 0 8px var(--primary-glow);}
         .ad-progress-text { font-size: 0.85rem; color: var(--text-gray); font-family: 'Poppins', sans-serif; font-weight: 500; display: flex; justify-content: space-between;}
         .ad-progress-text span { color: white; font-weight: 600; }
 
         .btn-ad-compact {
-            background: var(--text-light); color: var(--bg-main);
-            border: none; padding: 14px; border-radius: 16px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.95rem;
-            cursor: pointer; transition: var(--transition); box-shadow: 0 6px 20px rgba(255,255,255,0.12);
+            background: var(--primary-gradient); color: var(--dark-text);
+            border: none; padding: 14px; border-radius: 16px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.95rem;
+            cursor: pointer; transition: var(--transition); box-shadow: 0 6px 20px var(--primary-glow);
             display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%;
         }
         .btn-ad-compact:active { transform: scale(0.96); filter: brightness(0.9); }
         .btn-ad-compact.locked {
-            background: rgba(255,255,255,0.04); color: #52525B;
-            box-shadow: none; cursor: not-allowed; border: 1px solid rgba(255,255,255,0.05); 
+            background: rgba(255,255,255,0.1); color: var(--text-gray);
+            box-shadow: none; cursor: not-allowed; border: 1px solid rgba(255,255,255,0.1); 
             transform: none !important; pointer-events: none;
         }
 
         .ad-mini-toast {
             display: none; 
-            background: rgba(16, 185, 129, 0.15); 
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: #6EE7B7; 
+            background: rgba(52, 211, 153, 0.2); 
+            border: 1px solid rgba(52, 211, 153, 0.4);
+            color: #A7F3D0; 
             font-size: 0.8rem; 
             font-family: 'Poppins', sans-serif; 
             font-weight: 600;
@@ -248,34 +248,34 @@
 
         /* --- PROMO CODE SECTION --- */
         .promo-input-card {
-            background: rgba(20, 20, 25, 0.7); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 24px; padding: 24px;
+            background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 24px; padding: 24px;
             display: flex; flex-direction: column; gap: 16px; backdrop-filter: blur(15px);
         }
         .promo-input-wrapper { position: relative; width: 100%; }
         .promo-field {
-            width: 100%; padding: 16px 16px 16px 45px; background: rgba(7, 7, 9, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; color: white;
+            width: 100%; padding: 16px 16px 16px 45px; background: rgba(11, 25, 44, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; color: white;
             font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600; outline: none;
             transition: var(--transition); letter-spacing: 1px;
         }
-        .promo-field:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 240, 255, 0.1); }
-        .promo-icon-prefix { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; pointer-events: none; opacity: 0.7; }
+        .promo-field:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(255, 215, 0, 0.15); }
+        .promo-icon-prefix { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; pointer-events: none; opacity: 0.9; }
 
         /* --- HOST GIVEAWAY CARD --- */
         .host-banner {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.08) 0%, rgba(13, 13, 17, 0.7) 100%);
-            border: 1px solid rgba(255, 215, 0, 0.15); border-radius: 24px; padding: 24px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(26, 54, 93, 0.7) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.25); border-radius: 24px; padding: 24px;
             display: flex; flex-direction: column; gap: 14px; position: relative; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.3);
         }
-        .host-banner::before { content: '👑'; position: absolute; right: -15px; top: -15px; font-size: 80px; opacity: 0.04; transform: rotate(20deg); }
+        .host-banner::before { content: '👑'; position: absolute; right: -15px; top: -15px; font-size: 80px; opacity: 0.08; transform: rotate(20deg); }
         .host-title { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 600; color: var(--accent-gold); letter-spacing: 0.3px;}
-        .host-desc { font-size: 0.88rem; color: var(--text-gray); line-height: 1.5; }
+        .host-desc { font-size: 0.88rem; color: var(--text-light); line-height: 1.5; }
         .btn-host {
-            background: rgba(255, 215, 0, 0.06); color: var(--accent-gold); text-align: center;
+            background: rgba(255, 215, 0, 0.1); color: var(--accent-gold); text-align: center;
             padding: 12px; border-radius: 14px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.95rem; text-decoration: none;
-            border: 1px solid rgba(255, 215, 0, 0.15); transition: var(--transition); display: block;
+            border: 1px solid rgba(255, 215, 0, 0.25); transition: var(--transition); display: block;
         }
-        .btn-host:active { transform: scale(0.96); background: rgba(255, 215, 0, 0.1); }
+        .btn-host:active { transform: scale(0.96); background: rgba(255, 215, 0, 0.15); }
 
         /* --- GIVEAWAY LIST --- */
         .section-title { font-family: 'Poppins', sans-serif; font-size: 1.15rem; font-weight: 600; color: white; margin: 16px 0 8px 0; letter-spacing: 0.3px;}
@@ -283,11 +283,11 @@
         .gw-list-card {
             background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px;
             padding: 18px; display: flex; align-items: center; gap: 16px; cursor: pointer;
-            transition: var(--transition); backdrop-filter: blur(16px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); -webkit-tap-highlight-color: transparent;
+            transition: var(--transition); backdrop-filter: blur(16px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); -webkit-tap-highlight-color: transparent;
         }
-        .gw-list-card:active { transform: scale(0.97); background: rgba(255,255,255,0.02); }
-        .gw-icon-wrap { background: rgba(255,255,255,0.02); padding: 14px; border-radius: 16px; display: flex; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.04);}
-        .gw-icon { font-size: 2rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.08)); }
+        .gw-list-card:active { transform: scale(0.97); background: rgba(255,255,255,0.08); }
+        .gw-icon-wrap { background: rgba(255,255,255,0.08); padding: 14px; border-radius: 16px; display: flex; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.1);}
+        .gw-icon { font-size: 2rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.1)); }
         .gw-details { flex: 1; }
         .gw-title { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1.05rem; color: white; margin-bottom: 4px;}
         .gw-meta { font-size: 0.88rem; color: var(--text-gray); }
@@ -296,68 +296,68 @@
         /* --- GIVEAWAY DETAIL VIEW --- */
         .giveaway-card {
             background: var(--glass-bg); backdrop-filter: blur(25px); border-radius: 28px; padding: 36px 22px;
-            border: 1px solid var(--glass-border); text-align: center; box-shadow: 0 20px 45px rgba(0,0,0,0.5);
+            border: 1px solid var(--glass-border); text-align: center; box-shadow: 0 20px 45px rgba(0,0,0,0.3);
         }
         .prize-title { font-family: 'Poppins', sans-serif; color: white; font-size: 3.2rem; font-weight: 700; line-height: 1; margin-bottom: 8px; text-shadow: 0 0 35px var(--primary-glow); letter-spacing: -1px;}
         .subtitle { color: var(--accent-gold); font-family: 'Poppins', sans-serif; font-size: 1.05rem; margin-bottom: 30px; font-weight: 600; letter-spacing: 0.5px;}
 
         /* Timer */
         .timer-wrapper { display: flex; justify-content: center; gap: 10px; margin-bottom: 35px; }
-        .time-box { background: rgba(0, 0, 0, 0.4); padding: 14px 0; border-radius: 16px; width: 68px; border: 1px solid rgba(255, 255, 255, 0.03); box-shadow: inset 0 0 15px rgba(0,0,0,0.6); }
+        .time-box { background: rgba(11, 25, 44, 0.6); padding: 14px 0; border-radius: 16px; width: 68px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: inset 0 0 15px rgba(0,0,0,0.3); }
         .time-val { font-family: 'Poppins', sans-serif; font-size: 1.4rem; font-weight: 700; color: white; display: block;}
         .time-lbl { font-size: 0.72rem; color: var(--text-gray); font-family: 'Poppins', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; display: block; font-weight: 600;}
 
-        .gw-winner-ui { display: none; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.15); border-radius: 24px; padding: 26px 20px; margin-bottom: 25px; animation: fadeInView 0.4s ease; }
+        .gw-winner-ui { display: none; background: rgba(52, 211, 153, 0.15); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 24px; padding: 26px 20px; margin-bottom: 25px; animation: fadeInView 0.4s ease; }
 
         /* Steps */
         .steps-container { text-align: left; }
-        .step-card { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 20px; margin-bottom: 14px; border: 1px solid rgba(255,255,255,0.02); }
+        .step-card { background: rgba(11, 25, 44, 0.5); padding: 20px; border-radius: 20px; margin-bottom: 14px; border: 1px solid rgba(255,255,255,0.1); }
         .step-header { font-family: 'Poppins', sans-serif; font-weight: 600; margin-bottom: 6px; font-size: 1rem; color: white; display: flex; justify-content: space-between; align-items: center;}
         .step-desc { font-size: 0.88rem; color: var(--text-gray); margin-bottom: 16px; line-height: 1.5;}
-        .total-ad-counter { color: var(--bg-main); font-family: 'Poppins', sans-serif; font-weight: 600; background: var(--text-light); padding: 4px 10px; border-radius: 10px; font-size: 0.8rem;}
+        .total-ad-counter { color: var(--dark-text); font-family: 'Poppins', sans-serif; font-weight: 600; background: var(--primary); padding: 4px 10px; border-radius: 10px; font-size: 0.8rem;}
 
         .btn { width: 100%; padding: 16px; border-radius: 16px; border: none; font-size: 1rem; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer; transition: var(--transition); text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px; letter-spacing: 0.3px;}
         .btn:active { transform: scale(0.96); filter: brightness(0.9); }
-        .btn-join { background: rgba(255,255,255,0.04); color: white; border: 1px solid rgba(255,255,255,0.08); }
-        .btn-verify { background: var(--primary-gradient); color: var(--bg-main); box-shadow: 0 8px 25px rgba(0, 240, 255, 0.25); margin-top: 16px; }
+        .btn-join { background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.15); }
+        .btn-verify { background: var(--primary-gradient); color: var(--dark-text); font-weight: 700; box-shadow: 0 8px 25px var(--primary-glow); margin-top: 16px; }
         .btn-claim { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; box-shadow: 0 8px 25px rgba(16, 185, 129, 0.25); margin-top: 16px; }
 
         .btn:disabled, .btn.joined { 
-            background: rgba(255,255,255,0.02); color: #4b4b54; box-shadow: none; cursor: not-allowed; border: 1px solid transparent; 
+            background: rgba(255,255,255,0.05); color: var(--text-gray); box-shadow: none; cursor: not-allowed; border: 1px solid transparent; 
             pointer-events: none; transform: none !important;
         }
-        .btn.joined { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16,185,129,0.15); }
+        .btn.joined { background: var(--success-bg); color: var(--success); border: 1px solid rgba(52, 211, 153, 0.3); }
 
         .btn-back { 
             background: transparent; color: var(--text-gray); padding: 14px; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.95rem; 
             cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 6px; 
             transition: var(--transition); margin-top: 16px; border: none; width: 100%; border-radius: 16px;
         }
-        .btn-back:hover { color: white; background: rgba(255,255,255,0.04); }
+        .btn-back:hover { color: white; background: rgba(255,255,255,0.08); }
 
         .msg-box { margin-top: 16px; font-size: 0.92rem; display: none; padding: 16px; border-radius: 16px; line-height: 1.5; animation: fadeInView 0.3s ease; text-align: left; border: 1px solid transparent;}
-        .msg-err { background: rgba(239, 68, 68, 0.08); color: #FCA5A5; border-color: rgba(239, 68, 68, 0.15); }
-        .msg-succ { background: rgba(16, 185, 129, 0.08); color: #6EE7B7; border-color: rgba(16, 185, 129, 0.15); }
+        .msg-err { background: rgba(239, 68, 68, 0.15); color: #FECACA; border-color: rgba(239, 68, 68, 0.3); }
+        .msg-succ { background: rgba(52, 211, 153, 0.15); color: #A7F3D0; border-color: rgba(52, 211, 153, 0.3); }
 
         /* --- WALLET & LIVE BREAKDOWN DETAILS UI --- */
         .withdraw-step { 
-            background: rgba(0,0,0,0.25); padding: 20px 16px; 
-            border-radius: 20px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.03); 
-            text-align: left; box-shadow: inset 0 0 15px rgba(0,0,0,0.4);
+            background: rgba(11, 25, 44, 0.6); padding: 20px 16px; 
+            border-radius: 20px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.1); 
+            text-align: left; box-shadow: inset 0 0 15px rgba(0,0,0,0.2);
         }
         .withdraw-input-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
         .withdraw-input-symbol { position: absolute; left: 20px; font-size: 1.3rem; color: var(--primary); font-family: 'Poppins', sans-serif; font-weight: 600; pointer-events: none; }
         .withdraw-input {
-            width: 100%; padding: 18px 90px 18px 70px; background: rgba(7, 7, 9, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; color: white;
+            width: 100%; padding: 18px 90px 18px 70px; background: rgba(11, 25, 44, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; color: white;
             font-family: 'Poppins', sans-serif; font-size: 1.6rem; font-weight: 600; text-align: left;
-            transition: var(--transition); outline: none; box-shadow: inset 0 2px 10px rgba(0,0,0,0.4);
+            transition: var(--transition); outline: none; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
         }
-        .withdraw-input:focus { border-color: var(--primary); box-shadow: inset 0 2px 10px rgba(0,0,0,0.4), 0 0 20px rgba(0, 240, 255, 0.15); }
-        .withdraw-input::placeholder { font-size: 1.3rem; color: rgba(255, 255, 255, 0.12); font-weight: 500; }
+        .withdraw-input:focus { border-color: var(--primary); box-shadow: inset 0 2px 10px rgba(0,0,0,0.2), 0 0 20px var(--primary-glow); }
+        .withdraw-input::placeholder { font-size: 1.3rem; color: rgba(255, 255, 255, 0.3); font-weight: 500; }
         .btn-max { 
             position: absolute; right: 14px; top: 50%; transform: translateY(-50%); 
-            background: rgba(255, 255, 255, 0.04); color: var(--text-light); border: 1px solid rgba(255,255,255,0.08); 
+            background: rgba(255, 255, 255, 0.1); color: var(--text-light); border: 1px solid rgba(255,255,255,0.15); 
             padding: 10px 16px; border-radius: 12px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.85rem; 
             cursor: pointer; transition: var(--transition); 
         }
@@ -365,31 +365,31 @@
 
         /* Dynamic Crypto Breakdown Box */
         .live-breakdown-box {
-            display: none; background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255,255,255,0.04);
+            display: none; background: rgba(11, 25, 44, 0.8); border: 1px solid rgba(255,255,255,0.1);
             border-radius: 18px; padding: 16px; margin-top: 14px; text-align: left;
             animation: fadeInView 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
         .breakdown-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 8px; color: var(--text-gray); }
-        .breakdown-row.total { margin-bottom: 0; margin-top: 6px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.08); font-size: 0.95rem; }
+        .breakdown-row.total { margin-bottom: 0; margin-top: 6px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.15); font-size: 0.95rem; }
 
         /* Modernized History Entries */
         .history-item {
-            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.03);
+            background: rgba(11, 25, 44, 0.5); border: 1px solid rgba(255,255,255,0.1);
             border-radius: 22px; padding: 20px; display: flex; flex-direction: column; gap: 12px; text-align: left; transition: var(--transition);
         }
         .history-row-header { display: flex; justify-content: space-between; align-items: center; }
         .history-info { display: flex; align-items: center; gap: 14px; }
         .history-details-grid {
-            background: rgba(0,0,0,0.2); border-radius: 14px; padding: 12px;
-            display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem; border: 1px solid rgba(255,255,255,0.01);
+            background: rgba(0,0,0,0.15); border-radius: 14px; padding: 12px;
+            display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem; border: 1px solid rgba(255,255,255,0.05);
         }
         .history-amount { color: white; font-weight: 700; font-family: 'Poppins', sans-serif; font-size: 1.15rem;}
         .history-time { color: var(--text-gray); font-size: 0.82rem; font-weight: 500;}
         .history-status { font-family: 'Poppins', sans-serif; font-size: 0.72rem; font-weight: 700; padding: 6px 12px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px;}
-        .status-pending { background: rgba(255, 215, 0, 0.08); color: var(--accent-gold); border: 1px solid rgba(255, 215, 0, 0.15);}
-        .status-approved { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.15);}
+        .status-pending { background: rgba(255, 215, 0, 0.15); color: var(--primary); border: 1px solid rgba(255, 215, 0, 0.3);}
+        .status-approved { background: var(--success-bg); color: var(--success); border: 1px solid rgba(52, 211, 153, 0.3);}
 
-        .spinner { border: 2px solid rgba(255,255,255,0.2); border-top: 2px solid currentColor; border-radius: 50%; width: 18px; height: 18px; animation: spin 0.7s linear infinite; }
+        .spinner { border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid currentColor; border-radius: 50%; width: 18px; height: 18px; animation: spin 0.7s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -453,7 +453,7 @@
     <div id="view-home" class="view-container active">
         <div class="app-header">
             <div class="header-user">
-                <img src="https://ui-avatars.com/api/?name=User&background=00F0FF&color=070709" class="profile-avatar" id="tg-avatar" alt="Avatar">
+                <img src="https://ui-avatars.com/api/?name=User&background=FFD700&color=0B192C" class="profile-avatar" id="tg-avatar" alt="Avatar">
                 <div class="profile-name-group">
                     <span class="profile-name" id="tg-name">Loading...</span>
                     <span class="profile-uid" id="tg-uid">UID: Loading...</span>
@@ -525,12 +525,12 @@
             </div>
 
             <div class="section-title" style="margin-top: 30px;">Finished Giveaways</div>
-            <div class="gw-list-card" style="opacity: 0.65; border-color: rgba(255,255,255,0.01);" onclick="openGiveawayDetails(1)">
-                <div class="gw-icon-wrap" style="background: rgba(255,255,255,0.01);"><div class="gw-icon">🏆</div></div>
+            <div class="gw-list-card" style="opacity: 0.65; border-color: rgba(255,255,255,0.05);" onclick="openGiveawayDetails(1)">
+                <div class="gw-icon-wrap" style="background: rgba(255,255,255,0.05);"><div class="gw-icon">🏆</div></div>
                 <div class="gw-details">
                     <div class="gw-title">Crypto Group #1</div>
                     <div class="gw-meta">Prize Pool: 25 TON</div>
-                    <div class="gw-status" style="color: var(--error); background: rgba(239, 68, 68, 0.08);">● Ended</div>
+                    <div class="gw-status" style="color: var(--error); background: rgba(239, 68, 68, 0.15);">● Ended</div>
                     <div style="font-size: 0.88rem; color: var(--accent-gold); margin-top: 8px; font-family: 'Poppins', sans-serif; font-weight: 600;">🎉 Winner: <b>@matro97</b></div>
                 </div>
             </div>
@@ -638,8 +638,8 @@
             tgApp.ready();
             tgApp.expand();
             try { tgApp.requestFullscreen(); } catch(e){}
-            tgApp.setHeaderColor('#070709');
-            tgApp.setBackgroundColor('#070709');
+            tgApp.setHeaderColor('#0B192C');
+            tgApp.setBackgroundColor('#0B192C');
         }
 
         function getUID() { return tgApp?.initDataUnsafe?.user?.id?.toString() || '123456789'; }
@@ -1049,14 +1049,12 @@
         }
         function saveWithdrawHistory(arr) { saveStat("withdraw_history_array", JSON.stringify(arr)); }
 
-        function formatMSKTime(timestamp) {
+        function formatAppTime(timestamp) {
             const date = new Date(timestamp);
-            return new Intl.DateTimeFormat('en-GB', {
-                timeZone: 'Europe/Moscow',
+            return new Intl.DateTimeFormat('tr-TR', {
                 day: '2-digit', month: '2-digit', year: 'numeric',
-                hour: '2-digit', minute: '2-digit', second: '2-digit',
-                hour12: false
-            }).format(date) + ' MSK';
+                hour: '2-digit', minute: '2-digit'
+            }).format(date);
         }
 
         function renderHistory() {
@@ -1072,7 +1070,10 @@
             history.forEach(item => {
                 const statusClass = item.status === 'pending' ? 'status-pending' : 'status-approved';
                 const statusText = item.status === 'pending' ? 'Processing' : 'Approved';
-                const timeStr = formatMSKTime(item.time);
+                
+                // Müşteri isteği: Sadece saat yazdırılacak ("MSK" kaldırıldı)
+                const timeStr = formatAppTime(item.time); 
+                
                 const icon = item.status === 'pending' ? '⏳' : '✅';
                 
                 // Enhanced variables with fallback for backward compatibility
@@ -1084,7 +1085,7 @@
                     <div class="history-item">
                         <div class="history-row-header">
                             <div class="history-info">
-                                <div style="background: rgba(255,255,255,0.04); width: 44px; height: 44px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; border: 1px solid rgba(255,255,255,0.04);">${icon}</div>
+                                <div style="background: rgba(255,255,255,0.08); width: 44px; height: 44px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; border: 1px solid rgba(255,255,255,0.08);">${icon}</div>
                                 <div style="display:flex; flex-direction:column; gap:2px;">
                                     <span class="history-amount">${netVal} TON</span>
                                     <span class="history-time">${timeStr}</span>
@@ -1093,15 +1094,15 @@
                             <div class="history-status ${statusClass}">${statusText}</div>
                         </div>
                         <div class="history-details-grid">
-                            <div style="display:flex; justify-content:space-between; opacity:0.7;">
+                            <div style="display:flex; justify-content:space-between; opacity:0.8;">
                                 <span>Requested:</span>
                                 <span>${grossVal} TON</span>
                             </div>
-                            <div style="display:flex; justify-content:space-between; color:var(--error); opacity:0.8;">
+                            <div style="display:flex; justify-content:space-between; color:var(--error); opacity:0.9;">
                                 <span>Fee (30%):</span>
                                 <span>-${feeVal} TON</span>
                             </div>
-                            <div style="display:flex; justify-content:space-between; color:var(--success); font-weight:600; padding-top:4px; border-top:1px dashed rgba(255,255,255,0.05)">
+                            <div style="display:flex; justify-content:space-between; color:var(--success); font-weight:600; padding-top:4px; border-top:1px dashed rgba(255,255,255,0.1)">
                                 <span>Received:</span>
                                 <span>${netVal} TON</span>
                             </div>

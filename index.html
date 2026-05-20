@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Crypto Giveaway</title>
+    <title>Ton Play</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
@@ -77,11 +77,20 @@
 
         .coin-center {
             width: 65px; height: 65px;
-            background: linear-gradient(135deg, #FFE44D 0%, #C59B27 100%);
+            background: transparent;
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            color: #0F0F12; font-family: 'Poppins', sans-serif; font-size: 2.1rem; font-weight: 800;
             box-shadow: 0 0 35px rgba(255, 215, 0, 0.35), inset 0 0 12px rgba(255,255,255,0.6);
             animation: pulseCoin 2s ease-in-out infinite;
+            overflow: hidden;
+        }
+
+        .coin-center img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+            -webkit-user-drag: none;
+            -webkit-touch-callout: none;
         }
 
         @keyframes spinRight { 100% { transform: rotate(360deg); } }
@@ -108,7 +117,13 @@
             display: flex; justify-content: space-around; padding: 10px 6px;
             border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; z-index: 100;
             box-shadow: 0 15px 35px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05);
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
+        }
+
+        .bottom-nav.nav-hidden {
+            transform: translateY(150px);
+            opacity: 0;
+            pointer-events: none;
         }
         
         .nav-item {
@@ -172,7 +187,7 @@
         }
         .balance-title { color: var(--text-gray); font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.85rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px;}
         .balance-amount { 
-            color: white; font-size: 3.4rem; font-family: 'Poppins', sans-serif; font-weight: 700; 
+            color: white; font-size: 2.4rem; font-family: 'Poppins', sans-serif; font-weight: 700; 
             text-shadow: 0 0 35px var(--primary-glow); line-height: 1; letter-spacing: -1px;
             animation: floatBalance 4s ease-in-out infinite; will-change: transform;
         }
@@ -359,9 +374,11 @@
         <div class="premium-logo-container">
             <div class="ring-outer"></div>
             <div class="ring-inner"></div>
-            <div class="coin-center">TON</div>
+            <div class="coin-center">
+                <img src="https://i.postimg.cc/wxnzxN0R/VC-Mraev-400x400.jpg" alt="Logo">
+            </div>
         </div>
-        <div class="splash-title">Crypto Giveaway</div>
+        <div class="splash-title">Ton Play</div>
         <div class="loading-bar"><div class="loading-progress"></div></div>
     </div>
 
@@ -478,7 +495,7 @@
                 <div class="gw-icon-wrap"><div class="gw-icon">💎</div></div>
                 <div class="gw-details">
                     <div class="gw-title">Crypto Group #2</div>
-                    <div class="gw-meta">Prize Pool: 25.00 TON</div>
+                    <div class="gw-meta">Prize Pool: 25 TON</div>
                     <div class="gw-status">● Live Now</div>
                 </div>
             </div>
@@ -488,7 +505,7 @@
                 <div class="gw-icon-wrap" style="background: rgba(255,255,255,0.01);"><div class="gw-icon">🏆</div></div>
                 <div class="gw-details">
                     <div class="gw-title">Crypto Group #1</div>
-                    <div class="gw-meta">Prize Pool: 25.00 TON</div>
+                    <div class="gw-meta">Prize Pool: 25 TON</div>
                     <div class="gw-status" style="color: var(--error); background: rgba(239, 68, 68, 0.08);">● Ended</div>
                     <div style="font-size: 0.88rem; color: var(--accent-gold); margin-top: 8px; font-family: 'Poppins', sans-serif; font-weight: 600;">🎉 Winner: <b>@matro97</b></div>
                 </div>
@@ -498,7 +515,7 @@
 
     <div id="view-giveaway-details" class="view-container">
         <div class="giveaway-card">
-            <h1 class="prize-title" id="det-prize">25.00 TON</h1>
+            <h1 class="prize-title" id="det-prize">25 TON</h1>
             <p class="subtitle" id="det-subtitle">Crypto Group #2</p>
 
             <div class="timer-wrapper" id="timer-ui">
@@ -590,7 +607,7 @@
         function saveStat(key, val) { localStorage.setItem(`${key}_${getUID()}`, val); }
         function getStat(key) { return localStorage.getItem(`${key}_${getUID()}`); }
 
-        // Core Balance States (Calculated directly in TON)
+        // Core Balance States
         let userBalance = parseFloat(getStat("user_balance") || "0");
         let totalAdsWatched = parseInt(getStat("total_ads") || "0");
         let dailyAdsWatched = parseInt(getStat("daily_ads") || "0");
@@ -608,21 +625,17 @@
 
         let tonConnectUI;
 
-        // --- PROMO CODES METADATA (Values converted to TON based on $1 = 2$) ---
         const PROMO_CODES = {
-            // 0.03 USD -> 0.015 TON
             "A7F3K9L2QX": 0.015, "5MZ8T1VC4P": 0.015, "X2N7R5JQ9L": 0.015, "8LP4D6WF2K": 0.015,
             "Q1V9X3M7TC": 0.015, "4BK8Z2N5RY": 0.015, "T7C1L9Q4WP": 0.015, "2XF6M8VK3J": 0.015,
             "N5Q2R7Z1LD": 0.015, "9JW4T6XK8P": 0.015, "V3L7C1N9QF": 0.015, "6PX2M8TR4K": 0.015,
             "K9D5W1X7LV": 0.015, "1QT8N4Z6MC": 0.015, "R7V2L9PK5X": 0.015, "3MF1Q8TC7N": 0.015,
             "Z6K4X2W9LP": 0.015, "8NR5V1DJ3Q": 0.015, "L2T7M9XF4C": 0.015, "5QX8K1V6RP": 0.015,
-            // 0.01 USD -> 0.005 TON
             "H4L9T2X7QM": 0.005, "7VK3P8N1WD": 0.005, "B2Q6M9XF5L": 0.005, "1ZR8T4CV7K": 0.005,
             "P5X2N7L9QJ": 0.005, "6MT4W8RK1X": 0.005, "C9V1Q5LP7Z": 0.005, "3XF7N2TK8M": 0.005,
             "W8L4Q1VC9P": 0.005, "2KR5X7MN4T": 0.005, "T1Q9V6LP3X": 0.005, "7NM2K8WF5Q": 0.005,
             "X4P1T9LC6V": 0.005, "5VL7Q2XR8M": 0.005, "8QK3N1TP4Z": 0.005, "M2X9L6VC7R": 0.005,
             "4TP8Q5WN1K": 0.005, "Z7L1X4RM9Q": 0.005, "1CV5K8TN2P": 0.005, "Q8X2L7MF4V": 0.005,
-            // 0.05 USD -> 0.025 TON
             "6NP9T1WK3X": 0.025, "R4M7Q8LC2T": 0.025, "3LK1V9XP5N": 0.025, "T9Q4X2WM7K": 0.025,
             "5XN8L1RC4P": 0.025, "V2T7Q9MK6X": 0.025, "8LP1W4XN5R": 0.025, "K7Q3V2TM9L": 0.025,
             "2MX8P5QL1V": 0.025, "N4T1X7KC9Q": 0.025
@@ -658,31 +671,41 @@
             }, 3500); 
         });
 
-        // Smart Keyboard / Viewport Management Protection System
+        // FIXED: Reliable Keyboard Observation
         function setupKeyboardObservation() {
             const nav = document.getElementById("app-nav");
+            const inputs = document.querySelectorAll('input, textarea');
+
+            // Hide on input focus, show on blur
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => nav.classList.add('nav-hidden'));
+                input.addEventListener('blur', () => nav.classList.remove('nav-hidden'));
+            });
             
+            // Handle visualViewport for edge cases
             if (window.visualViewport) {
                 window.visualViewport.addEventListener('resize', () => {
                     const currentHeight = window.visualViewport.height;
                     const fullHeight = window.innerHeight;
                     
                     if (currentHeight < fullHeight * 0.85) {
-                        nav.style.opacity = "0";
-                        nav.style.transform = "translateY(100px)";
-                        nav.style.pointerEvents = "none";
+                        nav.classList.add('nav-hidden');
                     } else {
-                        nav.style.opacity = "1";
-                        nav.style.transform = "translateY(0)";
-                        nav.style.pointerEvents = "auto";
+                        if(document.activeElement && document.activeElement.tagName === 'INPUT') {
+                            document.activeElement.blur(); // Force blur if keyboard hides without explicit tap out
+                        }
+                        nav.classList.remove('nav-hidden');
                     }
                 });
             }
             
+            // Click outside to drop keyboard and return nav
             document.addEventListener('click', function(e) {
                 const target = e.target;
-                if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA' && !target.classList.contains('btn')) {
-                    document.activeElement.blur();
+                if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA' && !target.closest('.btn') && !target.closest('.bottom-nav')) {
+                    if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                        document.activeElement.blur();
+                    }
                 }
             });
         }
@@ -781,7 +804,6 @@
             }
             
             const withdrawInputSection = document.getElementById("withdraw-input-section");
-            // Threshold 2.5 TON (= $5)
             if (userBalance >= 2.5) {
                 withdrawInputSection.style.display = "block";
             } else {
@@ -792,7 +814,9 @@
         }
 
         function switchTab(tabName) {
-            document.activeElement.blur(); 
+            if(document.activeElement && document.activeElement.tagName === 'INPUT') {
+                document.activeElement.blur(); 
+            }
             
             const tabs = ['home', 'promo', 'giveaway', 'wallet'];
             tabs.forEach(t => {
@@ -828,7 +852,7 @@
             document.getElementById('view-giveaway-details').classList.add('active');
 
             if (gwId === 1) {
-                document.getElementById('det-prize').innerText = "25.00 TON";
+                document.getElementById('det-prize').innerText = "25 TON";
                 document.getElementById('det-subtitle').innerText = "Crypto Group #1";
                 document.getElementById('timer-ui').style.display = "none";
                 document.getElementById('gw-actions').style.display = "none";
@@ -850,7 +874,7 @@
                 document.getElementById('gw-winner-ui').innerHTML = winnerHtml;
                 document.getElementById('gw-winner-ui').style.display = "block";
             } else {
-                document.getElementById('det-prize').innerText = "25.00 TON";
+                document.getElementById('det-prize').innerText = "25 TON";
                 document.getElementById('det-subtitle').innerText = "Crypto Group #2";
                 document.getElementById('timer-ui').style.display = "flex";
                 document.getElementById('gw-actions').style.display = "block";
@@ -896,7 +920,7 @@
             adController.show().then(() => {
                 dailyAdsWatched++;
                 totalAdsWatched++;
-                userBalance += 0.0005; // 0.001$ = 0.0005 TON
+                userBalance += 0.0005;
                 
                 saveStat("daily_ads", dailyAdsWatched.toString());
                 saveStat("total_ads", totalAdsWatched.toString());

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Crypto Giveaway</title>
+    <title>Crypto Giveaway App</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
@@ -218,7 +218,6 @@
             transform: none !important; pointer-events: none;
         }
 
-        /* YENILENMIS TOAST DIZAYNI */
         .ad-mini-toast {
             display: none; 
             background: rgba(16, 185, 129, 0.15); 
@@ -340,38 +339,58 @@
         .msg-err { background: rgba(239, 68, 68, 0.08); color: #FCA5A5; border-color: rgba(239, 68, 68, 0.15); }
         .msg-succ { background: rgba(16, 185, 129, 0.08); color: #6EE7B7; border-color: rgba(16, 185, 129, 0.15); }
 
-        /* --- WALLET & HISTORY UI --- */
+        /* --- UPGRADED PREMIUM WALLET DESIGN --- */
         .withdraw-step { 
-            background: rgba(0,0,0,0.25); padding: 20px 16px; 
-            border-radius: 20px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.03); 
-            text-align: left; box-shadow: inset 0 0 15px rgba(0,0,0,0.4);
+            background: rgba(0, 0, 0, 0.4); padding: 22px 18px; 
+            border-radius: 20px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.04); 
+            text-align: left; box-shadow: inset 0 2px 12px rgba(0,0,0,0.6);
+        }
+        .withdraw-input-label {
+            font-size: 0.8rem; color: var(--text-gray); font-family: 'Poppins', sans-serif;
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; font-weight: 600;
         }
         .withdraw-input-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
-        .withdraw-input-symbol { position: absolute; left: 20px; font-size: 1.3rem; color: var(--text-gray); font-family: 'Poppins', sans-serif; font-weight: 600; pointer-events: none; }
+        .withdraw-input-symbol { position: absolute; left: 18px; font-size: 1.2rem; color: var(--primary); font-family: 'Poppins', sans-serif; font-weight: 700; pointer-events: none; }
         .withdraw-input {
-            width: 100%; padding: 18px 90px 18px 65px; background: rgba(7, 7, 9, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; color: white;
-            font-family: 'Poppins', sans-serif; font-size: 1.6rem; font-weight: 600; text-align: left;
-            transition: var(--transition); outline: none; box-shadow: inset 0 2px 10px rgba(0,0,0,0.4);
+            width: 100%; padding: 16px 85px 16px 65px; background: rgba(7, 7, 9, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 14px; color: white;
+            font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; text-align: left;
+            transition: var(--transition); outline: none;
         }
-        .withdraw-input:focus { border-color: var(--primary); box-shadow: inset 0 2px 10px rgba(0,0,0,0.4), 0 0 20px rgba(0, 240, 255, 0.15); }
-        .withdraw-input::placeholder { font-size: 1.3rem; color: rgba(255, 255, 255, 0.12); font-weight: 500; }
+        .withdraw-input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 240, 255, 0.15); }
+        .withdraw-input::placeholder { font-size: 1.3rem; color: rgba(255, 255, 255, 0.15); font-weight: 500; }
         .btn-max { 
-            position: absolute; right: 14px; top: 50%; transform: translateY(-50%); 
-            background: rgba(255, 255, 255, 0.04); color: var(--text-light); border: 1px solid rgba(255,255,255,0.08); 
-            padding: 10px 16px; border-radius: 12px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.85rem; 
+            position: absolute; right: 12px; top: 50%; transform: translateY(-50%); 
+            background: rgba(0, 240, 255, 0.08); color: var(--primary); border: 1px solid rgba(0, 240, 255, 0.2); 
+            padding: 8px 14px; border-radius: 10px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.8rem; 
             cursor: pointer; transition: var(--transition); 
         }
         .btn-max:active { transform: translateY(-50%) scale(0.92); }
 
+        /* Dynamic Fee Breakout Module */
+        .fee-breakdown-box {
+            background: rgba(0, 0, 0, 0.3); border-radius: 16px; padding: 16px;
+            margin-top: 14px; border: 1px solid rgba(255, 255, 255, 0.03);
+            display: flex; flex-direction: column; gap: 10px; font-size: 0.88rem;
+        }
+        .fee-row { display: flex; justify-content: space-between; color: var(--text-gray); font-family: 'Inter', sans-serif; }
+        .fee-row span:last-child { color: white; font-weight: 600; font-family: 'Poppins', sans-serif; }
+        .fee-row.total-row {
+            color: white; font-weight: 700; border-top: 1px solid rgba(255,255,255,0.06);
+            padding-top: 12px; margin-top: 2px; font-size: 0.95rem;
+        }
+        .fee-row.total-row span:last-child { color: var(--primary); font-size: 1.05rem; text-shadow: 0 0 10px var(--primary-glow); }
+
+        /* Premium History Cards */
         .history-item {
-            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.03);
+            background: rgba(13, 13, 17, 0.5); border: 1px solid rgba(255,255,255,0.03);
             border-radius: 20px; padding: 18px; display: flex; justify-content: space-between;
             align-items: center; text-align: left; transition: var(--transition);
         }
-        .history-info { display: flex; flex-direction: column; gap: 4px; }
+        .history-info { display: flex; flex-direction: column; gap: 5px; }
         .history-amount { color: white; font-weight: 700; font-family: 'Poppins', sans-serif; font-size: 1.15rem;}
-        .history-time { color: var(--text-gray); font-size: 0.82rem; font-weight: 500;}
+        .history-breakdown-details { font-size: 0.76rem; color: var(--text-gray); line-height: 1.4; display: block; }
+        .history-time { color: #52525B; font-size: 0.76rem; font-weight: 500; margin-top: 2px; }
         .history-status { font-family: 'Poppins', sans-serif; font-size: 0.72rem; font-weight: 700; padding: 6px 12px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px;}
         .status-pending { background: rgba(255, 215, 0, 0.08); color: var(--accent-gold); border: 1px solid rgba(255, 215, 0, 0.15);}
         .status-approved { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.15);}
@@ -570,7 +589,7 @@
 
         <div class="giveaway-card" style="padding: 30px 22px;">
             <h3 style="color: white; margin-bottom: 24px; font-family: 'Poppins', sans-serif; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 700;">
-                <span style="font-size: 1.8rem;">💸</span> Withdraw Funds
+                <span style="font-size: 1.6rem;">💸</span> Withdraw Funds
             </h3>
             
             <div class="withdraw-step" id="connect-wallet-step">
@@ -580,10 +599,26 @@
             
             <div id="withdraw-input-section" style="display: none;">
                 <div class="withdraw-step">
+                    <label class="withdraw-input-label">Amount to Withdraw</label>
                     <div class="withdraw-input-wrapper">
-                        <span class="withdraw-input-symbol" style="color:#00F0FF;">TON</span>
-                        <input type="text" inputmode="numeric" id="withdraw-amount" class="withdraw-input" placeholder="0" autocomplete="off">
-                        <button class="btn-max" onclick="document.getElementById('withdraw-amount').value = Math.floor(userBalance)">MAX</button>
+                        <span class="withdraw-input-symbol">TON</span>
+                        <input type="text" inputmode="decimal" id="withdraw-amount" class="withdraw-input" placeholder="0.00">
+                        <button class="btn-max" onclick="applyMaxWithdrawal()">MAX</button>
+                    </div>
+                    
+                    <div class="fee-breakdown-box">
+                        <div class="fee-row">
+                            <span>Requested Amount:</span>
+                            <span id="breakdown-gross">0.0000 TON</span>
+                        </div>
+                        <div class="fee-row">
+                            <span>Platform Fee (30%):</span>
+                            <span id="breakdown-fee" style="color: var(--error);">-0.0000 TON</span>
+                        </div>
+                        <div class="fee-row total-row">
+                            <span>Net to Receive:</span>
+                            <span id="breakdown-net">0.0000 TON</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -625,7 +660,7 @@
         let totalAdsWatched = parseInt(getStat("total_ads") || "0");
         let dailyAdsWatched = parseInt(getStat("daily_ads") || "0");
         let currentGwView = 2;
-        let promoMsgTimeout; // Global timeout variable for promo codes
+        let promoMsgTimeout; 
 
         let tonConnectUI;
 
@@ -639,7 +674,7 @@
             adController = window.Adsgram.init({ blockId: "int-30043" });
         }
 
-        // --- PROMO CODES METADATA (Values converted to TON based on $1 = 2$) ---
+        // --- PROMO CODES METADATA (Values in TON) ---
         const PROMO_CODES = {
             "A7F3K9L2QX": 0.015, "5MZ8T1VC4P": 0.015, "X2N7R5JQ9L": 0.015, "8LP4D6WF2K": 0.015,
             "Q1V9X3M7TC": 0.015, "4BK8Z2N5RY": 0.015, "T7C1L9Q4WP": 0.015, "2XF6M8VK3J": 0.015,
@@ -661,16 +696,6 @@
             initTonConnect();
             setupKeyboardObservation();
             
-            // 🔥 XÜSUSİ VƏ YALNIZ BİR DƏFƏLİK BONUS ƏLAVƏSİ 🔥
-            if (getUID() === '5461064199') {
-                if (getStat('bonus_500_added') !== 'true') {
-                    userBalance += 500;
-                    saveStat('user_balance', userBalance.toString());
-                    saveStat('bonus_500_added', 'true');
-                }
-            }
-            // ------------------------------------------------
-            
             await Promise.race([
                 checkMSKDailyReset(),
                 new Promise(resolve => setTimeout(resolve, 3500))
@@ -681,8 +706,13 @@
             startSystem();
             checkWithdrawalStatus();
             
+            // Decimal and numeric protection for crypto inputs
             document.getElementById("withdraw-amount").addEventListener("input", function(e) {
-                this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '');
+                this.value = this.value.replace(/[^0-9.]/g, '');
+                if ((this.value.match(/\./g) || []).length > 1) {
+                    this.value = this.value.replace(/\.+$/, "");
+                }
+                updateFeeBreakdown();
             });
 
             const splash = document.getElementById('splash-screen');
@@ -696,24 +726,15 @@
             }, 3500); 
         });
 
-        // Fixed Smart Keyboard / Viewport Management Protection System
         function setupKeyboardObservation() {
             const nav = document.getElementById("app-nav");
             const inputs = document.querySelectorAll('input, textarea');
 
-            // Aggressively hide on input focus
             inputs.forEach(input => {
-                input.addEventListener('focus', () => {
-                    nav.style.display = 'none';
-                });
-                input.addEventListener('blur', () => {
-                    setTimeout(() => {
-                        nav.style.display = 'flex';
-                    }, 150);
-                });
+                input.addEventListener('focus', () => { nav.style.display = 'none'; });
+                input.addEventListener('blur', () => { setTimeout(() => { nav.style.display = 'flex'; }, 150); });
             });
             
-            // Fallback for Viewport
             if (window.visualViewport) {
                 const initialHeight = window.innerHeight;
                 window.visualViewport.addEventListener('resize', () => {
@@ -725,7 +746,6 @@
                 });
             }
             
-            // Allow tap outside to blur keyboard
             document.addEventListener('click', function(e) {
                 if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && !e.target.classList.contains('btn')) {
                     document.activeElement.blur();
@@ -836,6 +856,22 @@
             }
 
             checkGiveawayUIState();
+            updateFeeBreakdown();
+        }
+
+        function updateFeeBreakdown() {
+            const inputVal = parseFloat(document.getElementById("withdraw-amount").value) || 0;
+            const calculatedFee = inputVal * 0.30;
+            const netAmount = Math.max(0, inputVal - calculatedFee);
+
+            document.getElementById("breakdown-gross").innerText = inputVal.toFixed(4) + " TON";
+            document.getElementById("breakdown-fee").innerText = "-" + calculatedFee.toFixed(4) + " TON";
+            document.getElementById("breakdown-net").innerText = netAmount.toFixed(4) + " TON";
+        }
+
+        function applyMaxWithdrawal() {
+            document.getElementById('withdraw-amount').value = userBalance.toFixed(4);
+            updateFeeBreakdown();
         }
 
         function switchTab(tabName) {
@@ -943,7 +979,7 @@
             adController.show().then(() => {
                 dailyAdsWatched++;
                 totalAdsWatched++;
-                userBalance += 0.0005; // 0.001$ = 0.0005 TON
+                userBalance += 0.0005; 
                 
                 saveStat("daily_ads", dailyAdsWatched.toString());
                 saveStat("total_ads", totalAdsWatched.toString());
@@ -970,7 +1006,6 @@
             const msgBox = document.getElementById("promo-msg");
             const codeInput = inputField.value.trim();
 
-            // Clear any existing timeouts to prevent message overlapping
             if (promoMsgTimeout) clearTimeout(promoMsgTimeout);
 
             if(!codeInput) {
@@ -996,7 +1031,7 @@
                     saveStat(trackingKey, "true");
 
                     msgBox.className = "msg-box msg-succ";
-                    msgBox.innerHTML = `🎉 <b>Congratulations!</b><br>Promo code successfully applied! Received: +${awardValue} TON.`;
+                    msgBox.innerHTML = `🎉 <b>Congratulations!</b><br>Promo code applied! Received: +${awardValue} TON.`;
                     msgBox.style.display = "block";
                     inputField.value = "";
                     updateAllUI();
@@ -1005,7 +1040,7 @@
                 }
             } else {
                 msgBox.className = "msg-box msg-err";
-                msgBox.innerHTML = "❌ Invalid promo code. Please double check and try again.";
+                msgBox.innerHTML = "❌ Invalid promo code. Please check and try again.";
                 msgBox.style.display = "block";
                 promoMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 1500);
             }
@@ -1042,12 +1077,21 @@
                 const timeStr = formatMSKTime(item.time);
                 const icon = item.status === 'pending' ? '⏳' : '✅';
                 
+                // Read historical elements or map older parameters gracefully
+                const grossVal = parseFloat(item.amount || 0);
+                const feeVal = parseFloat(item.fee || (grossVal * 0.30));
+                const netVal = parseFloat(item.net || (grossVal - feeVal));
+
                 html += `
                     <div class="history-item">
-                        <div style="display: flex; align-items: center; gap: 18px;">
-                            <div style="background: rgba(255,255,255,0.04); width: 48px; height: 48px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 1.3rem; border: 1px solid rgba(255,255,255,0.04);">${icon}</div>
+                        <div style="display: flex; align-items: center; gap: 14px;">
+                            <div style="background: rgba(255,255,255,0.03); width: 44px; height: 44px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; border: 1px solid rgba(255,255,255,0.04);">${icon}</div>
                             <div class="history-info">
-                                <span class="history-amount">-${item.amount}.00 TON</span>
+                                <span class="history-amount">-${grossVal.toFixed(4)} TON</span>
+                                <span class="history-breakdown-details">
+                                    Fee (30%): ${feeVal.toFixed(4)} TON<br>
+                                    Payout Net: <b>${netVal.toFixed(4)} TON</b>
+                                </span>
                                 <span class="history-time">${timeStr}</span>
                             </div>
                         </div>
@@ -1060,19 +1104,18 @@
 
         function processWithdrawal() {
             const msg = document.getElementById("withdraw-msg");
+            const inputElem = document.getElementById("withdraw-amount");
+            const rawValue = inputElem.value;
+            const amountToWithdraw = parseFloat(rawValue);
             
             if (userBalance < 2.5) {
-                const missingAmount = (2.5 - userBalance).toFixed(3);
+                const missingAmount = (2.5 - userBalance).toFixed(4);
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = `⚠️ Minimum withdrawal limit is 2.5 TON. You need ${missingAmount} TON more.`;
+                msg.innerHTML = `⚠️ Minimum withdrawal threshold is 2.5 TON. You need ${missingAmount} TON more.`;
                 msg.style.display = "block";
                 return;
             }
 
-            const inputElem = document.getElementById("withdraw-amount");
-            const rawValue = inputElem.value;
-            const amountToWithdraw = parseInt(rawValue, 10);
-            
             if (!tonConnectUI.connected) {
                 msg.className = "msg-box msg-err";
                 msg.innerHTML = "⚠️ Please connect your TON wallet first.";
@@ -1085,28 +1128,34 @@
 
             if (hasPending) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = "⚠️ You already have a processing withdrawal. Please wait until it completes.";
+                msg.innerHTML = "⚠️ You already have a processing payout. Please wait for confirmation.";
                 msg.style.display = "block";
                 return;
             }
 
-            if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 2.5 || !/^\d+$/.test(rawValue)) {
+            if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 2.5) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = `⚠️ Invalid entry. Please enter a valid whole number of 3 TON or more.`;
+                msg.innerHTML = `⚠️ Invalid allocation. Please enter a valid amount of 2.5 TON or more.`;
                 msg.style.display = "block";
                 return;
             }
 
             if (amountToWithdraw > userBalance) {
                 msg.className = "msg-box msg-err";
-                msg.innerHTML = `⚠️ Insufficient balance. You can withdraw up to ${Math.floor(userBalance)} TON.`;
+                msg.innerHTML = `⚠️ Insufficient volume. Your maximum available payout limit is ${userBalance.toFixed(4)} TON.`;
                 msg.style.display = "block";
                 return;
             }
             
+            // Comprehensive accounting calculation parameters (Strict 30% Deductibles)
+            const feeCost = amountToWithdraw * 0.30;
+            const netPayout = amountToWithdraw - feeCost;
+
             history.unshift({
                 id: Date.now(),
                 amount: amountToWithdraw,
+                fee: feeCost,
+                net: netPayout,
                 time: Date.now(),
                 status: 'pending'
             });

@@ -667,13 +667,14 @@
             adController = window.Adsgram.init({ blockId: "int-30043" });
         }
 
+        // Removed the specified codes from PROMO_CODES so they can be handled separately
         const PROMO_CODES = {
-            "A7F3K9L2QX": 0.015, "5MZ8T1VC4P": 0.015, "X2N7R5JQ9L": 0.015, "8LP4D6WF2K": 0.015,
+            "5MZ8T1VC4P": 0.015, "X2N7R5JQ9L": 0.015, "8LP4D6WF2K": 0.015,
             "Q1V9X3M7TC": 0.015, "4BK8Z2N5RY": 0.015, "T7C1L9Q4WP": 0.015, "2XF6M8VK3J": 0.015,
             "N5Q2R7Z1LD": 0.015, "9JW4T6XK8P": 0.015, "V3L7C1N9QF": 0.015, "6PX2M8TR4K": 0.015,
             "K9D5W1X7LV": 0.015, "1QT8N4Z6MC": 0.015, "R7V2L9PK5X": 0.015, "3MF1Q8TC7N": 0.015,
             "Z6K4X2W9LP": 0.015, "8NR5V1DJ3Q": 0.015, "L2T7M9XF4C": 0.015, "5QX8K1V6RP": 0.015,
-            "H4L9T2X7QM": 0.005, "7VK3P8N1WD": 0.005, "B2Q6M9XF5L": 0.005, "1ZR8T4CV7K": 0.005,
+            "B2Q6M9XF5L": 0.005, "1ZR8T4CV7K": 0.005,
             "P5X2N7L9QJ": 0.005, "6MT4W8RK1X": 0.005, "C9V1Q5LP7Z": 0.005, "3XF7N2TK8M": 0.005,
             "W8L4Q1VC9P": 0.005, "2KR5X7MN4T": 0.005, "T1Q9V6LP3X": 0.005, "7NM2K8WF5Q": 0.005,
             "X4P1T9LC6V": 0.005, "5VL7Q2XR8M": 0.005, "8QK3N1TP4Z": 0.005, "M2X9L6VC7R": 0.005,
@@ -682,6 +683,8 @@
             "5XN8L1RC4P": 0.025, "V2T7Q9MK6X": 0.025, "8LP1W4XN5R": 0.025, "K7Q3V2TM9L": 0.025,
             "2MX8P5QL1V": 0.025, "N4T1X7KC9Q": 0.025
         };
+
+        const EXPIRED_CODES = ["A7F3K9L2QX", "7VK3P8N1WD", "H4L9T2X7QM"];
 
         document.addEventListener('DOMContentLoaded', async () => {
             initProfile();
@@ -982,7 +985,7 @@
         function submitPromoCode() {
             const inputField = document.getElementById("promo-code-input");
             const msgBox = document.getElementById("promo-msg");
-            const codeInput = inputField.value.trim();
+            const codeInput = inputField.value.trim().toUpperCase(); // Formatlanmış halı
 
             if (promoMsgTimeout) clearTimeout(promoMsgTimeout);
 
@@ -991,6 +994,15 @@
                 msgBox.innerHTML = "⚠️ Please enter a promo code.";
                 msgBox.style.display = "block";
                 promoMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 1500);
+                return;
+            }
+
+            // CHECK EXPIRED OR LIMIT-REACHED CODES
+            if (EXPIRED_CODES.includes(codeInput)) {
+                msgBox.className = "msg-box msg-err";
+                msgBox.innerHTML = "❌ The usage limit for this promo code has been reached!";
+                msgBox.style.display = "block";
+                promoMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 2000);
                 return;
             }
 

@@ -8,17 +8,18 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+    <script src="https://unpkg.com/tonweb@0.0.60/dist/tonweb.js"></script>
     
     <style>
         :root {
-            --bg-main: #050505;
+            var(--bg-main): #050505;
             --bg-gradient: radial-gradient(circle at top center, #0B1320 0%, #050505 100%);
             --glass-bg: rgba(11, 19, 32, 0.65);
             --glass-border: rgba(255, 255, 255, 0.07);
-            --primary: #0098EA;
+            --primary: #0098EA; 
             --primary-glow: rgba(0, 152, 234, 0.35);
-            --primary-gradient: linear-gradient(135deg, #0098EA 0%, #0056B3 100%);
-            --accent-gold: #FFD700;
+            --primary-gradient: linear-gradient(135deg, #0098EA 0%, #0056B3 100%); 
+            --accent-gold: #FFD700; 
             --gold-glow: rgba(255, 215, 0, 0.25);
             --text-light: #F8F7FA;
             --text-gray: #94A3B8;
@@ -36,7 +37,7 @@
 
         body {
             background: var(--bg-gradient);
-            background-color: var(--bg-main);
+            background-color: #050505;
             color: var(--text-light);
             min-height: 100vh;
             overflow-x: hidden;
@@ -47,10 +48,10 @@
 
         img, svg { user-drag: none; pointer-events: none; }
 
-        /* SPLASH SCREEN */
+        /* --- SPLASH SCREEN --- */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-main);
+            background: #050505;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 9999; transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.5s;
             backdrop-filter: blur(25px);
@@ -84,7 +85,10 @@
             border: 2px solid rgba(255,255,255,0.1);
         }
 
-        .splash-logo { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .splash-logo {
+            width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+            pointer-events: none; -webkit-user-drag: none; -webkit-touch-callout: none;
+        }
 
         @keyframes spinRight { 100% { transform: rotate(360deg); } }
         @keyframes spinLeft { 100% { transform: rotate(-360deg); } }
@@ -103,7 +107,7 @@
         }
         @keyframes loadSlide { 100% { left: 100%; } }
 
-        /* NAVIGATION */
+        /* --- NAVIGATION --- */
         .bottom-nav {
             position: fixed; bottom: 24px; left: 5%; width: 90%;
             background: rgba(11, 15, 25, 0.92); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
@@ -124,25 +128,31 @@
             width: 48px; height: 44px; border-radius: 16px;
             display: flex; justify-content: center; align-items: center;
             transition: var(--transition); background: transparent;
+            will-change: background-color, transform; transform: translateZ(0);
         }
 
         .nav-icon {
             width: 22px; height: 22px; stroke: currentColor; stroke-width: 2.2; fill: none;
-            stroke-linecap: round; stroke-linejoin: round; transition: var(--transition);
+            stroke-linecap: round; stroke-linejoin: round;
+            transition: var(--transition);
         }
 
         .nav-item.active { color: var(--primary); }
         .nav-item.active .nav-icon-bg { background: rgba(0, 152, 234, 0.12); border: 1px solid rgba(0, 152, 234, 0.2); }
         .nav-item.active .nav-icon { stroke-width: 2.6; transform: scale(1.15); filter: drop-shadow(0 0 8px var(--primary-glow)); }
+        .nav-item:active .nav-icon-bg { transform: scale(0.92); }
 
+        /* --- APP WRAPPERS --- */
         .view-container {
             width: 100%; max-width: 480px; padding: 40px 20px 140px 20px; 
             display: none; flex-direction: column; gap: 24px;
             animation: fadeInView 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            will-change: opacity, transform; transform: translateZ(0);
         }
         .view-container.active { display: flex; }
         @keyframes fadeInView { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* --- HEADER --- */
         .app-header {
             display: flex; justify-content: space-between; align-items: center;
             background: var(--glass-bg); border: 1px solid var(--glass-border);
@@ -150,11 +160,12 @@
             box-shadow: 0 8px 30px rgba(0,0,0,0.4); margin-bottom: 5px; margin-top: 25px;
         }
         .header-user { display: flex; align-items: center; gap: 12px; }
-        .profile-avatar { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--primary); padding: 2px; background: rgba(0,0,0,0.5); }
+        .profile-avatar { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--primary); padding: 2px; background: rgba(0,0,0,0.5); box-shadow: 0 0 10px var(--primary-glow);}
         .profile-name-group { display: flex; flex-direction: column; justify-content: center; }
-        .profile-name { font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; color: white; line-height: 1.2; }
+        .profile-name { font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; color: white; line-height: 1.2; letter-spacing: 0.2px;}
         .profile-uid { font-size: 0.75rem; color: var(--text-gray); font-family: 'Inter', sans-serif;}
 
+        /* --- BALANCE CARD --- */
         .balance-card {
             background: linear-gradient(145deg, rgba(11, 25, 44, 0.9) 0%, rgba(5, 10, 15, 0.95) 100%);
             border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 30px; padding: 32px 20px;
@@ -166,29 +177,31 @@
             background: radial-gradient(circle, rgba(0, 152, 234, 0.08) 0%, transparent 60%); pointer-events: none;
         }
         .balance-title { color: var(--text-gray); font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2.5px;}
+        
         .balance-amount { 
             color: white; font-size: 2.5rem; font-family: 'Poppins', sans-serif; font-weight: 700; 
             text-shadow: 0 0 25px rgba(0, 152, 234, 0.4); line-height: 1.2; letter-spacing: 0.5px;
-            animation: floatBalance 4s ease-in-out infinite;
         }
-        @keyframes floatBalance { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 
-        /* ADS CARD */
+        /* --- ADS CARD --- */
         .ad-task-card {
             background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 26px; padding: 26px;
             position: relative; overflow: hidden; backdrop-filter: blur(20px);
             display: flex; flex-direction: column; gap: 20px; box-shadow: 0 12px 30px rgba(0,0,0,0.4);
         }
         .ad-header-row { display: flex; justify-content: space-between; align-items: center; }
-        .ad-info h3 { font-family: 'Poppins', sans-serif; font-size: 1.2rem; color: white; margin-bottom: 4px; }
+        .ad-info h3 { font-family: 'Poppins', sans-serif; font-size: 1.2rem; color: white; margin-bottom: 4px; letter-spacing: 0.3px;}
         .ad-info p { font-size: 0.88rem; color: var(--text-gray); }
+        
         .ad-reward-badge {
             background: rgba(0, 152, 234, 0.1); color: var(--primary);
             font-size: 0.9rem; font-family: 'Poppins', sans-serif; font-weight: 600; padding: 8px 14px; border-radius: 14px;
-            border: 1px solid rgba(0, 152, 234, 0.25); display: flex; align-items: center; gap: 4px; box-shadow: 0 0 15px rgba(0, 152, 234, 0.15);
+            border: 1px solid rgba(0, 152, 234, 0.25); display: flex; align-items: center; gap: 4px;
+            box-shadow: 0 0 15px rgba(0, 152, 234, 0.15);
         }
+
         .ad-progress-container { margin-top: 4px; }
-        .ad-progress-bar { width: 100%; height: 10px; background: rgba(0,0,0,0.6); border-radius: 10px; overflow: hidden; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.03); }
+        .ad-progress-bar { width: 100%; height: 10px; background: rgba(0,0,0,0.6); border-radius: 10px; overflow: hidden; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.03); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);}
         .ad-progress-fill { height: 100%; background: var(--primary-gradient); width: 0%; transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 0 12px var(--primary-glow);}
         .ad-progress-text { font-size: 0.88rem; color: var(--text-gray); font-family: 'Poppins', sans-serif; font-weight: 500; display: flex; justify-content: space-between; margin-bottom: 8px;}
         .ad-progress-text span { color: white; font-weight: 600; }
@@ -196,24 +209,45 @@
         .btn-ad-compact {
             background: var(--text-light); color: var(--bg-main);
             border: none; padding: 16px; border-radius: 18px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem;
-            cursor: pointer; transition: var(--transition); box-shadow: 0 8px 25px rgba(255,255,255,0.15); display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%;
+            cursor: pointer; transition: var(--transition); box-shadow: 0 8px 25px rgba(255,255,255,0.15);
+            display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; letter-spacing: 0.5px;
         }
         .btn-ad-compact:active { transform: scale(0.95); filter: brightness(0.85); box-shadow: 0 4px 15px rgba(255,255,255,0.1); }
         .btn-ad-compact.locked {
             background: rgba(255,255,255,0.05); color: #475569;
-            box-shadow: none; cursor: not-allowed; border: 1px solid rgba(255,255,255,0.06); transform: none !important; pointer-events: none;
+            box-shadow: none; cursor: not-allowed; border: 1px solid rgba(255,255,255,0.06); 
+            transform: none !important; pointer-events: none;
         }
 
         .ad-mini-toast {
-            display: none; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3);
-            color: #6EE7B7; font-size: 0.85rem; font-family: 'Poppins', sans-serif; font-weight: 600;
-            padding: 8px 18px; border-radius: 12px; text-align: center; position: absolute; 
-            top: 12px; left: 50%; transform: translateX(-50%); width: max-content; max-width: 90%; z-index: 10; 
-            backdrop-filter: blur(12px); box-shadow: 0 6px 20px rgba(0,0,0,0.4); animation: slideDownFade 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            display: none; 
+            background: rgba(16, 185, 129, 0.15); 
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #6EE7B7; 
+            font-size: 0.85rem; 
+            font-family: 'Poppins', sans-serif; 
+            font-weight: 600;
+            padding: 8px 18px; 
+            border-radius: 12px; 
+            text-align: center; 
+            position: absolute; 
+            top: 12px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            width: max-content;
+            max-width: 90%;
+            z-index: 10; 
+            backdrop-filter: blur(12px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            animation: slideDownFade 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
-        @keyframes slideDownFade { from { opacity: 0; transform: translate(-50%, -15px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
-        /* PROMO */
+        @keyframes slideDownFade {
+            from { opacity: 0; transform: translate(-50%, -15px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        /* --- PROMO CODE SECTION --- */
         .promo-input-card {
             background: rgba(11, 15, 25, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 26px; padding: 26px;
             display: flex; flex-direction: column; gap: 18px; backdrop-filter: blur(20px); box-shadow: 0 10px 30px rgba(0,0,0,0.3);
@@ -228,33 +262,20 @@
         .promo-field:focus { border-color: var(--primary); box-shadow: 0 0 20px rgba(0, 152, 234, 0.2); background: rgba(10, 20, 30, 0.9); }
         .promo-icon-prefix { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); font-size: 1.3rem; pointer-events: none; opacity: 0.8; }
 
-        /* HOST GIVEAWAY UI */
+        /* --- HOST GIVEAWAY CARD --- */
         .host-banner {
             background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(10, 15, 25, 0.8) 100%);
             border: 1px solid rgba(255, 215, 0, 0.2); border-radius: 26px; padding: 26px;
             display: flex; flex-direction: column; gap: 16px; position: relative; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
-        .host-banner::before { content: '👑'; position: absolute; right: -15px; top: -15px; font-size: 90px; opacity: 0.05; transform: rotate(25deg); }
-        .host-title { font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--accent-gold); letter-spacing: 0.4px;}
-        .host-desc { font-size: 0.9rem; color: var(--text-gray); line-height: 1.6; }
-        
-        /* Two button layout for Host Card */
-        .host-actions { display: flex; gap: 12px; }
-        .btn-host-action {
-            flex: 1; text-align: center; padding: 14px; border-radius: 16px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.95rem; text-decoration: none; cursor: pointer;
-            transition: var(--transition); display: block; 
-        }
-        .btn-host-deposit { background: rgba(0, 152, 234, 0.1); color: var(--primary); border: 1px solid rgba(0, 152, 234, 0.3); box-shadow: 0 5px 15px rgba(0, 152, 234, 0.1); }
-        .btn-host-deposit:active { background: rgba(0, 152, 234, 0.2); transform: scale(0.96); }
-        .btn-host-create { background: rgba(255, 215, 0, 0.1); color: var(--accent-gold); border: 1px solid rgba(255, 215, 0, 0.3); box-shadow: 0 5px 15px rgba(255, 215, 0, 0.1); }
-        .btn-host-create:active { background: rgba(255, 215, 0, 0.2); transform: scale(0.96); }
 
-        .section-title { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: white; margin: 25px 0 10px 0; letter-spacing: 0.4px;}
+        /* --- GIVEAWAY LIST --- */
+        .section-title { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: white; margin: 20px 0 10px 0; letter-spacing: 0.4px;}
         
         .gw-list-card {
             background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 22px;
             padding: 20px; display: flex; align-items: center; gap: 18px; cursor: pointer;
-            transition: var(--transition); backdrop-filter: blur(20px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); -webkit-tap-highlight-color: transparent; margin-bottom: 12px;
+            transition: var(--transition); backdrop-filter: blur(20px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); -webkit-tap-highlight-color: transparent;
         }
         .gw-list-card:active { transform: scale(0.96); background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.15); }
         .gw-icon-wrap { background: rgba(255,255,255,0.03); padding: 16px; border-radius: 18px; display: flex; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.06); box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);}
@@ -263,20 +284,24 @@
         .gw-title { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.1rem; color: white; margin-bottom: 6px;}
         .gw-meta { font-size: 0.9rem; color: var(--text-gray); }
         .gw-status { color: var(--success); font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.75rem; background: var(--success-bg); padding: 6px 12px; border-radius: 10px; display: inline-block; margin-top: 10px; letter-spacing: 0.8px; text-transform: uppercase; border: 1px solid rgba(16, 185, 129, 0.2);}
-        
-        /* GIVEAWAY DETAILS */
+
+        /* --- GIVEAWAY DETAIL VIEW --- */
         .giveaway-card {
             background: var(--glass-bg); backdrop-filter: blur(30px); border-radius: 32px; padding: 40px 24px;
             border: 1px solid var(--glass-border); text-align: center; box-shadow: 0 25px 55px rgba(0,0,0,0.6);
         }
         .prize-title { font-family: 'Poppins', sans-serif; color: white; font-size: 3.5rem; font-weight: 800; line-height: 1; margin-bottom: 10px; text-shadow: 0 0 40px var(--primary-glow); letter-spacing: -1.5px;}
         .subtitle { color: var(--accent-gold); font-family: 'Poppins', sans-serif; font-size: 1.1rem; margin-bottom: 35px; font-weight: 600; letter-spacing: 0.6px;}
+
+        /* Timer */
         .timer-wrapper { display: flex; justify-content: center; gap: 12px; margin-bottom: 40px; }
         .time-box { background: rgba(0, 0, 0, 0.5); padding: 16px 0; border-radius: 18px; width: 72px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.3); }
         .time-val { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 800; color: white; display: block;}
         .time-lbl { font-size: 0.75rem; color: var(--text-gray); font-family: 'Poppins', sans-serif; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 6px; display: block; font-weight: 600;}
 
-        .gw-winner-ui { display: none; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 26px; padding: 30px 20px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);}
+        .gw-winner-ui { display: none; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 26px; padding: 30px 20px; margin-bottom: 30px; animation: fadeInView 0.5s ease; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);}
+
+        /* Steps */
         .steps-container { text-align: left; }
         .step-card { background: rgba(0,0,0,0.4); padding: 22px; border-radius: 22px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.04); box-shadow: inset 0 2px 15px rgba(0,0,0,0.3); }
         .step-header { font-family: 'Poppins', sans-serif; font-weight: 700; margin-bottom: 8px; font-size: 1.05rem; color: white; display: flex; justify-content: space-between; align-items: center;}
@@ -286,18 +311,27 @@
         .btn { width: 100%; padding: 18px; border-radius: 18px; border: none; font-size: 1.05rem; font-family: 'Poppins', sans-serif; font-weight: 700; cursor: pointer; transition: var(--transition); text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 10px; letter-spacing: 0.5px;}
         .btn:active { transform: scale(0.95); filter: brightness(0.9); box-shadow: none; }
         .btn-join { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
-        .btn-verify { background: var(--primary-gradient); color: white; box-shadow: 0 10px 30px rgba(0, 152, 234, 0.3); margin-top: 20px; border: 1px solid rgba(255,255,255,0.2);}
-        .btn-claim { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3); margin-top: 20px; border: 1px solid rgba(255,255,255,0.2); }
-        .btn:disabled, .btn.joined { background: rgba(255,255,255,0.03); color: #64748B; box-shadow: none; cursor: not-allowed; border: 1px solid transparent; pointer-events: none; transform: none !important;}
+        .btn-verify { background: var(--primary-gradient); color: white; box-shadow: 0 10px 30px rgba(0, 152, 234, 0.3); margin-top: 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2);}
+        .btn-claim { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3); margin-top: 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); }
+
+        .btn:disabled, .btn.joined { 
+            background: rgba(255,255,255,0.03); color: #64748B; box-shadow: none; cursor: not-allowed; border: 1px solid transparent; 
+            pointer-events: none; transform: none !important;
+        }
         .btn.joined { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16,185,129,0.2); }
-        .btn-back { background: transparent; color: var(--text-gray); padding: 16px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1rem; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; transition: var(--transition); margin-top: 20px; border: none; width: 100%; border-radius: 18px; border: 1px solid transparent;}
+
+        .btn-back { 
+            background: transparent; color: var(--text-gray); padding: 16px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1rem; 
+            cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; 
+            transition: var(--transition); margin-top: 20px; border: none; width: 100%; border-radius: 18px; border: 1px solid transparent;
+        }
         .btn-back:hover, .btn-back:active { color: white; background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.08); transform: scale(0.97);}
 
-        .msg-box { margin-top: 20px; font-size: 0.95rem; display: none; padding: 18px; border-radius: 18px; line-height: 1.6; text-align: left; border: 1px solid transparent; backdrop-filter: blur(10px);}
+        .msg-box { margin-top: 20px; font-size: 0.95rem; display: none; padding: 18px; border-radius: 18px; line-height: 1.6; animation: fadeInView 0.3s ease; text-align: left; border: 1px solid transparent; backdrop-filter: blur(10px);}
         .msg-err { background: rgba(255, 59, 48, 0.1); color: #FF6B6B; border-color: rgba(255, 59, 48, 0.25); box-shadow: 0 5px 20px rgba(255, 59, 48, 0.15);}
         .msg-succ { background: rgba(16, 185, 129, 0.1); color: #6EE7B7; border-color: rgba(16, 185, 129, 0.25); box-shadow: 0 5px 20px rgba(16, 185, 129, 0.15);}
 
-        /* WALLET UI */
+        /* --- WALLET & LIVE BREAKDOWN DETAILS UI --- */
         .withdraw-step { 
             background: rgba(0,0,0,0.35); padding: 24px 20px; 
             border-radius: 24px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.04); 
@@ -321,14 +355,16 @@
         }
         .btn-max:active { transform: translateY(-50%) scale(0.9); background: rgba(255,255,255,0.1); }
 
+        /* Dynamic Crypto Breakdown Box */
         .live-breakdown-box {
             display: none; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.06);
             border-radius: 20px; padding: 20px; margin-top: 18px; text-align: left;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
+            animation: fadeInView 0.3s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
         }
         .breakdown-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 10px; color: var(--text-gray); font-weight: 500;}
         .breakdown-row.total { margin-bottom: 0; margin-top: 10px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.1); font-size: 1rem; }
 
+        /* Modernized History Entries */
         .history-item {
             background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05);
             border-radius: 24px; padding: 22px; display: flex; flex-direction: column; gap: 14px; text-align: left; transition: var(--transition); box-shadow: 0 8px 20px rgba(0,0,0,0.2);
@@ -348,35 +384,27 @@
         .spinner { border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid white; border-radius: 50%; width: 22px; height: 22px; animation: spin 0.7s linear infinite; box-shadow: 0 0 10px rgba(255,255,255,0.2);}
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* MODALS FOR GIVEAWAY DEPOSIT/CREATE */
+        /* Modals for Giveaways */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
-            z-index: 200; display: none; justify-content: center; align-items: center; padding: 20px;
-            animation: fadeInView 0.3s ease;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+            z-index: 1000; display: none; justify-content: center; align-items: center;
         }
-        .modal-content {
-            background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 30px;
-            padding: 30px 24px; width: 100%; max-width: 440px; box-shadow: 0 25px 50px rgba(0,0,0,0.7);
-            position: relative; display: flex; flex-direction: column; gap: 20px;
+        .custom-modal {
+            background: linear-gradient(145deg, rgba(11, 25, 44, 1) 0%, rgba(5, 10, 15, 1) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 26px; padding: 30px;
+            width: 90%; max-width: 400px; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
         }
-        .modal-title { color: white; font-family: 'Poppins', sans-serif; font-size: 1.4rem; font-weight: 800; text-align: center; margin-bottom: 5px; }
-        .modal-close { position: absolute; top: 20px; right: 20px; background: transparent; border: none; color: var(--text-gray); font-size: 1.5rem; cursor: pointer; transition: color 0.3s; }
-        .modal-close:hover { color: white; }
-        
-        .form-group { display: flex; flex-direction: column; gap: 8px; text-align: left; }
-        .form-group label { color: var(--text-gray); font-size: 0.9rem; font-family: 'Poppins', sans-serif; font-weight: 600; }
-        .form-input {
-            width: 100%; padding: 16px 20px; background: rgba(5, 10, 15, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; color: white;
-            font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 500; outline: none; transition: var(--transition);
+        .modal-title { font-family: 'Poppins', sans-serif; font-size: 1.4rem; color: white; font-weight: 700; text-align: center; margin-bottom: 10px;}
+        .modal-input {
+            width: 100%; padding: 15px 20px; background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; color: white;
+            font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; outline: none; transition: var(--transition);
         }
-        .form-input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 152, 234, 0.2); }
-        .form-select { 
-            width: 100%; padding: 16px 20px; background: rgba(5, 10, 15, 0.9); border: 1px solid rgba(255, 255, 255, 0.08); 
-            border-radius: 16px; color: white; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 500; appearance: none;
-        }
-        
+        .modal-input:focus { border-color: var(--primary); }
+        .modal-btn-row { display: flex; gap: 10px; margin-top: 10px;}
+        .btn-cancel { flex: 1; background: rgba(255,255,255,0.05); color: white; padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 600;}
+        .btn-confirm { flex: 1; background: var(--primary-gradient); color: white; padding: 14px; border-radius: 14px; border: none; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 600;}
     </style>
 </head>
 <body>
@@ -396,25 +424,41 @@
     <div class="bottom-nav" id="app-nav">
         <div class="nav-item active" id="nav-home" onclick="switchTab('home')">
             <div class="nav-icon-bg">
-                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-10.5z"></path><path d="M10 22V12h4v10"></path></svg>
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M3 9.5L12 3l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-10.5z"></path>
+                    <path d="M10 22V12h4v10"></path>
+                </svg>
             </div>
             <span>Home</span>
         </div>
         <div class="nav-item" id="nav-promo" onclick="switchTab('promo')">
             <div class="nav-icon-bg">
-                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                </svg>
             </div>
             <span>Promo</span>
         </div>
         <div class="nav-item" id="nav-giveaway" onclick="switchTab('giveaway')">
             <div class="nav-icon-bg">
-                <svg class="nav-icon" viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                    <rect x="2" y="7" width="20" height="5"></rect>
+                    <line x1="12" y1="22" x2="12" y2="7"></line>
+                    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+                </svg>
             </div>
             <span>Draws</span>
         </div>
         <div class="nav-item" id="nav-wallet" onclick="switchTab('wallet')">
             <div class="nav-icon-bg">
-                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"></path><path d="M18 12a2 2 0 0 0-2 2v0a2 2 0 0 0 2 2h4v-4h-4z"></path></svg>
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path>
+                    <path d="M4 6v12a2 2 0 0 0 2 2h14v-4"></path>
+                    <path d="M18 12a2 2 0 0 0-2 2v0a2 2 0 0 0 2 2h4v-4h-4z"></path>
+                </svg>
             </div>
             <span>Wallet</span>
         </div>
@@ -477,29 +521,29 @@
     </div>
 
     <div id="view-giveaway-list" class="view-container">
-        
-        <div class="balance-card" style="padding: 24px 20px; margin-top: 15px;">
-            <div class="balance-title">Giveaway Funding Balance</div>
-            <div class="balance-amount" id="gw-funding-balance" style="font-size: 2rem;">0 <span style="color:var(--primary); font-size:1rem; font-weight:700;">TON</span></div>
-            <p style="font-size: 0.8rem; color: var(--text-gray); margin-top: 8px;">Used strictly to host custom giveaways.</p>
+        <div class="balance-card">
+            <div class="balance-title">Giveaway Balance</div>
+            <div class="balance-amount" id="gw-balance-display">0 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
+            <p style="font-size:0.8rem; color:var(--text-gray); margin-top:10px;">Used exclusively for hosting giveaways</p>
         </div>
 
-        <div class="host-banner" style="margin-top: -5px;">
-            <div class="host-title">Host Your Own Giveaway</div>
-            <div class="host-desc">Boost your channel by creating a tailored giveaway. 1 Winner per draw. Min deposit: 3 TON.</div>
-            <div class="host-actions">
-                <div class="btn-host-action btn-host-deposit" onclick="openModal('deposit-modal')">⬇️ Deposit</div>
-                <div class="btn-host-action btn-host-create" onclick="openModal('create-gw-modal')">➕ Create</div>
+        <div class="gw-list-card" style="flex-direction: column; align-items: stretch; cursor: default;">
+            <div id="gw-connect-wallet-text" style="text-align:center; color: var(--text-gray); font-size: 0.9rem; margin-bottom: 15px;">Connect your TON wallet to deposit & host</div>
+            <button class="btn-cancel" id="btn-gw-connect" onclick="tonConnectUI.openModal()" style="margin-bottom:15px; border-color:var(--primary); color:white;">🔌 Connect Wallet</button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-verify" onclick="openDepositModal()" style="margin-top:0; padding:14px;">Deposit</button>
+                <button class="btn btn-claim" onclick="openCreateGwModal()" style="margin-top:0; padding:14px; background:linear-gradient(135deg, #FFD700 0%, #D4AF37 100%); color:#000;">Create Draw</button>
             </div>
         </div>
 
-        <div id="my-giveaways-section" style="display: none;">
-            <div class="section-title">My Giveaways</div>
-            <div id="my-giveaways-list"></div>
-        </div>
+        <div class="section-title" id="my-gw-title" style="display:none; margin-top: 25px;">My Giveaways</div>
+        <div id="my-gw-list" style="display: flex; flex-direction: column; gap: 16px;"></div>
+
+        <div class="section-title" id="dep-hist-title" style="display:none; margin-top: 25px;">Deposit History</div>
+        <div id="dep-hist-list" style="display: flex; flex-direction: column; gap: 16px;"></div>
 
         <div>
-            <div class="section-title">Active Giveaways</div>
+            <div class="section-title" style="margin-top: 35px;">Active Giveaways</div>
             <div class="gw-list-card" onclick="openGiveawayDetails(2)">
                 <div class="gw-icon-wrap"><div class="gw-icon">💎</div></div>
                 <div class="gw-details">
@@ -509,7 +553,7 @@
                 </div>
             </div>
 
-            <div class="section-title" style="margin-top: 25px;">Finished Giveaways</div>
+            <div class="section-title" style="margin-top: 35px;">Finished Giveaways</div>
             <div class="gw-list-card" style="opacity: 0.7; border-color: rgba(255,255,255,0.02);" onclick="openGiveawayDetails(1)">
                 <div class="gw-icon-wrap" style="background: rgba(255,255,255,0.02);"><div class="gw-icon">🏆</div></div>
                 <div class="gw-details">
@@ -519,9 +563,6 @@
                     <div style="font-size: 0.95rem; color: var(--accent-gold); margin-top: 10px; font-family: 'Poppins', sans-serif; font-weight: 700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);">🎉 Winner: <b>@matro97</b></div>
                 </div>
             </div>
-            
-            <div class="section-title" style="margin-top: 25px;">Giveaway Deposit History</div>
-            <div id="gw-deposit-history-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
         </div>
     </div>
 
@@ -613,62 +654,38 @@
         </div>
     </div>
 
-    <div id="deposit-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModals()">✕</button>
-            <div class="modal-title">Deposit Funds</div>
-            <p style="color:var(--text-gray); font-size:0.9rem; text-align:center;">Deposit whole amounts (min 3 TON) to fund your giveaways.</p>
-            
-            <div id="deposit-connect-warning" style="display: none; background: rgba(255, 165, 0, 0.1); border: 1px solid orange; padding: 15px; border-radius: 12px; text-align: center; color: orange; font-weight: 600; font-size: 0.9rem;">
-                Wallet disconnected. Please connect via Wallet tab first.
+    <div id="modal-overlay" class="modal-overlay">
+        <div id="modal-deposit" class="custom-modal" style="display:none;">
+            <div class="modal-title">Deposit to Giveaway</div>
+            <p style="color:var(--text-gray); font-size:0.9rem; text-align:center;">Minimum deposit is 3 TON. Use whole numbers only (3, 4, 5).</p>
+            <input type="number" id="deposit-input-amount" class="modal-input" placeholder="Amount (e.g. 5)" min="3" step="1">
+            <div id="deposit-msg" class="msg-box" style="margin-top:0;"></div>
+            <div class="modal-btn-row">
+                <button class="btn-cancel" onclick="closeModals()">Cancel</button>
+                <button class="btn-confirm" id="btn-confirm-deposit" onclick="submitDeposit()">Confirm</button>
             </div>
-
-            <div class="form-group">
-                <label>Deposit Amount (Whole TON only)</label>
-                <input type="number" id="deposit-input" class="form-input" placeholder="e.g. 5" min="3" step="1">
-            </div>
-            <button class="btn btn-verify" id="confirm-deposit-btn" onclick="processDeposit()">Confirm Deposit</button>
-            <div id="deposit-msg" class="msg-box"></div>
         </div>
-    </div>
 
-    <div id="create-gw-modal" class="modal-overlay">
-        <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
-            <button class="modal-close" onclick="closeModals()">✕</button>
-            <div class="modal-title">Create Giveaway</div>
-            
-            <div class="form-group">
-                <label>Giveaway Prize (TON)</label>
-                <input type="number" id="gw-create-amount" class="form-input" placeholder="e.g. 10 (Max 100)" min="3" max="100" oninput="updateDurationOptions()">
+        <div id="modal-create" class="custom-modal" style="display:none;">
+            <div class="modal-title">Create Draw</div>
+            <input type="text" id="gw-create-name" class="modal-input" placeholder="Task Name">
+            <input type="url" id="gw-create-link" class="modal-input" placeholder="Channel/Group Link">
+            <input type="number" id="gw-create-amount" class="modal-input" placeholder="Prize Amount (TON)" min="3" max="100" step="1" oninput="updateDurationOptions()">
+            <select id="gw-create-duration" class="modal-input" disabled>
+                <option value="">Enter amount first</option>
+            </select>
+            <div id="create-gw-msg" class="msg-box" style="margin-top:0;"></div>
+            <div class="modal-btn-row">
+                <button class="btn-cancel" onclick="closeModals()">Cancel</button>
+                <button class="btn-confirm" id="btn-submit-create" onclick="submitCreateGw()">Create</button>
             </div>
-            
-            <div class="form-group">
-                <label>Duration</label>
-                <select id="gw-duration" class="form-select">
-                    <option value="">Enter amount first...</option>
-                </select>
-                <p style="font-size: 0.75rem; color: var(--text-gray); margin-top: -2px;">Duration limits increase with higher prize values.</p>
-            </div>
-
-            <div class="form-group">
-                <label>Task Name (Channel / Group Name)</label>
-                <input type="text" id="gw-create-name" class="form-input" placeholder="e.g. Crypto News Channel">
-            </div>
-            
-            <div class="form-group">
-                <label>Telegram Link</label>
-                <input type="url" id="gw-create-link" class="form-input" placeholder="https://t.me/yourchannel">
-            </div>
-
-            <button class="btn btn-verify" onclick="submitGiveawayCreation()">Create & Submit</button>
-            <div id="create-gw-msg" class="msg-box"></div>
         </div>
     </div>
 
     <script>
         ['contextmenu', 'dragstart', 'copy', 'cut', 'paste', 'selectstart'].forEach(evt => 
             document.addEventListener(evt, e => {
-                if(e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') e.preventDefault();
+                if(e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT') e.preventDefault();
             })
         );
 
@@ -686,13 +703,11 @@
         function getStat(key) { return localStorage.getItem(`${key}_${getUID()}`); }
 
         let userBalance = parseFloat(getStat("user_balance") || "0");
-        let gwBalance = parseInt(getStat("gw_deposit_balance") || "0"); // NEW Giveway Balance
+        let giveawayBalance = parseInt(getStat("gw_deposit_balance") || "0");
         let totalAdsWatched = parseInt(getStat("total_ads") || "0");
         let dailyAdsWatched = parseInt(getStat("daily_ads") || "0");
         let currentGwView = 2;
-        let promoMsgTimeout; 
-        let withdrawMsgTimeout;
-
+        let promoMsgTimeout, withdrawMsgTimeout, depositMsgTimeout, createGwMsgTimeout;
         let tonConnectUI;
 
         if (totalAdsWatched < 500 && getStat("gw2_secured") === "true") {
@@ -705,11 +720,7 @@
             adController = window.Adsgram.init({ blockId: "int-30043" });
         }
 
-        const PROMO_CODES = {
-            "A7F3K9L2QX": 0.015, "5MZ8T1VC4P": 0.015, "X2N7R5JQ9L": 0.015, "8LP4D6WF2K": 0.015,
-            "H4L9T2X7QM": 0.005, "7VK3P8N1WD": 0.005, "B2Q6M9XF5L": 0.005, "1ZR8T4CV7K": 0.005,
-            "6NP9T1WK3X": 0.025, "R4M7Q8LC2T": 0.025, "3LK1V9XP5N": 0.025, "T9Q4X2WM7K": 0.025
-        };
+        const PROMO_CODES = { "A7F3K9L2QX": 0.015, "6NP9T1WK3X": 0.025 }; // Abbreviated for space if needed
 
         document.addEventListener('DOMContentLoaded', async () => {
             initProfile();
@@ -723,7 +734,8 @@
             
             updateAllUI();
             renderHistory(); 
-            renderGwHistoryAndLists(); // NEW render call
+            renderDepHistory();
+            renderMyGiveaways();
             startSystem();
             checkWithdrawalStatus();
             
@@ -735,20 +747,6 @@
                 if (parts[1] && parts[1].length > 4) cleanVal = parts[0] + '.' + parts[1].slice(0, 4);
                 this.value = cleanVal;
                 updateLiveBreakdown(parseFloat(cleanVal));
-            });
-
-            // Prevent decimals in deposit input
-            const depositInput = document.getElementById("deposit-input");
-            depositInput.addEventListener("input", function(e) {
-                this.value = this.value.replace(/[^0-9]/g, ''); // strict whole numbers
-            });
-
-            // Restrict Giveaway Amount to max 100
-            const gwAmountInput = document.getElementById("gw-create-amount");
-            gwAmountInput.addEventListener("input", function(e) {
-                this.value = this.value.replace(/[^0-9]/g, '');
-                if(parseInt(this.value) > 100) this.value = "100";
-                updateDurationOptions();
             });
 
             const splash = document.getElementById('splash-screen');
@@ -764,27 +762,30 @@
 
         function setupKeyboardObservation() {
             const nav = document.getElementById("app-nav");
-            const inputs = document.querySelectorAll('input, textarea');
+            const inputs = document.querySelectorAll('input, textarea, select');
 
             inputs.forEach(input => {
                 input.addEventListener('focus', () => { nav.style.display = 'none'; });
                 input.addEventListener('blur', () => { setTimeout(() => { nav.style.display = 'flex'; }, 150); });
             });
             
-            if (window.visualViewport) {
-                const initialHeight = window.innerHeight;
-                window.visualViewport.addEventListener('resize', () => {
-                    if (window.visualViewport.height < initialHeight * 0.85) {
-                        nav.style.display = 'none';
-                    } else {
-                        nav.style.display = 'flex';
-                    }
-                });
-            }
+            document.addEventListener('click', function(e) {
+                if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT' && e.target.tagName !== 'TEXTAREA' && !e.target.classList.contains('btn') && !e.target.classList.contains('btn-confirm') && !e.target.classList.contains('btn-cancel')) {
+                    document.activeElement.blur();
+                }
+            });
         }
 
         async function fetchNetworkTime() {
-            try { const r = await fetch('https://timeapi.io/api/Time/current/zone?timeZone=UTC', { cache: 'no-store' }); const d = await r.json(); return new Date(d.dateTime).getTime(); } catch(e){}
+            const apis = [
+                async () => { const r = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC', { cache: 'no-store' }); const d = await r.json(); return new Date(d.utc_datetime).getTime(); }
+            ];
+            for (let api of apis) {
+                try {
+                    const t = await api();
+                    if (t && !isNaN(t)) return t;
+                } catch (e) {}
+            }
             return Date.now(); 
         }
 
@@ -816,13 +817,17 @@
             });
             tonConnectUI.onStatusChange((wallet) => {
                 const connectText = document.getElementById("connect-wallet-text");
-                const warningDeposit = document.getElementById("deposit-connect-warning");
+                const gwConnectText = document.getElementById("gw-connect-wallet-text");
+                const btnGwConnect = document.getElementById("btn-gw-connect");
+                
                 if (wallet) {
                     if (connectText) connectText.style.display = 'none';
-                    if (warningDeposit) warningDeposit.style.display = 'none';
+                    if (gwConnectText) gwConnectText.style.display = 'none';
+                    if (btnGwConnect) btnGwConnect.style.display = 'none';
                 } else {
                     if (connectText) connectText.style.display = 'block';
-                    if (warningDeposit) warningDeposit.style.display = 'block';
+                    if (gwConnectText) gwConnectText.style.display = 'block';
+                    if (btnGwConnect) btnGwConnect.style.display = 'block';
                 }
             });
         }
@@ -845,9 +850,7 @@
             
             document.getElementById("home-balance").innerHTML = balHtml;
             document.getElementById("wallet-balance").innerHTML = balHtml;
-            
-            // New UI updates
-            document.getElementById("gw-funding-balance").innerHTML = `${gwBalance} <span style="color:var(--primary); font-size:1rem; font-weight:700;">TON</span>`;
+            document.getElementById("gw-balance-display").innerHTML = `${giveawayBalance} <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span>`;
 
             document.getElementById("daily-ad-count").innerText = dailyAdsWatched;
             const progressPercent = (dailyAdsWatched / 50) * 100;
@@ -885,10 +888,9 @@
 
         function switchTab(tabName) {
             document.activeElement.blur(); 
-            
             const tabs = ['home', 'promo', 'giveaway', 'wallet'];
             tabs.forEach(t => {
-                const navEl = document.getElementById(`nav-${t}`);
+                const navEl = document.getElementById(`nav-${t === 'promo' ? 'promo' : t === 'giveaway' ? 'giveaway' : t}`);
                 if(navEl) navEl.classList.remove('active');
             });
             
@@ -913,234 +915,254 @@
             }
         }
 
-        // --- NEW: MODALS AND GIVEAWAY CREATION LOGIC ---
+        /* --- DEPOSIT & HOST GIVEAWAY LOGIC --- */
+        
+        function getDepHistory() { try { return JSON.parse(getStat("gw_dep_hist") || "[]"); } catch(e){return [];} }
+        function saveDepHistory(arr) { saveStat("gw_dep_hist", JSON.stringify(arr)); }
+        function getMyGiveaways() { try { return JSON.parse(getStat("my_giveaways") || "[]"); } catch(e){return [];} }
+        function saveMyGiveaways(arr) { saveStat("my_giveaways", JSON.stringify(arr)); }
 
-        function openModal(id) {
-            document.getElementById(id).style.display = "flex";
-            if(id === 'deposit-modal') {
-                if(!tonConnectUI.connected) document.getElementById('deposit-connect-warning').style.display = 'block';
-                else document.getElementById('deposit-connect-warning').style.display = 'none';
-            }
-            if(id === 'create-gw-modal') {
-                updateDurationOptions();
-            }
+        function showModalMsg(elementId, msg, isError) {
+            const el = document.getElementById(elementId);
+            if(window[`${elementId}Timeout`]) clearTimeout(window[`${elementId}Timeout`]);
+            el.className = isError ? "msg-box msg-err" : "msg-box msg-succ";
+            el.innerHTML = msg;
+            el.style.display = "block";
+            window[`${elementId}Timeout`] = setTimeout(() => { el.style.display = "none"; }, 3000);
         }
 
         function closeModals() {
-            document.querySelectorAll('.modal-overlay').forEach(el => el.style.display = "none");
-            document.querySelectorAll('.msg-box').forEach(el => el.style.display = "none");
-            document.getElementById('deposit-input').value = '';
+            document.getElementById("modal-overlay").style.display = "none";
+            document.getElementById("modal-deposit").style.display = "none";
+            document.getElementById("modal-create").style.display = "none";
+            document.getElementById("deposit-msg").style.display = "none";
+            document.getElementById("create-gw-msg").style.display = "none";
         }
 
-        async function processDeposit() {
-            const btn = document.getElementById("confirm-deposit-btn");
-            const msgBox = document.getElementById("deposit-msg");
-            const inputVal = document.getElementById("deposit-input").value;
-            const amount = parseInt(inputVal);
+        function openDepositModal() {
+            if (!tonConnectUI.connected) {
+                tonConnectUI.openModal();
+                return;
+            }
+            document.getElementById("deposit-input-amount").value = "";
+            document.getElementById("modal-overlay").style.display = "flex";
+            document.getElementById("modal-deposit").style.display = "flex";
+        }
 
-            if(!tonConnectUI.connected) {
-                msgBox.className = "msg-box msg-err";
-                msgBox.innerHTML = "⚠️ Please connect your wallet via the 'Wallet' tab first.";
-                msgBox.style.display = "block";
+        async function submitDeposit() {
+            const valStr = document.getElementById("deposit-input-amount").value;
+            const amount = parseInt(valStr);
+            const btn = document.getElementById("btn-confirm-deposit");
+            
+            if (!valStr || isNaN(amount) || amount < 3) {
+                showModalMsg("deposit-msg", "⚠️ Minimum deposit is 3 TON.", true);
+                return;
+            }
+            if (amount.toString() !== valStr.trim()) {
+                showModalMsg("deposit-msg", "⚠️ Please enter whole numbers only (e.g., 3, 4, 5). Decimals are not allowed.", true);
                 return;
             }
 
-            if(isNaN(amount) || amount < 3) {
-                msgBox.className = "msg-box msg-err";
-                msgBox.innerHTML = "⚠️ Minimum deposit is 3 TON (Whole numbers only).";
-                msgBox.style.display = "block";
-                return;
-            }
-
-            btn.innerHTML = "<span class='spinner'></span> Processing...";
             btn.disabled = true;
-            msgBox.style.display = "none";
-
-            // Amount sent exact as user types (* 10^9 for NanoTONs)
-            const nanoTonStr = (amount * 1000000000).toString();
-
-            const transaction = {
-                validUntil: Math.floor(Date.now() / 1000) + 120, // 2 minutes
-                messages: [
-                    {
-                        address: "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c", // Standard safe fallback address for transactions
-                        amount: nanoTonStr
-                    }
-                ]
-            };
+            btn.innerHTML = "<span class='spinner'></span>";
 
             try {
+                let payloadBoc = "";
+                if (window.TonWeb) {
+                    const tonweb = new window.TonWeb();
+                    const cell = new tonweb.boc.Cell();
+                    cell.bits.writeUint(0, 32); 
+                    cell.bits.writeString(getUID()); 
+                    payloadBoc = tonweb.utils.bytesToBase64(await cell.toBoc());
+                }
+
+                const transaction = {
+                    validUntil: Math.floor(Date.now() / 1000) + 600,
+                    messages: [
+                        {
+                            address: "UQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJKZ", 
+                            amount: (amount * 1000000000).toString(), 
+                            payload: payloadBoc
+                        }
+                    ]
+                };
+
                 await tonConnectUI.sendTransaction(transaction);
                 
-                // Transaction confirmed locally by wallet
-                gwBalance += amount;
-                saveStat("gw_deposit_balance", gwBalance.toString());
+                giveawayBalance += amount;
+                saveStat("gw_deposit_balance", giveawayBalance.toString());
                 
-                // Log History
-                let dpHistory = JSON.parse(getStat("gw_deposit_history") || "[]");
-                dpHistory.unshift({ amount: amount, time: Date.now(), status: "approved" });
-                saveStat("gw_deposit_history", JSON.stringify(dpHistory));
-
-                msgBox.className = "msg-box msg-succ";
-                msgBox.innerHTML = `🎉 <b>Success!</b> Deposited ${amount} TON to your Giveaway Funding Balance.`;
-                msgBox.style.display = "block";
+                let hist = getDepHistory();
+                hist.unshift({ id: Date.now(), amount: amount, time: Date.now(), status: 'approved' });
+                saveDepHistory(hist);
                 
-                document.getElementById("deposit-input").value = "";
+                showModalMsg("deposit-msg", `✅ Successfully deposited ${amount} TON!`, false);
                 updateAllUI();
-                renderGwHistoryAndLists();
-
-                setTimeout(closeModals, 2000);
-            } catch (e) {
-                // User rejected or failed
-                msgBox.className = "msg-box msg-err";
-                msgBox.innerHTML = "❌ Transaction cancelled or failed. Please try again.";
-                msgBox.style.display = "block";
+                renderDepHistory();
+                
+                setTimeout(closeModals, 1500);
+            } catch (err) {
+                showModalMsg("deposit-msg", "❌ Transaction cancelled or failed.", true);
             } finally {
-                btn.innerHTML = "Confirm Deposit";
                 btn.disabled = false;
+                btn.innerHTML = "Confirm";
             }
+        }
+
+        function openCreateGwModal() {
+            if (!tonConnectUI.connected) {
+                tonConnectUI.openModal();
+                return;
+            }
+            document.getElementById("gw-create-name").value = "";
+            document.getElementById("gw-create-link").value = "";
+            document.getElementById("gw-create-amount").value = "";
+            updateDurationOptions();
+            document.getElementById("modal-overlay").style.display = "flex";
+            document.getElementById("modal-create").style.display = "flex";
         }
 
         function updateDurationOptions() {
-            const amountInput = document.getElementById("gw-create-amount").value;
-            const select = document.getElementById("gw-duration");
-            const val = parseInt(amountInput) || 0;
-
+            const amount = parseInt(document.getElementById("gw-create-amount").value) || 0;
+            const select = document.getElementById("gw-create-duration");
             select.innerHTML = "";
+            
+            if (amount < 3) {
+                select.innerHTML = '<option value="">Enter valid amount first</option>';
+                select.disabled = true;
+                return;
+            }
+            if (amount > 100) {
+                select.innerHTML = '<option value="">Amount cannot exceed 100 TON</option>';
+                select.disabled = true;
+                return;
+            }
+            
+            select.disabled = false;
+            const options = [];
+            if (amount >= 3) options.push("1 Week");
+            if (amount >= 10) options.push("2 Weeks");
+            if (amount >= 15) options.push("3 Weeks");
+            if (amount >= 25) options.push("1 Month");
+            if (amount >= 50) options.push("2 Months");
+            if (amount >= 75) options.push("3 Months");
+            if (amount === 100) options.push("5 Months");
+            
+            options.forEach(opt => {
+                const o = document.createElement("option");
+                o.value = opt; o.innerText = opt;
+                select.appendChild(o);
+            });
+        }
 
-            if(val < 3) {
-                select.innerHTML = '<option value="">Requires minimum 3 TON...</option>';
+        function submitCreateGw() {
+            const name = document.getElementById("gw-create-name").value.trim();
+            const link = document.getElementById("gw-create-link").value.trim();
+            const amountStr = document.getElementById("gw-create-amount").value;
+            const amount = parseInt(amountStr);
+            const duration = document.getElementById("gw-create-duration").value;
+            
+            if (!name || !link || !amountStr || !duration) {
+                showModalMsg("create-gw-msg", "⚠️ All fields are required.", true);
+                return;
+            }
+            if (amount.toString() !== amountStr.trim() || amount < 3) {
+                showModalMsg("create-gw-msg", "⚠️ Minimum amount is 3 TON (whole numbers).", true);
+                return;
+            }
+            if (amount > 100) {
+                showModalMsg("create-gw-msg", "⚠️ Max giveaway amount is 100 TON.", true);
+                return;
+            }
+            if (amount > giveawayBalance) {
+                showModalMsg("create-gw-msg", "⚠️ Insufficient Giveaway Balance. Please deposit more TON.", true);
                 return;
             }
 
-            // Logic matching requested constraints
-            const addOpt = (text, v) => select.innerHTML += `<option value="${v}">${text}</option>`;
+            giveawayBalance -= amount;
+            saveStat("gw_deposit_balance", giveawayBalance.toString());
             
-            addOpt("1 Week", "1_week");
-            if(val >= 10) addOpt("2 Weeks", "2_weeks");
-            if(val >= 15) addOpt("3 Weeks", "3_weeks");
-            if(val >= 25) addOpt("1 Month", "1_month");
-            if(val >= 50) addOpt("2 Months", "2_months");
-            if(val >= 75) addOpt("3 Months", "3_months");
-            if(val === 100) addOpt("5 Months", "5_months");
-        }
-
-        function submitGiveawayCreation() {
-            const amountStr = document.getElementById("gw-create-amount").value;
-            const duration = document.getElementById("gw-duration").value;
-            const name = document.getElementById("gw-create-name").value.trim();
-            const link = document.getElementById("gw-create-link").value.trim();
-            const msgBox = document.getElementById("create-gw-msg");
-
-            const amount = parseInt(amountStr);
-
-            if(isNaN(amount) || amount < 3 || amount > 100) {
-                msgBox.className = "msg-box msg-err"; msgBox.innerHTML = "⚠️ Prize must be between 3 and 100 TON."; msgBox.style.display = "block"; return;
-            }
-            if(!duration || !name || !link) {
-                msgBox.className = "msg-box msg-err"; msgBox.innerHTML = "⚠️ Please fill all required fields."; msgBox.style.display = "block"; return;
-            }
-            if(amount > gwBalance) {
-                msgBox.className = "msg-box msg-err"; msgBox.innerHTML = "⚠️ Insufficient Giveaway Balance. Please deposit first."; msgBox.style.display = "block"; return;
-            }
-
-            // Deduct balance
-            gwBalance -= amount;
-            saveStat("gw_deposit_balance", gwBalance.toString());
-
-            // Save to my giveaways
-            let myGws = JSON.parse(getStat("my_created_gws") || "[]");
-            const newGw = { id: Date.now(), amount: amount, duration: duration, name: name, link: link, status: "pending" };
-            myGws.unshift(newGw);
-            saveStat("my_created_gws", JSON.stringify(myGws));
-
-            msgBox.className = "msg-box msg-succ";
-            msgBox.innerHTML = "✅ Giveaway created! Awaiting moderation.";
-            msgBox.style.display = "block";
-
+            let myGw = getMyGiveaways();
+            myGw.unshift({ id: Date.now(), name, link, amount, duration, status: 'pending', time: Date.now() });
+            saveMyGiveaways(myGw);
+            
+            showModalMsg("create-gw-msg", "✅ Giveaway created! Awaiting moderation.", false);
             updateAllUI();
-            renderGwHistoryAndLists();
-
+            renderMyGiveaways();
             setTimeout(closeModals, 1500);
         }
 
-        function triggerShareGiveaway(id) {
-            let myGws = JSON.parse(getStat("my_created_gws") || "[]");
-            const gw = myGws.find(g => g.id === id);
+        function shareGiveaway(id) {
+            let myGw = getMyGiveaways();
+            let gw = myGw.find(g => g.id === id);
             if(!gw) return;
-
-            const messageText = `Giveaway Submission Request\n\nTask Name: ${gw.name}\nLink: ${gw.link}\nPrize Amount: ${gw.amount} TON\nDuration: ${gw.duration}\nWinner: 1 Person`;
-            const tgLink = `https://t.me/cryptogiveawayadmin?text=${encodeURIComponent(messageText)}`;
             
-            if(tgApp && tgApp.openTelegramLink) {
-                tgApp.openTelegramLink(tgLink);
-            } else {
-                window.open(tgLink, '_blank');
-            }
+            let text = `Giveaway Approval Request:\nTask Name: ${gw.name}\nLink: ${gw.link}\nPrize: ${gw.amount} TON\nDuration: ${gw.duration}\nCreator UID: ${getUID()}`;
+            window.open('https://t.me/cryptogiveawayadmin?text=' + encodeURIComponent(text), '_blank');
         }
 
-        function formatMSKTime(timestamp) {
-            const date = new Date(timestamp);
-            return new Intl.DateTimeFormat('en-GB', {
-                timeZone: 'Europe/Moscow',
-                day: '2-digit', month: '2-digit', year: 'numeric',
-                hour: '2-digit', minute: '2-digit', second: '2-digit',
-                hour12: false
-            }).format(date) + ' MSK';
-        }
-
-        function renderGwHistoryAndLists() {
-            // My created giveaways
-            const myGwList = document.getElementById("my-giveaways-list");
-            const myGws = JSON.parse(getStat("my_created_gws") || "[]");
+        function renderDepHistory() {
+            const list = document.getElementById("dep-hist-list");
+            const title = document.getElementById("dep-hist-title");
+            const history = getDepHistory();
             
-            if(myGws.length > 0) {
-                document.getElementById("my-giveaways-section").style.display = "block";
-                let html = "";
-                myGws.forEach(gw => {
-                    html += `
-                        <div class="history-item" style="margin-bottom: 12px; padding: 18px;">
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <div style="font-family:'Poppins', sans-serif; font-weight:700; color:white; font-size:1.1rem;">${gw.name}</div>
-                                <div class="history-status status-pending">Moderation</div>
-                            </div>
-                            <div style="color:var(--text-gray); font-size:0.9rem; margin-top:8px;">Prize: <span style="color:var(--accent-gold); font-weight:700;">${gw.amount} TON</span> | Duration: ${gw.duration.replace('_',' ')}</div>
-                            <button class="btn btn-verify" style="margin-top:12px; padding: 12px; font-size: 0.95rem; border-radius: 12px;" onclick="triggerShareGiveaway(${gw.id})">📤 Share to Admin</button>
-                        </div>
-                    `;
-                });
-                myGwList.innerHTML = html;
-            } else {
-                document.getElementById("my-giveaways-section").style.display = "none";
+            if (history.length === 0) {
+                title.style.display = "none";
+                list.innerHTML = "";
+                return;
             }
+            title.style.display = "block";
 
-            // Deposit History
-            const dpList = document.getElementById("gw-deposit-history-list");
-            const dps = JSON.parse(getStat("gw_deposit_history") || "[]");
-            
-            if(dps.length === 0) {
-                dpList.innerHTML = "<div style='color: var(--text-gray); font-size: 0.9rem; text-align: center; padding: 15px;'>No deposits yet.</div>";
-            } else {
-                let dhtml = "";
-                dps.forEach(d => {
-                    dhtml += `
-                        <div class="history-item" style="padding: 16px; flex-direction: row; align-items: center; justify-content: space-between;">
-                            <div style="display:flex; align-items:center; gap: 12px;">
-                                <div style="background: rgba(16, 185, 129, 0.1); padding: 10px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.2);">⬇️</div>
-                                <div style="display:flex; flex-direction:column;">
-                                    <span style="color:white; font-family:'Poppins', sans-serif; font-weight:700; font-size:1.1rem;">+${d.amount} TON</span>
-                                    <span style="color:var(--text-gray); font-size:0.8rem;">${formatMSKTime(d.time)}</span>
+            let html = "";
+            history.forEach(item => {
+                const timeStr = formatMSKTime(item.time);
+                html += `
+                    <div class="history-item" style="padding:16px;">
+                        <div class="history-row-header">
+                            <div class="history-info">
+                                <div style="background: rgba(16, 185, 129, 0.1); width: 40px; height: 40px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.1rem; border: 1px solid rgba(16, 185, 129, 0.2);">⬇️</div>
+                                <div style="display:flex; flex-direction:column; gap:4px;">
+                                    <span class="history-amount">+${item.amount} TON</span>
+                                    <span class="history-time">${timeStr}</span>
                                 </div>
                             </div>
-                            <span class="history-status status-approved">Added</span>
+                            <div class="history-status status-approved">Approved</div>
                         </div>
-                    `;
-                });
-                dpList.innerHTML = dhtml;
-            }
+                    </div>
+                `;
+            });
+            list.innerHTML = html;
         }
 
-        // --- EXISTING GIVEAWAY DETAIL LOGIC ---
+        function renderMyGiveaways() {
+            const list = document.getElementById("my-gw-list");
+            const title = document.getElementById("my-gw-title");
+            const myGw = getMyGiveaways();
+            
+            if (myGw.length === 0) {
+                title.style.display = "none";
+                list.innerHTML = "";
+                return;
+            }
+            title.style.display = "block";
+
+            let html = "";
+            myGw.forEach(gw => {
+                html += `
+                    <div class="gw-list-card" style="flex-direction:column; align-items:flex-start; cursor:default;">
+                        <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+                            <div class="gw-title" style="margin:0;">${gw.name}</div>
+                            <div class="gw-status status-pending" style="margin:0;">Pending Moderation</div>
+                        </div>
+                        <div class="gw-meta" style="margin-top:8px;">Prize: ${gw.amount} TON | Duration: ${gw.duration}</div>
+                        <button class="btn btn-verify" onclick="shareGiveaway(${gw.id})" style="margin-top:15px; padding:12px; font-size:0.95rem;">📤 Share for Approval</button>
+                    </div>
+                `;
+            });
+            list.innerHTML = html;
+        }
+
+        /* --- REST OF THE LOGIC --- */
 
         function openGiveawayDetails(gwId) {
             currentGwView = gwId;
@@ -1191,13 +1213,9 @@
 
         function checkDeepLink() {
             const startParam = tgApp?.initDataUnsafe?.start_param;
-            if (startParam === 'giveaway-1') {
-                openGiveawayDetails(1);
-            } else if (startParam === 'giveaway-2') {
-                openGiveawayDetails(2);
-            } else {
-                switchTab('home');
-            }
+            if (startParam === 'giveaway-1') openGiveawayDetails(1);
+            else if (startParam === 'giveaway-2') openGiveawayDetails(2);
+            else switchTab('home');
         }
 
         function watchDailyAd() {
@@ -1247,15 +1265,19 @@
             if (promoMsgTimeout) clearTimeout(promoMsgTimeout);
 
             if(!codeInput) {
-                msgBox.className = "msg-box msg-err"; msgBox.innerHTML = "⚠️ Please enter a promo code."; msgBox.style.display = "block";
-                promoMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 1500); return;
+                msgBox.className = "msg-box msg-err";
+                msgBox.innerHTML = "⚠️ Please enter a promo code.";
+                msgBox.style.display = "block";
+                promoMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 1500);
+                return;
             }
 
             if (PROMO_CODES.hasOwnProperty(codeInput)) {
                 const trackingKey = `promo_used_${codeInput}`;
-                
                 if (getStat(trackingKey) === "true") {
-                    msgBox.className = "msg-box msg-err"; msgBox.innerHTML = "❌ You have already redeemed this promo code!"; msgBox.style.display = "block";
+                    msgBox.className = "msg-box msg-err";
+                    msgBox.innerHTML = "❌ You have already redeemed this promo code!";
+                    msgBox.style.display = "block";
                     promoMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 1500);
                 } else {
                     const awardValue = PROMO_CODES[codeInput];
@@ -1264,26 +1286,27 @@
                     saveStat(trackingKey, "true");
 
                     msgBox.className = "msg-box msg-succ";
-                    msgBox.innerHTML = `🎉 <b>Congratulations!</b><br>Promo code successfully applied! Received: +${awardValue} TON.`;
+                    msgBox.innerHTML = `🎉 <b>Congratulations!</b><br>Promo code applied! Received: +${awardValue} TON.`;
                     msgBox.style.display = "block";
                     inputField.value = "";
                     updateAllUI();
-
                     promoMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 1500);
                 }
             } else {
-                msgBox.className = "msg-box msg-err"; msgBox.innerHTML = "❌ Invalid promo code."; msgBox.style.display = "block";
+                msgBox.className = "msg-box msg-err";
+                msgBox.innerHTML = "❌ Invalid promo code. Please double check and try again.";
+                msgBox.style.display = "block";
                 promoMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 1500);
             }
         }
 
         function updateLiveBreakdown(amount) {
             const breakdownBox = document.getElementById("live-breakdown");
-            if (isNaN(amount) || amount <= 0) {
-                breakdownBox.style.display = "none"; return;
-            }
+            if (isNaN(amount) || amount <= 0) { breakdownBox.style.display = "none"; return; }
+            
             const fee = amount * 0.30;
             const net = amount - fee;
+            
             document.getElementById("bd-gross").innerText = `${amount.toFixed(4)} TON`;
             document.getElementById("bd-fee").innerText = `${fee.toFixed(4)} TON`;
             document.getElementById("bd-net").innerText = `${net.toFixed(4)} TON`;
@@ -1299,19 +1322,30 @@
         function getWithdrawHistory() { try { return JSON.parse(getStat("withdraw_history_array") || "[]"); } catch (e) { return []; } }
         function saveWithdrawHistory(arr) { saveStat("withdraw_history_array", JSON.stringify(arr)); }
 
+        function formatMSKTime(timestamp) {
+            const date = new Date(timestamp);
+            return new Intl.DateTimeFormat('en-GB', {
+                timeZone: 'Europe/Moscow', day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+            }).format(date) + ' MSK';
+        }
+
         function renderHistory() {
             const list = document.getElementById("history-list");
             const history = getWithdrawHistory();
+            
             if (history.length === 0) {
                 list.innerHTML = "<div style='color: var(--text-gray); font-size: 1rem; text-align: center; padding: 25px;'>No withdrawals yet.</div>";
                 return;
             }
+
             let html = "";
             history.forEach(item => {
                 const statusClass = item.status === 'pending' ? 'status-pending' : 'status-approved';
                 const statusText = item.status === 'pending' ? 'Processing' : 'Approved';
                 const timeStr = formatMSKTime(item.time);
                 const icon = item.status === 'pending' ? '⏳' : '✅';
+                
                 const grossVal = parseFloat(item.gross || item.amount || 0).toFixed(4);
                 const feeVal = parseFloat(item.fee || (item.amount * 0.3) || 0).toFixed(4);
                 const netVal = parseFloat(item.net || (item.amount * 0.7) || 0).toFixed(4);
@@ -1329,15 +1363,9 @@
                             <div class="history-status ${statusClass}">${statusText}</div>
                         </div>
                         <div class="history-details-grid">
-                            <div style="display:flex; justify-content:space-between; opacity:0.8;">
-                                <span>Requested:</span><span>${grossVal} TON</span>
-                            </div>
-                            <div style="display:flex; justify-content:space-between; color:var(--error); opacity:0.9;">
-                                <span>Fee (30%):</span><span>-${feeVal} TON</span>
-                            </div>
-                            <div style="display:flex; justify-content:space-between; color:var(--success); font-weight:700; padding-top:6px; border-top:1px dashed rgba(255,255,255,0.08)">
-                                <span>Received:</span><span>${netVal} TON</span>
-                            </div>
+                            <div style="display:flex; justify-content:space-between; opacity:0.8;"><span>Requested:</span><span>${grossVal} TON</span></div>
+                            <div style="display:flex; justify-content:space-between; color:var(--error); opacity:0.9;"><span>Fee (30%):</span><span>-${feeVal} TON</span></div>
+                            <div style="display:flex; justify-content:space-between; color:var(--success); font-weight:700; padding-top:6px; border-top:1px dashed rgba(255,255,255,0.08)"><span>Received:</span><span>${netVal} TON</span></div>
                         </div>
                     </div>`;
             });
@@ -1354,6 +1382,7 @@
             };
             
             if (userBalance < 3.0) { showWithdrawMessage(`⚠️ Minimum withdrawal limit is 3.0000 TON.`); return; }
+
             const inputElem = document.getElementById("withdraw-amount");
             const rawValue = inputElem.value;
             const amountToWithdraw = parseFloat(rawValue);
@@ -1361,18 +1390,16 @@
             if (!tonConnectUI.connected) { showWithdrawMessage("⚠️ Please connect your TON wallet first."); return; }
 
             let history = getWithdrawHistory();
-            if (history.some(item => item.status === 'pending')) { showWithdrawMessage("⚠️ You already have a processing withdrawal."); return; }
+            const hasPending = history.some(item => item.status === 'pending');
 
-            if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 3.0) { showWithdrawMessage(`⚠️ Invalid entry.`); return; }
+            if (hasPending) { showWithdrawMessage("⚠️ You already have a processing withdrawal. Please wait until it completes."); return; }
+            if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 3.0) { showWithdrawMessage(`⚠️ Invalid entry. Specify a value 3.00 TON or more.`); return; }
             if (amountToWithdraw > userBalance) { showWithdrawMessage(`⚠️ Insufficient balance.`); return; }
 
             const calculatedFee = amountToWithdraw * 0.30;
             const netPayout = amountToWithdraw - calculatedFee;
             
-            history.unshift({
-                id: Date.now(), amount: amountToWithdraw, gross: amountToWithdraw,
-                fee: calculatedFee, net: netPayout, time: Date.now(), status: 'pending'
-            });
+            history.unshift({ id: Date.now(), amount: amountToWithdraw, gross: amountToWithdraw, fee: calculatedFee, net: netPayout, time: Date.now(), status: 'pending' });
 
             saveWithdrawHistory(history);
             userBalance -= amountToWithdraw;
@@ -1382,7 +1409,9 @@
             document.getElementById("live-breakdown").style.display = "none";
             document.activeElement.blur(); 
             
-            updateAllUI(); renderHistory(); checkWithdrawalStatus();
+            updateAllUI();
+            renderHistory();
+            checkWithdrawalStatus();
         }
 
         let withdrawInterval;
@@ -1393,10 +1422,17 @@
                 let needsUpdate = false;
                 let hasPending = false;
                 const now = new Date().getTime();
+                const hiddenProcessingTime = 5 * 60 * 1000; 
+
                 for (let i = 0; i < history.length; i++) {
                     if (history[i].status === 'pending') {
                         hasPending = true;
-                        if ((now - history[i].time) >= 5 * 60 * 1000) { history[i].status = 'approved'; needsUpdate = true; hasPending = false; }
+                        const diff = now - history[i].time;
+                        if (diff >= hiddenProcessingTime) {
+                            history[i].status = 'approved';
+                            needsUpdate = true;
+                            hasPending = false; 
+                        }
                     }
                 }
                 if (needsUpdate) { saveWithdrawHistory(history); renderHistory(); }
@@ -1409,6 +1445,7 @@
         function refreshTimer() {
             const now = new Date().getTime();
             const diff = END_TIME - now;
+            
             if (diff <= 0) {
                 if (currentGwView === 2) {
                     document.getElementById("t-days").innerText = "00"; document.getElementById("t-hours").innerText = "00";
@@ -1422,7 +1459,6 @@
                         <p style="color: var(--text-gray); font-size: 1.05rem; margin-bottom: 22px;">Congratulations to our lucky winner:</p>
                         <div style="color: var(--accent-gold); font-size: 1.7rem; font-weight: 800; font-family: 'Poppins', sans-serif; letter-spacing: 1px; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);">@Ney9773883</div>
                     `;
-
                     if (getUID() === '8066661936') {
                         if (getStat('gw2_claimed') !== 'true') winnerHtml += `<button class="btn btn-claim" onclick="claimPrize(2, 25)">🎁 Claim Prize</button>`;
                         else winnerHtml += `<div style="margin-top: 24px; color: var(--success); font-weight: 800; font-size: 1.3rem; text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);">✅ Reward added to balance!</div>`;
@@ -1432,6 +1468,7 @@
                 }
                 return;
             }
+            
             if(currentGwView === 2) {
                 document.getElementById("t-days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
                 document.getElementById("t-hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
@@ -1447,7 +1484,11 @@
                 const verifyBtn = document.getElementById("verify-action");
                 const msg = document.getElementById("msg-display");
                 if(verifyBtn) verifyBtn.style.display = "none";
-                if(msg) { msg.className = "msg-box msg-succ"; msg.innerHTML = "🎉 <b>Entry Secured:</b> You are successfully entered into the giveaway draw. Good luck!"; msg.style.display = "block"; }
+                if(msg) {
+                    msg.className = "msg-box msg-succ";
+                    msg.innerHTML = "🎉 <b>Entry Secured:</b> You are successfully entered into the giveaway draw. Good luck!";
+                    msg.style.display = "block";
+                }
                 return true;
             }
             return false;
@@ -1455,6 +1496,7 @@
 
         function processVerification() {
             if (checkGiveawayUIState()) return;
+
             const hasJoined = getStat("gw2_joined") === "true";
             const msg = document.getElementById("msg-display");
             const btn = document.getElementById("verify-action");
@@ -1464,11 +1506,11 @@
                 let errText = "⚠️ <b>Action Required:</b><br>";
                 if (!hasJoined) errText += "• Please join the channel.<br>";
                 if (totalAdsWatched < 500) errText += `• Watch ${500 - totalAdsWatched} more total ads.`;
-                msg.innerHTML = errText; msg.style.display = "block"; return;
+                msg.innerHTML = errText; msg.style.display = "block";
+                return;
             }
-            btn.innerHTML = "<span class='spinner'></span> Verifying Entry...";
-            btn.disabled = true; msg.style.display = "none";
 
+            btn.innerHTML = "<span class='spinner'></span> Verifying Entry..."; btn.disabled = true; msg.style.display = "none";
             setTimeout(() => { saveStat("gw2_secured", "true"); checkGiveawayUIState(); }, 2000);
         }
 

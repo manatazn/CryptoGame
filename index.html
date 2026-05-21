@@ -11,21 +11,21 @@
     
     <style>
         :root {
-            /* NEW "CYAN & DEEP BLUE" COLOR PALETTE BASED ON LOGO */
-            --bg-main: #050a12;
-            --bg-gradient: radial-gradient(circle at top center, #0d1b2a 0%, #050a12 100%);
-            --glass-bg: rgba(13, 27, 42, 0.65);
-            --glass-border: rgba(0, 210, 255, 0.15);
-            --primary: #00d2ff; /* Bright Cyan from logo */
-            --primary-glow: rgba(0, 210, 255, 0.35);
-            --primary-gradient: linear-gradient(135deg, #00d2ff 0%, #0066ff 100%);
-            --ton-blue: #0098EA; /* Official Toncoin Blue */
-            --accent-cyan: #00E5FF;
-            --text-light: #F0F4F8;
-            --text-gray: #8F9DAE;
+            /* YENİ "TON" VƏ KOSMİK GÖY RƏNG PALİTRASI */
+            --bg-main: #060913;
+            --bg-gradient: radial-gradient(circle at top center, #0F172A 0%, #060913 100%);
+            --glass-bg: rgba(15, 23, 42, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --primary: #0098EA; /* Toncoin rəsmi mavi rəngi */
+            --primary-glow: rgba(0, 152, 234, 0.35);
+            --primary-gradient: linear-gradient(135deg, #32AEEB 0%, #0098EA 100%); 
+            --accent-gold: #FACC15; 
+            --gold-glow: rgba(250, 204, 21, 0.25);
+            --text-light: #F8F9FA;
+            --text-gray: #94A3B8;
             --success: #10B981;
             --success-bg: rgba(16, 185, 129, 0.15);
-            --error: #FF3366; 
+            --error: #EF4444; 
             --transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
@@ -48,6 +48,12 @@
 
         img, svg { user-drag: none; pointer-events: none; }
 
+        .ton-text {
+            color: var(--primary) !important;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
         /* --- SPLASH SCREEN --- */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -65,13 +71,13 @@
 
         .ring-outer {
             position: absolute; width: 100%; height: 100%; border-radius: 50%;
-            border: 2px dashed rgba(0, 210, 255, 0.4);
+            border: 2px dashed rgba(0, 152, 234, 0.4);
             animation: spinRight 14s linear infinite;
         }
 
         .ring-inner {
             position: absolute; width: 85%; height: 85%; border-radius: 50%;
-            border: 2px solid transparent; border-top: 3px solid var(--primary); border-bottom: 3px solid #0066ff;
+            border: 2px solid transparent; border-top: 3px solid var(--primary); border-bottom: 3px solid #32AEEB;
             animation: spinLeft 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             box-shadow: 0 0 30px var(--primary-glow);
         }
@@ -79,7 +85,7 @@
         .coin-center {
             width: 76px; height: 76px;
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 45px rgba(0, 210, 255, 0.4);
+            box-shadow: 0 0 45px rgba(0, 152, 234, 0.4);
             animation: pulseCoin 2s ease-in-out infinite;
             background: #000; overflow: hidden;
             border: 2px solid rgba(255,255,255,0.1);
@@ -97,7 +103,7 @@
         .splash-title { 
             font-family: 'Poppins', sans-serif; font-size: 2.1rem; font-weight: 800; color: white; 
             letter-spacing: 1.5px; margin-bottom: 30px; text-shadow: 0 4px 20px rgba(0,0,0,0.6);
-            background: linear-gradient(to right, #FFFFFF, #B0E2FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background: linear-gradient(to right, #FFFFFF, #B0D8F1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         
         .loading-bar { width: 160px; height: 6px; background: rgba(255,255,255,0.06); border-radius: 10px; overflow: hidden; position: relative; }
@@ -110,15 +116,15 @@
         /* --- NAVIGATION --- */
         .bottom-nav {
             position: fixed; bottom: 24px; left: 5%; width: 90%;
-            background: rgba(5, 10, 18, 0.92); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            background: rgba(10, 15, 28, 0.92); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             display: flex; justify-content: space-around; padding: 10px 6px;
-            border: 1px solid rgba(0, 210, 255, 0.15); border-radius: 28px; z-index: 100;
+            border: 1px solid rgba(255,255,255,0.05); border-radius: 28px; z-index: 100;
             box-shadow: 0 15px 40px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05);
             transition: opacity 0.2s, transform 0.2s;
         }
         
         .nav-item {
-            color: #8F9DAE; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer;
+            color: #64748B; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer;
             display: flex; flex-direction: column; align-items: center; gap: 4px; 
             transition: var(--transition); font-size: 0.75rem; width: 23%;
             -webkit-tap-highlight-color: transparent;
@@ -138,7 +144,7 @@
         }
 
         .nav-item.active { color: var(--primary); }
-        .nav-item.active .nav-icon-bg { background: rgba(0, 210, 255, 0.12); border: 1px solid rgba(0, 210, 255, 0.2); }
+        .nav-item.active .nav-icon-bg { background: rgba(0, 152, 234, 0.12); border: 1px solid rgba(0, 152, 234, 0.2); }
         .nav-item.active .nav-icon { stroke-width: 2.6; transform: scale(1.15); filter: drop-shadow(0 0 8px var(--primary-glow)); }
         .nav-item:active .nav-icon-bg { transform: scale(0.92); }
 
@@ -167,20 +173,20 @@
 
         /* --- BALANCE CARD --- */
         .balance-card {
-            background: linear-gradient(145deg, rgba(16, 33, 54, 0.9) 0%, rgba(6, 13, 24, 0.95) 100%);
-            border: 1px solid rgba(0, 210, 255, 0.15); border-radius: 30px; padding: 32px 20px;
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9) 0%, rgba(6, 9, 19, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 30px; padding: 32px 20px;
             display: flex; flex-direction: column; align-items: center; text-align: center;
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05); position: relative; overflow: hidden;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.03); position: relative; overflow: hidden;
         }
         .balance-card::before {
             content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(0, 210, 255, 0.08) 0%, transparent 60%); pointer-events: none;
+            background: radial-gradient(circle, rgba(0, 152, 234, 0.08) 0%, transparent 60%); pointer-events: none;
         }
         .balance-title { color: var(--text-gray); font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2.5px;}
         
         .balance-amount { 
             color: white; font-size: 2.5rem; font-family: 'Poppins', sans-serif; font-weight: 700; 
-            text-shadow: 0 0 25px rgba(0, 210, 255, 0.4); line-height: 1.2; letter-spacing: 0.5px;
+            text-shadow: 0 0 25px rgba(0, 152, 234, 0.4); line-height: 1.2; letter-spacing: 0.5px;
             animation: floatBalance 4s ease-in-out infinite; will-change: transform;
         }
         @keyframes floatBalance { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
@@ -196,14 +202,14 @@
         .ad-info p { font-size: 0.88rem; color: var(--text-gray); }
         
         .ad-reward-badge {
-            background: rgba(0, 210, 255, 0.1); color: var(--primary);
+            background: rgba(0, 152, 234, 0.1); color: var(--primary);
             font-size: 0.9rem; font-family: 'Poppins', sans-serif; font-weight: 600; padding: 8px 14px; border-radius: 14px;
-            border: 1px solid rgba(0, 210, 255, 0.25); display: flex; align-items: center; gap: 4px;
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.15);
+            border: 1px solid rgba(0, 152, 234, 0.25); display: flex; align-items: center; gap: 4px;
+            box-shadow: 0 0 15px rgba(0, 152, 234, 0.15);
         }
 
         .ad-progress-container { margin-top: 4px; }
-        .ad-progress-bar { width: 100%; height: 10px; background: rgba(0,0,0,0.6); border-radius: 10px; overflow: hidden; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.03); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);}
+        .ad-progress-bar { width: 100%; height: 10px; background: rgba(0,0,0,0.6); border-radius: 10px; overflow: hidden; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.02); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);}
         .ad-progress-fill { height: 100%; background: var(--primary-gradient); width: 0%; transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 0 12px var(--primary-glow);}
         .ad-progress-text { font-size: 0.88rem; color: var(--text-gray); font-family: 'Poppins', sans-serif; font-weight: 500; display: flex; justify-content: space-between; margin-bottom: 8px;}
         .ad-progress-text span { color: white; font-weight: 600; }
@@ -211,13 +217,13 @@
         .btn-ad-compact {
             background: var(--text-light); color: var(--bg-main);
             border: none; padding: 16px; border-radius: 18px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem;
-            cursor: pointer; transition: var(--transition); box-shadow: 0 8px 25px rgba(255,255,255,0.15);
+            cursor: pointer; transition: var(--transition); box-shadow: 0 8px 25px rgba(255,255,255,0.1);
             display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; letter-spacing: 0.5px;
         }
-        .btn-ad-compact:active { transform: scale(0.95); filter: brightness(0.85); box-shadow: 0 4px 15px rgba(255,255,255,0.1); }
+        .btn-ad-compact:active { transform: scale(0.95); filter: brightness(0.85); box-shadow: 0 4px 15px rgba(255,255,255,0.05); }
         .btn-ad-compact.locked {
-            background: rgba(255,255,255,0.05); color: #645C7A;
-            box-shadow: none; cursor: not-allowed; border: 1px solid rgba(255,255,255,0.06); 
+            background: rgba(255,255,255,0.05); color: #475569;
+            box-shadow: none; cursor: not-allowed; border: 1px solid rgba(255,255,255,0.04); 
             transform: none !important; pointer-events: none;
         }
 
@@ -251,34 +257,34 @@
 
         /* --- PROMO CODE SECTION --- */
         .promo-input-card {
-            background: rgba(13, 27, 42, 0.7); border: 1px solid var(--glass-border); border-radius: 26px; padding: 26px;
+            background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 26px; padding: 26px;
             display: flex; flex-direction: column; gap: 18px; backdrop-filter: blur(20px); box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         .promo-input-wrapper { position: relative; width: 100%; }
         .promo-field {
-            width: 100%; padding: 18px 18px 18px 50px; background: rgba(5, 10, 18, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 18px; color: white;
+            width: 100%; padding: 18px 18px 18px 50px; background: rgba(6, 9, 19, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; color: white;
             font-family: 'Poppins', sans-serif; font-size: 1.15rem; font-weight: 600; outline: none;
             transition: var(--transition); letter-spacing: 1.5px; text-transform: uppercase;
         }
-        .promo-field:focus { border-color: var(--primary); box-shadow: 0 0 20px rgba(0, 210, 255, 0.2); background: rgba(9, 18, 30, 0.9); }
+        .promo-field:focus { border-color: var(--primary); box-shadow: 0 0 20px rgba(0, 152, 234, 0.2); background: rgba(10, 15, 28, 0.9); }
         .promo-icon-prefix { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); font-size: 1.3rem; pointer-events: none; opacity: 0.8; }
 
         /* --- HOST GIVEAWAY CARD --- */
         .host-banner {
-            background: linear-gradient(135deg, rgba(0, 210, 255, 0.1) 0%, rgba(5, 10, 18, 0.8) 100%);
-            border: 1px solid rgba(0, 210, 255, 0.2); border-radius: 26px; padding: 26px;
+            background: linear-gradient(135deg, rgba(250, 204, 21, 0.1) 0%, rgba(10, 15, 28, 0.8) 100%);
+            border: 1px solid rgba(250, 204, 21, 0.2); border-radius: 26px; padding: 26px;
             display: flex; flex-direction: column; gap: 16px; position: relative; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
-        .host-banner::before { content: '👑'; position: absolute; right: -15px; top: -15px; font-size: 90px; opacity: 0.05; transform: rotate(25deg); filter: grayscale(1) sepia(1) hue-rotate(180deg) saturate(3); }
-        .host-title { font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--accent-cyan); letter-spacing: 0.4px;}
+        .host-banner::before { content: '👑'; position: absolute; right: -15px; top: -15px; font-size: 90px; opacity: 0.05; transform: rotate(25deg); }
+        .host-title { font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--accent-gold); letter-spacing: 0.4px;}
         .host-desc { font-size: 0.9rem; color: var(--text-gray); line-height: 1.6; }
         .btn-host {
-            background: rgba(0, 210, 255, 0.08); color: var(--accent-cyan); text-align: center;
+            background: rgba(250, 204, 21, 0.08); color: var(--accent-gold); text-align: center;
             padding: 14px; border-radius: 16px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1rem; text-decoration: none;
-            border: 1px solid rgba(0, 210, 255, 0.25); transition: var(--transition); display: block; box-shadow: 0 5px 15px rgba(0, 210, 255, 0.1);
+            border: 1px solid rgba(250, 204, 21, 0.25); transition: var(--transition); display: block; box-shadow: 0 5px 15px rgba(250, 204, 21, 0.1);
         }
-        .btn-host:active { transform: scale(0.96); background: rgba(0, 210, 255, 0.15); box-shadow: none; }
+        .btn-host:active { transform: scale(0.96); background: rgba(250, 204, 21, 0.15); box-shadow: none; }
 
         /* --- GIVEAWAY LIST --- */
         .section-title { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: white; margin: 20px 0 10px 0; letter-spacing: 0.4px;}
@@ -288,9 +294,9 @@
             padding: 20px; display: flex; align-items: center; gap: 18px; cursor: pointer;
             transition: var(--transition); backdrop-filter: blur(20px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); -webkit-tap-highlight-color: transparent;
         }
-        .gw-list-card:active { transform: scale(0.96); background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.15); }
-        .gw-icon-wrap { background: rgba(255,255,255,0.03); padding: 16px; border-radius: 18px; display: flex; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.06); box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);}
-        .gw-icon { font-size: 2.2rem; filter: drop-shadow(0 0 12px rgba(0,210,255,0.2)); }
+        .gw-list-card:active { transform: scale(0.96); background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.1); }
+        .gw-icon-wrap { background: rgba(255,255,255,0.03); padding: 16px; border-radius: 18px; display: flex; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.04); box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);}
+        .gw-icon { font-size: 2.2rem; filter: drop-shadow(0 0 12px rgba(255,255,255,0.1)); }
         .gw-details { flex: 1; }
         .gw-title { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.1rem; color: white; margin-bottom: 6px;}
         .gw-meta { font-size: 0.9rem; color: var(--text-gray); }
@@ -302,31 +308,31 @@
             border: 1px solid var(--glass-border); text-align: center; box-shadow: 0 25px 55px rgba(0,0,0,0.6);
         }
         .prize-title { font-family: 'Poppins', sans-serif; color: white; font-size: 3.5rem; font-weight: 800; line-height: 1; margin-bottom: 10px; text-shadow: 0 0 40px var(--primary-glow); letter-spacing: -1.5px;}
-        .subtitle { color: var(--accent-cyan); font-family: 'Poppins', sans-serif; font-size: 1.1rem; margin-bottom: 35px; font-weight: 600; letter-spacing: 0.6px;}
+        .subtitle { color: var(--accent-gold); font-family: 'Poppins', sans-serif; font-size: 1.1rem; margin-bottom: 35px; font-weight: 600; letter-spacing: 0.6px;}
 
         /* Timer */
         .timer-wrapper { display: flex; justify-content: center; gap: 12px; margin-bottom: 40px; }
-        .time-box { background: rgba(0, 0, 0, 0.5); padding: 16px 0; border-radius: 18px; width: 72px; border: 1px solid rgba(0, 210, 255, 0.15); box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.3); }
-        .time-val { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 800; color: white; display: block; text-shadow: 0 0 10px var(--primary-glow); }
+        .time-box { background: rgba(0, 0, 0, 0.5); padding: 16px 0; border-radius: 18px; width: 72px; border: 1px solid rgba(255, 255, 255, 0.04); box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.3); }
+        .time-val { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 800; color: white; display: block;}
         .time-lbl { font-size: 0.75rem; color: var(--text-gray); font-family: 'Poppins', sans-serif; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 6px; display: block; font-weight: 600;}
 
         .gw-winner-ui { display: none; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 26px; padding: 30px 20px; margin-bottom: 30px; animation: fadeInView 0.5s ease; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);}
 
         /* Steps */
         .steps-container { text-align: left; }
-        .step-card { background: rgba(0,0,0,0.4); padding: 22px; border-radius: 22px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.04); box-shadow: inset 0 2px 15px rgba(0,0,0,0.3); }
+        .step-card { background: rgba(0,0,0,0.4); padding: 22px; border-radius: 22px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.03); box-shadow: inset 0 2px 15px rgba(0,0,0,0.3); }
         .step-header { font-family: 'Poppins', sans-serif; font-weight: 700; margin-bottom: 8px; font-size: 1.05rem; color: white; display: flex; justify-content: space-between; align-items: center;}
         .step-desc { font-size: 0.9rem; color: var(--text-gray); margin-bottom: 18px; line-height: 1.5;}
         .total-ad-counter { color: var(--bg-main); font-family: 'Poppins', sans-serif; font-weight: 700; background: var(--text-light); padding: 5px 12px; border-radius: 12px; font-size: 0.85rem;}
 
         .btn { width: 100%; padding: 18px; border-radius: 18px; border: none; font-size: 1.05rem; font-family: 'Poppins', sans-serif; font-weight: 700; cursor: pointer; transition: var(--transition); text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 10px; letter-spacing: 0.5px;}
         .btn:active { transform: scale(0.95); filter: brightness(0.9); box-shadow: none; }
-        .btn-join { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
-        .btn-verify { background: var(--primary-gradient); color: white; box-shadow: 0 10px 30px rgba(0, 210, 255, 0.3); margin-top: 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2);}
+        .btn-join { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
+        .btn-verify { background: var(--primary-gradient); color: white; box-shadow: 0 10px 30px rgba(0, 152, 234, 0.3); margin-top: 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);}
         .btn-claim { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3); margin-top: 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); }
 
         .btn:disabled, .btn.joined { 
-            background: rgba(255,255,255,0.03); color: #5B5270; box-shadow: none; cursor: not-allowed; border: 1px solid transparent; 
+            background: rgba(255,255,255,0.02); color: #475569; box-shadow: none; cursor: not-allowed; border: 1px solid transparent; 
             pointer-events: none; transform: none !important;
         }
         .btn.joined { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16,185,129,0.2); }
@@ -336,31 +342,31 @@
             cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; 
             transition: var(--transition); margin-top: 20px; border: none; width: 100%; border-radius: 18px; border: 1px solid transparent;
         }
-        .btn-back:hover, .btn-back:active { color: white; background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.08); transform: scale(0.97);}
+        .btn-back:hover, .btn-back:active { color: white; background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.06); transform: scale(0.97);}
 
         .msg-box { margin-top: 20px; font-size: 0.95rem; display: none; padding: 18px; border-radius: 18px; line-height: 1.6; animation: fadeInView 0.3s ease; text-align: left; border: 1px solid transparent; backdrop-filter: blur(10px);}
-        .msg-err { background: rgba(255, 51, 102, 0.1); color: #FF85A1; border-color: rgba(255, 51, 102, 0.25); box-shadow: 0 5px 20px rgba(255, 51, 102, 0.15);}
+        .msg-err { background: rgba(239, 68, 68, 0.1); color: #FCA5A5; border-color: rgba(239, 68, 68, 0.25); box-shadow: 0 5px 20px rgba(239, 68, 68, 0.15);}
         .msg-succ { background: rgba(16, 185, 129, 0.1); color: #6EE7B7; border-color: rgba(16, 185, 129, 0.25); box-shadow: 0 5px 20px rgba(16, 185, 129, 0.15);}
 
         /* --- WALLET & LIVE BREAKDOWN DETAILS UI --- */
         .withdraw-step { 
             background: rgba(0,0,0,0.35); padding: 24px 20px; 
-            border-radius: 24px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.04); 
+            border-radius: 24px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.03); 
             text-align: left; box-shadow: inset 0 2px 20px rgba(0,0,0,0.5);
         }
-        .withdraw-input-wrapper { position: relative; width: 100%; display: flex; align-items: center; justify-content: center;}
+        .withdraw-input-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
         
         .withdraw-input {
-            width: 100%; padding: 20px 95px 20px 25px; background: rgba(5, 10, 18, 0.9);
-            border: 1px solid rgba(0, 210, 255, 0.2); border-radius: 18px; color: white;
+            width: 100%; padding: 20px 95px 20px 20px; background: rgba(6, 9, 19, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 18px; color: white;
             font-family: 'Poppins', sans-serif; font-size: 1.7rem; font-weight: 700; text-align: left;
             transition: var(--transition); outline: none; box-shadow: inset 0 2px 15px rgba(0,0,0,0.6);
         }
-        .withdraw-input:focus { border-color: var(--primary); box-shadow: inset 0 2px 15px rgba(0,0,0,0.6), 0 0 25px rgba(0, 210, 255, 0.2); }
+        .withdraw-input:focus { border-color: var(--primary); box-shadow: inset 0 2px 15px rgba(0,0,0,0.6), 0 0 25px rgba(0, 152, 234, 0.2); }
         .withdraw-input::placeholder { font-size: 1.4rem; color: rgba(255, 255, 255, 0.15); font-weight: 600; }
         .btn-max { 
             position: absolute; right: 16px; top: 50%; transform: translateY(-50%); 
-            background: rgba(255, 255, 255, 0.06); color: var(--text-light); border: 1px solid rgba(255,255,255,0.1); 
+            background: rgba(255, 255, 255, 0.06); color: var(--text-light); border: 1px solid rgba(255,255,255,0.08); 
             padding: 12px 18px; border-radius: 14px; font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 0.85rem; 
             cursor: pointer; transition: var(--transition); box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
@@ -368,16 +374,16 @@
 
         /* Dynamic Crypto Breakdown Box */
         .live-breakdown-box {
-            display: none; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.06);
+            display: none; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.04);
             border-radius: 20px; padding: 20px; margin-top: 18px; text-align: left;
             animation: fadeInView 0.3s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
         }
         .breakdown-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 10px; color: var(--text-gray); font-weight: 500;}
-        .breakdown-row.total { margin-bottom: 0; margin-top: 10px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.1); font-size: 1rem; }
+        .breakdown-row.total { margin-bottom: 0; margin-top: 10px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.08); font-size: 1rem; }
 
         /* Modernized History Entries */
         .history-item {
-            background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.04);
             border-radius: 24px; padding: 22px; display: flex; flex-direction: column; gap: 14px; text-align: left; transition: var(--transition); box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
         .history-row-header { display: flex; justify-content: space-between; align-items: center; }
@@ -389,7 +395,7 @@
         .history-amount { color: white; font-weight: 800; font-family: 'Poppins', sans-serif; font-size: 1.2rem; text-shadow: 0 0 10px rgba(255,255,255,0.1);}
         .history-time { color: var(--text-gray); font-size: 0.85rem; font-weight: 500;}
         .history-status { font-family: 'Poppins', sans-serif; font-size: 0.75rem; font-weight: 800; padding: 8px 14px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.8px;}
-        .status-pending { background: rgba(0, 210, 255, 0.1); color: var(--accent-cyan); border: 1px solid rgba(0, 210, 255, 0.25); box-shadow: 0 0 15px rgba(0, 210, 255, 0.1);}
+        .status-pending { background: rgba(250, 204, 21, 0.1); color: var(--accent-gold); border: 1px solid rgba(250, 204, 21, 0.25); box-shadow: 0 0 15px rgba(250, 204, 21, 0.1);}
         .status-approved { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.25); box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);}
 
         .spinner { border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid white; border-radius: 50%; width: 22px; height: 22px; animation: spin 0.7s linear infinite; box-shadow: 0 0 10px rgba(255,255,255,0.2);}
@@ -403,7 +409,7 @@
             <div class="ring-outer"></div>
             <div class="ring-inner"></div>
             <div class="coin-center">
-                <img src="https://i.postimg.cc/BvcfhLB1/file-00000000b55471f4b7a4628b6173f770.png" alt="Logo" class="splash-logo">
+                <img src="https://i.postimg.cc/wxnzxN0R/VC-Mraev-400x400.jpg" alt="Logo" class="splash-logo">
             </div>
         </div>
         <div class="splash-title">Crypto Giveaway</div>
@@ -456,7 +462,7 @@
     <div id="view-home" class="view-container active">
         <div class="app-header">
             <div class="header-user">
-                <img src="https://ui-avatars.com/api/?name=User&background=00d2ff&color=ffffff" class="profile-avatar" id="tg-avatar" alt="Avatar">
+                <img src="https://ui-avatars.com/api/?name=User&background=0098EA&color=ffffff" class="profile-avatar" id="tg-avatar" alt="Avatar">
                 <div class="profile-name-group">
                     <span class="profile-name" id="tg-name">Loading...</span>
                     <span class="profile-uid" id="tg-uid">UID: Loading...</span>
@@ -466,7 +472,7 @@
 
         <div class="balance-card">
             <div class="balance-title">Current Balance</div>
-            <div class="balance-amount" id="home-balance">0.0000 <span style="color:var(--ton-blue); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
+            <div class="balance-amount" id="home-balance">0.0000 <span class="ton-text" style="font-size:1.1rem;">TON</span></div>
         </div>
 
         <div class="ad-task-card">
@@ -474,7 +480,7 @@
             <div class="ad-header-row">
                 <div class="ad-info">
                     <h3>Daily Rewards</h3>
-                    <p>Watch short ads to earn TON fractions.</p>
+                    <p>Watch short ads to earn <span class="ton-text">TON</span> fractions.</p>
                 </div>
                 <div class="ad-reward-badge">0.0005 TON</div>
             </div>
@@ -496,7 +502,7 @@
     <div id="view-promo" class="view-container">
         <div class="balance-card" style="padding: 30px 24px;">
             <div class="balance-title">Redeem Code</div>
-            <p style="font-size:0.9rem; color:var(--text-gray); margin-top:6px; line-height: 1.5;">Enter your code below to receive an instant TON credit.</p>
+            <p style="font-size:0.9rem; color:var(--text-gray); margin-top:6px; line-height: 1.5;">Enter your code below to receive an instant <span class="ton-text">TON</span> credit.</p>
         </div>
 
         <div class="promo-input-card">
@@ -522,7 +528,7 @@
                 <div class="gw-icon-wrap"><div class="gw-icon">💎</div></div>
                 <div class="gw-details">
                     <div class="gw-title">Crypto Group #2</div>
-                    <div class="gw-meta">Prize Pool: 25 TON</div>
+                    <div class="gw-meta">Prize Pool: 25 <span class="ton-text" style="font-size:0.9rem;">TON</span></div>
                     <div class="gw-status">● Live Now</div>
                 </div>
             </div>
@@ -532,9 +538,9 @@
                 <div class="gw-icon-wrap" style="background: rgba(255,255,255,0.02);"><div class="gw-icon">🏆</div></div>
                 <div class="gw-details">
                     <div class="gw-title">Crypto Group #1</div>
-                    <div class="gw-meta">Prize Pool: 25 TON</div>
-                    <div class="gw-status" style="color: var(--error); background: rgba(255, 51, 102, 0.1); border-color: rgba(255, 51, 102, 0.2);">● Ended</div>
-                    <div style="font-size: 0.95rem; color: var(--accent-cyan); margin-top: 10px; font-family: 'Poppins', sans-serif; font-weight: 700; text-shadow: 0 0 10px rgba(0, 210, 255, 0.2);">🎉 Winner: <b style="color: white;">@matro97</b></div>
+                    <div class="gw-meta">Prize Pool: 25 <span class="ton-text" style="font-size:0.9rem;">TON</span></div>
+                    <div class="gw-status" style="color: var(--error); background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.2);">● Ended</div>
+                    <div style="font-size: 0.95rem; color: var(--accent-gold); margin-top: 10px; font-family: 'Poppins', sans-serif; font-weight: 700; text-shadow: 0 0 10px rgba(250, 204, 21, 0.2);">🎉 Winner: <b>@matro97</b></div>
                 </div>
             </div>
         </div>
@@ -542,7 +548,7 @@
 
     <div id="view-giveaway-details" class="view-container">
         <div class="giveaway-card">
-            <h1 class="prize-title" id="det-prize">25 <span style="font-size:1.4rem; color:var(--ton-blue);">TON</span></h1>
+            <h1 class="prize-title" id="det-prize">25 <span class="ton-text" style="font-size:1.4rem;">TON</span></h1>
             <p class="subtitle" id="det-subtitle">Crypto Group #2</p>
 
             <div class="timer-wrapper" id="timer-ui">
@@ -567,7 +573,7 @@
                         <span class="total-ad-counter"><span id="gw-total-ads">0</span>/500</span>
                     </div>
                     <p class="step-desc">You must watch a lifetime total of 500 ads to qualify for this draw.</p>
-                    <button class="btn btn-join" style="border: 1px solid rgba(255,255,255,0.2); color: white;" onclick="switchTab('home')">Go to Daily Ads</button>
+                    <button class="btn btn-join" style="border: 1px solid rgba(255,255,255,0.1); color: white;" onclick="switchTab('home')">Go to Daily Ads</button>
                 </div>
 
                 <button class="btn btn-verify" id="verify-action" onclick="processVerification()">Verify & Enter Draw</button>
@@ -581,7 +587,7 @@
     <div id="view-wallet" class="view-container">
         <div class="balance-card">
             <div class="balance-title">Available Balance</div>
-            <div class="balance-amount" id="wallet-balance">0.0000 <span style="color:var(--ton-blue); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
+            <div class="balance-amount" id="wallet-balance">0.0000 <span class="ton-text" style="font-size:1.1rem;">TON</span></div>
         </div>
 
         <div class="giveaway-card" style="padding: 35px 24px;">
@@ -590,7 +596,7 @@
             </h3>
             
             <div class="withdraw-step" id="connect-wallet-step">
-                <div id="connect-wallet-text" style="color: var(--text-gray); font-size: 1rem; margin-bottom: 20px; text-align: center; font-weight: 600;">Connect your TON wallet to withdraw funds</div>
+                <div id="connect-wallet-text" style="color: var(--text-gray); font-size: 1rem; margin-bottom: 20px; text-align: center; font-weight: 600;">Connect your <span class="ton-text">TON</span> wallet to withdraw funds</div>
                 <div id="ton-connect" style="display: flex; justify-content: center;"></div>
             </div>
             
@@ -604,7 +610,7 @@
                     <div id="live-breakdown" class="live-breakdown-box">
                         <div class="breakdown-row">
                             <span>Requested Amount:</span>
-                            <span id="bd-gross" style="color:white; font-weight:700;">0.0000 TON</span>
+                            <span id="bd-gross" style="color:white; font-weight:700;">0.0000 <span class="ton-text" style="font-size:0.9rem;">TON</span></span>
                         </div>
                         <div class="breakdown-row" style="color:var(--error);">
                             <span>Network Fee (30%):</span>
@@ -612,7 +618,7 @@
                         </div>
                         <div class="breakdown-row total" style="color:var(--success);">
                             <span>Net Payout Amount:</span>
-                            <span id="bd-net" style="font-weight:800; text-shadow: 0 0 10px rgba(16, 185, 129, 0.2);">0.0000 TON</span>
+                            <span id="bd-net" style="font-weight:800; text-shadow: 0 0 10px rgba(16, 185, 129, 0.2);">0.0000 <span class="ton-text" style="font-size:0.9rem;">TON</span></span>
                         </div>
                     </div>
                 </div>
@@ -640,9 +646,8 @@
             tgApp.ready();
             tgApp.expand();
             try { tgApp.requestFullscreen(); } catch(e){}
-            /* HEADER COLOR UPDATED */
-            tgApp.setHeaderColor('#050a12');
-            tgApp.setBackgroundColor('#050a12');
+            tgApp.setHeaderColor('#060913');
+            tgApp.setBackgroundColor('#060913');
         }
 
         function getUID() { return tgApp?.initDataUnsafe?.user?.id?.toString() || '123456789'; }
@@ -814,8 +819,7 @@
 
         function updateAllUI() {
             const balVal = userBalance.toFixed(4);
-            // TON COLOR UPDATED
-            const balHtml = `${balVal} <span style="color:var(--ton-blue); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span>`;
+            const balHtml = `${balVal} <span class="ton-text" style="font-size:1.1rem;">TON</span>`;
             
             document.getElementById("home-balance").innerHTML = balHtml;
             document.getElementById("wallet-balance").innerHTML = balHtml;
@@ -891,8 +895,7 @@
             document.getElementById('view-giveaway-details').classList.add('active');
 
             if (gwId === 1) {
-                // TON COLOR UPDATED
-                document.getElementById('det-prize').innerHTML = '25 <span style="font-size:1.4rem; color:var(--ton-blue);">TON</span>';
+                document.getElementById('det-prize').innerHTML = '25 <span class="ton-text" style="font-size:1.4rem;">TON</span>';
                 document.getElementById('det-subtitle').innerText = "Crypto Group #1";
                 document.getElementById('timer-ui').style.display = "none";
                 document.getElementById('gw-actions').style.display = "none";
@@ -901,7 +904,7 @@
                     <div style="font-size: 3.8rem; margin-bottom: 22px; filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));">🎊🏆🎊</div>
                     <h3 style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.5rem; margin-bottom: 14px; font-weight: 800;">Giveaway Ended!</h3>
                     <p style="color: var(--text-gray); font-size: 1.05rem; margin-bottom: 22px;">Congratulations to our lucky winner:</p>
-                    <div style="color: var(--accent-cyan); font-size: 1.7rem; font-weight: 800; font-family: 'Poppins', sans-serif; letter-spacing: 1px; text-shadow: 0 0 15px rgba(0, 210, 255, 0.4);">@matro97</div>
+                    <div style="color: var(--accent-gold); font-size: 1.7rem; font-weight: 800; font-family: 'Poppins', sans-serif; letter-spacing: 1px; text-shadow: 0 0 15px rgba(250, 204, 21, 0.4);">@matro97</div>
                 `;
 
                 if (getUID() === '8227619759') {
@@ -914,8 +917,7 @@
                 document.getElementById('gw-winner-ui').innerHTML = winnerHtml;
                 document.getElementById('gw-winner-ui').style.display = "block";
             } else {
-                // TON COLOR UPDATED
-                document.getElementById('det-prize').innerHTML = '25 <span style="font-size:1.4rem; color:var(--ton-blue);">TON</span>';
+                document.getElementById('det-prize').innerHTML = '25 <span class="ton-text" style="font-size:1.4rem;">TON</span>';
                 document.getElementById('det-subtitle').innerText = "Crypto Group #2";
                 document.getElementById('timer-ui').style.display = "flex";
                 document.getElementById('gw-actions').style.display = "block";
@@ -1038,9 +1040,9 @@
             const fee = amount * 0.30;
             const net = amount - fee;
             
-            document.getElementById("bd-gross").innerText = `${amount.toFixed(4)} TON`;
+            document.getElementById("bd-gross").innerHTML = `${amount.toFixed(4)} <span class="ton-text" style="font-size:0.9rem;">TON</span>`;
             document.getElementById("bd-fee").innerText = `${fee.toFixed(4)} TON`;
-            document.getElementById("bd-net").innerText = `${net.toFixed(4)} TON`;
+            document.getElementById("bd-net").innerHTML = `${net.toFixed(4)} <span class="ton-text" style="font-size:0.9rem;">TON</span>`;
             breakdownBox.style.display = "block";
         }
 
@@ -1091,7 +1093,7 @@
                             <div class="history-info">
                                 <div style="background: rgba(255,255,255,0.05); width: 48px; height: 48px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 1.3rem; border: 1px solid rgba(255,255,255,0.06); box-shadow: inset 0 0 10px rgba(0,0,0,0.3);">${icon}</div>
                                 <div style="display:flex; flex-direction:column; gap:4px;">
-                                    <span class="history-amount">${netVal} TON</span>
+                                    <span class="history-amount">${netVal} <span class="ton-text" style="font-size:0.9rem;">TON</span></span>
                                     <span class="history-time">${timeStr}</span>
                                 </div>
                             </div>
@@ -1108,7 +1110,7 @@
                             </div>
                             <div style="display:flex; justify-content:space-between; color:var(--success); font-weight:700; padding-top:6px; border-top:1px dashed rgba(255,255,255,0.08)">
                                 <span>Received:</span>
-                                <span>${netVal} TON</span>
+                                <span>${netVal} <span class="ton-text" style="font-size:0.8rem;">TON</span></span>
                             </div>
                         </div>
                     </div>
@@ -1240,7 +1242,7 @@
                         <div style="font-size: 3.8rem; margin-bottom: 22px; filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));">🎊🏆🎊</div>
                         <h3 style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.5rem; margin-bottom: 14px; font-weight: 800;">Giveaway Ended!</h3>
                         <p style="color: var(--text-gray); font-size: 1.05rem; margin-bottom: 22px;">Congratulations to our lucky winner:</p>
-                        <div style="color: var(--accent-cyan); font-size: 1.7rem; font-weight: 800; font-family: 'Poppins', sans-serif; letter-spacing: 1px; text-shadow: 0 0 15px rgba(0, 210, 255, 0.4);">@Ney9773883</div>
+                        <div style="color: var(--accent-gold); font-size: 1.7rem; font-weight: 800; font-family: 'Poppins', sans-serif; letter-spacing: 1px; text-shadow: 0 0 15px rgba(250, 204, 21, 0.4);">@Ney9773883</div>
                     `;
 
                     if (getUID() === '8066661936') {

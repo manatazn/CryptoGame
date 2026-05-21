@@ -8,18 +8,18 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
-    <script src="https://unpkg.com/tonweb@0.0.60/dist/tonweb.js"></script>
     
     <style>
         :root {
-            var(--bg-main): #050505;
+            /* YENİ "TON BLUE & BLACK" RƏNG PALİTRASI */
+            --bg-main: #050505;
             --bg-gradient: radial-gradient(circle at top center, #0B1320 0%, #050505 100%);
             --glass-bg: rgba(11, 19, 32, 0.65);
             --glass-border: rgba(255, 255, 255, 0.07);
-            --primary: #0098EA; 
+            --primary: #0098EA; /* TON Mavi */
             --primary-glow: rgba(0, 152, 234, 0.35);
-            --primary-gradient: linear-gradient(135deg, #0098EA 0%, #0056B3 100%); 
-            --accent-gold: #FFD700; 
+            --primary-gradient: linear-gradient(135deg, #0098EA 0%, #0056B3 100%); /* Açıq Mavi -> Tünd Mavi */
+            --accent-gold: #FFD700; /* Loqoya uyğun Qızılı/Sarı */
             --gold-glow: rgba(255, 215, 0, 0.25);
             --text-light: #F8F7FA;
             --text-gray: #94A3B8;
@@ -37,7 +37,7 @@
 
         body {
             background: var(--bg-gradient);
-            background-color: #050505;
+            background-color: var(--bg-main);
             color: var(--text-light);
             min-height: 100vh;
             overflow-x: hidden;
@@ -51,7 +51,7 @@
         /* --- SPLASH SCREEN --- */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #050505;
+            background: var(--bg-main);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 9999; transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.5s;
             backdrop-filter: blur(25px);
@@ -181,7 +181,9 @@
         .balance-amount { 
             color: white; font-size: 2.5rem; font-family: 'Poppins', sans-serif; font-weight: 700; 
             text-shadow: 0 0 25px rgba(0, 152, 234, 0.4); line-height: 1.2; letter-spacing: 0.5px;
+            animation: floatBalance 4s ease-in-out infinite; will-change: transform;
         }
+        @keyframes floatBalance { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 
         /* --- ADS CARD --- */
         .ad-task-card {
@@ -268,6 +270,15 @@
             border: 1px solid rgba(255, 215, 0, 0.2); border-radius: 26px; padding: 26px;
             display: flex; flex-direction: column; gap: 16px; position: relative; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
+        .host-banner::before { content: '👑'; position: absolute; right: -15px; top: -15px; font-size: 90px; opacity: 0.05; transform: rotate(25deg); }
+        .host-title { font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--accent-gold); letter-spacing: 0.4px;}
+        .host-desc { font-size: 0.9rem; color: var(--text-gray); line-height: 1.6; }
+        .btn-host {
+            background: rgba(255, 215, 0, 0.08); color: var(--accent-gold); text-align: center;
+            padding: 14px; border-radius: 16px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1rem; text-decoration: none;
+            border: 1px solid rgba(255, 215, 0, 0.25); transition: var(--transition); display: block; box-shadow: 0 5px 15px rgba(255, 215, 0, 0.1);
+        }
+        .btn-host:active { transform: scale(0.96); background: rgba(255, 215, 0, 0.15); box-shadow: none; }
 
         /* --- GIVEAWAY LIST --- */
         .section-title { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: white; margin: 20px 0 10px 0; letter-spacing: 0.4px;}
@@ -383,28 +394,6 @@
 
         .spinner { border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid white; border-radius: 50%; width: 22px; height: 22px; animation: spin 0.7s linear infinite; box-shadow: 0 0 10px rgba(255,255,255,0.2);}
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* Modals for Giveaways */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
-            z-index: 1000; display: none; justify-content: center; align-items: center;
-        }
-        .custom-modal {
-            background: linear-gradient(145deg, rgba(11, 25, 44, 1) 0%, rgba(5, 10, 15, 1) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 26px; padding: 30px;
-            width: 90%; max-width: 400px; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-        }
-        .modal-title { font-family: 'Poppins', sans-serif; font-size: 1.4rem; color: white; font-weight: 700; text-align: center; margin-bottom: 10px;}
-        .modal-input {
-            width: 100%; padding: 15px 20px; background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; color: white;
-            font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; outline: none; transition: var(--transition);
-        }
-        .modal-input:focus { border-color: var(--primary); }
-        .modal-btn-row { display: flex; gap: 10px; margin-top: 10px;}
-        .btn-cancel { flex: 1; background: rgba(255,255,255,0.05); color: white; padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 600;}
-        .btn-confirm { flex: 1; background: var(--primary-gradient); color: white; padding: 14px; border-radius: 14px; border: none; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 600;}
     </style>
 </head>
 <body>
@@ -521,29 +510,14 @@
     </div>
 
     <div id="view-giveaway-list" class="view-container">
-        <div class="balance-card">
-            <div class="balance-title">Giveaway Balance</div>
-            <div class="balance-amount" id="gw-balance-display">0 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
-            <p style="font-size:0.8rem; color:var(--text-gray); margin-top:10px;">Used exclusively for hosting giveaways</p>
+        <div class="host-banner">
+            <div class="host-title">Host Your Own Giveaway</div>
+            <div class="host-desc">Boost your channel's growth and engage your community by starting a customized crypto giveaway.</div>
+            <a href="https://t.me/cryptogiveawayadmin" target="_blank" class="btn-host">💬 Contact Support</a>
         </div>
-
-        <div class="gw-list-card" style="flex-direction: column; align-items: stretch; cursor: default;">
-            <div id="gw-connect-wallet-text" style="text-align:center; color: var(--text-gray); font-size: 0.9rem; margin-bottom: 15px;">Connect your TON wallet to deposit & host</div>
-            <button class="btn-cancel" id="btn-gw-connect" onclick="tonConnectUI.openModal()" style="margin-bottom:15px; border-color:var(--primary); color:white;">🔌 Connect Wallet</button>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn btn-verify" onclick="openDepositModal()" style="margin-top:0; padding:14px;">Deposit</button>
-                <button class="btn btn-claim" onclick="openCreateGwModal()" style="margin-top:0; padding:14px; background:linear-gradient(135deg, #FFD700 0%, #D4AF37 100%); color:#000;">Create Draw</button>
-            </div>
-        </div>
-
-        <div class="section-title" id="my-gw-title" style="display:none; margin-top: 25px;">My Giveaways</div>
-        <div id="my-gw-list" style="display: flex; flex-direction: column; gap: 16px;"></div>
-
-        <div class="section-title" id="dep-hist-title" style="display:none; margin-top: 25px;">Deposit History</div>
-        <div id="dep-hist-list" style="display: flex; flex-direction: column; gap: 16px;"></div>
 
         <div>
-            <div class="section-title" style="margin-top: 35px;">Active Giveaways</div>
+            <div class="section-title">Active Giveaways</div>
             <div class="gw-list-card" onclick="openGiveawayDetails(2)">
                 <div class="gw-icon-wrap"><div class="gw-icon">💎</div></div>
                 <div class="gw-details">
@@ -654,38 +628,10 @@
         </div>
     </div>
 
-    <div id="modal-overlay" class="modal-overlay">
-        <div id="modal-deposit" class="custom-modal" style="display:none;">
-            <div class="modal-title">Deposit to Giveaway</div>
-            <p style="color:var(--text-gray); font-size:0.9rem; text-align:center;">Minimum deposit is 3 TON. Use whole numbers only (3, 4, 5).</p>
-            <input type="number" id="deposit-input-amount" class="modal-input" placeholder="Amount (e.g. 5)" min="3" step="1">
-            <div id="deposit-msg" class="msg-box" style="margin-top:0;"></div>
-            <div class="modal-btn-row">
-                <button class="btn-cancel" onclick="closeModals()">Cancel</button>
-                <button class="btn-confirm" id="btn-confirm-deposit" onclick="submitDeposit()">Confirm</button>
-            </div>
-        </div>
-
-        <div id="modal-create" class="custom-modal" style="display:none;">
-            <div class="modal-title">Create Draw</div>
-            <input type="text" id="gw-create-name" class="modal-input" placeholder="Task Name">
-            <input type="url" id="gw-create-link" class="modal-input" placeholder="Channel/Group Link">
-            <input type="number" id="gw-create-amount" class="modal-input" placeholder="Prize Amount (TON)" min="3" max="100" step="1" oninput="updateDurationOptions()">
-            <select id="gw-create-duration" class="modal-input" disabled>
-                <option value="">Enter amount first</option>
-            </select>
-            <div id="create-gw-msg" class="msg-box" style="margin-top:0;"></div>
-            <div class="modal-btn-row">
-                <button class="btn-cancel" onclick="closeModals()">Cancel</button>
-                <button class="btn-confirm" id="btn-submit-create" onclick="submitCreateGw()">Create</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         ['contextmenu', 'dragstart', 'copy', 'cut', 'paste', 'selectstart'].forEach(evt => 
             document.addEventListener(evt, e => {
-                if(e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT') e.preventDefault();
+                if(e.target.tagName !== 'INPUT') e.preventDefault();
             })
         );
 
@@ -703,11 +649,12 @@
         function getStat(key) { return localStorage.getItem(`${key}_${getUID()}`); }
 
         let userBalance = parseFloat(getStat("user_balance") || "0");
-        let giveawayBalance = parseInt(getStat("gw_deposit_balance") || "0");
         let totalAdsWatched = parseInt(getStat("total_ads") || "0");
         let dailyAdsWatched = parseInt(getStat("daily_ads") || "0");
         let currentGwView = 2;
-        let promoMsgTimeout, withdrawMsgTimeout, depositMsgTimeout, createGwMsgTimeout;
+        let promoMsgTimeout; 
+        let withdrawMsgTimeout;
+
         let tonConnectUI;
 
         if (totalAdsWatched < 500 && getStat("gw2_secured") === "true") {
@@ -720,7 +667,21 @@
             adController = window.Adsgram.init({ blockId: "int-30043" });
         }
 
-        const PROMO_CODES = { "A7F3K9L2QX": 0.015, "6NP9T1WK3X": 0.025 }; // Abbreviated for space if needed
+        const PROMO_CODES = {
+            "A7F3K9L2QX": 0.015, "5MZ8T1VC4P": 0.015, "X2N7R5JQ9L": 0.015, "8LP4D6WF2K": 0.015,
+            "Q1V9X3M7TC": 0.015, "4BK8Z2N5RY": 0.015, "T7C1L9Q4WP": 0.015, "2XF6M8VK3J": 0.015,
+            "N5Q2R7Z1LD": 0.015, "9JW4T6XK8P": 0.015, "V3L7C1N9QF": 0.015, "6PX2M8TR4K": 0.015,
+            "K9D5W1X7LV": 0.015, "1QT8N4Z6MC": 0.015, "R7V2L9PK5X": 0.015, "3MF1Q8TC7N": 0.015,
+            "Z6K4X2W9LP": 0.015, "8NR5V1DJ3Q": 0.015, "L2T7M9XF4C": 0.015, "5QX8K1V6RP": 0.015,
+            "H4L9T2X7QM": 0.005, "7VK3P8N1WD": 0.005, "B2Q6M9XF5L": 0.005, "1ZR8T4CV7K": 0.005,
+            "P5X2N7L9QJ": 0.005, "6MT4W8RK1X": 0.005, "C9V1Q5LP7Z": 0.005, "3XF7N2TK8M": 0.005,
+            "W8L4Q1VC9P": 0.005, "2KR5X7MN4T": 0.005, "T1Q9V6LP3X": 0.005, "7NM2K8WF5Q": 0.005,
+            "X4P1T9LC6V": 0.005, "5VL7Q2XR8M": 0.005, "8QK3N1TP4Z": 0.005, "M2X9L6VC7R": 0.005,
+            "4TP8Q5WN1K": 0.005, "Z7L1X4RM9Q": 0.005, "1CV5K8TN2P": 0.005, "Q8X2L7MF4V": 0.005,
+            "6NP9T1WK3X": 0.025, "R4M7Q8LC2T": 0.025, "3LK1V9XP5N": 0.025, "T9Q4X2WM7K": 0.025,
+            "5XN8L1RC4P": 0.025, "V2T7Q9MK6X": 0.025, "8LP1W4XN5R": 0.025, "K7Q3V2TM9L": 0.025,
+            "2MX8P5QL1V": 0.025, "N4T1X7KC9Q": 0.025
+        };
 
         document.addEventListener('DOMContentLoaded', async () => {
             initProfile();
@@ -734,8 +695,6 @@
             
             updateAllUI();
             renderHistory(); 
-            renderDepHistory();
-            renderMyGiveaways();
             startSystem();
             checkWithdrawalStatus();
             
@@ -762,15 +721,26 @@
 
         function setupKeyboardObservation() {
             const nav = document.getElementById("app-nav");
-            const inputs = document.querySelectorAll('input, textarea, select');
+            const inputs = document.querySelectorAll('input, textarea');
 
             inputs.forEach(input => {
                 input.addEventListener('focus', () => { nav.style.display = 'none'; });
                 input.addEventListener('blur', () => { setTimeout(() => { nav.style.display = 'flex'; }, 150); });
             });
             
+            if (window.visualViewport) {
+                const initialHeight = window.innerHeight;
+                window.visualViewport.addEventListener('resize', () => {
+                    if (window.visualViewport.height < initialHeight * 0.85) {
+                        nav.style.display = 'none';
+                    } else {
+                        nav.style.display = 'flex';
+                    }
+                });
+            }
+            
             document.addEventListener('click', function(e) {
-                if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT' && e.target.tagName !== 'TEXTAREA' && !e.target.classList.contains('btn') && !e.target.classList.contains('btn-confirm') && !e.target.classList.contains('btn-cancel')) {
+                if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && !e.target.classList.contains('btn')) {
                     document.activeElement.blur();
                 }
             });
@@ -778,11 +748,15 @@
 
         async function fetchNetworkTime() {
             const apis = [
+                async () => { const r = await fetch('https://timeapi.io/api/Time/current/zone?timeZone=UTC', { cache: 'no-store' }); const d = await r.json(); return new Date(d.dateTime).getTime(); },
                 async () => { const r = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC', { cache: 'no-store' }); const d = await r.json(); return new Date(d.utc_datetime).getTime(); }
             ];
             for (let api of apis) {
                 try {
+                    const controller = new AbortController();
+                    const timeout = setTimeout(() => controller.abort(), 2000); 
                     const t = await api();
+                    clearTimeout(timeout);
                     if (t && !isNaN(t)) return t;
                 } catch (e) {}
             }
@@ -817,17 +791,10 @@
             });
             tonConnectUI.onStatusChange((wallet) => {
                 const connectText = document.getElementById("connect-wallet-text");
-                const gwConnectText = document.getElementById("gw-connect-wallet-text");
-                const btnGwConnect = document.getElementById("btn-gw-connect");
-                
                 if (wallet) {
                     if (connectText) connectText.style.display = 'none';
-                    if (gwConnectText) gwConnectText.style.display = 'none';
-                    if (btnGwConnect) btnGwConnect.style.display = 'none';
                 } else {
                     if (connectText) connectText.style.display = 'block';
-                    if (gwConnectText) gwConnectText.style.display = 'block';
-                    if (btnGwConnect) btnGwConnect.style.display = 'block';
                 }
             });
         }
@@ -850,7 +817,6 @@
             
             document.getElementById("home-balance").innerHTML = balHtml;
             document.getElementById("wallet-balance").innerHTML = balHtml;
-            document.getElementById("gw-balance-display").innerHTML = `${giveawayBalance} <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span>`;
 
             document.getElementById("daily-ad-count").innerText = dailyAdsWatched;
             const progressPercent = (dailyAdsWatched / 50) * 100;
@@ -888,6 +854,7 @@
 
         function switchTab(tabName) {
             document.activeElement.blur(); 
+            
             const tabs = ['home', 'promo', 'giveaway', 'wallet'];
             tabs.forEach(t => {
                 const navEl = document.getElementById(`nav-${t === 'promo' ? 'promo' : t === 'giveaway' ? 'giveaway' : t}`);
@@ -914,255 +881,6 @@
                 document.getElementById('view-wallet').classList.add('active');
             }
         }
-
-        /* --- DEPOSIT & HOST GIVEAWAY LOGIC --- */
-        
-        function getDepHistory() { try { return JSON.parse(getStat("gw_dep_hist") || "[]"); } catch(e){return [];} }
-        function saveDepHistory(arr) { saveStat("gw_dep_hist", JSON.stringify(arr)); }
-        function getMyGiveaways() { try { return JSON.parse(getStat("my_giveaways") || "[]"); } catch(e){return [];} }
-        function saveMyGiveaways(arr) { saveStat("my_giveaways", JSON.stringify(arr)); }
-
-        function showModalMsg(elementId, msg, isError) {
-            const el = document.getElementById(elementId);
-            if(window[`${elementId}Timeout`]) clearTimeout(window[`${elementId}Timeout`]);
-            el.className = isError ? "msg-box msg-err" : "msg-box msg-succ";
-            el.innerHTML = msg;
-            el.style.display = "block";
-            window[`${elementId}Timeout`] = setTimeout(() => { el.style.display = "none"; }, 3000);
-        }
-
-        function closeModals() {
-            document.getElementById("modal-overlay").style.display = "none";
-            document.getElementById("modal-deposit").style.display = "none";
-            document.getElementById("modal-create").style.display = "none";
-            document.getElementById("deposit-msg").style.display = "none";
-            document.getElementById("create-gw-msg").style.display = "none";
-        }
-
-        function openDepositModal() {
-            if (!tonConnectUI.connected) {
-                tonConnectUI.openModal();
-                return;
-            }
-            document.getElementById("deposit-input-amount").value = "";
-            document.getElementById("modal-overlay").style.display = "flex";
-            document.getElementById("modal-deposit").style.display = "flex";
-        }
-
-        async function submitDeposit() {
-            const valStr = document.getElementById("deposit-input-amount").value;
-            const amount = parseInt(valStr);
-            const btn = document.getElementById("btn-confirm-deposit");
-            
-            if (!valStr || isNaN(amount) || amount < 3) {
-                showModalMsg("deposit-msg", "⚠️ Minimum deposit is 3 TON.", true);
-                return;
-            }
-            if (amount.toString() !== valStr.trim()) {
-                showModalMsg("deposit-msg", "⚠️ Please enter whole numbers only (e.g., 3, 4, 5). Decimals are not allowed.", true);
-                return;
-            }
-
-            btn.disabled = true;
-            btn.innerHTML = "<span class='spinner'></span>";
-
-            try {
-                let payloadBoc = "";
-                if (window.TonWeb) {
-                    const tonweb = new window.TonWeb();
-                    const cell = new tonweb.boc.Cell();
-                    cell.bits.writeUint(0, 32); 
-                    cell.bits.writeString(getUID()); 
-                    payloadBoc = tonweb.utils.bytesToBase64(await cell.toBoc());
-                }
-
-                const transaction = {
-                    validUntil: Math.floor(Date.now() / 1000) + 600,
-                    messages: [
-                        {
-                            address: "UQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJKZ", 
-                            amount: (amount * 1000000000).toString(), 
-                            payload: payloadBoc
-                        }
-                    ]
-                };
-
-                await tonConnectUI.sendTransaction(transaction);
-                
-                giveawayBalance += amount;
-                saveStat("gw_deposit_balance", giveawayBalance.toString());
-                
-                let hist = getDepHistory();
-                hist.unshift({ id: Date.now(), amount: amount, time: Date.now(), status: 'approved' });
-                saveDepHistory(hist);
-                
-                showModalMsg("deposit-msg", `✅ Successfully deposited ${amount} TON!`, false);
-                updateAllUI();
-                renderDepHistory();
-                
-                setTimeout(closeModals, 1500);
-            } catch (err) {
-                showModalMsg("deposit-msg", "❌ Transaction cancelled or failed.", true);
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = "Confirm";
-            }
-        }
-
-        function openCreateGwModal() {
-            if (!tonConnectUI.connected) {
-                tonConnectUI.openModal();
-                return;
-            }
-            document.getElementById("gw-create-name").value = "";
-            document.getElementById("gw-create-link").value = "";
-            document.getElementById("gw-create-amount").value = "";
-            updateDurationOptions();
-            document.getElementById("modal-overlay").style.display = "flex";
-            document.getElementById("modal-create").style.display = "flex";
-        }
-
-        function updateDurationOptions() {
-            const amount = parseInt(document.getElementById("gw-create-amount").value) || 0;
-            const select = document.getElementById("gw-create-duration");
-            select.innerHTML = "";
-            
-            if (amount < 3) {
-                select.innerHTML = '<option value="">Enter valid amount first</option>';
-                select.disabled = true;
-                return;
-            }
-            if (amount > 100) {
-                select.innerHTML = '<option value="">Amount cannot exceed 100 TON</option>';
-                select.disabled = true;
-                return;
-            }
-            
-            select.disabled = false;
-            const options = [];
-            if (amount >= 3) options.push("1 Week");
-            if (amount >= 10) options.push("2 Weeks");
-            if (amount >= 15) options.push("3 Weeks");
-            if (amount >= 25) options.push("1 Month");
-            if (amount >= 50) options.push("2 Months");
-            if (amount >= 75) options.push("3 Months");
-            if (amount === 100) options.push("5 Months");
-            
-            options.forEach(opt => {
-                const o = document.createElement("option");
-                o.value = opt; o.innerText = opt;
-                select.appendChild(o);
-            });
-        }
-
-        function submitCreateGw() {
-            const name = document.getElementById("gw-create-name").value.trim();
-            const link = document.getElementById("gw-create-link").value.trim();
-            const amountStr = document.getElementById("gw-create-amount").value;
-            const amount = parseInt(amountStr);
-            const duration = document.getElementById("gw-create-duration").value;
-            
-            if (!name || !link || !amountStr || !duration) {
-                showModalMsg("create-gw-msg", "⚠️ All fields are required.", true);
-                return;
-            }
-            if (amount.toString() !== amountStr.trim() || amount < 3) {
-                showModalMsg("create-gw-msg", "⚠️ Minimum amount is 3 TON (whole numbers).", true);
-                return;
-            }
-            if (amount > 100) {
-                showModalMsg("create-gw-msg", "⚠️ Max giveaway amount is 100 TON.", true);
-                return;
-            }
-            if (amount > giveawayBalance) {
-                showModalMsg("create-gw-msg", "⚠️ Insufficient Giveaway Balance. Please deposit more TON.", true);
-                return;
-            }
-
-            giveawayBalance -= amount;
-            saveStat("gw_deposit_balance", giveawayBalance.toString());
-            
-            let myGw = getMyGiveaways();
-            myGw.unshift({ id: Date.now(), name, link, amount, duration, status: 'pending', time: Date.now() });
-            saveMyGiveaways(myGw);
-            
-            showModalMsg("create-gw-msg", "✅ Giveaway created! Awaiting moderation.", false);
-            updateAllUI();
-            renderMyGiveaways();
-            setTimeout(closeModals, 1500);
-        }
-
-        function shareGiveaway(id) {
-            let myGw = getMyGiveaways();
-            let gw = myGw.find(g => g.id === id);
-            if(!gw) return;
-            
-            let text = `Giveaway Approval Request:\nTask Name: ${gw.name}\nLink: ${gw.link}\nPrize: ${gw.amount} TON\nDuration: ${gw.duration}\nCreator UID: ${getUID()}`;
-            window.open('https://t.me/cryptogiveawayadmin?text=' + encodeURIComponent(text), '_blank');
-        }
-
-        function renderDepHistory() {
-            const list = document.getElementById("dep-hist-list");
-            const title = document.getElementById("dep-hist-title");
-            const history = getDepHistory();
-            
-            if (history.length === 0) {
-                title.style.display = "none";
-                list.innerHTML = "";
-                return;
-            }
-            title.style.display = "block";
-
-            let html = "";
-            history.forEach(item => {
-                const timeStr = formatMSKTime(item.time);
-                html += `
-                    <div class="history-item" style="padding:16px;">
-                        <div class="history-row-header">
-                            <div class="history-info">
-                                <div style="background: rgba(16, 185, 129, 0.1); width: 40px; height: 40px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.1rem; border: 1px solid rgba(16, 185, 129, 0.2);">⬇️</div>
-                                <div style="display:flex; flex-direction:column; gap:4px;">
-                                    <span class="history-amount">+${item.amount} TON</span>
-                                    <span class="history-time">${timeStr}</span>
-                                </div>
-                            </div>
-                            <div class="history-status status-approved">Approved</div>
-                        </div>
-                    </div>
-                `;
-            });
-            list.innerHTML = html;
-        }
-
-        function renderMyGiveaways() {
-            const list = document.getElementById("my-gw-list");
-            const title = document.getElementById("my-gw-title");
-            const myGw = getMyGiveaways();
-            
-            if (myGw.length === 0) {
-                title.style.display = "none";
-                list.innerHTML = "";
-                return;
-            }
-            title.style.display = "block";
-
-            let html = "";
-            myGw.forEach(gw => {
-                html += `
-                    <div class="gw-list-card" style="flex-direction:column; align-items:flex-start; cursor:default;">
-                        <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
-                            <div class="gw-title" style="margin:0;">${gw.name}</div>
-                            <div class="gw-status status-pending" style="margin:0;">Pending Moderation</div>
-                        </div>
-                        <div class="gw-meta" style="margin-top:8px;">Prize: ${gw.amount} TON | Duration: ${gw.duration}</div>
-                        <button class="btn btn-verify" onclick="shareGiveaway(${gw.id})" style="margin-top:15px; padding:12px; font-size:0.95rem;">📤 Share for Approval</button>
-                    </div>
-                `;
-            });
-            list.innerHTML = html;
-        }
-
-        /* --- REST OF THE LOGIC --- */
 
         function openGiveawayDetails(gwId) {
             currentGwView = gwId;
@@ -1213,9 +931,13 @@
 
         function checkDeepLink() {
             const startParam = tgApp?.initDataUnsafe?.start_param;
-            if (startParam === 'giveaway-1') openGiveawayDetails(1);
-            else if (startParam === 'giveaway-2') openGiveawayDetails(2);
-            else switchTab('home');
+            if (startParam === 'giveaway-1') {
+                openGiveawayDetails(1);
+            } else if (startParam === 'giveaway-2') {
+                openGiveawayDetails(2);
+            } else {
+                switchTab('home');
+            }
         }
 
         function watchDailyAd() {
@@ -1274,6 +996,7 @@
 
             if (PROMO_CODES.hasOwnProperty(codeInput)) {
                 const trackingKey = `promo_used_${codeInput}`;
+                
                 if (getStat(trackingKey) === "true") {
                     msgBox.className = "msg-box msg-err";
                     msgBox.innerHTML = "❌ You have already redeemed this promo code!";
@@ -1286,10 +1009,11 @@
                     saveStat(trackingKey, "true");
 
                     msgBox.className = "msg-box msg-succ";
-                    msgBox.innerHTML = `🎉 <b>Congratulations!</b><br>Promo code applied! Received: +${awardValue} TON.`;
+                    msgBox.innerHTML = `🎉 <b>Congratulations!</b><br>Promo code successfully applied! Received: +${awardValue} TON.`;
                     msgBox.style.display = "block";
                     inputField.value = "";
                     updateAllUI();
+
                     promoMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 1500);
                 }
             } else {
@@ -1302,7 +1026,10 @@
 
         function updateLiveBreakdown(amount) {
             const breakdownBox = document.getElementById("live-breakdown");
-            if (isNaN(amount) || amount <= 0) { breakdownBox.style.display = "none"; return; }
+            if (isNaN(amount) || amount <= 0) {
+                breakdownBox.style.display = "none";
+                return;
+            }
             
             const fee = amount * 0.30;
             const net = amount - fee;
@@ -1319,14 +1046,18 @@
             updateLiveBreakdown(maxVal);
         }
 
-        function getWithdrawHistory() { try { return JSON.parse(getStat("withdraw_history_array") || "[]"); } catch (e) { return []; } }
+        function getWithdrawHistory() {
+            try { return JSON.parse(getStat("withdraw_history_array") || "[]"); } catch (e) { return []; }
+        }
         function saveWithdrawHistory(arr) { saveStat("withdraw_history_array", JSON.stringify(arr)); }
 
         function formatMSKTime(timestamp) {
             const date = new Date(timestamp);
             return new Intl.DateTimeFormat('en-GB', {
-                timeZone: 'Europe/Moscow', day: '2-digit', month: '2-digit', year: 'numeric',
-                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+                timeZone: 'Europe/Moscow',
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit', second: '2-digit',
+                hour12: false
             }).format(date) + ' MSK';
         }
 
@@ -1363,43 +1094,81 @@
                             <div class="history-status ${statusClass}">${statusText}</div>
                         </div>
                         <div class="history-details-grid">
-                            <div style="display:flex; justify-content:space-between; opacity:0.8;"><span>Requested:</span><span>${grossVal} TON</span></div>
-                            <div style="display:flex; justify-content:space-between; color:var(--error); opacity:0.9;"><span>Fee (30%):</span><span>-${feeVal} TON</span></div>
-                            <div style="display:flex; justify-content:space-between; color:var(--success); font-weight:700; padding-top:6px; border-top:1px dashed rgba(255,255,255,0.08)"><span>Received:</span><span>${netVal} TON</span></div>
+                            <div style="display:flex; justify-content:space-between; opacity:0.8;">
+                                <span>Requested:</span>
+                                <span>${grossVal} TON</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; color:var(--error); opacity:0.9;">
+                                <span>Fee (30%):</span>
+                                <span>-${feeVal} TON</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; color:var(--success); font-weight:700; padding-top:6px; border-top:1px dashed rgba(255,255,255,0.08)">
+                                <span>Received:</span>
+                                <span>${netVal} TON</span>
+                            </div>
                         </div>
-                    </div>`;
+                    </div>
+                `;
             });
             list.innerHTML = html;
         }
 
         function processWithdrawal() {
             const msg = document.getElementById("withdraw-msg");
+
             const showWithdrawMessage = (htmlContent, isError = true) => {
                 if (withdrawMsgTimeout) clearTimeout(withdrawMsgTimeout);
                 msg.className = isError ? "msg-box msg-err" : "msg-box msg-succ";
-                msg.innerHTML = htmlContent; msg.style.display = "block";
+                msg.innerHTML = htmlContent;
+                msg.style.display = "block";
                 withdrawMsgTimeout = setTimeout(() => { msg.style.display = "none"; }, 1500);
             };
             
-            if (userBalance < 3.0) { showWithdrawMessage(`⚠️ Minimum withdrawal limit is 3.0000 TON.`); return; }
+            if (userBalance < 3.0) {
+                const missingAmount = (3.0 - userBalance).toFixed(4);
+                showWithdrawMessage(`⚠️ Minimum withdrawal limit is 3.0000 TON. You need ${missingAmount} TON more.`);
+                return;
+            }
 
             const inputElem = document.getElementById("withdraw-amount");
             const rawValue = inputElem.value;
             const amountToWithdraw = parseFloat(rawValue);
             
-            if (!tonConnectUI.connected) { showWithdrawMessage("⚠️ Please connect your TON wallet first."); return; }
+            if (!tonConnectUI.connected) {
+                showWithdrawMessage("⚠️ Please connect your TON wallet first.");
+                return;
+            }
 
             let history = getWithdrawHistory();
             const hasPending = history.some(item => item.status === 'pending');
 
-            if (hasPending) { showWithdrawMessage("⚠️ You already have a processing withdrawal. Please wait until it completes."); return; }
-            if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 3.0) { showWithdrawMessage(`⚠️ Invalid entry. Specify a value 3.00 TON or more.`); return; }
-            if (amountToWithdraw > userBalance) { showWithdrawMessage(`⚠️ Insufficient balance.`); return; }
+            if (hasPending) {
+                showWithdrawMessage("⚠️ You already have a processing withdrawal. Please wait until it completes.");
+                return;
+            }
+
+            if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 3.0) {
+                showWithdrawMessage(`⚠️ Invalid entry. Please specify a valid total value of 3.00 TON or more.`);
+                return;
+            }
+
+            if (amountToWithdraw > userBalance) {
+                showWithdrawMessage(`⚠️ Insufficient balance. You can withdraw up to ${userBalance.toFixed(4)} TON.`);
+                return;
+            }
 
             const calculatedFee = amountToWithdraw * 0.30;
             const netPayout = amountToWithdraw - calculatedFee;
             
-            history.unshift({ id: Date.now(), amount: amountToWithdraw, gross: amountToWithdraw, fee: calculatedFee, net: netPayout, time: Date.now(), status: 'pending' });
+            history.unshift({
+                id: Date.now(),
+                amount: amountToWithdraw, 
+                gross: amountToWithdraw,
+                fee: calculatedFee,
+                net: netPayout,
+                time: Date.now(),
+                status: 'pending'
+            });
 
             saveWithdrawHistory(history);
             userBalance -= amountToWithdraw;
@@ -1423,6 +1192,7 @@
                 let hasPending = false;
                 const now = new Date().getTime();
                 const hiddenProcessingTime = 5 * 60 * 1000; 
+                const msg = document.getElementById("withdraw-msg");
 
                 for (let i = 0; i < history.length; i++) {
                     if (history[i].status === 'pending') {
@@ -1435,8 +1205,14 @@
                         }
                     }
                 }
-                if (needsUpdate) { saveWithdrawHistory(history); renderHistory(); }
-                if (!hasPending) clearInterval(withdrawInterval);
+
+                if (needsUpdate) {
+                    saveWithdrawHistory(history);
+                    renderHistory();
+                }
+                if (!hasPending) {
+                    clearInterval(withdrawInterval);
+                }
             }, 1000);
         }
 
@@ -1448,8 +1224,11 @@
             
             if (diff <= 0) {
                 if (currentGwView === 2) {
-                    document.getElementById("t-days").innerText = "00"; document.getElementById("t-hours").innerText = "00";
-                    document.getElementById("t-mins").innerText = "00"; document.getElementById("t-secs").innerText = "00";
+                    document.getElementById("t-days").innerText = "00";
+                    document.getElementById("t-hours").innerText = "00";
+                    document.getElementById("t-mins").innerText = "00";
+                    document.getElementById("t-secs").innerText = "00";
+                    
                     const actionsContainer = document.getElementById("gw-actions");
                     if (actionsContainer) actionsContainer.style.display = "none";
                     
@@ -1459,12 +1238,20 @@
                         <p style="color: var(--text-gray); font-size: 1.05rem; margin-bottom: 22px;">Congratulations to our lucky winner:</p>
                         <div style="color: var(--accent-gold); font-size: 1.7rem; font-weight: 800; font-family: 'Poppins', sans-serif; letter-spacing: 1px; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);">@Ney9773883</div>
                     `;
+
                     if (getUID() === '8066661936') {
-                        if (getStat('gw2_claimed') !== 'true') winnerHtml += `<button class="btn btn-claim" onclick="claimPrize(2, 25)">🎁 Claim Prize</button>`;
-                        else winnerHtml += `<div style="margin-top: 24px; color: var(--success); font-weight: 800; font-size: 1.3rem; text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);">✅ Reward added to balance!</div>`;
+                        if (getStat('gw2_claimed') !== 'true') {
+                            winnerHtml += `<button class="btn btn-claim" onclick="claimPrize(2, 25)">🎁 Claim Prize</button>`;
+                        } else {
+                            winnerHtml += `<div style="margin-top: 24px; color: var(--success); font-weight: 800; font-size: 1.3rem; text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);">✅ Reward added to balance!</div>`;
+                        }
                     }
+
                     const winnerUI = document.getElementById("gw-winner-ui");
-                    if (winnerUI) { winnerUI.innerHTML = winnerHtml; winnerUI.style.display = "block"; }
+                    if (winnerUI) {
+                        winnerUI.innerHTML = winnerHtml;
+                        winnerUI.style.display = "block";
+                    }
                 }
                 return;
             }
@@ -1477,7 +1264,10 @@
             }
         }
 
-        function markJoined() { saveStat("gw2_joined", "true"); updateAllUI(); }
+        function markJoined() {
+            saveStat("gw2_joined", "true");
+            updateAllUI();
+        }
 
         function checkGiveawayUIState() {
             if (getStat("gw2_secured") === "true") {
@@ -1506,19 +1296,29 @@
                 let errText = "⚠️ <b>Action Required:</b><br>";
                 if (!hasJoined) errText += "• Please join the channel.<br>";
                 if (totalAdsWatched < 500) errText += `• Watch ${500 - totalAdsWatched} more total ads.`;
-                msg.innerHTML = errText; msg.style.display = "block";
+                msg.innerHTML = errText;
+                msg.style.display = "block";
                 return;
             }
 
-            btn.innerHTML = "<span class='spinner'></span> Verifying Entry..."; btn.disabled = true; msg.style.display = "none";
-            setTimeout(() => { saveStat("gw2_secured", "true"); checkGiveawayUIState(); }, 2000);
+            btn.innerHTML = "<span class='spinner'></span> Verifying Entry...";
+            btn.disabled = true;
+            msg.style.display = "none";
+
+            setTimeout(() => {
+                saveStat("gw2_secured", "true");
+                checkGiveawayUIState();
+            }, 2000);
         }
 
         function startSystem() {
             setInterval(refreshTimer, 1000);
             setInterval(checkMSKDailyReset, 120000);
+            
             setInterval(() => {
-                if (adController && (document.getElementById('view-giveaway-details').classList.contains('active') || document.getElementById('view-home').classList.contains('active'))) {
+                if (adController && 
+                    (document.getElementById('view-giveaway-details').classList.contains('active') || 
+                     document.getElementById('view-home').classList.contains('active'))) {
                     if (document.getElementById('view-home').classList.contains('active') && dailyAdsWatched >= 50) return;
                     adController.show().catch(e => {});
                 }

@@ -11,23 +11,21 @@
     
     <style>
         :root {
-            /* YENİ "LUXURY GOLD" RƏNG PALİTRASI */
-            --bg-main: #0A0A0A;
-            --bg-gradient: radial-gradient(circle at top center, #1F1C18 0%, #050505 100%);
-            --glass-bg: rgba(26, 24, 20, 0.65);
-            --glass-border: rgba(255, 255, 255, 0.05);
-            --primary: #E5A93C; /* Loqodakı əsas qızılı */
-            --primary-glow: rgba(229, 169, 60, 0.35);
-            --primary-gradient: linear-gradient(135deg, #FACC15 0%, #D4AF37 100%); /* Parlaq qızılı qradient */
-            --accent-gold: #FACC15; 
-            --gold-glow: rgba(250, 204, 21, 0.25);
-            --ton-blue: #0098EA; /* Toncoin Orijinal Mavi */
-            --ton-blue-glow: rgba(0, 152, 234, 0.4);
+            /* YENİ "TON BLUE & BLACK" RƏNG PALİTRASI */
+            --bg-main: #050505;
+            --bg-gradient: radial-gradient(circle at top center, #0B1320 0%, #050505 100%);
+            --glass-bg: rgba(11, 19, 32, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.07);
+            --primary: #0098EA; /* TON Mavi */
+            --primary-glow: rgba(0, 152, 234, 0.35);
+            --primary-gradient: linear-gradient(135deg, #0098EA 0%, #0056B3 100%); /* Açıq Mavi -> Tünd Mavi */
+            --accent-gold: #FFD700; /* Loqoya uyğun Qızılı/Sarı */
+            --gold-glow: rgba(255, 215, 0, 0.25);
             --text-light: #F8F7FA;
-            --text-gray: #A7A1B8;
+            --text-gray: #94A3B8;
             --success: #10B981;
             --success-bg: rgba(16, 185, 129, 0.15);
-            --error: #FF3366; 
+            --error: #FF3B30; 
             --transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
@@ -67,13 +65,13 @@
 
         .ring-outer {
             position: absolute; width: 100%; height: 100%; border-radius: 50%;
-            border: 2px dashed rgba(229, 169, 60, 0.4);
+            border: 2px dashed rgba(0, 152, 234, 0.4);
             animation: spinRight 14s linear infinite;
         }
 
         .ring-inner {
             position: absolute; width: 85%; height: 85%; border-radius: 50%;
-            border: 2px solid transparent; border-top: 3px solid var(--primary); border-bottom: 3px solid #FFF;
+            border: 2px solid transparent; border-top: 3px solid var(--primary); border-bottom: 3px solid var(--accent-gold);
             animation: spinLeft 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             box-shadow: 0 0 30px var(--primary-glow);
         }
@@ -81,7 +79,7 @@
         .coin-center {
             width: 76px; height: 76px;
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 45px rgba(229, 169, 60, 0.4);
+            box-shadow: 0 0 45px rgba(0, 152, 234, 0.4);
             animation: pulseCoin 2s ease-in-out infinite;
             background: #000; overflow: hidden;
             border: 2px solid rgba(255,255,255,0.1);
@@ -99,7 +97,7 @@
         .splash-title { 
             font-family: 'Poppins', sans-serif; font-size: 2.1rem; font-weight: 800; color: white; 
             letter-spacing: 1.5px; margin-bottom: 30px; text-shadow: 0 4px 20px rgba(0,0,0,0.6);
-            background: linear-gradient(to right, #FFFFFF, #FACC15); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background: linear-gradient(to right, #FFFFFF, #D0E8F2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         
         .loading-bar { width: 160px; height: 6px; background: rgba(255,255,255,0.06); border-radius: 10px; overflow: hidden; position: relative; }
@@ -112,15 +110,15 @@
         /* --- NAVIGATION --- */
         .bottom-nav {
             position: fixed; bottom: 24px; left: 5%; width: 90%;
-            background: rgba(15, 13, 10, 0.92); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            background: rgba(11, 15, 25, 0.92); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             display: flex; justify-content: space-around; padding: 10px 6px;
-            border: 1px solid rgba(255,255,255,0.05); border-radius: 28px; z-index: 100;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 28px; z-index: 100;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.08);
             transition: opacity 0.2s, transform 0.2s;
         }
         
         .nav-item {
-            color: #8C84A3; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer;
+            color: #64748B; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer;
             display: flex; flex-direction: column; align-items: center; gap: 4px; 
             transition: var(--transition); font-size: 0.75rem; width: 23%;
             -webkit-tap-highlight-color: transparent;
@@ -140,7 +138,7 @@
         }
 
         .nav-item.active { color: var(--primary); }
-        .nav-item.active .nav-icon-bg { background: rgba(229, 169, 60, 0.12); border: 1px solid rgba(229, 169, 60, 0.2); }
+        .nav-item.active .nav-icon-bg { background: rgba(0, 152, 234, 0.12); border: 1px solid rgba(0, 152, 234, 0.2); }
         .nav-item.active .nav-icon { stroke-width: 2.6; transform: scale(1.15); filter: drop-shadow(0 0 8px var(--primary-glow)); }
         .nav-item:active .nav-icon-bg { transform: scale(0.92); }
 
@@ -169,20 +167,20 @@
 
         /* --- BALANCE CARD --- */
         .balance-card {
-            background: linear-gradient(145deg, rgba(38, 33, 20, 0.9) 0%, rgba(15, 13, 10, 0.95) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 30px; padding: 32px 20px;
+            background: linear-gradient(145deg, rgba(11, 25, 44, 0.9) 0%, rgba(5, 10, 15, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 30px; padding: 32px 20px;
             display: flex; flex-direction: column; align-items: center; text-align: center;
             box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05); position: relative; overflow: hidden;
         }
         .balance-card::before {
             content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(229, 169, 60, 0.08) 0%, transparent 60%); pointer-events: none;
+            background: radial-gradient(circle, rgba(0, 152, 234, 0.08) 0%, transparent 60%); pointer-events: none;
         }
         .balance-title { color: var(--text-gray); font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2.5px;}
         
         .balance-amount { 
             color: white; font-size: 2.5rem; font-family: 'Poppins', sans-serif; font-weight: 700; 
-            text-shadow: 0 0 25px rgba(255, 255, 255, 0.2); line-height: 1.2; letter-spacing: 0.5px;
+            text-shadow: 0 0 25px rgba(0, 152, 234, 0.4); line-height: 1.2; letter-spacing: 0.5px;
             animation: floatBalance 4s ease-in-out infinite; will-change: transform;
         }
         @keyframes floatBalance { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
@@ -198,10 +196,10 @@
         .ad-info p { font-size: 0.88rem; color: var(--text-gray); }
         
         .ad-reward-badge {
-            background: rgba(229, 169, 60, 0.1); color: var(--primary);
+            background: rgba(0, 152, 234, 0.1); color: var(--primary);
             font-size: 0.9rem; font-family: 'Poppins', sans-serif; font-weight: 600; padding: 8px 14px; border-radius: 14px;
-            border: 1px solid rgba(229, 169, 60, 0.25); display: flex; align-items: center; gap: 4px;
-            box-shadow: 0 0 15px rgba(229, 169, 60, 0.15);
+            border: 1px solid rgba(0, 152, 234, 0.25); display: flex; align-items: center; gap: 4px;
+            box-shadow: 0 0 15px rgba(0, 152, 234, 0.15);
         }
 
         .ad-progress-container { margin-top: 4px; }
@@ -218,7 +216,7 @@
         }
         .btn-ad-compact:active { transform: scale(0.95); filter: brightness(0.85); box-shadow: 0 4px 15px rgba(255,255,255,0.1); }
         .btn-ad-compact.locked {
-            background: rgba(255,255,255,0.05); color: #645C7A;
+            background: rgba(255,255,255,0.05); color: #475569;
             box-shadow: none; cursor: not-allowed; border: 1px solid rgba(255,255,255,0.06); 
             transform: none !important; pointer-events: none;
         }
@@ -253,34 +251,34 @@
 
         /* --- PROMO CODE SECTION --- */
         .promo-input-card {
-            background: rgba(26, 24, 20, 0.7); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 26px; padding: 26px;
+            background: rgba(11, 15, 25, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 26px; padding: 26px;
             display: flex; flex-direction: column; gap: 18px; backdrop-filter: blur(20px); box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         .promo-input-wrapper { position: relative; width: 100%; }
         .promo-field {
-            width: 100%; padding: 18px 18px 18px 50px; background: rgba(11, 10, 8, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; color: white;
+            width: 100%; padding: 18px 18px 18px 50px; background: rgba(5, 10, 15, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 18px; color: white;
             font-family: 'Poppins', sans-serif; font-size: 1.15rem; font-weight: 600; outline: none;
             transition: var(--transition); letter-spacing: 1.5px; text-transform: uppercase;
         }
-        .promo-field:focus { border-color: var(--primary); box-shadow: 0 0 20px rgba(229, 169, 60, 0.2); background: rgba(20, 18, 15, 0.9); }
+        .promo-field:focus { border-color: var(--primary); box-shadow: 0 0 20px rgba(0, 152, 234, 0.2); background: rgba(10, 20, 30, 0.9); }
         .promo-icon-prefix { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); font-size: 1.3rem; pointer-events: none; opacity: 0.8; }
 
         /* --- HOST GIVEAWAY CARD --- */
         .host-banner {
-            background: linear-gradient(135deg, rgba(250, 204, 21, 0.1) 0%, rgba(15, 13, 10, 0.8) 100%);
-            border: 1px solid rgba(250, 204, 21, 0.2); border-radius: 26px; padding: 26px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(10, 15, 25, 0.8) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.2); border-radius: 26px; padding: 26px;
             display: flex; flex-direction: column; gap: 16px; position: relative; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
         .host-banner::before { content: '👑'; position: absolute; right: -15px; top: -15px; font-size: 90px; opacity: 0.05; transform: rotate(25deg); }
         .host-title { font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--accent-gold); letter-spacing: 0.4px;}
         .host-desc { font-size: 0.9rem; color: var(--text-gray); line-height: 1.6; }
         .btn-host {
-            background: rgba(250, 204, 21, 0.08); color: var(--accent-gold); text-align: center;
+            background: rgba(255, 215, 0, 0.08); color: var(--accent-gold); text-align: center;
             padding: 14px; border-radius: 16px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1rem; text-decoration: none;
-            border: 1px solid rgba(250, 204, 21, 0.25); transition: var(--transition); display: block; box-shadow: 0 5px 15px rgba(250, 204, 21, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.25); transition: var(--transition); display: block; box-shadow: 0 5px 15px rgba(255, 215, 0, 0.1);
         }
-        .btn-host:active { transform: scale(0.96); background: rgba(250, 204, 21, 0.15); box-shadow: none; }
+        .btn-host:active { transform: scale(0.96); background: rgba(255, 215, 0, 0.15); box-shadow: none; }
 
         /* --- GIVEAWAY LIST --- */
         .section-title { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: white; margin: 20px 0 10px 0; letter-spacing: 0.4px;}
@@ -303,7 +301,7 @@
             background: var(--glass-bg); backdrop-filter: blur(30px); border-radius: 32px; padding: 40px 24px;
             border: 1px solid var(--glass-border); text-align: center; box-shadow: 0 25px 55px rgba(0,0,0,0.6);
         }
-        .prize-title { font-family: 'Poppins', sans-serif; color: white; font-size: 3.5rem; font-weight: 800; line-height: 1; margin-bottom: 10px; text-shadow: 0 0 40px var(--ton-blue-glow); letter-spacing: -1.5px;}
+        .prize-title { font-family: 'Poppins', sans-serif; color: white; font-size: 3.5rem; font-weight: 800; line-height: 1; margin-bottom: 10px; text-shadow: 0 0 40px var(--primary-glow); letter-spacing: -1.5px;}
         .subtitle { color: var(--accent-gold); font-family: 'Poppins', sans-serif; font-size: 1.1rem; margin-bottom: 35px; font-weight: 600; letter-spacing: 0.6px;}
 
         /* Timer */
@@ -324,11 +322,11 @@
         .btn { width: 100%; padding: 18px; border-radius: 18px; border: none; font-size: 1.05rem; font-family: 'Poppins', sans-serif; font-weight: 700; cursor: pointer; transition: var(--transition); text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 10px; letter-spacing: 0.5px;}
         .btn:active { transform: scale(0.95); filter: brightness(0.9); box-shadow: none; }
         .btn-join { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
-        .btn-verify { background: var(--primary-gradient); color: var(--bg-main); box-shadow: 0 10px 30px rgba(229, 169, 60, 0.3); margin-top: 20px; text-shadow: 0 1px 2px rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.2);}
+        .btn-verify { background: var(--primary-gradient); color: white; box-shadow: 0 10px 30px rgba(0, 152, 234, 0.3); margin-top: 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2);}
         .btn-claim { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3); margin-top: 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); }
 
         .btn:disabled, .btn.joined { 
-            background: rgba(255,255,255,0.03); color: #5B5270; box-shadow: none; cursor: not-allowed; border: 1px solid transparent; 
+            background: rgba(255,255,255,0.03); color: #64748B; box-shadow: none; cursor: not-allowed; border: 1px solid transparent; 
             pointer-events: none; transform: none !important;
         }
         .btn.joined { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16,185,129,0.2); }
@@ -341,7 +339,7 @@
         .btn-back:hover, .btn-back:active { color: white; background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.08); transform: scale(0.97);}
 
         .msg-box { margin-top: 20px; font-size: 0.95rem; display: none; padding: 18px; border-radius: 18px; line-height: 1.6; animation: fadeInView 0.3s ease; text-align: left; border: 1px solid transparent; backdrop-filter: blur(10px);}
-        .msg-err { background: rgba(255, 51, 102, 0.1); color: #FF85A1; border-color: rgba(255, 51, 102, 0.25); box-shadow: 0 5px 20px rgba(255, 51, 102, 0.15);}
+        .msg-err { background: rgba(255, 59, 48, 0.1); color: #FF6B6B; border-color: rgba(255, 59, 48, 0.25); box-shadow: 0 5px 20px rgba(255, 59, 48, 0.15);}
         .msg-succ { background: rgba(16, 185, 129, 0.1); color: #6EE7B7; border-color: rgba(16, 185, 129, 0.25); box-shadow: 0 5px 20px rgba(16, 185, 129, 0.15);}
 
         /* --- WALLET & LIVE BREAKDOWN DETAILS UI --- */
@@ -351,13 +349,14 @@
             text-align: left; box-shadow: inset 0 2px 20px rgba(0,0,0,0.5);
         }
         .withdraw-input-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
+        
         .withdraw-input {
-            width: 100%; padding: 20px 95px 20px 20px; background: rgba(11, 10, 8, 0.9);
+            width: 100%; padding: 20px 95px 20px 22px; background: rgba(5, 10, 15, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; color: white;
             font-family: 'Poppins', sans-serif; font-size: 1.7rem; font-weight: 700; text-align: left;
             transition: var(--transition); outline: none; box-shadow: inset 0 2px 15px rgba(0,0,0,0.6);
         }
-        .withdraw-input:focus { border-color: var(--primary); box-shadow: inset 0 2px 15px rgba(0,0,0,0.6), 0 0 25px rgba(229, 169, 60, 0.2); }
+        .withdraw-input:focus { border-color: var(--primary); box-shadow: inset 0 2px 15px rgba(0,0,0,0.6), 0 0 25px rgba(0, 152, 234, 0.2); }
         .withdraw-input::placeholder { font-size: 1.4rem; color: rgba(255, 255, 255, 0.15); font-weight: 600; }
         .btn-max { 
             position: absolute; right: 16px; top: 50%; transform: translateY(-50%); 
@@ -390,7 +389,7 @@
         .history-amount { color: white; font-weight: 800; font-family: 'Poppins', sans-serif; font-size: 1.2rem; text-shadow: 0 0 10px rgba(255,255,255,0.1);}
         .history-time { color: var(--text-gray); font-size: 0.85rem; font-weight: 500;}
         .history-status { font-family: 'Poppins', sans-serif; font-size: 0.75rem; font-weight: 800; padding: 8px 14px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.8px;}
-        .status-pending { background: rgba(250, 204, 21, 0.1); color: var(--accent-gold); border: 1px solid rgba(250, 204, 21, 0.25); box-shadow: 0 0 15px rgba(250, 204, 21, 0.1);}
+        .status-pending { background: rgba(255, 215, 0, 0.1); color: var(--accent-gold); border: 1px solid rgba(255, 215, 0, 0.25); box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);}
         .status-approved { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.25); box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);}
 
         .spinner { border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid white; border-radius: 50%; width: 22px; height: 22px; animation: spin 0.7s linear infinite; box-shadow: 0 0 10px rgba(255,255,255,0.2);}
@@ -457,7 +456,7 @@
     <div id="view-home" class="view-container active">
         <div class="app-header">
             <div class="header-user">
-                <img src="https://ui-avatars.com/api/?name=User&background=E5A93C&color=ffffff" class="profile-avatar" id="tg-avatar" alt="Avatar">
+                <img src="https://ui-avatars.com/api/?name=User&background=0098EA&color=ffffff" class="profile-avatar" id="tg-avatar" alt="Avatar">
                 <div class="profile-name-group">
                     <span class="profile-name" id="tg-name">Loading...</span>
                     <span class="profile-uid" id="tg-uid">UID: Loading...</span>
@@ -467,7 +466,7 @@
 
         <div class="balance-card">
             <div class="balance-title">Current Balance</div>
-            <div class="balance-amount" id="home-balance">0.0000 <span style="color:var(--ton-blue); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
+            <div class="balance-amount" id="home-balance">0.0000 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
         </div>
 
         <div class="ad-task-card">
@@ -534,8 +533,8 @@
                 <div class="gw-details">
                     <div class="gw-title">Crypto Group #1</div>
                     <div class="gw-meta">Prize Pool: 25 TON</div>
-                    <div class="gw-status" style="color: var(--error); background: rgba(255, 51, 102, 0.1); border-color: rgba(255, 51, 102, 0.2);">● Ended</div>
-                    <div style="font-size: 0.95rem; color: var(--accent-gold); margin-top: 10px; font-family: 'Poppins', sans-serif; font-weight: 700; text-shadow: 0 0 10px rgba(250, 204, 21, 0.2);">🎉 Winner: <b>@matro97</b></div>
+                    <div class="gw-status" style="color: var(--error); background: rgba(255, 59, 48, 0.1); border-color: rgba(255, 59, 48, 0.2);">● Ended</div>
+                    <div style="font-size: 0.95rem; color: var(--accent-gold); margin-top: 10px; font-family: 'Poppins', sans-serif; font-weight: 700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);">🎉 Winner: <b>@matro97</b></div>
                 </div>
             </div>
         </div>
@@ -543,7 +542,7 @@
 
     <div id="view-giveaway-details" class="view-container">
         <div class="giveaway-card">
-            <h1 class="prize-title" id="det-prize">25 <span style="font-size:1.4rem; color:var(--ton-blue);">TON</span></h1>
+            <h1 class="prize-title" id="det-prize">25 <span style="font-size:1.4rem; color:var(--primary);">TON</span></h1>
             <p class="subtitle" id="det-subtitle">Crypto Group #2</p>
 
             <div class="timer-wrapper" id="timer-ui">
@@ -582,7 +581,7 @@
     <div id="view-wallet" class="view-container">
         <div class="balance-card">
             <div class="balance-title">Available Balance</div>
-            <div class="balance-amount" id="wallet-balance">0.0000 <span style="color:var(--ton-blue); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
+            <div class="balance-amount" id="wallet-balance">0.0000 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
         </div>
 
         <div class="giveaway-card" style="padding: 35px 24px;">
@@ -641,8 +640,8 @@
             tgApp.ready();
             tgApp.expand();
             try { tgApp.requestFullscreen(); } catch(e){}
-            tgApp.setHeaderColor('#0A0A0A');
-            tgApp.setBackgroundColor('#0A0A0A');
+            tgApp.setHeaderColor('#050505');
+            tgApp.setBackgroundColor('#050505');
         }
 
         function getUID() { return tgApp?.initDataUnsafe?.user?.id?.toString() || '123456789'; }
@@ -814,7 +813,7 @@
 
         function updateAllUI() {
             const balVal = userBalance.toFixed(4);
-            const balHtml = `${balVal} <span style="color:var(--ton-blue); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span>`;
+            const balHtml = `${balVal} <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span>`;
             
             document.getElementById("home-balance").innerHTML = balHtml;
             document.getElementById("wallet-balance").innerHTML = balHtml;
@@ -843,8 +842,7 @@
             }
             
             const withdrawInputSection = document.getElementById("withdraw-input-section");
-            // Çıxarış limiti minimum 1.00 olaraq tənzimləndi
-            if (userBalance >= 1.0) {
+            if (userBalance >= 3.0) {
                 withdrawInputSection.style.display = "block";
             } else {
                 withdrawInputSection.style.display = "none";
@@ -891,7 +889,7 @@
             document.getElementById('view-giveaway-details').classList.add('active');
 
             if (gwId === 1) {
-                document.getElementById('det-prize').innerHTML = '25 <span style="font-size:1.4rem; color:var(--ton-blue);">TON</span>';
+                document.getElementById('det-prize').innerHTML = '25 <span style="font-size:1.4rem; color:var(--primary);">TON</span>';
                 document.getElementById('det-subtitle').innerText = "Crypto Group #1";
                 document.getElementById('timer-ui').style.display = "none";
                 document.getElementById('gw-actions').style.display = "none";
@@ -900,7 +898,7 @@
                     <div style="font-size: 3.8rem; margin-bottom: 22px; filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));">🎊🏆🎊</div>
                     <h3 style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.5rem; margin-bottom: 14px; font-weight: 800;">Giveaway Ended!</h3>
                     <p style="color: var(--text-gray); font-size: 1.05rem; margin-bottom: 22px;">Congratulations to our lucky winner:</p>
-                    <div style="color: var(--accent-gold); font-size: 1.7rem; font-weight: 800; font-family: 'Poppins', sans-serif; letter-spacing: 1px; text-shadow: 0 0 15px rgba(250, 204, 21, 0.4);">@matro97</div>
+                    <div style="color: var(--accent-gold); font-size: 1.7rem; font-weight: 800; font-family: 'Poppins', sans-serif; letter-spacing: 1px; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);">@matro97</div>
                 `;
 
                 if (getUID() === '8227619759') {
@@ -913,7 +911,7 @@
                 document.getElementById('gw-winner-ui').innerHTML = winnerHtml;
                 document.getElementById('gw-winner-ui').style.display = "block";
             } else {
-                document.getElementById('det-prize').innerHTML = '25 <span style="font-size:1.4rem; color:var(--ton-blue);">TON</span>';
+                document.getElementById('det-prize').innerHTML = '25 <span style="font-size:1.4rem; color:var(--primary);">TON</span>';
                 document.getElementById('det-subtitle').innerText = "Crypto Group #2";
                 document.getElementById('timer-ui').style.display = "flex";
                 document.getElementById('gw-actions').style.display = "block";
@@ -1126,10 +1124,9 @@
                 withdrawMsgTimeout = setTimeout(() => { msg.style.display = "none"; }, 1500);
             };
             
-            // Limit 1.00 olaraq yoxlanılır
-            if (userBalance < 1.0) {
-                const missingAmount = (1.0 - userBalance).toFixed(4);
-                showWithdrawMessage(`⚠️ Minimum withdrawal limit is 1.0000 TON. You need ${missingAmount} TON more.`);
+            if (userBalance < 3.0) {
+                const missingAmount = (3.0 - userBalance).toFixed(4);
+                showWithdrawMessage(`⚠️ Minimum withdrawal limit is 3.0000 TON. You need ${missingAmount} TON more.`);
                 return;
             }
 
@@ -1150,8 +1147,8 @@
                 return;
             }
 
-            if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 1.0) {
-                showWithdrawMessage(`⚠️ Invalid entry. Please specify a valid total value of 1.00 TON or more.`);
+            if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 3.0) {
+                showWithdrawMessage(`⚠️ Invalid entry. Please specify a valid total value of 3.00 TON or more.`);
                 return;
             }
 
@@ -1239,7 +1236,7 @@
                         <div style="font-size: 3.8rem; margin-bottom: 22px; filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));">🎊🏆🎊</div>
                         <h3 style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.5rem; margin-bottom: 14px; font-weight: 800;">Giveaway Ended!</h3>
                         <p style="color: var(--text-gray); font-size: 1.05rem; margin-bottom: 22px;">Congratulations to our lucky winner:</p>
-                        <div style="color: var(--accent-gold); font-size: 1.7rem; font-weight: 800; font-family: 'Poppins', sans-serif; letter-spacing: 1px; text-shadow: 0 0 15px rgba(250, 204, 21, 0.4);">@Ney9773883</div>
+                        <div style="color: var(--accent-gold); font-size: 1.7rem; font-weight: 800; font-family: 'Poppins', sans-serif; letter-spacing: 1px; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);">@Ney9773883</div>
                     `;
 
                     if (getUID() === '8066661936') {

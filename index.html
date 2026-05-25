@@ -119,7 +119,7 @@
         .nav-item {
             color: #64748B; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer;
             display: flex; flex-direction: column; align-items: center; gap: 4px; 
-            transition: var(--transition); font-size: 0.70rem; width: 20%;
+            transition: var(--transition); font-size: 0.70rem; width: 20%; 
             -webkit-tap-highlight-color: transparent;
         }
         
@@ -180,7 +180,6 @@
         .balance-amount { 
             color: white; font-size: 2.5rem; font-family: 'Poppins', sans-serif; font-weight: 700; 
             text-shadow: 0 0 25px rgba(0, 152, 234, 0.4); line-height: 1.2; letter-spacing: 0.5px;
-            /* Balance animation removed as requested */
         }
 
         /* --- ADS & GAME CARDS --- */
@@ -223,14 +222,6 @@
             box-shadow: 0 8px 25px rgba(0, 152, 234, 0.3);
             border: 1px solid rgba(255,255,255,0.2);
         }
-
-        /* Standard Back Button */
-        .btn-modern-back {
-            background: rgba(255,255,255,0.05); color: white; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem;
-            padding: 16px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.1); width: 100%; letter-spacing: 2px;
-            text-align: center; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; margin-top: 10px;
-        }
-        .btn-modern-back:active { transform: scale(0.96); background: rgba(255,255,255,0.1); }
 
         .ad-mini-toast {
             display: none; 
@@ -345,7 +336,7 @@
         .btn-back { 
             background: transparent; color: var(--text-gray); padding: 16px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1rem; 
             cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; 
-            transition: var(--transition); margin-top: 20px; border: none; width: 100%; border-radius: 18px; border: 1px solid transparent; text-transform: uppercase; letter-spacing: 2px;
+            transition: var(--transition); margin-top: 20px; border: none; width: 100%; border-radius: 18px; border: 1px solid transparent;
         }
         .btn-back:hover, .btn-back:active { color: white; background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.08); transform: scale(0.97);}
 
@@ -353,7 +344,7 @@
         .msg-err { background: rgba(255, 59, 48, 0.1); color: #FF6B6B; border-color: rgba(255, 59, 48, 0.25); box-shadow: 0 5px 20px rgba(255, 59, 48, 0.15);}
         .msg-succ { background: rgba(16, 185, 129, 0.1); color: #6EE7B7; border-color: rgba(16, 185, 129, 0.25); box-shadow: 0 5px 20px rgba(16, 185, 129, 0.15);}
 
-        /* --- WALLET --- */
+        /* --- WALLET & LIVE BREAKDOWN DETAILS UI --- */
         .withdraw-step { 
             background: rgba(0,0,0,0.35); padding: 24px 20px; 
             border-radius: 24px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.04); 
@@ -377,6 +368,7 @@
         }
         .btn-max:active { transform: translateY(-50%) scale(0.9); background: rgba(255,255,255,0.1); }
 
+        /* Dynamic Crypto Breakdown Box */
         .live-breakdown-box {
             display: none; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.06);
             border-radius: 20px; padding: 20px; margin-top: 18px; text-align: left;
@@ -385,6 +377,7 @@
         .breakdown-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 10px; color: var(--text-gray); font-weight: 500;}
         .breakdown-row.total { margin-bottom: 0; margin-top: 10px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.1); font-size: 1rem; }
 
+        /* Modernized History Entries */
         .history-item {
             background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05);
             border-radius: 24px; padding: 22px; display: flex; flex-direction: column; gap: 14px; text-align: left; transition: var(--transition); box-shadow: 0 8px 20px rgba(0,0,0,0.2);
@@ -404,43 +397,68 @@
         .spinner { border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid white; border-radius: 50%; width: 22px; height: 22px; animation: spin 0.7s linear infinite; box-shadow: 0 0 10px rgba(255,255,255,0.2);}
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* --- WHEEL PAGE CSS --- */
-        .wheel-box { position: relative; width: 290px; height: 290px; margin: 0 auto; filter: drop-shadow(0 15px 35px rgba(0,152,234,0.3)); }
+        /* --- NEW DEDICATED GAME PAGES STYLING --- */
+        .btn-page-back {
+            background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px 24px; border-radius: 12px; font-family: 'Poppins', sans-serif;
+            font-weight: 700; font-size: 0.95rem; letter-spacing: 1.5px; cursor: pointer;
+            transition: var(--transition); display: block; width: max-content; margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .btn-page-back:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
+
+        /* Wheel of Fortune CSS */
+        .wheel-wrapper { position: relative; width: 280px; height: 280px; margin: 30px auto; }
         .wheel-pointer {
             position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
-            width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-top: 35px solid var(--error);
-            z-index: 10; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
+            width: 34px; height: 34px; background: var(--accent-gold);
+            clip-path: polygon(50% 100%, 0 0, 100% 0); z-index: 10;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
         }
-        .wheel-pointer::after {
-            content:''; position:absolute; top:-35px; left:-14px; width:28px; height:5px; background:white; border-radius:10px;
+        .wheel {
+            width: 100%; height: 100%; border-radius: 50%;
+            border: 6px solid var(--primary); box-shadow: 0 0 30px var(--primary-glow), inset 0 0 20px rgba(0,0,0,0.8);
+            position: relative; overflow: hidden;
+            transition: transform 5s cubic-bezier(0.2, 0.8, 0.1, 1);
+            background: conic-gradient(
+                #0056B3 0deg 30deg, #0B1320 30deg 60deg,
+                #0056B3 60deg 90deg, #0B1320 90deg 120deg,
+                #0056B3 120deg 150deg, #0B1320 150deg 180deg,
+                #0056B3 180deg 210deg, #0B1320 210deg 240deg,
+                #0056B3 240deg 270deg, #0B1320 270deg 300deg,
+                #0056B3 300deg 330deg, #0B1320 330deg 360deg
+            );
         }
-        .wheel { width: 100%; height: 100%; border-radius: 50%; position: relative; overflow: hidden; border: 6px solid rgba(255,255,255,0.15); box-shadow: inset 0 0 20px rgba(0,0,0,0.8); }
-        .wheel-text-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; }
-        .wheel-text {
-            position: absolute; top: 18px; font-family: 'Poppins', sans-serif; font-weight: 800;
-            font-size: 13px; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+        .wheel-slice {
+            position: absolute; top: 0; left: 50%; width: 60px; height: 50%;
+            margin-left: -30px; transform-origin: bottom center;
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+            padding-top: 15px; z-index: 2;
         }
+        .wheel-prize-val { font-family: 'Poppins', sans-serif; font-weight: 700; color: white; font-size: 0.8rem; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
 
-        /* --- BOX PAGE CSS --- */
-        @keyframes boxShake {
-            0% { transform: rotate(0deg) scale(1); }
-            10% { transform: rotate(15deg) scale(1.15); }
-            20% { transform: rotate(-15deg) scale(1.15); }
-            30% { transform: rotate(15deg) scale(1.15); }
-            40% { transform: rotate(-15deg) scale(1.15); }
-            50% { transform: rotate(0deg) scale(1.25); filter: drop-shadow(0 0 50px rgba(0,152,234,0.9)); }
-            100% { transform: rotate(0deg) scale(1); }
+        /* Box Animation CSS */
+        .box-anim-container { margin: 40px auto; display: flex; justify-content: center; align-items: center; height: 180px; perspective: 1000px; }
+        .mystery-box-anim {
+            font-size: 6rem; filter: drop-shadow(0 15px 25px rgba(0,152,234,0.4));
+            transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; color: var(--accent-gold); font-family: 'Poppins', sans-serif; font-weight: 800; text-shadow: 0 0 20px rgba(255,215,0,0.5);
+            line-height: 1.2;
         }
-        .shake-anim { animation: boxShake 1.8s ease-in-out forwards; }
-
-        /* --- REWARD MODAL --- */
-        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); z-index:1000; display:none; justify-content:center; align-items:center; }
-        .modal-overlay.active { display:flex; animation: fadeInView 0.3s ease; }
-        .modal-content { background: var(--glass-bg); border: 1px solid rgba(0, 152, 234, 0.4); padding: 35px 25px; border-radius: 28px; text-align: center; max-width: 85%; width: 340px; box-shadow: 0 0 50px rgba(0,152,234,0.3); }
-        .modal-icon { font-size: 4.5rem; margin-bottom: 12px; filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6)); }
-        .modal-title { font-family: 'Poppins', sans-serif; font-size: 1.6rem; color: white; margin-bottom: 8px; font-weight: 800; letter-spacing: 0.5px;}
-        .modal-desc { font-size: 1.15rem; color: var(--accent-gold); font-weight: 700; font-family: 'Poppins', sans-serif; margin-bottom: 25px; }
-
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-5deg); }
+            20% { transform: translate(-3px, 0px) rotate(5deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(5deg); }
+            50% { transform: translate(-1px, 2px) rotate(-5deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-5deg); }
+            80% { transform: translate(-1px, -1px) rotate(5deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-5deg); }
+        }
+        .shake-anim { animation: shake 0.4s infinite; }
     </style>
 </head>
 <body>
@@ -455,15 +473,6 @@
         </div>
         <div class="splash-title">Crypto Giveaway</div>
         <div class="loading-bar"><div class="loading-progress"></div></div>
-    </div>
-
-    <div id="game-reward-modal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-icon" id="modal-icon">🎉</div>
-            <h2 class="modal-title" id="modal-title">Congratulations!</h2>
-            <p class="modal-desc" id="modal-desc">You won 0.0005 TON</p>
-            <button class="btn-modern-back" onclick="closeGameModal()" style="background: var(--primary-gradient); border:none; box-shadow: 0 10px 20px rgba(0,152,234,0.3); margin-top: 5px;">CONTINUE</button>
-        </div>
     </div>
 
     <div class="bottom-nav" id="app-nav">
@@ -544,8 +553,7 @@
                     <h3>Daily Rewards</h3>
                     <p>Watch short ads to earn TON fractions.</p>
                 </div>
-                <div class="ad-reward-badge">0.0005 TON</div> 
-            </div>
+                <div class="ad-reward-badge">0.0005 TON</div> </div>
             
             <div class="ad-progress-container">
                 <div class="ad-progress-text">
@@ -564,7 +572,7 @@
     <div id="view-games" class="view-container">
         <div class="balance-card" style="padding: 20px 24px; margin-bottom: -10px;">
             <div class="balance-title">Mini Games</div>
-            <p style="font-size:0.9rem; color:var(--text-gray); margin-top:6px; line-height: 1.5;">Play games to win extra TON fractions instantly.</p>
+            <p style="font-size:0.9rem; color:var(--text-gray); margin-top:6px; line-height: 1.5;">Watch ads to play games and win extra TON fractions instantly.</p>
         </div>
 
         <div class="ad-task-card" style="margin-top: 15px;">
@@ -572,10 +580,17 @@
                 <div style="font-size: 3rem; filter: drop-shadow(0 0 15px rgba(255,215,0,0.3));">🎡</div>
                 <div>
                     <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.2rem; color: white; margin-bottom: 4px;">Lucky Spin</h3>
-                    <p style="font-size: 0.85rem; color: var(--text-gray);">Spin the wheel for a guaranteed prize.</p>
+                    <p style="font-size: 0.85rem; color: var(--text-gray);">Spin the wheel for a chance to win up to 5 TON.</p>
                 </div>
             </div>
-            <button class="btn-ad-compact action" onclick="goToSpinPage()">Play Game</button>
+            <div class="ad-progress-container">
+                <div class="ad-progress-text">
+                    <span>Daily Limit</span>
+                    <span><span id="daily-spin-count">0</span> / 10</span>
+                </div>
+                <div class="ad-progress-bar"><div class="ad-progress-fill" id="daily-spin-fill"></div></div>
+            </div>
+            <button class="btn-ad-compact action" id="spin-nav-btn" onclick="openGamePage('spin')">Go to Lucky Spin</button>
         </div>
 
         <div class="ad-task-card">
@@ -583,56 +598,53 @@
                 <div style="font-size: 3rem; filter: drop-shadow(0 0 15px rgba(0,152,234,0.3));">🎁</div>
                 <div>
                     <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.2rem; color: white; margin-bottom: 4px;">Mystery Box</h3>
-                    <p style="font-size: 0.85rem; color: var(--text-gray);">Open a random box to find hidden TON.</p>
+                    <p style="font-size: 0.85rem; color: var(--text-gray);">Open a random box to find hidden TON rewards.</p>
                 </div>
             </div>
-            <button class="btn-ad-compact action" onclick="goToBoxPage()">Play Game</button>
+            <div class="ad-progress-container">
+                <div class="ad-progress-text">
+                    <span>Daily Limit</span>
+                    <span><span id="daily-box-count">0</span> / 5</span>
+                </div>
+                <div class="ad-progress-bar"><div class="ad-progress-fill" id="daily-box-fill"></div></div>
+            </div>
+            <button class="btn-ad-compact action" id="box-nav-btn" onclick="openGamePage('box')">Go to Mystery Box</button>
         </div>
     </div>
 
     <div id="view-spin-page" class="view-container">
-       <div class="balance-card" style="padding: 24px;">
-           <div class="balance-title">Lucky Spin</div>
-           <p style="font-size:0.95rem; color:var(--text-gray); margin-top:6px; line-height: 1.5;">Spin the wheel to win exciting crypto rewards!</p>
-       </div>
-       
-       <div style="margin: 45px 0 25px 0; display:flex; justify-content:center;">
-           <div class="wheel-box">
-               <div class="wheel-pointer"></div>
-               <div class="wheel" id="wheel-element"></div>
-           </div>
-       </div>
-
-       <div class="ad-progress-container" style="margin-bottom: 20px;">
-           <div class="ad-progress-text">
-               <span>Daily Spins</span>
-               <span><span id="spin-page-count">0</span> / 10</span>
-           </div>
-           <div class="ad-progress-bar"><div class="ad-progress-fill" id="spin-page-fill"></div></div>
-       </div>
-       <button class="btn-ad-compact action" id="do-spin-btn" onclick="executeSpin()">Watch Ad & Spin</button>
-       <button class="btn-modern-back" onclick="goToGames()">BACK</button>
+        <button class="btn-page-back" onclick="closeGamePage()">BACK</button>
+        
+        <div class="balance-card" style="padding: 20px;">
+            <div class="balance-title">Lucky Spin</div>
+            <p style="font-size:0.9rem; color:var(--text-gray); margin-top:6px;">Spin the wheel to win up to 5 TON instantly!</p>
+        </div>
+        
+        <div class="wheel-wrapper">
+            <div class="wheel-pointer"></div>
+            <div class="wheel" id="roulette-wheel"></div>
+        </div>
+        
+        <div id="spin-page-alert" class="ad-mini-toast" style="position:relative; top:0; transform:none; margin: 15px auto;"></div>
+        
+        <button class="btn-ad-compact action" id="spin-page-btn" onclick="executeSpin()">Watch Ad & Spin</button>
     </div>
 
     <div id="view-box-page" class="view-container">
-       <div class="balance-card" style="padding: 24px;">
-           <div class="balance-title">Mystery Box</div>
-           <p style="font-size:0.95rem; color:var(--text-gray); margin-top:6px; line-height: 1.5;">Unlock the hidden treasure inside the mystery box.</p>
-       </div>
-       
-       <div style="display:flex; justify-content:center; align-items:center; height: 260px; margin-top: 10px;">
-           <div id="mystery-box-visual" style="font-size: 8.5rem; filter: drop-shadow(0 15px 30px rgba(0,152,234,0.4)); transform-origin: bottom center;">🎁</div>
-       </div>
-
-       <div class="ad-progress-container" style="margin-bottom: 20px;">
-           <div class="ad-progress-text">
-               <span>Daily Opens</span>
-               <span><span id="box-page-count">0</span> / 5</span>
-           </div>
-           <div class="ad-progress-bar"><div class="ad-progress-fill" id="box-page-fill"></div></div>
-       </div>
-       <button class="btn-ad-compact action" id="do-box-btn" onclick="executeBox()">Watch Ad & Open</button>
-       <button class="btn-modern-back" onclick="goToGames()">BACK</button>
+        <button class="btn-page-back" onclick="closeGamePage()">BACK</button>
+        
+        <div class="balance-card" style="padding: 20px;">
+            <div class="balance-title">Mystery Box</div>
+            <p style="font-size:0.9rem; color:var(--text-gray); margin-top:6px;">Open the box for a chance to win up to 5 TON!</p>
+        </div>
+        
+        <div class="box-anim-container">
+            <div class="mystery-box-anim" id="mystery-box-anim">🎁</div>
+        </div>
+        
+        <div id="box-page-alert" class="ad-mini-toast" style="position:relative; top:0; transform:none; margin: 15px auto;"></div>
+        
+        <button class="btn-ad-compact action" id="box-page-btn" onclick="executeBox()">Watch Ad & Open</button>
     </div>
 
     <div id="view-promo" class="view-container">
@@ -716,7 +728,7 @@
                 <div class="msg-box" id="msg-display"></div>
             </div>
 
-            <button class="btn-back" style="border:none;" onclick="switchTab('giveaway')">BACK</button>
+            <button class="btn-back" onclick="switchTab('giveaway')">🔙 Back to List</button>
         </div>
     </div>
 
@@ -793,21 +805,24 @@
         let userBalance = parseFloat(getStat("user_balance") || "0");
         let totalAdsWatched = parseInt(getStat("total_ads") || "0");
         
+        // Limits
         let dailyAdsWatched = parseInt(getStat("daily_ads") || "0");
         let dailySpins = parseInt(getStat("daily_spins") || "0");
         let dailyBoxes = parseInt(getStat("daily_boxes") || "0");
         const MAX_SPINS = 10;
         const MAX_BOXES = 5;
 
+        // Wheel Prizes
+        const WHEEL_PRIZES = [0.0005, 0.001, 0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 5];
+        let currentWheelRotation = 0;
+        let isSpinning = false;
+        let isOpeningBox = false;
+
         let currentGwView = 2;
         let promoMsgTimeout; 
         let withdrawMsgTimeout;
 
         let tonConnectUI;
-
-        // Games Logic Definitions
-        const wheelPrizes = [0.0005, 0.001, 0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1];
-        window.wheelCurrentDeg = 0;
 
         if (totalAdsWatched < 500 && getStat("gw2_secured") === "true") {
             localStorage.removeItem(`gw2_secured_${getUID()}`);
@@ -936,8 +951,8 @@
                     saveStat("daily_ads", "0");
                     saveStat("daily_spins", "0");
                     saveStat("daily_boxes", "0");
-                    saveStat("daily_spins_0025", "0");
-                    saveStat("daily_box_001", "0");
+                    saveStat("daily_0025_count", "0");
+                    saveStat("daily_001_count_box", "0");
                     saveStat("ad_cycle_id", currentCycleId);
                     updateAllUI();
                 }
@@ -972,24 +987,15 @@
         }
 
         function initWheel() {
-            const wheel = document.getElementById("wheel-element");
-            const angle = 360 / 11;
-            let gradientStr = `conic-gradient(from -${angle/2}deg, `;
-            let htmlStr = "";
-
-            wheelPrizes.forEach((prize, i) => {
-                const color = i % 2 === 0 ? '#0B1320' : '#0056B3';
-                const startAngle = i * angle;
-                const endAngle = (i + 1) * angle;
-                gradientStr += `${color} ${startAngle}deg ${endAngle}deg${i === 10 ? ')' : ', '}`;
-
-                htmlStr += `<div class="wheel-text-wrapper" style="transform: rotate(${i * angle}deg);">
-                               <div class="wheel-text">${prize}</div>
-                            </div>`;
+            const wheel = document.getElementById('roulette-wheel');
+            let html = '';
+            WHEEL_PRIZES.forEach((prize, index) => {
+                const rotation = (index * 30) + 15;
+                html += `<div class="wheel-slice" style="transform: rotate(${rotation}deg)">
+                            <span class="wheel-prize-val">${prize}</span>
+                         </div>`;
             });
-
-            wheel.style.background = gradientStr;
-            wheel.innerHTML = htmlStr;
+            wheel.innerHTML = html;
         }
 
         function updateAllUI() {
@@ -1012,23 +1018,54 @@
                 mainBtn.className = "btn-ad-compact action";
             }
 
-            // Sub-pages Game Progress
-            document.getElementById("spin-page-count").innerText = dailySpins;
-            document.getElementById("spin-page-fill").style.width = `${(dailySpins / MAX_SPINS) * 100}%`;
-            const doSpinBtn = document.getElementById("do-spin-btn");
-            if(dailySpins >= MAX_SPINS) {
-                doSpinBtn.innerHTML = "🔒 Limit Reached"; doSpinBtn.className = "btn-ad-compact locked";
-            } else {
-                doSpinBtn.innerHTML = "Watch Ad & Spin"; doSpinBtn.className = "btn-ad-compact action";
+            // Games Progress Limits (Games View)
+            document.getElementById("daily-spin-count").innerText = dailySpins;
+            document.getElementById("daily-spin-fill").style.width = `${(dailySpins / MAX_SPINS) * 100}%`;
+            const spinNavBtn = document.getElementById("spin-nav-btn");
+            if(spinNavBtn) {
+                if (dailySpins >= MAX_SPINS) {
+                    spinNavBtn.innerHTML = "🔒 Limit Reached";
+                    spinNavBtn.className = "btn-ad-compact locked";
+                } else {
+                    spinNavBtn.innerHTML = "Go to Lucky Spin";
+                    spinNavBtn.className = "btn-ad-compact action";
+                }
             }
 
-            document.getElementById("box-page-count").innerText = dailyBoxes;
-            document.getElementById("box-page-fill").style.width = `${(dailyBoxes / MAX_BOXES) * 100}%`;
-            const doBoxBtn = document.getElementById("do-box-btn");
-            if(dailyBoxes >= MAX_BOXES) {
-                doBoxBtn.innerHTML = "🔒 Limit Reached"; doBoxBtn.className = "btn-ad-compact locked";
-            } else {
-                doBoxBtn.innerHTML = "Watch Ad & Open"; doBoxBtn.className = "btn-ad-compact action";
+            document.getElementById("daily-box-count").innerText = dailyBoxes;
+            document.getElementById("daily-box-fill").style.width = `${(dailyBoxes / MAX_BOXES) * 100}%`;
+            const boxNavBtn = document.getElementById("box-nav-btn");
+            if(boxNavBtn) {
+                if (dailyBoxes >= MAX_BOXES) {
+                    boxNavBtn.innerHTML = "🔒 Limit Reached";
+                    boxNavBtn.className = "btn-ad-compact locked";
+                } else {
+                    boxNavBtn.innerHTML = "Go to Mystery Box";
+                    boxNavBtn.className = "btn-ad-compact action";
+                }
+            }
+
+            // Action Buttons in Dedicated Pages
+            const spinPageBtn = document.getElementById("spin-page-btn");
+            if(spinPageBtn && !isSpinning) {
+                if (dailySpins >= MAX_SPINS) {
+                    spinPageBtn.innerHTML = "🔒 Limit Reached";
+                    spinPageBtn.className = "btn-ad-compact locked";
+                } else {
+                    spinPageBtn.innerHTML = "Watch Ad & Spin";
+                    spinPageBtn.className = "btn-ad-compact action";
+                }
+            }
+
+            const boxPageBtn = document.getElementById("box-page-btn");
+            if(boxPageBtn && !isOpeningBox) {
+                if (dailyBoxes >= MAX_BOXES) {
+                    boxPageBtn.innerHTML = "🔒 Limit Reached";
+                    boxPageBtn.className = "btn-ad-compact locked";
+                } else {
+                    boxPageBtn.innerHTML = "Watch Ad & Open";
+                    boxPageBtn.className = "btn-ad-compact action";
+                }
             }
 
             document.getElementById("gw-total-ads").innerText = totalAdsWatched;
@@ -1086,150 +1123,184 @@
             }
         }
 
-        // Dedicated Game Navigation
-        function goToSpinPage() {
-            switchTab('games'); 
-            document.getElementById('view-games').classList.remove('active');
-            document.getElementById('view-spin-page').classList.add('active');
+        // DEDICATED GAMES NAVIGATION
+        function openGamePage(pageId) {
+            document.activeElement.blur();
+            const views = document.querySelectorAll('.view-container');
+            views.forEach(v => v.classList.remove('active'));
             document.getElementById('app-nav').style.display = 'none';
+            
+            if (pageId === 'spin') {
+                document.getElementById('view-spin-page').classList.add('active');
+            } else if (pageId === 'box') {
+                document.getElementById('view-box-page').classList.add('active');
+            }
         }
-        function goToBoxPage() {
-            switchTab('games'); 
-            document.getElementById('view-games').classList.remove('active');
-            document.getElementById('view-box-page').classList.add('active');
-            document.getElementById('app-nav').style.display = 'none';
-        }
-        function goToGames() {
-            document.getElementById('view-spin-page').classList.remove('active');
-            document.getElementById('view-box-page').classList.remove('active');
+
+        function closeGamePage() {
+            document.activeElement.blur();
+            const views = document.querySelectorAll('.view-container');
+            views.forEach(v => v.classList.remove('active'));
             document.getElementById('app-nav').style.display = 'flex';
-            switchTab('games');
+            document.getElementById('view-games').classList.add('active');
+            updateAllUI();
         }
 
-        function showGameRewardModal(title, desc) {
-            document.getElementById("modal-title").innerText = title;
-            document.getElementById("modal-desc").innerText = desc;
-            document.getElementById("game-reward-modal").classList.add("active");
-        }
-        function closeGameModal() {
-            document.getElementById("game-reward-modal").classList.remove("active");
+        // SPIN LOGIC
+        function determineSpinPrizeIndex() {
+            let spinTotalCount = parseInt(getStat("spin_total_count") || "0");
+            let spinNext005 = parseInt(getStat("spin_next_005") || "0");
+            
+            if (spinNext005 === 0) {
+                spinNext005 = spinTotalCount + Math.floor(Math.random() * 11) + 30; // 30-40
+                saveStat("spin_next_005", spinNext005.toString());
+            }
+            
+            spinTotalCount++;
+            saveStat("spin_total_count", spinTotalCount.toString());
+            
+            let prize = 0.0005;
+            
+            if (spinTotalCount >= spinNext005) {
+                prize = 0.005;
+                saveStat("spin_next_005", (spinTotalCount + Math.floor(Math.random() * 11) + 30).toString());
+            } else {
+                let daily0025Count = parseInt(getStat("daily_0025_count") || "0");
+                if (daily0025Count < 1 && Math.random() < 0.1) { // 10% chance for 0.0025 max 1/day
+                    prize = 0.0025;
+                    saveStat("daily_0025_count", "1");
+                } else {
+                    prize = Math.random() < 0.2 ? 0.001 : 0.0005;
+                }
+            }
+            
+            return WHEEL_PRIZES.indexOf(prize);
         }
 
-        // GAMES LOGIC
         function executeSpin() {
+            if (isSpinning) return;
             if (dailySpins >= MAX_SPINS) { alert("Daily spin limit reached."); return; }
             if (!adController) { alert("Ads are initializing. Please wait..."); return; }
             
-            const btn = document.getElementById("do-spin-btn");
+            const btn = document.getElementById("spin-page-btn");
             btn.innerHTML = "<span class='spinner'></span> Loading...";
             btn.classList.add('locked');
             
             adController.show().then(() => {
-                let lifetimeSpins = parseInt(getStat("total_spins_lifetime") || "0") + 1;
-                let dSpins0025 = parseInt(getStat("daily_spins_0025") || "0");
-                let prizeVal;
-
-                if (lifetimeSpins % 35 === 0) {
-                    prizeVal = 0.005;
-                } else if (dSpins0025 < 1 && Math.random() < 0.05) {
-                    prizeVal = 0.0025;
-                    saveStat("daily_spins_0025", "1");
-                } else if (Math.random() < 0.25) {
-                    prizeVal = 0.001;
-                } else {
-                    prizeVal = 0.0005;
-                }
-
-                saveStat("total_spins_lifetime", lifetimeSpins.toString());
-                const prizeIndex = wheelPrizes.indexOf(prizeVal);
-
-                const sliceAngle = 360 / wheelPrizes.length;
-                const baseSpins = 360 * 5; 
-                const targetAngle = 360 - (prizeIndex * sliceAngle);
-                const randomOffset = (Math.random() - 0.5) * (sliceAngle * 0.6);
+                isSpinning = true;
+                btn.innerHTML = "Spinning...";
+                dailySpins++;
+                totalAdsWatched++;
                 
-                const currentBase = Math.floor(window.wheelCurrentDeg / 360) * 360;
-                const finalRot = currentBase + baseSpins + targetAngle + randomOffset;
+                const targetIndex = determineSpinPrizeIndex();
+                const sliceAngle = 360 / 12;
                 
-                window.wheelCurrentDeg = finalRot;
-                const wheelElem = document.getElementById("wheel-element");
+                // Formula to align pointer exactly in the middle of target slice
+                const targetDeg = (360 - ((targetIndex * 30) + 15)) % 360;
+                const currentDeg = currentWheelRotation % 360;
                 
-                wheelElem.style.transition = "transform 4s cubic-bezier(0.25, 1, 0.5, 1)";
-                wheelElem.style.transform = `rotate(${finalRot}deg)`;
-
+                let moveDeg = targetDeg - currentDeg;
+                if (moveDeg <= 0) moveDeg += 360;
+                
+                currentWheelRotation += (360 * 5) + moveDeg;
+                document.getElementById('roulette-wheel').style.transform = `rotate(${currentWheelRotation}deg)`;
+                
                 setTimeout(() => {
-                    userBalance += prizeVal;
-                    dailySpins++;
-                    totalAdsWatched++;
+                    const prize = WHEEL_PRIZES[targetIndex];
+                    userBalance += prize;
                     saveStat("daily_spins", dailySpins.toString());
                     saveStat("total_ads", totalAdsWatched.toString());
                     saveStat("user_balance", userBalance.toString());
-                    updateAllUI();
-
-                    document.getElementById("modal-icon").innerText = "🎡";
-                    showGameRewardModal(`Congratulations!`, `You won ${prizeVal} TON!`);
-
-                    btn.innerHTML = "Watch Ad & Spin";
-                    btn.classList.remove('locked');
-                }, 4000);
-
+                    
+                    const miniAlert = document.getElementById("spin-page-alert");
+                    miniAlert.innerHTML = `🎉 Congratulations! You won ${prize} TON!`;
+                    miniAlert.style.display = "block";
+                    
+                    setTimeout(() => {
+                        miniAlert.style.display = "none";
+                        isSpinning = false;
+                        updateAllUI(); 
+                    }, 4000);
+                }, 5000); 
+                
             }).catch((err) => {
                 btn.innerHTML = "Watch Ad & Spin";
                 btn.classList.remove('locked');
+                isSpinning = false;
             });
         }
 
+        // MYSTERY BOX LOGIC
         function executeBox() {
+            if (isOpeningBox) return;
             if (dailyBoxes >= MAX_BOXES) { alert("Daily box limit reached."); return; }
             if (!adController) { alert("Ads are initializing. Please wait..."); return; }
             
-            const btn = document.getElementById("do-box-btn");
+            const btn = document.getElementById("box-page-btn");
             btn.innerHTML = "<span class='spinner'></span> Loading...";
             btn.classList.add('locked');
             
             adController.show().then(() => {
-                let lifetimeBoxes = parseInt(getStat("total_boxes_lifetime") || "0") + 1;
-                let dBox001 = parseInt(getStat("daily_box_001") || "0");
-                let prizeVal;
-
-                if (lifetimeBoxes % 25 === 0) {
-                    prizeVal = 0.005;
-                } else if (dBox001 < 1 && (Math.random() < 0.3 || dailyBoxes === MAX_BOXES - 1)) {
-                    prizeVal = 0.001;
-                    saveStat("daily_box_001", "1");
-                } else {
-                    prizeVal = 0.0002;
-                }
-
-                saveStat("total_boxes_lifetime", lifetimeBoxes.toString());
+                isOpeningBox = true;
+                btn.innerHTML = "Opening...";
+                dailyBoxes++;
+                totalAdsWatched++;
                 
-                const boxVisual = document.getElementById("mystery-box-visual");
-                boxVisual.classList.add("shake-anim");
-
+                let boxTotalCount = parseInt(getStat("box_total_count") || "0");
+                let boxNext005 = parseInt(getStat("box_next_005") || "0");
+                if (boxNext005 === 0) {
+                    boxNext005 = boxTotalCount + Math.floor(Math.random() * 11) + 20; // 20-30
+                    saveStat("box_next_005", boxNext005.toString());
+                }
+                boxTotalCount++;
+                saveStat("box_total_count", boxTotalCount.toString());
+                
+                let prize = 0.0002;
+                if (boxTotalCount >= boxNext005) {
+                    prize = 0.005;
+                    saveStat("box_next_005", (boxTotalCount + Math.floor(Math.random() * 11) + 20).toString());
+                } else {
+                    let daily001CountBox = parseInt(getStat("daily_001_count_box") || "0");
+                    if (daily001CountBox < 1 && Math.random() < 0.20) { 
+                        prize = 0.001;
+                        saveStat("daily_001_count_box", "1");
+                    } else {
+                        prize = 0.0002;
+                    }
+                }
+                
+                const boxElem = document.getElementById("mystery-box-anim");
+                boxElem.classList.add("shake-anim");
+                boxElem.innerHTML = "🎁";
+                
                 setTimeout(() => {
-                    boxVisual.classList.remove("shake-anim");
-                    boxVisual.innerHTML = "✨💎✨"; 
-
-                    userBalance += prizeVal;
-                    dailyBoxes++;
-                    totalAdsWatched++;
+                    boxElem.classList.remove("shake-anim");
+                    boxElem.style.fontSize = "2.5rem";
+                    boxElem.innerHTML = `🎉<br>+${prize} TON`;
+                    
+                    userBalance += prize;
                     saveStat("daily_boxes", dailyBoxes.toString());
                     saveStat("total_ads", totalAdsWatched.toString());
                     saveStat("user_balance", userBalance.toString());
-                    updateAllUI();
-
-                    document.getElementById("modal-icon").innerText = "🎁";
-                    showGameRewardModal(`Box Opened!`, `You found ${prizeVal} TON!`);
                     
-                    setTimeout(() => { boxVisual.innerHTML = "🎁"; }, 2000); 
-
-                    btn.innerHTML = "Watch Ad & Open";
-                    btn.classList.remove('locked');
-                }, 1800);
-
+                    const miniAlert = document.getElementById("box-page-alert");
+                    miniAlert.innerHTML = `Congratulations! You won ${prize} TON!`;
+                    miniAlert.style.display = "block";
+                    
+                    setTimeout(() => {
+                        miniAlert.style.display = "none";
+                        boxElem.style.fontSize = "6rem";
+                        boxElem.innerHTML = "🎁";
+                        isOpeningBox = false;
+                        updateAllUI();
+                    }, 3000);
+                    
+                }, 1500); 
+                
             }).catch((err) => {
                 btn.innerHTML = "Watch Ad & Open";
                 btn.classList.remove('locked');
+                isOpeningBox = false;
             });
         }
 
@@ -1308,7 +1379,7 @@
             adController.show().then(() => {
                 dailyAdsWatched++;
                 totalAdsWatched++;
-                userBalance += 0.0005; // Updated base reward
+                userBalance += 0.0005;
                 
                 saveStat("daily_ads", dailyAdsWatched.toString());
                 saveStat("total_ads", totalAdsWatched.toString());

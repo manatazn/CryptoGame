@@ -246,26 +246,6 @@
             animation: slideDownFade 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* YENİ OYUN İÇİ MESAJ (TOAST) CSS - Sürüşmə xətası olmadan tam ortada gəlir */
-        .game-toast {
-            display: none; 
-            background: rgba(16, 185, 129, 0.15); 
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: #6EE7B7; 
-            font-size: 0.9rem; 
-            font-family: 'Poppins', sans-serif; 
-            font-weight: 600;
-            padding: 10px 20px; 
-            border-radius: 14px; 
-            text-align: center; 
-            margin: 0 auto 20px auto; 
-            width: max-content;
-            max-width: 90%;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-            animation: fadeInView 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
         @keyframes slideDownFade {
             from { opacity: 0; transform: translate(-50%, -15px); }
             to { opacity: 1; transform: translate(-50%, 0); }
@@ -420,12 +400,36 @@
         /* --- NEW DEDICATED GAME PAGES STYLING --- */
         .btn-page-back {
             background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1);
-            padding: 12px 24px; border-radius: 12px; font-family: 'Poppins', sans-serif; text-align: center;
+            padding: 12px 24px; border-radius: 12px; font-family: 'Poppins', sans-serif;
             font-weight: 700; font-size: 0.95rem; letter-spacing: 1.5px; cursor: pointer;
-            transition: var(--transition); display: block; width: 100%; margin: 0 auto 20px auto;
+            transition: var(--transition); display: block; width: max-content; margin-bottom: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         .btn-page-back:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
+
+        /* YENI OVERLAY MESAJ CSS */
+        .game-toast-overlay {
+            display: none; 
+            position: absolute; 
+            top: -10px;
+            left: 50%; 
+            transform: translateX(-50%); 
+            background: rgba(16, 185, 129, 0.15); 
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #6EE7B7; 
+            font-size: 0.9rem; 
+            font-family: 'Poppins', sans-serif; 
+            font-weight: 600;
+            padding: 10px 20px; 
+            border-radius: 14px; 
+            text-align: center; 
+            width: max-content;
+            max-width: 90%;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            animation: fadeInView 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
 
         /* Wheel of Fortune CSS */
         .wheel-wrapper { position: relative; width: 280px; height: 280px; margin: 30px auto; }
@@ -461,7 +465,7 @@
         .box-anim-container { margin: 40px auto; display: flex; justify-content: center; align-items: center; height: 180px; perspective: 1000px; }
         .mystery-box-anim {
             font-size: 6rem; filter: drop-shadow(0 15px 25px rgba(0,152,234,0.4));
-            transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
             text-align: center; color: var(--accent-gold); font-family: 'Poppins', sans-serif; font-weight: 800; text-shadow: 0 0 20px rgba(255,215,0,0.5);
             line-height: 1.2;
         }
@@ -633,37 +637,39 @@
     </div>
 
     <div id="view-spin-page" class="view-container">
-        
         <div class="balance-card">
             <div class="balance-title">Current Balance</div>
             <div class="balance-amount" id="spin-balance">0.0000 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
         </div>
 
-        <button class="btn-page-back" onclick="closeGamePage()">🔙 Back to Games</button>
+        <button class="btn-page-back" onclick="closeGamePage()" style="margin: 0 auto;">BACK</button>
         
-        <div id="spin-page-alert" class="game-toast"></div>
-        
-        <div class="wheel-wrapper">
-            <div class="wheel-pointer"></div>
-            <div class="wheel" id="roulette-wheel"></div>
+        <div style="position: relative; width: 100%; display: flex; justify-content: center; margin-top: 10px;">
+            <div id="spin-page-alert" class="game-toast-overlay"></div>
+            
+            <div class="wheel-wrapper" style="margin: 20px auto;">
+                <div class="wheel-pointer"></div>
+                <div class="wheel" id="roulette-wheel"></div>
+            </div>
         </div>
         
         <button class="btn-ad-compact action" id="spin-page-btn" onclick="executeSpin()">Watch Ad & Spin</button>
     </div>
 
     <div id="view-box-page" class="view-container">
-        
         <div class="balance-card">
             <div class="balance-title">Current Balance</div>
             <div class="balance-amount" id="box-balance">0.0000 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
         </div>
 
-        <button class="btn-page-back" onclick="closeGamePage()">🔙 Back to Games</button>
+        <button class="btn-page-back" onclick="closeGamePage()" style="margin: 0 auto;">BACK</button>
         
-        <div id="box-page-alert" class="game-toast"></div>
-        
-        <div class="box-anim-container">
-            <div class="mystery-box-anim" id="mystery-box-anim">🎁</div>
+        <div style="position: relative; width: 100%; display: flex; justify-content: center; margin-top: 10px;">
+            <div id="box-page-alert" class="game-toast-overlay"></div>
+            
+            <div class="box-anim-container" style="margin: 20px auto;">
+                <div class="mystery-box-anim" id="mystery-box-anim">🎁</div>
+            </div>
         </div>
         
         <button class="btn-ad-compact action" id="box-page-btn" onclick="executeBox()">Watch Ad & Open</button>
@@ -1024,13 +1030,14 @@
             const balVal = userBalance.toFixed(4);
             const balHtml = `${balVal} <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span>`;
             
-            // Hər səhifədəki balans kartlarını yeniləmək
             document.getElementById("home-balance").innerHTML = balHtml;
             document.getElementById("wallet-balance").innerHTML = balHtml;
-            const spinBalance = document.getElementById("spin-balance");
-            if (spinBalance) spinBalance.innerHTML = balHtml;
-            const boxBalance = document.getElementById("box-balance");
-            if (boxBalance) boxBalance.innerHTML = balHtml;
+            
+            // Oyun səhifələrinin balans kartlarının yenilənməsi
+            const spinBal = document.getElementById("spin-balance");
+            if(spinBal) spinBal.innerHTML = balHtml;
+            const boxBal = document.getElementById("box-balance");
+            if(boxBal) boxBal.innerHTML = balHtml;
 
             // Ads Progress
             document.getElementById("daily-ad-count").innerText = dailyAdsWatched;
@@ -1221,6 +1228,9 @@
                 totalAdsWatched++;
                 
                 const targetIndex = determineSpinPrizeIndex();
+                const sliceAngle = 360 / 12;
+                
+                // Formula to align pointer exactly in the middle of target slice
                 const targetDeg = (360 - ((targetIndex * 30) + 15)) % 360;
                 const currentDeg = currentWheelRotation % 360;
                 
@@ -1241,13 +1251,10 @@
                     miniAlert.innerHTML = `🎉 Congratulations! You won ${prize} TON!`;
                     miniAlert.style.display = "block";
                     
-                    // Button dərhal əvvəlki halına qaytarılır (limit dolmayıbsa)
-                    isSpinning = false;
-                    updateAllUI(); 
-                    
-                    // Mesaj tam 1.5 saniyə sonra ekrandan itir
                     setTimeout(() => {
                         miniAlert.style.display = "none";
+                        isSpinning = false;
+                        updateAllUI(); 
                     }, 1500);
                 }, 5000); 
                 
@@ -1303,8 +1310,8 @@
                 
                 setTimeout(() => {
                     boxElem.classList.remove("shake-anim");
-                    boxElem.style.fontSize = "2.5rem";
-                    boxElem.innerHTML = `🎉<br>+${prize} TON`;
+                    // Span ile ölçünü daxildə kiçik tuturuq ki, xarici qutu (container) böyüməsin və itələməsin
+                    boxElem.innerHTML = `<span style="font-size: 2.5rem; line-height: 1.2;">🎉<br>+${prize} TON</span>`;
                     
                     userBalance += prize;
                     saveStat("daily_boxes", dailyBoxes.toString());
@@ -1315,15 +1322,11 @@
                     miniAlert.innerHTML = `Congratulations! You won ${prize} TON!`;
                     miniAlert.style.display = "block";
                     
-                    // Button dərhal əvvəlki halına qaytarılır
-                    isOpeningBox = false;
-                    updateAllUI();
-                    
-                    // Mesaj tam 1.5 saniyə sonra ekrandan itir
                     setTimeout(() => {
                         miniAlert.style.display = "none";
-                        boxElem.style.fontSize = "6rem";
                         boxElem.innerHTML = "🎁";
+                        isOpeningBox = false;
+                        updateAllUI();
                     }, 1500);
                     
                 }, 1500); 

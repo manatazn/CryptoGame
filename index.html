@@ -246,6 +246,26 @@
             animation: slideDownFade 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
+        /* YENİ OYUN İÇİ MESAJ (TOAST) CSS - Sürüşmə xətası olmadan tam ortada gəlir */
+        .game-toast {
+            display: none; 
+            background: rgba(16, 185, 129, 0.15); 
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #6EE7B7; 
+            font-size: 0.9rem; 
+            font-family: 'Poppins', sans-serif; 
+            font-weight: 600;
+            padding: 10px 20px; 
+            border-radius: 14px; 
+            text-align: center; 
+            margin: 0 auto 20px auto; 
+            width: max-content;
+            max-width: 90%;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            animation: fadeInView 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
         @keyframes slideDownFade {
             from { opacity: 0; transform: translate(-50%, -15px); }
             to { opacity: 1; transform: translate(-50%, 0); }
@@ -400,9 +420,9 @@
         /* --- NEW DEDICATED GAME PAGES STYLING --- */
         .btn-page-back {
             background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1);
-            padding: 12px 24px; border-radius: 12px; font-family: 'Poppins', sans-serif;
+            padding: 12px 24px; border-radius: 12px; font-family: 'Poppins', sans-serif; text-align: center;
             font-weight: 700; font-size: 0.95rem; letter-spacing: 1.5px; cursor: pointer;
-            transition: var(--transition); display: block; width: max-content; margin-bottom: 20px;
+            transition: var(--transition); display: block; width: 100%; margin: 0 auto 20px auto;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         .btn-page-back:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
@@ -613,36 +633,38 @@
     </div>
 
     <div id="view-spin-page" class="view-container">
-        <button class="btn-page-back" onclick="closeGamePage()">BACK</button>
         
-        <div class="balance-card" style="padding: 20px;">
-            <div class="balance-title">Lucky Spin</div>
-            <p style="font-size:0.9rem; color:var(--text-gray); margin-top:6px;">Spin the wheel to win up to 5 TON instantly!</p>
+        <div class="balance-card">
+            <div class="balance-title">Current Balance</div>
+            <div class="balance-amount" id="spin-balance">0.0000 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
         </div>
+
+        <button class="btn-page-back" onclick="closeGamePage()">🔙 Back to Games</button>
+        
+        <div id="spin-page-alert" class="game-toast"></div>
         
         <div class="wheel-wrapper">
             <div class="wheel-pointer"></div>
             <div class="wheel" id="roulette-wheel"></div>
         </div>
         
-        <div id="spin-page-alert" class="ad-mini-toast" style="position:relative; top:0; transform:none; margin: 15px auto;"></div>
-        
         <button class="btn-ad-compact action" id="spin-page-btn" onclick="executeSpin()">Watch Ad & Spin</button>
     </div>
 
     <div id="view-box-page" class="view-container">
-        <button class="btn-page-back" onclick="closeGamePage()">BACK</button>
         
-        <div class="balance-card" style="padding: 20px;">
-            <div class="balance-title">Mystery Box</div>
-            <p style="font-size:0.9rem; color:var(--text-gray); margin-top:6px;">Open the box for a chance to win up to 5 TON!</p>
+        <div class="balance-card">
+            <div class="balance-title">Current Balance</div>
+            <div class="balance-amount" id="box-balance">0.0000 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
         </div>
+
+        <button class="btn-page-back" onclick="closeGamePage()">🔙 Back to Games</button>
+        
+        <div id="box-page-alert" class="game-toast"></div>
         
         <div class="box-anim-container">
             <div class="mystery-box-anim" id="mystery-box-anim">🎁</div>
         </div>
-        
-        <div id="box-page-alert" class="ad-mini-toast" style="position:relative; top:0; transform:none; margin: 15px auto;"></div>
         
         <button class="btn-ad-compact action" id="box-page-btn" onclick="executeBox()">Watch Ad & Open</button>
     </div>
@@ -1002,8 +1024,13 @@
             const balVal = userBalance.toFixed(4);
             const balHtml = `${balVal} <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span>`;
             
+            // Hər səhifədəki balans kartlarını yeniləmək
             document.getElementById("home-balance").innerHTML = balHtml;
             document.getElementById("wallet-balance").innerHTML = balHtml;
+            const spinBalance = document.getElementById("spin-balance");
+            if (spinBalance) spinBalance.innerHTML = balHtml;
+            const boxBalance = document.getElementById("box-balance");
+            if (boxBalance) boxBalance.innerHTML = balHtml;
 
             // Ads Progress
             document.getElementById("daily-ad-count").innerText = dailyAdsWatched;
@@ -1135,6 +1162,7 @@
             } else if (pageId === 'box') {
                 document.getElementById('view-box-page').classList.add('active');
             }
+            updateAllUI();
         }
 
         function closeGamePage() {
@@ -1193,9 +1221,6 @@
                 totalAdsWatched++;
                 
                 const targetIndex = determineSpinPrizeIndex();
-                const sliceAngle = 360 / 12;
-                
-                // Formula to align pointer exactly in the middle of target slice
                 const targetDeg = (360 - ((targetIndex * 30) + 15)) % 360;
                 const currentDeg = currentWheelRotation % 360;
                 
@@ -1216,11 +1241,14 @@
                     miniAlert.innerHTML = `🎉 Congratulations! You won ${prize} TON!`;
                     miniAlert.style.display = "block";
                     
+                    // Button dərhal əvvəlki halına qaytarılır (limit dolmayıbsa)
+                    isSpinning = false;
+                    updateAllUI(); 
+                    
+                    // Mesaj tam 1.5 saniyə sonra ekrandan itir
                     setTimeout(() => {
                         miniAlert.style.display = "none";
-                        isSpinning = false;
-                        updateAllUI(); 
-                    }, 4000);
+                    }, 1500);
                 }, 5000); 
                 
             }).catch((err) => {
@@ -1287,13 +1315,16 @@
                     miniAlert.innerHTML = `Congratulations! You won ${prize} TON!`;
                     miniAlert.style.display = "block";
                     
+                    // Button dərhal əvvəlki halına qaytarılır
+                    isOpeningBox = false;
+                    updateAllUI();
+                    
+                    // Mesaj tam 1.5 saniyə sonra ekrandan itir
                     setTimeout(() => {
                         miniAlert.style.display = "none";
                         boxElem.style.fontSize = "6rem";
                         boxElem.innerHTML = "🎁";
-                        isOpeningBox = false;
-                        updateAllUI();
-                    }, 3000);
+                    }, 1500);
                     
                 }, 1500); 
                 

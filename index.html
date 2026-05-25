@@ -11,15 +11,14 @@
     
     <style>
         :root {
-            /* YENİ "TON BLUE & BLACK" RƏNG PALİTRASI */
             --bg-main: #050505;
             --bg-gradient: radial-gradient(circle at top center, #0B1320 0%, #050505 100%);
             --glass-bg: rgba(11, 19, 32, 0.65);
             --glass-border: rgba(255, 255, 255, 0.07);
-            --primary: #0098EA; /* TON Mavi */
+            --primary: #0098EA;
             --primary-glow: rgba(0, 152, 234, 0.35);
-            --primary-gradient: linear-gradient(135deg, #0098EA 0%, #0056B3 100%); /* Açıq Mavi -> Tünd Mavi */
-            --accent-gold: #FFD700; /* Loqoya uyğun Qızılı/Sarı */
+            --primary-gradient: linear-gradient(135deg, #0098EA 0%, #0056B3 100%);
+            --accent-gold: #FFD700;
             --gold-glow: rgba(255, 215, 0, 0.25);
             --text-light: #F8F7FA;
             --text-gray: #94A3B8;
@@ -120,19 +119,19 @@
         .nav-item {
             color: #64748B; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer;
             display: flex; flex-direction: column; align-items: center; gap: 4px; 
-            transition: var(--transition); font-size: 0.75rem; width: 23%;
+            transition: var(--transition); font-size: 0.70rem; width: 20%; /* Changed to 20% to fit 5 items */
             -webkit-tap-highlight-color: transparent;
         }
         
         .nav-icon-bg {
-            width: 48px; height: 44px; border-radius: 16px;
+            width: 44px; height: 40px; border-radius: 14px;
             display: flex; justify-content: center; align-items: center;
             transition: var(--transition); background: transparent;
             will-change: background-color, transform; transform: translateZ(0);
         }
 
         .nav-icon {
-            width: 22px; height: 22px; stroke: currentColor; stroke-width: 2.2; fill: none;
+            width: 20px; height: 20px; stroke: currentColor; stroke-width: 2.2; fill: none;
             stroke-linecap: round; stroke-linejoin: round;
             transition: var(--transition);
         }
@@ -185,7 +184,7 @@
         }
         @keyframes floatBalance { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 
-        /* --- ADS CARD --- */
+        /* --- ADS & GAME CARDS --- */
         .ad-task-card {
             background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 26px; padding: 26px;
             position: relative; overflow: hidden; backdrop-filter: blur(20px);
@@ -219,6 +218,11 @@
             background: rgba(255,255,255,0.05); color: #475569;
             box-shadow: none; cursor: not-allowed; border: 1px solid rgba(255,255,255,0.06); 
             transform: none !important; pointer-events: none;
+        }
+        .btn-ad-compact.action {
+            background: var(--primary-gradient); color: white;
+            box-shadow: 0 8px 25px rgba(0, 152, 234, 0.3);
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         .ad-mini-toast {
@@ -420,6 +424,18 @@
             </div>
             <span>Home</span>
         </div>
+        <div class="nav-item" id="nav-games" onclick="switchTab('games')">
+            <div class="nav-icon-bg">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <rect x="2" y="6" width="20" height="12" rx="2" ry="2"></rect>
+                    <path d="M6 12h4"></path>
+                    <path d="M8 10v4"></path>
+                    <line x1="15" y1="13" x2="15.01" y2="13"></line>
+                    <line x1="18" y1="11" x2="18.01" y2="11"></line>
+                </svg>
+            </div>
+            <span>Games</span>
+        </div>
         <div class="nav-item" id="nav-promo" onclick="switchTab('promo')">
             <div class="nav-icon-bg">
                 <svg class="nav-icon" viewBox="0 0 24 24">
@@ -476,8 +492,7 @@
                     <h3>Daily Rewards</h3>
                     <p>Watch short ads to earn TON fractions.</p>
                 </div>
-                <div class="ad-reward-badge">0.0005 TON</div>
-            </div>
+                <div class="ad-reward-badge">0.0002 TON</div> </div>
             
             <div class="ad-progress-container">
                 <div class="ad-progress-text">
@@ -489,7 +504,52 @@
                 </div>
             </div>
             
-            <button class="btn-ad-compact" id="main-watch-btn" onclick="watchDailyAd()">▶ Watch Ad</button>
+            <button class="btn-ad-compact action" id="main-watch-btn" onclick="watchDailyAd()">▶ Watch Ad</button>
+        </div>
+    </div>
+
+    <div id="view-games" class="view-container">
+        <div class="balance-card" style="padding: 20px 24px; margin-bottom: -10px;">
+            <div class="balance-title">Mini Games</div>
+            <p style="font-size:0.9rem; color:var(--text-gray); margin-top:6px; line-height: 1.5;">Watch ads to play games and win extra TON fractions instantly.</p>
+        </div>
+
+        <div class="ad-task-card" style="margin-top: 15px;">
+            <div id="spin-mini-alert" class="ad-mini-toast"></div>
+            <div style="display:flex; gap: 15px; align-items: center;">
+                <div style="font-size: 3rem; filter: drop-shadow(0 0 15px rgba(255,215,0,0.3));">🎡</div>
+                <div>
+                    <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.2rem; color: white; margin-bottom: 4px;">Lucky Spin</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-gray);">Spin the wheel for a chance to win up to 0.001 TON.</p>
+                </div>
+            </div>
+            <div class="ad-progress-container">
+                <div class="ad-progress-text">
+                    <span>Daily Limit</span>
+                    <span><span id="daily-spin-count">0</span> / 10</span>
+                </div>
+                <div class="ad-progress-bar"><div class="ad-progress-fill" id="daily-spin-fill"></div></div>
+            </div>
+            <button class="btn-ad-compact action" id="spin-btn" onclick="playSpin()">Watch Ad & Spin</button>
+        </div>
+
+        <div class="ad-task-card">
+            <div id="box-mini-alert" class="ad-mini-toast"></div>
+            <div style="display:flex; gap: 15px; align-items: center;">
+                <div style="font-size: 3rem; filter: drop-shadow(0 0 15px rgba(0,152,234,0.3));">🎁</div>
+                <div>
+                    <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.2rem; color: white; margin-bottom: 4px;">Mystery Box</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-gray);">Open a random box to find hidden TON rewards.</p>
+                </div>
+            </div>
+            <div class="ad-progress-container">
+                <div class="ad-progress-text">
+                    <span>Daily Limit</span>
+                    <span><span id="daily-box-count">0</span> / 5</span>
+                </div>
+                <div class="ad-progress-bar"><div class="ad-progress-fill" id="daily-box-fill"></div></div>
+            </div>
+            <button class="btn-ad-compact action" id="box-btn" onclick="openBox()">Watch Ad & Open</button>
         </div>
     </div>
 
@@ -650,7 +710,14 @@
 
         let userBalance = parseFloat(getStat("user_balance") || "0");
         let totalAdsWatched = parseInt(getStat("total_ads") || "0");
+        
+        // Limits
         let dailyAdsWatched = parseInt(getStat("daily_ads") || "0");
+        let dailySpins = parseInt(getStat("daily_spins") || "0");
+        let dailyBoxes = parseInt(getStat("daily_boxes") || "0");
+        const MAX_SPINS = 10;
+        const MAX_BOXES = 5;
+
         let currentGwView = 2;
         let promoMsgTimeout; 
         let withdrawMsgTimeout;
@@ -667,7 +734,6 @@
             adController = window.Adsgram.init({ blockId: "int-30043" });
         }
 
-        // Removed N4T1X7KC9Q and 2MX8P5QL1V from PROMO_CODES
         const PROMO_CODES = {
             "5MZ8T1VC4P": 0.015, "X2N7R5JQ9L": 0.015, "8LP4D6WF2K": 0.015,
             "Q1V9X3M7TC": 0.015, "4BK8Z2N5RY": 0.015, "T7C1L9Q4WP": 0.015, "2XF6M8VK3J": 0.015,
@@ -683,7 +749,6 @@
             "5XN8L1RC4P": 0.025, "V2T7Q9MK6X": 0.025, "8LP1W4XN5R": 0.025, "K7Q3V2TM9L": 0.025
         };
 
-        // Added N4T1X7KC9Q and 2MX8P5QL1V to EXPIRED_CODES
         const EXPIRED_CODES = ["A7F3K9L2QX", "7VK3P8N1WD", "H4L9T2X7QM", "N4T1X7KC9Q", "2MX8P5QL1V"];
 
         document.addEventListener('DOMContentLoaded', async () => {
@@ -780,7 +845,11 @@
 
                 if (savedCycleId !== currentCycleId) {
                     dailyAdsWatched = 0;
+                    dailySpins = 0;
+                    dailyBoxes = 0;
                     saveStat("daily_ads", "0");
+                    saveStat("daily_spins", "0");
+                    saveStat("daily_boxes", "0");
                     saveStat("ad_cycle_id", currentCycleId);
                     updateAllUI();
                 }
@@ -821,9 +890,9 @@
             document.getElementById("home-balance").innerHTML = balHtml;
             document.getElementById("wallet-balance").innerHTML = balHtml;
 
+            // Ads Progress
             document.getElementById("daily-ad-count").innerText = dailyAdsWatched;
-            const progressPercent = (dailyAdsWatched / 50) * 100;
-            document.getElementById("daily-ad-fill").style.width = `${progressPercent}%`;
+            document.getElementById("daily-ad-fill").style.width = `${(dailyAdsWatched / 50) * 100}%`;
 
             const mainBtn = document.getElementById("main-watch-btn");
             if (dailyAdsWatched >= 50) {
@@ -831,7 +900,30 @@
                 mainBtn.className = "btn-ad-compact locked";
             } else {
                 mainBtn.innerHTML = "▶ Watch Ad";
-                mainBtn.className = "btn-ad-compact";
+                mainBtn.className = "btn-ad-compact action";
+            }
+
+            // Games Progress
+            document.getElementById("daily-spin-count").innerText = dailySpins;
+            document.getElementById("daily-spin-fill").style.width = `${(dailySpins / MAX_SPINS) * 100}%`;
+            const spinBtn = document.getElementById("spin-btn");
+            if (dailySpins >= MAX_SPINS) {
+                spinBtn.innerHTML = "🔒 Limit Reached";
+                spinBtn.className = "btn-ad-compact locked";
+            } else {
+                spinBtn.innerHTML = "Watch Ad & Spin";
+                spinBtn.className = "btn-ad-compact action";
+            }
+
+            document.getElementById("daily-box-count").innerText = dailyBoxes;
+            document.getElementById("daily-box-fill").style.width = `${(dailyBoxes / MAX_BOXES) * 100}%`;
+            const boxBtn = document.getElementById("box-btn");
+            if (dailyBoxes >= MAX_BOXES) {
+                boxBtn.innerHTML = "🔒 Limit Reached";
+                boxBtn.className = "btn-ad-compact locked";
+            } else {
+                boxBtn.innerHTML = "Watch Ad & Open";
+                boxBtn.className = "btn-ad-compact action";
             }
 
             document.getElementById("gw-total-ads").innerText = totalAdsWatched;
@@ -858,21 +950,23 @@
         function switchTab(tabName) {
             document.activeElement.blur(); 
             
-            const tabs = ['home', 'promo', 'giveaway', 'wallet'];
+            const tabs = ['home', 'games', 'promo', 'giveaway', 'wallet'];
             tabs.forEach(t => {
-                const navEl = document.getElementById(`nav-${t === 'promo' ? 'promo' : t === 'giveaway' ? 'giveaway' : t}`);
+                const navEl = document.getElementById(`nav-${t}`);
                 if(navEl) navEl.classList.remove('active');
+                
+                const viewEl = document.getElementById(`view-${t === 'giveaway' ? 'giveaway-list' : t}`);
+                if(viewEl) viewEl.classList.remove('active');
             });
             
-            document.getElementById('view-home').classList.remove('active');
-            if(document.getElementById('view-promo')) document.getElementById('view-promo').classList.remove('active');
-            document.getElementById('view-giveaway-list').classList.remove('active');
             document.getElementById('view-giveaway-details').classList.remove('active');
-            document.getElementById('view-wallet').classList.remove('active');
 
             if (tabName === 'home') {
                 document.getElementById('nav-home').classList.add('active');
                 document.getElementById('view-home').classList.add('active');
+            } else if (tabName === 'games') {
+                document.getElementById('nav-games').classList.add('active');
+                document.getElementById('view-games').classList.add('active');
             } else if (tabName === 'promo') {
                 document.getElementById('nav-promo').classList.add('active');
                 document.getElementById('view-promo').classList.add('active');
@@ -883,6 +977,78 @@
                 document.getElementById('nav-wallet').classList.add('active');
                 document.getElementById('view-wallet').classList.add('active');
             }
+        }
+
+        // GAMES LOGIC
+        function playSpin() {
+            if (dailySpins >= MAX_SPINS) { alert("Daily spin limit reached."); return; }
+            if (!adController) { alert("Ads are initializing. Please wait..."); return; }
+            
+            const btn = document.getElementById("spin-btn");
+            btn.innerHTML = "<span class='spinner'></span> Loading...";
+            btn.classList.add('locked');
+            
+            adController.show().then(() => {
+                dailySpins++;
+                totalAdsWatched++;
+                
+                // Random Prize Logic (Low payout)
+                let rand = Math.random();
+                let prize = 0.0001; // 60% chance
+                if (rand > 0.60) prize = 0.0002; // 30% chance
+                if (rand > 0.90) prize = 0.0005; // 9% chance
+                if (rand > 0.99) prize = 0.0010; // 1% chance
+                
+                userBalance += prize;
+                saveStat("daily_spins", dailySpins.toString());
+                saveStat("total_ads", totalAdsWatched.toString());
+                saveStat("user_balance", userBalance.toString());
+                
+                const miniAlert = document.getElementById("spin-mini-alert");
+                miniAlert.innerHTML = `🎰 You won: +${prize} TON!`;
+                miniAlert.style.display = "block";
+                setTimeout(() => { miniAlert.style.display = "none"; }, 2000);
+
+                updateAllUI();
+            }).catch((err) => {
+                btn.innerHTML = "Watch Ad & Spin";
+                btn.classList.remove('locked');
+            });
+        }
+
+        function openBox() {
+            if (dailyBoxes >= MAX_BOXES) { alert("Daily box limit reached."); return; }
+            if (!adController) { alert("Ads are initializing. Please wait..."); return; }
+            
+            const btn = document.getElementById("box-btn");
+            btn.innerHTML = "<span class='spinner'></span> Loading...";
+            btn.classList.add('locked');
+            
+            adController.show().then(() => {
+                dailyBoxes++;
+                totalAdsWatched++;
+                
+                // Random Prize Logic (Low payout)
+                let rand = Math.random();
+                let prize = 0.0002; // 50%
+                if (rand > 0.50) prize = 0.0003; // 40%
+                if (rand > 0.90) prize = 0.0008; // 10%
+                
+                userBalance += prize;
+                saveStat("daily_boxes", dailyBoxes.toString());
+                saveStat("total_ads", totalAdsWatched.toString());
+                saveStat("user_balance", userBalance.toString());
+                
+                const miniAlert = document.getElementById("box-mini-alert");
+                miniAlert.innerHTML = `🎁 Box contained: +${prize} TON!`;
+                miniAlert.style.display = "block";
+                setTimeout(() => { miniAlert.style.display = "none"; }, 2000);
+
+                updateAllUI();
+            }).catch((err) => {
+                btn.innerHTML = "Watch Ad & Open";
+                btn.classList.remove('locked');
+            });
         }
 
         function openGiveawayDetails(gwId) {
@@ -960,22 +1126,18 @@
             adController.show().then(() => {
                 dailyAdsWatched++;
                 totalAdsWatched++;
-                userBalance += 0.0005; 
+                userBalance += 0.0002; // REWARD REDUCED TO 0.0002
                 
                 saveStat("daily_ads", dailyAdsWatched.toString());
                 saveStat("total_ads", totalAdsWatched.toString());
                 saveStat("user_balance", userBalance.toString());
                 
                 const miniAlert = document.getElementById("ad-mini-alert");
-                miniAlert.innerHTML = "🎉 Earned: +0.0005 TON";
+                miniAlert.innerHTML = "🎉 Earned: +0.0002 TON";
                 miniAlert.style.display = "block";
                 setTimeout(() => { miniAlert.style.display = "none"; }, 1500);
 
                 updateAllUI(); 
-                if (dailyAdsWatched < 50) {
-                    btn.innerHTML = "▶ Watch Ad";
-                    btn.classList.remove('locked');
-                }
             }).catch((err) => {
                 btn.innerHTML = "▶ Watch Ad";
                 btn.classList.remove('locked');
@@ -985,7 +1147,7 @@
         function submitPromoCode() {
             const inputField = document.getElementById("promo-code-input");
             const msgBox = document.getElementById("promo-msg");
-            const codeInput = inputField.value.trim().toUpperCase(); // Formatlanmış halı
+            const codeInput = inputField.value.trim().toUpperCase(); 
 
             if (promoMsgTimeout) clearTimeout(promoMsgTimeout);
 
@@ -997,7 +1159,6 @@
                 return;
             }
 
-            // CHECK EXPIRED OR LIMIT-REACHED CODES
             if (EXPIRED_CODES.includes(codeInput)) {
                 msgBox.className = "msg-box msg-err";
                 msgBox.innerHTML = "❌ The usage limit for this promo code has been reached!";

@@ -1104,7 +1104,11 @@
             applyTranslations();
             updateAllUI();
             renderHistory();
-            if(currentGwView === 1 || currentGwView === 2) openGiveawayDetails(currentGwView); 
+            
+            // Yalnız aktiv olduqda yenilənmə apar (səhifəni dəyişməmək üçün)
+            if (document.getElementById('view-giveaway-details').classList.contains('active')) {
+                openGiveawayDetails(currentGwView); 
+            }
         }
 
         function applyTranslations() {

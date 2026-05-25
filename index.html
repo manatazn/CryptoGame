@@ -151,40 +151,52 @@
         .view-container.active { display: flex; }
         @keyframes fadeInView { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- HEADER & LANGUAGE MENU --- */
+        /* --- HEADER & LANGUAGE SWITCHER --- */
         .app-header {
             display: flex; justify-content: space-between; align-items: center;
             background: var(--glass-bg); border: 1px solid var(--glass-border);
-            border-radius: 50px; padding: 6px 20px 6px 6px; backdrop-filter: blur(25px);
+            border-radius: 50px; padding: 6px 6px 6px 6px; backdrop-filter: blur(25px);
             box-shadow: 0 8px 30px rgba(0,0,0,0.4); margin-bottom: 5px; margin-top: 25px;
+            position: relative; z-index: 200;
         }
-        .header-user { display: flex; align-items: center; gap: 12px; flex: 1;}
+        .header-user { display: flex; align-items: center; gap: 12px; }
         .profile-avatar { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--primary); padding: 2px; background: rgba(0,0,0,0.5); box-shadow: 0 0 10px var(--primary-glow);}
         .profile-name-group { display: flex; flex-direction: column; justify-content: center; }
         .profile-name { font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; color: white; line-height: 1.2; letter-spacing: 0.2px;}
         .profile-uid { font-size: 0.75rem; color: var(--text-gray); font-family: 'Inter', sans-serif;}
 
-        .lang-dropdown { position: relative; z-index: 150; }
-        .lang-selected { display: flex; align-items: center; gap: 4px; cursor: pointer; padding: 6px 8px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); transition: var(--transition); user-select: none;}
-        .lang-selected:active { background: rgba(255,255,255,0.1); transform: scale(0.95);}
-        .lang-text { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.9rem; color: white; width: 22px; text-align: center; }
-        .lang-arrow { width: 14px; height: 14px; stroke: white; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
-        .lang-arrow.open { transform: rotate(180deg); }
+        .lang-switcher {
+            position: relative; margin-right: 6px;
+        }
+        .lang-btn {
+            display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.06); 
+            padding: 8px 14px; border-radius: 20px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); 
+            font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.85rem; transition: var(--transition);
+        }
+        .lang-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
+        .lang-arrow {
+            width: 14px; height: 14px; stroke: currentColor; stroke-width: 2.5; fill: none; 
+            stroke-linecap: round; stroke-linejoin: round; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .lang-arrow.open { transform: rotate(-180deg); }
         
-        .lang-options { 
-            position: absolute; top: 115%; right: 0; background: rgba(11, 19, 32, 0.95); backdrop-filter: blur(25px);
-            border: 1px solid rgba(255,255,255,0.15); border-radius: 14px; display: none; flex-direction: column; 
-            overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8); min-width: 65px;
-            animation: fadeInView 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+        .lang-menu {
+            position: absolute; top: calc(100% + 8px); right: 0; 
+            background: rgba(11, 15, 25, 0.95); backdrop-filter: blur(25px); 
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 6px; 
+            display: none; flex-direction: column; gap: 4px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.7); min-width: 75px;
+            transform-origin: top right; animation: scaleIn 0.2s cubic-bezier(0.25, 1, 0.5, 1);
         }
-        .lang-options.show { display: flex; }
-        .lang-options div { 
-            padding: 12px; text-align: center; font-family: 'Poppins', sans-serif; font-weight: 700; 
-            font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; 
-            transition: background 0.2s; color: white;
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .lang-menu.show { display: flex; }
+        .lang-menu li {
+            list-style: none; padding: 10px 14px; border-radius: 12px; cursor: pointer; text-align: center; 
+            font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 700; transition: var(--transition);
+            color: var(--text-light);
         }
-        .lang-options div:last-child { border-bottom: none; }
-        .lang-options div:active { background: rgba(0, 152, 234, 0.3); }
+        .lang-menu li:hover, .lang-menu li:active { background: rgba(0, 152, 234, 0.15); color: var(--primary); }
+        .lang-menu li.active-lang { background: var(--primary-gradient); color: white; box-shadow: 0 4px 15px rgba(0, 152, 234, 0.3); border: 1px solid rgba(255,255,255,0.1); }
 
         /* --- BALANCE CARD --- */
         .balance-card {
@@ -246,15 +258,32 @@
         }
 
         .ad-mini-toast {
-            display: none; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3);
-            color: #6EE7B7; font-size: 0.85rem; font-family: 'Poppins', sans-serif; font-weight: 600;
-            padding: 8px 18px; border-radius: 12px; text-align: center; position: absolute; 
-            top: 12px; left: 50%; transform: translateX(-50%); width: max-content; max-width: 90%;
-            z-index: 100; backdrop-filter: blur(12px); box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            display: none; 
+            background: rgba(16, 185, 129, 0.15); 
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #6EE7B7; 
+            font-size: 0.85rem; 
+            font-family: 'Poppins', sans-serif; 
+            font-weight: 600;
+            padding: 8px 18px; 
+            border-radius: 12px; 
+            text-align: center; 
+            position: absolute; 
+            top: 12px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            width: max-content;
+            max-width: 90%;
+            z-index: 100; 
+            backdrop-filter: blur(12px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
             animation: slideDownFade 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        @keyframes slideDownFade { from { opacity: 0; transform: translate(-50%, -15px); } to { opacity: 1; transform: translate(-50%, 0); } }
+        @keyframes slideDownFade {
+            from { opacity: 0; transform: translate(-50%, -15px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
 
         /* --- PROMO CODE SECTION --- */
         .promo-input-card {
@@ -488,7 +517,7 @@
                     <path d="M10 22V12h4v10"></path>
                 </svg>
             </div>
-            <span data-i18n="nav_home">Home</span>
+            <span data-i18n="navHome">Home</span>
         </div>
         <div class="nav-item" id="nav-games" onclick="switchTab('games')">
             <div class="nav-icon-bg">
@@ -500,7 +529,7 @@
                     <line x1="18" y1="11" x2="18.01" y2="11"></line>
                 </svg>
             </div>
-            <span data-i18n="nav_games">Games</span>
+            <span data-i18n="navGames">Games</span>
         </div>
         <div class="nav-item" id="nav-promo" onclick="switchTab('promo')">
             <div class="nav-icon-bg">
@@ -509,7 +538,7 @@
                     <line x1="7" y1="7" x2="7.01" y2="7"></line>
                 </svg>
             </div>
-            <span data-i18n="nav_promo">Promo</span>
+            <span data-i18n="navPromo">Promo</span>
         </div>
         <div class="nav-item" id="nav-giveaway" onclick="switchTab('giveaway')">
             <div class="nav-icon-bg">
@@ -521,7 +550,7 @@
                     <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
                 </svg>
             </div>
-            <span data-i18n="nav_draws">Draws</span>
+            <span data-i18n="navDraws">Draws</span>
         </div>
         <div class="nav-item" id="nav-wallet" onclick="switchTab('wallet')">
             <div class="nav-icon-bg">
@@ -531,7 +560,7 @@
                     <path d="M18 12a2 2 0 0 0-2 2v0a2 2 0 0 0 2 2h4v-4h-4z"></path>
                 </svg>
             </div>
-            <span data-i18n="nav_wallet">Wallet</span>
+            <span data-i18n="navWallet">Wallet</span>
         </div>
     </div>
 
@@ -544,25 +573,22 @@
                     <span class="profile-uid" id="tg-uid">UID: Loading...</span>
                 </div>
             </div>
-            
-            <div class="lang-dropdown" id="langDropdown">
-                <div class="lang-selected" onclick="toggleLang(event)">
-                    <span class="lang-text" id="lang-text">EN</span>
-                    <svg viewBox="0 0 24 24" class="lang-arrow" id="lang-arrow">
-                        <path d="M12 5v14"></path><path d="M19 12l-7 7-7-7"></path>
-                    </svg>
+            <div class="lang-switcher">
+                <div class="lang-btn" id="lang-btn" onclick="toggleLangMenu(event)">
+                    <span id="current-lang-text">EN</span>
+                    <svg viewBox="0 0 24 24" class="lang-arrow"><path d="M6 9l6 6 6-6"></path></svg>
                 </div>
-                <div class="lang-options" id="lang-options">
-                    <div onclick="setLang('en')">EN</div>
-                    <div onclick="setLang('az')">AZ</div>
-                    <div onclick="setLang('ru')">RU</div>
-                    <div onclick="setLang('tr')">TR</div>
-                </div>
+                <ul class="lang-menu" id="lang-menu">
+                    <li onclick="changeLang('en')" id="lang-opt-en">EN</li>
+                    <li onclick="changeLang('az')" id="lang-opt-az">AZ</li>
+                    <li onclick="changeLang('ru')" id="lang-opt-ru">RU</li>
+                    <li onclick="changeLang('tr')" id="lang-opt-tr">TR</li>
+                </ul>
             </div>
         </div>
 
         <div class="balance-card">
-            <div class="balance-title" data-i18n="curr_balance">Current Balance</div>
+            <div class="balance-title" data-i18n="currBal">Current Balance</div>
             <div class="balance-amount" id="home-balance">0.0000 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
         </div>
 
@@ -570,11 +596,10 @@
             <div id="ad-mini-alert" class="ad-mini-toast"></div>
             <div class="ad-header-row">
                 <div class="ad-info">
-                    <h3 data-i18n="daily_rewards">Daily Rewards</h3>
-                    <p data-i18n="watch_ads_desc">Watch short ads to earn TON fractions.</p>
+                    <h3 data-i18n="dailyRew">Daily Rewards</h3>
+                    <p data-i18n="dailyDesc">Watch short ads to earn TON fractions.</p>
                 </div>
-                <div class="ad-reward-badge">0.0005 TON</div> 
-            </div>
+                <div class="ad-reward-badge">0.0005 TON</div> </div>
             
             <div class="ad-progress-container">
                 <div class="ad-progress-text">
@@ -586,64 +611,64 @@
                 </div>
             </div>
             
-            <button class="btn-ad-compact action" id="main-watch-btn" onclick="watchDailyAd()">▶ Watch Ad</button>
+            <button class="btn-ad-compact action" id="main-watch-btn" onclick="watchDailyAd()">▶ <span data-i18n="watchAdBtn">Watch Ad</span></button>
         </div>
     </div>
 
     <div id="view-games" class="view-container">
         <div class="balance-card" style="padding: 20px 24px; margin-bottom: -10px;">
-            <div class="balance-title" data-i18n="mini_games">Mini Games</div>
-            <p data-i18n="mini_games_desc" style="font-size:0.9rem; color:var(--text-gray); margin-top:6px; line-height: 1.5;">Watch ads to play games and win extra TON fractions instantly.</p>
+            <div class="balance-title" data-i18n="miniGames">Mini Games</div>
+            <p style="font-size:0.9rem; color:var(--text-gray); margin-top:6px; line-height: 1.5;" data-i18n="miniGamesDesc">Watch ads to play games and win extra TON fractions instantly.</p>
         </div>
 
         <div class="ad-task-card" style="margin-top: 15px;">
             <div style="display:flex; gap: 15px; align-items: center;">
                 <div style="font-size: 3rem; filter: drop-shadow(0 0 15px rgba(255,215,0,0.3));">🎡</div>
                 <div>
-                    <h3 data-i18n="lucky_spin" style="font-family: 'Poppins', sans-serif; font-size: 1.2rem; color: white; margin-bottom: 4px;">Lucky Spin</h3>
-                    <p data-i18n="lucky_spin_desc" style="font-size: 0.85rem; color: var(--text-gray);">Spin the wheel for a chance to win up to 5 TON.</p>
+                    <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.2rem; color: white; margin-bottom: 4px;" data-i18n="luckySpin">Lucky Spin</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-gray);" data-i18n="luckySpinDesc">Spin the wheel for a chance to win up to 5 TON.</p>
                 </div>
             </div>
             <div class="ad-progress-container">
                 <div class="ad-progress-text">
-                    <span data-i18n="daily_limit">Daily Limit</span>
+                    <span data-i18n="dailyLimitText">Daily Limit</span>
                     <span><span id="daily-spin-count">0</span> / 10</span>
                 </div>
                 <div class="ad-progress-bar"><div class="ad-progress-fill" id="daily-spin-fill"></div></div>
             </div>
-            <button class="btn-ad-compact action" id="spin-nav-btn" onclick="openGamePage('spin')">Go to Lucky Spin</button>
+            <button class="btn-ad-compact action" id="spin-nav-btn" onclick="openGamePage('spin')" data-i18n="goToSpin">Go to Lucky Spin</button>
         </div>
 
         <div class="ad-task-card">
             <div style="display:flex; gap: 15px; align-items: center;">
                 <div style="font-size: 3rem; filter: drop-shadow(0 0 15px rgba(0,152,234,0.3));">🎁</div>
                 <div>
-                    <h3 data-i18n="mystery_box" style="font-family: 'Poppins', sans-serif; font-size: 1.2rem; color: white; margin-bottom: 4px;">Mystery Box</h3>
-                    <p data-i18n="mystery_box_desc" style="font-size: 0.85rem; color: var(--text-gray);">Open a random box to find hidden TON rewards.</p>
+                    <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.2rem; color: white; margin-bottom: 4px;" data-i18n="mysteryBox">Mystery Box</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-gray);" data-i18n="mysteryBoxDesc">Open a random box to find hidden TON rewards.</p>
                 </div>
             </div>
             <div class="ad-progress-container">
                 <div class="ad-progress-text">
-                    <span data-i18n="daily_limit">Daily Limit</span>
+                    <span data-i18n="dailyLimitText">Daily Limit</span>
                     <span><span id="daily-box-count">0</span> / 5</span>
                 </div>
                 <div class="ad-progress-bar"><div class="ad-progress-fill" id="daily-box-fill"></div></div>
             </div>
-            <button class="btn-ad-compact action" id="box-nav-btn" onclick="openGamePage('box')">Go to Mystery Box</button>
+            <button class="btn-ad-compact action" id="box-nav-btn" onclick="openGamePage('box')" data-i18n="goToBox">Go to Mystery Box</button>
         </div>
     </div>
 
     <div id="view-spin-page" class="view-container">
         
         <div class="balance-card" style="padding: 24px 20px;">
-            <div class="balance-title" data-i18n="curr_balance">Current Balance</div>
+            <div class="balance-title" data-i18n="currBal">Current Balance</div>
             <div class="balance-amount" id="spin-balance">0.0000 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
         </div>
 
         <div style="display: flex; justify-content: flex-start; margin-top: 15px;">
             <button class="btn-page-back" onclick="closeGamePage()">
                 <svg viewBox="0 0 24 24" style="width:20px; height:20px; stroke:currentColor; stroke-width:2.5; fill:none; stroke-linecap:round; stroke-linejoin:round; margin-right:8px;"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
-                <span data-i18n="back">BACK</span>
+                <span data-i18n="backBtn">BACK</span>
             </button>
         </div>
         
@@ -656,20 +681,20 @@
             <div class="wheel" id="roulette-wheel"></div>
         </div>
         
-        <button class="btn-ad-compact action" id="spin-page-btn" onclick="executeSpin()">Watch Ad & Spin</button>
+        <button class="btn-ad-compact action" id="spin-page-btn" onclick="executeSpin()" data-i18n="watchAdSpin">Watch Ad & Spin</button>
     </div>
 
     <div id="view-box-page" class="view-container">
         
         <div class="balance-card" style="padding: 24px 20px;">
-            <div class="balance-title" data-i18n="curr_balance">Current Balance</div>
+            <div class="balance-title" data-i18n="currBal">Current Balance</div>
             <div class="balance-amount" id="box-balance">0.0000 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
         </div>
 
         <div style="display: flex; justify-content: flex-start; margin-top: 15px;">
             <button class="btn-page-back" onclick="closeGamePage()">
                 <svg viewBox="0 0 24 24" style="width:20px; height:20px; stroke:currentColor; stroke-width:2.5; fill:none; stroke-linecap:round; stroke-linejoin:round; margin-right:8px;"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
-                <span data-i18n="back">BACK</span>
+                <span data-i18n="backBtn">BACK</span>
             </button>
         </div>
         
@@ -681,51 +706,51 @@
             <div class="mystery-box-anim" id="mystery-box-anim">🎁</div>
         </div>
         
-        <button class="btn-ad-compact action" id="box-page-btn" onclick="executeBox()">Watch Ad & Open</button>
+        <button class="btn-ad-compact action" id="box-page-btn" onclick="executeBox()" data-i18n="watchAdOpen">Watch Ad & Open</button>
     </div>
 
     <div id="view-promo" class="view-container">
         <div class="balance-card" style="padding: 30px 24px;">
-            <div class="balance-title" data-i18n="redeem_code">Redeem Code</div>
-            <p data-i18n="redeem_desc" style="font-size:0.9rem; color:var(--text-gray); margin-top:6px; line-height: 1.5;">Enter your code below to receive an instant TON credit.</p>
+            <div class="balance-title" data-i18n="redeemCode">Redeem Code</div>
+            <p style="font-size:0.9rem; color:var(--text-gray); margin-top:6px; line-height: 1.5;" data-i18n="redeemDesc">Enter your code below to receive an instant TON credit.</p>
         </div>
 
         <div class="promo-input-card">
             <div class="promo-input-wrapper">
                 <span class="promo-icon-prefix">🎫</span>
-                <input type="text" id="promo-code-input" class="promo-field" data-i18n-placeholder="promo_placeholder" placeholder="ENTER PROMO CODE" autocomplete="off" spellcheck="false">
+                <input type="text" id="promo-code-input" class="promo-field" data-i18n="promoPlaceholder" placeholder="ENTER PROMO CODE" autocomplete="off" spellcheck="false">
             </div>
-            <button class="btn btn-verify" style="margin-top:0;" onclick="submitPromoCode()" data-i18n="claim_reward">Claim Reward</button>
+            <button class="btn btn-verify" style="margin-top:0;" onclick="submitPromoCode()" data-i18n="claimReward">Claim Reward</button>
             <div id="promo-msg" class="msg-box"></div>
         </div>
     </div>
 
     <div id="view-giveaway-list" class="view-container">
         <div class="host-banner">
-            <div class="host-title" data-i18n="host_own">Host Your Own Giveaway</div>
-            <div class="host-desc" data-i18n="host_desc">Boost your channel's growth and engage your community by starting a customized crypto giveaway.</div>
-            <a href="https://t.me/cryptogiveawayadmin" target="_blank" class="btn-host"><span data-i18n="contact_support">💬 Contact Support</span></a>
+            <div class="host-title" data-i18n="hostTitle">Host Your Own Giveaway</div>
+            <div class="host-desc" data-i18n="hostDesc">Boost your channel's growth and engage your community by starting a customized crypto giveaway.</div>
+            <a href="https://t.me/cryptogiveawayadmin" target="_blank" class="btn-host">💬 <span data-i18n="contactSupport">Contact Support</span></a>
         </div>
 
         <div>
-            <div class="section-title" data-i18n="active_gws">Active Giveaways</div>
+            <div class="section-title" data-i18n="activeGw">Active Giveaways</div>
             <div class="gw-list-card" onclick="openGiveawayDetails(2)">
                 <div class="gw-icon-wrap"><div class="gw-icon">💎</div></div>
                 <div class="gw-details">
                     <div class="gw-title">Crypto Group #2</div>
-                    <div class="gw-meta" data-i18n="prize_pool">Prize Pool: 25 TON</div>
-                    <div class="gw-status" data-i18n="live_now">● Live Now</div>
+                    <div class="gw-meta"><span data-i18n="prizePool">Prize Pool</span>: 25 TON</div>
+                    <div class="gw-status" data-i18n="liveNow">● Live Now</div>
                 </div>
             </div>
 
-            <div class="section-title" style="margin-top: 35px;" data-i18n="finished_gws">Finished Giveaways</div>
+            <div class="section-title" style="margin-top: 35px;" data-i18n="finishedGw">Finished Giveaways</div>
             <div class="gw-list-card" style="opacity: 0.7; border-color: rgba(255,255,255,0.02);" onclick="openGiveawayDetails(1)">
                 <div class="gw-icon-wrap" style="background: rgba(255,255,255,0.02);"><div class="gw-icon">🏆</div></div>
                 <div class="gw-details">
                     <div class="gw-title">Crypto Group #1</div>
-                    <div class="gw-meta" data-i18n="prize_pool">Prize Pool: 25 TON</div>
+                    <div class="gw-meta"><span data-i18n="prizePool">Prize Pool</span>: 25 TON</div>
                     <div class="gw-status" style="color: var(--error); background: rgba(255, 59, 48, 0.1); border-color: rgba(255, 59, 48, 0.2);" data-i18n="ended">● Ended</div>
-                    <div style="font-size: 0.95rem; color: var(--accent-gold); margin-top: 10px; font-family: 'Poppins', sans-serif; font-weight: 700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);"><span data-i18n="winner">🎉 Winner:</span> <b>@matro97</b></div>
+                    <div style="font-size: 0.95rem; color: var(--accent-gold); margin-top: 10px; font-family: 'Poppins', sans-serif; font-weight: 700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);"><span data-i18n="winnerTxt">🎉 Winner:</span> <b>@matro97</b></div>
                 </div>
             </div>
         </div>
@@ -748,8 +773,8 @@
             <div class="steps-container" id="gw-actions">
                 <div class="step-card">
                     <div class="step-header" data-i18n="step1">Step 1: Join Channel</div>
-                    <p class="step-desc" data-i18n="step1_desc">Required to participate in the draw.</p>
-                    <a href="https://t.me/Crypto_group_2026" target="_blank" class="btn btn-join" id="join-btn" onclick="markJoined()" data-i18n="join_channel">🔗 Join Channel</a>
+                    <p class="step-desc" data-i18n="step1Desc">Required to participate in the draw.</p>
+                    <a href="https://t.me/Crypto_group_2026" target="_blank" class="btn btn-join" id="join-btn" onclick="markJoined()">🔗 <span data-i18n="joinChannel">Join Channel</span></a>
                 </div>
 
                 <div class="step-card">
@@ -757,31 +782,31 @@
                         <span data-i18n="step2">Step 2: Total Ads Goal</span>
                         <span class="total-ad-counter"><span id="gw-total-ads">0</span>/500</span>
                     </div>
-                    <p class="step-desc" data-i18n="step2_desc">You must watch a lifetime total of 500 ads to qualify for this draw.</p>
-                    <button class="btn btn-join" style="border: 1px solid rgba(255,255,255,0.2); color: white;" onclick="switchTab('home')" data-i18n="go_daily_ads">Go to Daily Ads</button>
+                    <p class="step-desc" data-i18n="step2Desc">You must watch a lifetime total of 500 ads to qualify for this draw.</p>
+                    <button class="btn btn-join" style="border: 1px solid rgba(255,255,255,0.2); color: white;" onclick="switchTab('home')" data-i18n="goToDaily">Go to Daily Ads</button>
                 </div>
 
-                <button class="btn btn-verify" id="verify-action" onclick="processVerification()" data-i18n="verify_enter">Verify & Enter Draw</button>
+                <button class="btn btn-verify" id="verify-action" onclick="processVerification()" data-i18n="verifyBtn">Verify & Enter Draw</button>
                 <div class="msg-box" id="msg-display"></div>
             </div>
 
-            <button class="btn-back" onclick="switchTab('giveaway')" data-i18n="back_to_list">🔙 Back to List</button>
+            <button class="btn-back" onclick="switchTab('giveaway')">🔙 <span data-i18n="backToList">Back to List</span></button>
         </div>
     </div>
 
     <div id="view-wallet" class="view-container">
         <div class="balance-card">
-            <div class="balance-title" data-i18n="avail_balance">Available Balance</div>
+            <div class="balance-title" data-i18n="availBal">Available Balance</div>
             <div class="balance-amount" id="wallet-balance">0.0000 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
         </div>
 
         <div class="giveaway-card" style="padding: 35px 24px;">
             <h3 style="color: white; margin-bottom: 28px; font-family: 'Poppins', sans-serif; font-size: 1.4rem; display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 800;">
-                <span style="font-size: 2rem; text-shadow: 0 0 20px rgba(255,255,255,0.3);">💸</span> <span data-i18n="withdraw_funds">Withdraw Funds</span>
+                <span style="font-size: 2rem; text-shadow: 0 0 20px rgba(255,255,255,0.3);">💸</span> <span data-i18n="withdrawFunds">Withdraw Funds</span>
             </h3>
             
             <div class="withdraw-step" id="connect-wallet-step">
-                <div id="connect-wallet-text" data-i18n="connect_wallet" style="color: var(--text-gray); font-size: 1rem; margin-bottom: 20px; text-align: center; font-weight: 600;">Connect your TON wallet to withdraw funds</div>
+                <div id="connect-wallet-text" style="color: var(--text-gray); font-size: 1rem; margin-bottom: 20px; text-align: center; font-weight: 600;" data-i18n="connWalletDesc">Connect your TON wallet to withdraw funds</div>
                 <div id="ton-connect" style="display: flex; justify-content: center;"></div>
             </div>
             
@@ -789,20 +814,20 @@
                 <div class="withdraw-step">
                     <div class="withdraw-input-wrapper">
                         <input type="text" inputmode="decimal" id="withdraw-amount" class="withdraw-input" placeholder="0.00">
-                        <button class="btn-max" onclick="handleMaxWithdrawal()" data-i18n="max">MAX</button>
+                        <button class="btn-max" onclick="handleMaxWithdrawal()">MAX</button>
                     </div>
                     
                     <div id="live-breakdown" class="live-breakdown-box">
                         <div class="breakdown-row">
-                            <span data-i18n="req_amount">Requested Amount:</span>
+                            <span data-i18n="reqAmount">Requested Amount:</span>
                             <span id="bd-gross" style="color:white; font-weight:700;">0.0000 TON</span>
                         </div>
                         <div class="breakdown-row" style="color:var(--error);">
-                            <span data-i18n="net_fee">Network Fee (30%):</span>
+                            <span data-i18n="netFee">Network Fee (30%):</span>
                             <span id="bd-fee" style="font-weight:700;">0.0000 TON</span>
                         </div>
                         <div class="breakdown-row total" style="color:var(--success);">
-                            <span data-i18n="net_payout">Net Payout Amount:</span>
+                            <span data-i18n="netPayout">Net Payout Amount:</span>
                             <span id="bd-net" style="font-weight:800; text-shadow: 0 0 10px rgba(16, 185, 129, 0.2);">0.0000 TON</span>
                         </div>
                     </div>
@@ -814,221 +839,231 @@
         </div>
 
         <div class="giveaway-card" style="padding: 30px 24px; margin-top: 20px;">
-            <h3 style="color: white; margin-bottom: 22px; font-family: 'Poppins', sans-serif; font-size: 1.3rem; text-align: left; font-weight: 800;" data-i18n="withdraw_hist">Withdrawal History</h3>
+            <h3 style="color: white; margin-bottom: 22px; font-family: 'Poppins', sans-serif; font-size: 1.3rem; text-align: left; font-weight: 800;" data-i18n="history">Withdrawal History</h3>
             <div id="history-list" style="display: flex; flex-direction: column; gap: 16px;"></div>
         </div>
     </div>
 
     <script>
-        // --- TRANSLATIONS SYSTEM ---
-        const translations = {
+        // --- TRANSLATIONS DICTIONARY ---
+        const t = {
             en: {
-                "nav_home": "Home", "nav_games": "Games", "nav_promo": "Promo", "nav_draws": "Draws", "nav_wallet": "Wallet",
-                "curr_balance": "Current Balance", "daily_rewards": "Daily Rewards", "watch_ads_desc": "Watch short ads to earn TON fractions.",
-                "progress": "Progress", "watch_ad": "▶ Watch Ad", "limit_reached": "🔒 Limit Reached",
-                "mini_games": "Mini Games", "mini_games_desc": "Watch ads to play games and win extra TON fractions instantly.",
-                "lucky_spin": "Lucky Spin", "lucky_spin_desc": "Spin the wheel for a chance to win up to 5 TON.",
-                "daily_limit": "Daily Limit", "go_lucky_spin": "Go to Lucky Spin", "mystery_box": "Mystery Box",
-                "mystery_box_desc": "Open a random box to find hidden TON rewards.", "go_mystery_box": "Go to Mystery Box",
-                "back": "BACK", "watch_ad_spin": "Watch Ad & Spin", "watch_ad_open": "Watch Ad & Open",
-                "redeem_code": "Redeem Code", "redeem_desc": "Enter your code below to receive an instant TON credit.",
-                "promo_placeholder": "ENTER PROMO CODE", "claim_reward": "Claim Reward",
-                "host_own": "Host Your Own Giveaway", "host_desc": "Boost your channel's growth and engage your community by starting a customized crypto giveaway.",
-                "contact_support": "💬 Contact Support", "active_gws": "Active Giveaways", "prize_pool": "Prize Pool: 25 TON",
-                "live_now": "● Live Now", "finished_gws": "Finished Giveaways", "ended": "● Ended", "winner": "🎉 Winner: ",
-                "days": "Days", "hours": "Hours", "mins": "Mins", "secs": "Secs",
-                "step1": "Step 1: Join Channel", "step1_desc": "Required to participate in the draw.", "join_channel": "🔗 Join Channel",
-                "step2": "Step 2: Total Ads Goal", "step2_desc": "You must watch a lifetime total of 500 ads to qualify for this draw.",
-                "go_daily_ads": "Go to Daily Ads", "verify_enter": "Verify & Enter Draw", "back_to_list": "🔙 Back to List",
-                "avail_balance": "Available Balance", "withdraw_funds": "Withdraw Funds", "connect_wallet": "Connect your TON wallet to withdraw funds",
-                "max": "MAX", "req_amount": "Requested Amount:", "net_fee": "Network Fee (30%):", "net_payout": "Net Payout Amount:",
-                "withdraw": "Withdraw", "withdraw_hist": "Withdrawal History",
-                // Dynamic strings
-                "loading": "Loading...", "spinning": "Spinning...", "opening": "Opening...",
-                "msg_daily_spin": "Daily spin limit reached.", "msg_ads_init": "Ads are initializing. Please wait...",
-                "msg_won_ton": "🎉 Congratulations! You won {amount} TON!",
-                "msg_daily_box": "Daily box limit reached.", "msg_daily_limit": "Daily limit reached! Please come back tomorrow.",
-                "msg_earned": "🎉 Earned: +{amount} TON", "msg_enter_promo": "⚠️ Please enter a promo code.",
-                "msg_promo_limit": "❌ The usage limit for this promo code has been reached!",
-                "msg_promo_used": "❌ You have already redeemed this promo code!",
-                "msg_promo_success": "🎉 <b>Congratulations!</b><br>Promo code successfully applied! Received: +{amount} TON.",
-                "msg_promo_invalid": "❌ Invalid promo code. Please double check and try again.",
-                "msg_min_withdraw": "⚠️ Minimum withdrawal limit is 3.0000 TON. You need {amount} TON more.",
-                "msg_conn_wallet": "⚠️ Please connect your TON wallet first.", "msg_proc_withdraw": "⚠️ You already have a processing withdrawal. Please wait until it completes.",
-                "msg_invalid_entry": "⚠️ Invalid entry. Please specify a valid total value of 3.00 TON or more.",
-                "msg_insuf_bal": "⚠️ Insufficient balance. You can withdraw up to {amount} TON.",
-                "status_pending": "Processing", "status_approved": "Approved", "msg_no_withdraw": "No withdrawals yet.",
-                "msg_gw_ended": "Giveaway Ended!", "msg_gw_congrats": "Congratulations to our lucky winner:",
-                "btn_claim_prize": "🎁 Claim Prize", "msg_reward_added": "✅ Reward added to balance!",
-                "btn_joined": "✓ Channel Joined", "msg_entry_secured": "🎉 <b>Entry Secured:</b> You are successfully entered into the giveaway draw. Good luck!",
-                "msg_action_req": "⚠️ <b>Action Required:</b><br>", "msg_pls_join": "• Please join the channel.<br>",
-                "msg_watch_more": "• Watch {amount} more total ads.", "msg_verifying": "Verifying Entry..."
+                navHome: "Home", navGames: "Games", navPromo: "Promo", navDraws: "Draws", navWallet: "Wallet",
+                currBal: "Current Balance",
+                dailyRew: "Daily Rewards", dailyDesc: "Watch short ads to earn TON fractions.",
+                progress: "Progress", dailyLimitText: "Daily Limit",
+                watchAdBtn: "Watch Ad", limitReached: "🔒 Limit Reached",
+                miniGames: "Mini Games", miniGamesDesc: "Watch ads to play games and win extra TON fractions instantly.",
+                luckySpin: "Lucky Spin", luckySpinDesc: "Spin the wheel for a chance to win up to 5 TON.",
+                goToSpin: "Go to Lucky Spin",
+                mysteryBox: "Mystery Box", mysteryBoxDesc: "Open a random box to find hidden TON rewards.",
+                goToBox: "Go to Mystery Box",
+                backBtn: "BACK",
+                watchAdSpin: "Watch Ad & Spin", watchAdOpen: "Watch Ad & Open",
+                loading: "Loading...", spinning: "Spinning...", opening: "Opening...",
+                redeemCode: "Redeem Code", redeemDesc: "Enter your code below to receive an instant TON credit.",
+                promoPlaceholder: "ENTER PROMO CODE", claimReward: "Claim Reward",
+                hostTitle: "Host Your Own Giveaway", hostDesc: "Boost your channel's growth and engage your community by starting a customized crypto giveaway.", contactSupport: "Contact Support",
+                activeGw: "Active Giveaways", prizePool: "Prize Pool", liveNow: "● Live Now",
+                finishedGw: "Finished Giveaways", ended: "● Ended", winnerTxt: "🎉 Winner:",
+                days: "Days", hours: "Hours", mins: "Mins", secs: "Secs",
+                gwEnded: "Giveaway Ended!", congratsWinner: "Congratulations to our lucky winner:",
+                claimPrize: "Claim Prize", rewardAdded: "✅ Reward added to balance!",
+                step1: "Step 1: Join Channel", step1Desc: "Required to participate in the draw.",
+                joinChannel: "Join Channel", channelJoined: "✓ Channel Joined",
+                step2: "Step 2: Total Ads Goal", step2Desc: "You must watch a lifetime total of 500 ads to qualify for this draw.",
+                goToDaily: "Go to Daily Ads", verifyBtn: "Verify & Enter Draw",
+                backToList: "Back to List",
+                availBal: "Available Balance", withdrawFunds: "Withdraw Funds",
+                connWalletDesc: "Connect your TON wallet to withdraw funds",
+                reqAmount: "Requested Amount:", netFee: "Network Fee (30%):", netPayout: "Net Payout Amount:",
+                withdraw: "Withdraw", history: "Withdrawal History",
+                noWithdrawals: "No withdrawals yet.", processing: "Processing", approved: "Approved",
+                req: "Requested:", fee: "Fee (30%):", rec: "Received:",
+                
+                alertLimitReached: "Daily limit reached! Please come back tomorrow.",
+                alertAdsInit: "Ads are initializing. Please wait...",
+                toastEarned: "Earned",
+                toastCongrats: "Congratulations! You won {prize} TON!",
+                errEnterPromo: "⚠️ Please enter a promo code.",
+                errPromoLimit: "❌ The usage limit for this promo code has been reached!",
+                errPromoRedeemed: "❌ You have already redeemed this promo code!",
+                succPromo: "🎉 <b>Congratulations!</b><br>Promo code successfully applied! Received: +{amount} TON.",
+                errPromoInv: "❌ Invalid promo code. Please double check and try again.",
+                errMinWithdraw: "⚠️ Minimum withdrawal limit is 3.0000 TON. You need {amount} TON more.",
+                errConnWallet: "⚠️ Please connect your TON wallet first.",
+                errPending: "⚠️ You already have a processing withdrawal. Please wait until it completes.",
+                errInvEntry: "⚠️ Invalid entry. Please specify a valid total value of 3.00 TON or more.",
+                errInsuff: "⚠️ Insufficient balance. You can withdraw up to {amount} TON.",
+                succEntrySec: "🎉 <b>Entry Secured:</b> You are successfully entered into the giveaway draw. Good luck!",
+                errActionReq: "⚠️ <b>Action Required:</b><br>",
+                errJoinChan: "• Please join the channel.<br>",
+                errWatchMore: "• Watch {amount} more total ads.",
+                verifying: "Verifying Entry..."
             },
             az: {
-                "nav_home": "Ana səhifə", "nav_games": "Oyunlar", "nav_promo": "Promo", "nav_draws": "Püşk", "nav_wallet": "Cüzdan",
-                "curr_balance": "Cari Balans", "daily_rewards": "Gündəlik Mükafat", "watch_ads_desc": "TON qazanmaq üçün qısa reklamlara baxın.",
-                "progress": "Tərəqqi", "watch_ad": "▶ Reklama bax", "limit_reached": "🔒 Limit Doldu",
-                "mini_games": "Mini Oyunlar", "mini_games_desc": "Oyun oynamaq və anında TON qazanmaq üçün reklamlara baxın.",
-                "lucky_spin": "Şans Çarxı", "lucky_spin_desc": "5 TON-a qədər qazanmaq şansı üçün çarxı fırlat.",
-                "daily_limit": "Gündəlik Limit", "go_lucky_spin": "Şans Çarxına Get", "mystery_box": "Sirli Qutu",
-                "mystery_box_desc": "Gizli TON mükafatları tapmaq üçün qutunu aç.", "go_mystery_box": "Sirli Qutuya Get",
-                "back": "GERİ", "watch_ad_spin": "Reklama Bax & Fırlat", "watch_ad_open": "Reklama Bax & Aç",
-                "redeem_code": "Kodu Daxil Et", "redeem_desc": "Anında TON krediti almaq üçün kodunuzu aşağıya daxil edin.",
-                "promo_placeholder": "PROMO KODU DAXİL EDİN", "claim_reward": "Mükafatı Al",
-                "host_own": "Öz Püşkatmanı Yarat", "host_desc": "Kanalınızın böyüməsini sürətləndirin və kripto püşkatması ilə icmanızı aktivləşdirin.",
-                "contact_support": "💬 Dəstək ilə Əlaqə", "active_gws": "Aktiv Püşkatmalar", "prize_pool": "Mükafat Fondu: 25 TON",
-                "live_now": "● İndi Canlı", "finished_gws": "Bitmiş Püşkatmalar", "ended": "● Bitdi", "winner": "🎉 Qalib: ",
-                "days": "Gün", "hours": "Saat", "mins": "Dəq", "secs": "San",
-                "step1": "Addım 1: Kanala Qoşul", "step1_desc": "Püşkatmada iştirak etmək üçün tələb olunur.", "join_channel": "🔗 Kanala Qoşul",
-                "step2": "Addım 2: Ümumi Reklam Hədəfi", "step2_desc": "Bu püşkatmaya qatılmaq üçün cəmi 500 reklama baxmalısınız.",
-                "go_daily_ads": "Gündəlik Reklamlara Get", "verify_enter": "Təsdiqlə & Püşkə Qatıl", "back_to_list": "🔙 Siyahıya Qayıt",
-                "avail_balance": "Mövcud Balans", "withdraw_funds": "Məbləği Çıxar", "connect_wallet": "Məbləği çıxarmaq üçün TON cüzdanınızı bağlayın",
-                "max": "MAKS", "req_amount": "Tələb Olunan Məbləğ:", "net_fee": "Şəbəkə Komissiyası (30%):", "net_payout": "Xalis Ödəniş:",
-                "withdraw": "Çıxarış Et", "withdraw_hist": "Çıxarış Tarixçəsi",
-                // Dynamic
-                "loading": "Yüklənir...", "spinning": "Fırlanır...", "opening": "Açılır...",
-                "msg_daily_spin": "Gündəlik fırlatma limitinə çatdınız.", "msg_ads_init": "Reklamlar yüklənir. Zəhmət olmasa gözləyin...",
-                "msg_won_ton": "🎉 Təbrik edirik! {amount} TON qazandınız!",
-                "msg_daily_box": "Gündəlik qutu limitinə çatdınız.", "msg_daily_limit": "Gündəlik limitə çatdınız! Zəhmət olmasa sabah yenidən cəhd edin.",
-                "msg_earned": "🎉 Qazanıldı: +{amount} TON", "msg_enter_promo": "⚠️ Zəhmət olmasa promo kodu daxil edin.",
-                "msg_promo_limit": "❌ Bu promo kodun istifadə limitinə çatılmışdır!",
-                "msg_promo_used": "❌ Siz artıq bu promo kodu istifadə etmisiniz!",
-                "msg_promo_success": "🎉 <b>Təbriklər!</b><br>Promo kod uğurla tətbiq edildi! Alındı: +{amount} TON.",
-                "msg_promo_invalid": "❌ Yanlış promo kod. Zəhmət olmasa yoxlayın və yenidən cəhd edin.",
-                "msg_min_withdraw": "⚠️ Minimum çıxarış limiti 3.0000 TON-dur. Daha {amount} TON lazımdır.",
-                "msg_conn_wallet": "⚠️ Zəhmət olmasa əvvəlcə TON cüzdanınızı bağlayın.", "msg_proc_withdraw": "⚠️ Sizin artıq davam edən çıxarışınız var. Zəhmət olmasa bitməsini gözləyin.",
-                "msg_invalid_entry": "⚠️ Yanlış dəyər. Zəhmət olmasa 3.00 TON və ya daha çox dəyər daxil edin.",
-                "msg_insuf_bal": "⚠️ Kifayət qədər balans yoxdur. {amount} TON-a qədər çıxara bilərsiniz.",
-                "status_pending": "İcra olunur", "status_approved": "Təsdiqləndi", "msg_no_withdraw": "Hələ çıxarış yoxdur.",
-                "msg_gw_ended": "Püşkatma Bitdi!", "msg_gw_congrats": "Şanslı qalibimizi təbrik edirik:",
-                "btn_claim_prize": "🎁 Mükafatı Al", "msg_reward_added": "✅ Mükafat balansa əlavə olundu!",
-                "btn_joined": "✓ Kanala Qoşuldu", "msg_entry_secured": "🎉 <b>İştirak Təsdiqləndi:</b> Siz püşkatmaya uğurla qatıldınız. Uğurlar!",
-                "msg_action_req": "⚠️ <b>Tələb olunan hərəkət:</b><br>", "msg_pls_join": "• Zəhmət olmasa kanala qoşulun.<br>",
-                "msg_watch_more": "• Daha {amount} reklama baxın.", "msg_verifying": "İştirak Təsdiqlənir..."
+                navHome: "Ana Səhifə", navGames: "Oyunlar", navPromo: "Promo", navDraws: "Tirajlar", navWallet: "Pulqabı",
+                currBal: "Cari Balans",
+                dailyRew: "Gündəlik Mükafatlar", dailyDesc: "Qısa reklamlara baxaraq TON kəsrləri qazan.",
+                progress: "Tərəqqi", dailyLimitText: "Gündəlik Limit",
+                watchAdBtn: "Reklama Bax", limitReached: "🔒 Limit Doldu",
+                miniGames: "Mini Oyunlar", miniGamesDesc: "Reklamlara baxaraq oyunlar oyna və əlavə TON qazan.",
+                luckySpin: "Şans Çarxı", luckySpinDesc: "Çarxı fırlat və 5 TON-a qədər qazan.",
+                goToSpin: "Şans Çarxına Get",
+                mysteryBox: "Sirrli Qutu", mysteryBoxDesc: "Gizli TON tapmaq üçün qutunu aç.",
+                goToBox: "Sirrli Qutuya Get",
+                backBtn: "GERİ",
+                watchAdSpin: "Reklama Bax və Fırlat", watchAdOpen: "Reklama Bax və Aç",
+                loading: "Yüklənir...", spinning: "Fırlanır...", opening: "Açılır...",
+                redeemCode: "Promo Kod", redeemDesc: "TON krediti almaq üçün kodu aşağıya daxil et.",
+                promoPlaceholder: "PROMO KODU DAXİL ET", claimReward: "Mükafatı Al",
+                hostTitle: "Öz Tirajını Yarat", hostDesc: "Kanalınızı böyütmək üçün xüsusi kripto tirajı yaradın.", contactSupport: "Dəstək ilə Əlaqə",
+                activeGw: "Aktiv Tirajlar", prizePool: "Mükafat Fondu", liveNow: "● Canlı",
+                finishedGw: "Bitmiş Tirajlar", ended: "● Bitdi", winnerTxt: "🎉 Qalib:",
+                days: "Gün", hours: "Saat", mins: "Dəqiqə", secs: "Saniyə",
+                gwEnded: "Tiraj Bitdi!", congratsWinner: "Şanslı qalibimizi təbrik edirik:",
+                claimPrize: "Mükafatı Tələb Et", rewardAdded: "✅ Mükafat balansa əlavə edildi!",
+                step1: "Addım 1: Kanala Qoşul", step1Desc: "İştirak üçün məcburidir.",
+                joinChannel: "Kanala Qoşul", channelJoined: "✓ Kanala Qoşulmusunuz",
+                step2: "Addım 2: Ümumi Reklam", step2Desc: "Bu tiraja qatılmaq üçün ümumilikdə 500 reklama baxmalısan.",
+                goToDaily: "Gündəlik Reklamlara Get", verifyBtn: "Təsdiqlə və Qatıl",
+                backToList: "Siyahıya Qayıt",
+                availBal: "Mövcud Balans", withdrawFunds: "Vəsaiti Çıxar",
+                connWalletDesc: "Vəsaiti çıxarmaq üçün TON pulqabınızı bağlayın.",
+                reqAmount: "Tələb Olunan:", netFee: "Şəbəkə Komissiyası (30%):", netPayout: "Xalis Ödəniş:",
+                withdraw: "Çıxarış", history: "Çıxarış Tarixçəsi",
+                noWithdrawals: "Hələ çıxarış yoxdur.", processing: "İcra olunur", approved: "Təsdiqləndi",
+                req: "Tələb Edildi:", fee: "Komissiya (30%):", rec: "Alındı:",
+                
+                alertLimitReached: "Gündəlik limit doldu! Zəhmət olmasa sabah yenidən sınayın.",
+                alertAdsInit: "Reklamlar yüklənir. Zəhmət olmasa gözləyin...",
+                toastEarned: "Qazanıldı",
+                toastCongrats: "Təbrik edirik! {prize} TON qazandınız!",
+                errEnterPromo: "⚠️ Zəhmət olmasa promo kod daxil edin.",
+                errPromoLimit: "❌ Bu promo kodun istifadə limiti bitmişdir!",
+                errPromoRedeemed: "❌ Siz bu promo kodu artıq istifadə etmisiniz!",
+                succPromo: "🎉 <b>Təbriklər!</b><br>Promo kod uğurla tətbiq edildi! Alındı: +{amount} TON.",
+                errPromoInv: "❌ Yanlış promo kod. Zəhmət olmasa yoxlayıb yenidən cəhd edin.",
+                errMinWithdraw: "⚠️ Minimum çıxarış limiti 3.0000 TON-dur. Sizə daha {amount} TON lazımdır.",
+                errConnWallet: "⚠️ Zəhmət olmasa əvvəlcə TON pulqabınızı bağlayın.",
+                errPending: "⚠️ Sizin artıq icra olunan çıxarışınız var. Zəhmət olmasa tamamlanmasını gözləyin.",
+                errInvEntry: "⚠️ Yanlış məlumat. Zəhmət olmasa 3.00 TON və ya daha çox dəyər daxil edin.",
+                errInsuff: "⚠️ Balansınız kifayət deyil. Maksimum {amount} TON çıxara bilərsiniz.",
+                succEntrySec: "🎉 <b>İştirak Təsdiqləndi:</b> Tirajda iştirakınız uğurla qeydə alındı. Uğurlar!",
+                errActionReq: "⚠️ <b>Tələb olunan hərəkət:</b><br>",
+                errJoinChan: "• Zəhmət olmasa kanala qoşulun.<br>",
+                errWatchMore: "• Daha {amount} reklama baxın.",
+                verifying: "Təsdiqlənir..."
             },
             ru: {
-                "nav_home": "Главная", "nav_games": "Игры", "nav_promo": "Промо", "nav_draws": "Розыгрыши", "nav_wallet": "Кошелек",
-                "curr_balance": "Текущий баланс", "daily_rewards": "Ежедневные награды", "watch_ads_desc": "Смотрите рекламу, чтобы заработать TON.",
-                "progress": "Прогресс", "watch_ad": "▶ Смотреть рекламу", "limit_reached": "🔒 Лимит достигнут",
-                "mini_games": "Мини-игры", "mini_games_desc": "Смотрите рекламу, играйте и выигрывайте TON мгновенно.",
-                "lucky_spin": "Колесо Удачи", "lucky_spin_desc": "Крутите колесо, чтобы выиграть до 5 TON.",
-                "daily_limit": "Дневной лимит", "go_lucky_spin": "Перейти к Колесу", "mystery_box": "Тайный Ящик",
-                "mystery_box_desc": "Откройте случайный ящик и найдите скрытые TON.", "go_mystery_box": "Перейти к Ящику",
-                "back": "НАЗАД", "watch_ad_spin": "Смотреть & Крутить", "watch_ad_open": "Смотреть & Открыть",
-                "redeem_code": "Ввести код", "redeem_desc": "Введите код ниже, чтобы получить мгновенный кредит TON.",
-                "promo_placeholder": "ВВЕДИТЕ ПРОМОКОД", "claim_reward": "Получить награду",
-                "host_own": "Создать свой розыгрыш", "host_desc": "Ускорьте рост вашего канала, запустив крипто-розыгрыш.",
-                "contact_support": "💬 Связаться с поддержкой", "active_gws": "Активные розыгрыши", "prize_pool": "Призовой фонд: 25 TON",
-                "live_now": "● В эфире", "finished_gws": "Завершенные", "ended": "● Завершен", "winner": "🎉 Победитель: ",
-                "days": "Дн", "hours": "Час", "mins": "Мин", "secs": "Сек",
-                "step1": "Шаг 1: Вступить в канал", "step1_desc": "Обязательно для участия в розыгрыше.", "join_channel": "🔗 Вступить в канал",
-                "step2": "Шаг 2: Цель по рекламе", "step2_desc": "Вы должны посмотреть 500 реклам, чтобы участвовать.",
-                "go_daily_ads": "К ежедневной рекламе", "verify_enter": "Проверить и участвовать", "back_to_list": "🔙 Вернуться к списку",
-                "avail_balance": "Доступный баланс", "withdraw_funds": "Вывести средства", "connect_wallet": "Подключите ваш кошелек TON для вывода",
-                "max": "МАКС", "req_amount": "Запрашиваемая сумма:", "net_fee": "Комиссия сети (30%):", "net_payout": "Чистая выплата:",
-                "withdraw": "Вывести", "withdraw_hist": "История выводов",
-                // Dynamic
-                "loading": "Загрузка...", "spinning": "Крутится...", "opening": "Открытие...",
-                "msg_daily_spin": "Достигнут дневной лимит вращений.", "msg_ads_init": "Реклама загружается. Пожалуйста, подождите...",
-                "msg_won_ton": "🎉 Поздравляем! Вы выиграли {amount} TON!",
-                "msg_daily_box": "Достигнут дневной лимит ящиков.", "msg_daily_limit": "Дневной лимит достигнут! Приходите завтра.",
-                "msg_earned": "🎉 Заработано: +{amount} TON", "msg_enter_promo": "⚠️ Пожалуйста, введите промокод.",
-                "msg_promo_limit": "❌ Лимит использования этого промокода исчерпан!",
-                "msg_promo_used": "❌ Вы уже использовали этот промокод!",
-                "msg_promo_success": "🎉 <b>Поздравляем!</b><br>Промокод успешно применен! Получено: +{amount} TON.",
-                "msg_promo_invalid": "❌ Неверный промокод. Проверьте и попробуйте снова.",
-                "msg_min_withdraw": "⚠️ Минимальная сумма вывода 3.0000 TON. Вам нужно еще {amount} TON.",
-                "msg_conn_wallet": "⚠️ Пожалуйста, сначала подключите кошелек TON.", "msg_proc_withdraw": "⚠️ У вас уже есть обрабатываемый вывод. Подождите завершения.",
-                "msg_invalid_entry": "⚠️ Неверный ввод. Укажите сумму от 3.00 TON.",
-                "msg_insuf_bal": "⚠️ Недостаточно средств. Вы можете вывести до {amount} TON.",
-                "status_pending": "В обработке", "status_approved": "Одобрено", "msg_no_withdraw": "Пока нет выводов.",
-                "msg_gw_ended": "Розыгрыш завершен!", "msg_gw_congrats": "Поздравляем нашего счастливчика:",
-                "btn_claim_prize": "🎁 Получить приз", "msg_reward_added": "✅ Награда добавлена на баланс!",
-                "btn_joined": "✓ Вы вступили", "msg_entry_secured": "🎉 <b>Участие подтверждено:</b> Вы успешно зарегистрированы. Удачи!",
-                "msg_action_req": "⚠️ <b>Требуется действие:</b><br>", "msg_pls_join": "• Пожалуйста, вступите в канал.<br>",
-                "msg_watch_more": "• Посмотрите еще {amount} реклам.", "msg_verifying": "Проверка участия..."
+                navHome: "Главная", navGames: "Игры", navPromo: "Промо", navDraws: "Розыгрыши", navWallet: "Кошелек",
+                currBal: "Текущий баланс",
+                dailyRew: "Ежедневные награды", dailyDesc: "Смотрите рекламу, чтобы заработать части TON.",
+                progress: "Прогресс", dailyLimitText: "Дневной лимит",
+                watchAdBtn: "Смотреть рекламу", limitReached: "🔒 Лимит исчерпан",
+                miniGames: "Мини Игры", miniGamesDesc: "Смотрите рекламу, чтобы играть и получать TON.",
+                luckySpin: "Колесо Фортуны", luckySpinDesc: "Крути колесо и выиграй до 5 TON.",
+                goToSpin: "К Колесу Фортуны",
+                mysteryBox: "Загадочная Коробка", mysteryBoxDesc: "Открой коробку и найди TON.",
+                goToBox: "К Загадочной Коробке",
+                backBtn: "НАЗАД",
+                watchAdSpin: "Реклама и Крутить", watchAdOpen: "Реклама и Открыть",
+                loading: "Загрузка...", spinning: "Крутится...", opening: "Открывается...",
+                redeemCode: "Промокод", redeemDesc: "Введите код ниже, чтобы получить TON.",
+                promoPlaceholder: "ВВЕДИТЕ ПРОМОКОД", claimReward: "Получить награду",
+                hostTitle: "Создать Розыгрыш", hostDesc: "Запустите свой розыгрыш для развития канала.", contactSupport: "Служба поддержки",
+                activeGw: "Активные розыгрыши", prizePool: "Призовой фонд", liveNow: "● В эфире",
+                finishedGw: "Завершенные", ended: "● Завершен", winnerTxt: "🎉 Победитель:",
+                days: "Дни", hours: "Часы", mins: "Мин", secs: "Сек",
+                gwEnded: "Розыгрыш завершен!", congratsWinner: "Поздравляем победителя:",
+                claimPrize: "Забрать Приз", rewardAdded: "✅ Награда добавлена на баланс!",
+                step1: "Шаг 1: Присоединиться", step1Desc: "Обязательно для участия.",
+                joinChannel: "Вступить в канал", channelJoined: "✓ Вы подписаны",
+                step2: "Шаг 2: Просмотры рекламы", step2Desc: "Для участия посмотрите 500 реклам в сумме.",
+                goToDaily: "Смотреть рекламу", verifyBtn: "Проверить и Участвовать",
+                backToList: "К списку",
+                availBal: "Доступный баланс", withdrawFunds: "Вывод средств",
+                connWalletDesc: "Подключите кошелек TON для вывода средств",
+                reqAmount: "Сумма запроса:", netFee: "Комиссия сети (30%):", netPayout: "Сумма к выплате:",
+                withdraw: "Вывести", history: "История выводов",
+                noWithdrawals: "Пока нет выводов.", processing: "В обработке", approved: "Одобрено",
+                req: "Запрошено:", fee: "Комиссия (30%):", rec: "Получено:",
+                
+                alertLimitReached: "Дневной лимит достигнут! Возвращайтесь завтра.",
+                alertAdsInit: "Реклама загружается. Пожалуйста, подождите...",
+                toastEarned: "Заработано",
+                toastCongrats: "Поздравляем! Вы выиграли {prize} TON!",
+                errEnterPromo: "⚠️ Введите промокод.",
+                errPromoLimit: "❌ Лимит использования этого промокода исчерпан!",
+                errPromoRedeemed: "❌ Вы уже использовали этот промокод!",
+                succPromo: "🎉 <b>Поздравляем!</b><br>Промокод успешно применен! Получено: +{amount} TON.",
+                errPromoInv: "❌ Неверный промокод. Проверьте и попробуйте снова.",
+                errMinWithdraw: "⚠️ Минимальная сумма вывода 3.0000 TON. Вам нужно еще {amount} TON.",
+                errConnWallet: "⚠️ Сначала подключите кошелек TON.",
+                errPending: "⚠️ У вас уже есть обрабатываемый вывод. Подождите завершения.",
+                errInvEntry: "⚠️ Неверный ввод. Укажите сумму от 3.00 TON.",
+                errInsuff: "⚠️ Недостаточно средств. Максимальный вывод {amount} TON.",
+                succEntrySec: "🎉 <b>Участие подтверждено:</b> Вы успешно добавлены в розыгрыш. Удачи!",
+                errActionReq: "⚠️ <b>Требуется действие:</b><br>",
+                errJoinChan: "• Пожалуйста, подпишитесь на канал.<br>",
+                errWatchMore: "• Посмотрите еще {amount} реклам.",
+                verifying: "Проверка..."
             },
             tr: {
-                "nav_home": "Ana Sayfa", "nav_games": "Oyunlar", "nav_promo": "Promo", "nav_draws": "Çekiliş", "nav_wallet": "Cüzdan",
-                "curr_balance": "Mevcut Bakiye", "daily_rewards": "Günlük Ödüller", "watch_ads_desc": "TON kazanmak için kısa reklamlar izleyin.",
-                "progress": "İlerleme", "watch_ad": "▶ Reklam İzle", "limit_reached": "🔒 Limit Doldu",
-                "mini_games": "Mini Oyunlar", "mini_games_desc": "Oyun oynamak ve anında TON kazanmak için reklam izleyin.",
-                "lucky_spin": "Şans Çarkı", "lucky_spin_desc": "5 TON'a kadar kazanma şansı için çarkı çevirin.",
-                "daily_limit": "Günlük Limit", "go_lucky_spin": "Şans Çarkına Git", "mystery_box": "Gizemli Kutu",
-                "mystery_box_desc": "Gizli TON ödüllerini bulmak için kutuyu açın.", "go_mystery_box": "Gizemli Kutuya Git",
-                "back": "GERİ", "watch_ad_spin": "Reklam İzle & Çevir", "watch_ad_open": "Reklam İzle & Aç",
-                "redeem_code": "Kod Gir", "redeem_desc": "Anında TON kredisi almak için kodunuzu aşağıya girin.",
-                "promo_placeholder": "PROMO KODU GİRİN", "claim_reward": "Ödülü Al",
-                "host_own": "Kendi Çekilişini Yap", "host_desc": "Kanalınızın büyümesini hızlandırın ve topluluğunuzu canlandırın.",
-                "contact_support": "💬 Desteğe Ulaşın", "active_gws": "Aktif Çekilişler", "prize_pool": "Ödül Havuzu: 25 TON",
-                "live_now": "● Şu An Canlı", "finished_gws": "Bitmiş Çekilişler", "ended": "● Bitti", "winner": "🎉 Kazanan: ",
-                "days": "Gün", "hours": "Saat", "mins": "Dak", "secs": "San",
-                "step1": "Adım 1: Kanala Katıl", "step1_desc": "Çekilişe katılmak için gereklidir.", "join_channel": "🔗 Kanala Katıl",
-                "step2": "Adım 2: Toplam Reklam Hedefi", "step2_desc": "Bu çekilişe katılmak için toplam 500 reklam izlemelisiniz.",
-                "go_daily_ads": "Günlük Reklamlara Git", "verify_enter": "Doğrula & Katıl", "back_to_list": "🔙 Listeye Dön",
-                "avail_balance": "Mevcut Bakiye", "withdraw_funds": "Para Çek", "connect_wallet": "Para çekmek için TON cüzdanınızı bağlayın",
-                "max": "MAKS", "req_amount": "Talep Edilen Tutar:", "net_fee": "Ağ Ücreti (30%):", "net_payout": "Net Ödeme:",
-                "withdraw": "Çek", "withdraw_hist": "Çekim Geçmişi",
-                // Dynamic
-                "loading": "Yükleniyor...", "spinning": "Çevriliyor...", "opening": "Açılıyor...",
-                "msg_daily_spin": "Günlük çevirme limitine ulaştınız.", "msg_ads_init": "Reklamlar yükleniyor. Lütfen bekleyin...",
-                "msg_won_ton": "🎉 Tebrikler! {amount} TON kazandınız!",
-                "msg_daily_box": "Günlük kutu limitine ulaştınız.", "msg_daily_limit": "Günlük limite ulaşıldı! Lütfen yarın tekrar gelin.",
-                "msg_earned": "🎉 Kazanıldı: +{amount} TON", "msg_enter_promo": "⚠️ Lütfen bir promo kodu girin.",
-                "msg_promo_limit": "❌ Bu promo kodun kullanım sınırına ulaşıldı!",
-                "msg_promo_used": "❌ Bu promo kodu zaten kullandınız!",
-                "msg_promo_success": "🎉 <b>Tebrikler!</b><br>Promo kod başarıyla uygulandı! Alınan: +{amount} TON.",
-                "msg_promo_invalid": "❌ Geçersiz promo kod. Lütfen kontrol edip tekrar deneyin.",
-                "msg_min_withdraw": "⚠️ Minimum çekim limiti 3.0000 TON. {amount} TON daha gerekiyor.",
-                "msg_conn_wallet": "⚠️ Lütfen önce TON cüzdanınızı bağlayın.", "msg_proc_withdraw": "⚠️ Zaten devam eden bir çekim işleminiz var. Lütfen bitmesini bekleyin.",
-                "msg_invalid_entry": "⚠️ Geçersiz giriş. Lütfen 3.00 TON veya daha fazla bir değer girin.",
-                "msg_insuf_bal": "⚠️ Yetersiz bakiye. {amount} TON'a kadar çekebilirsiniz.",
-                "status_pending": "İşleniyor", "status_approved": "Onaylandı", "msg_no_withdraw": "Henüz para çekme işlemi yok.",
-                "msg_gw_ended": "Çekiliş Bitti!", "msg_gw_congrats": "Şanslı kazananımızı tebrik ederiz:",
-                "btn_claim_prize": "🎁 Ödülü Al", "msg_reward_added": "✅ Ödül bakiyeye eklendi!",
-                "btn_joined": "✓ Kanala Katıldı", "msg_entry_secured": "🎉 <b>Katılım Onaylandı:</b> Çekilişe başarıyla katıldınız. İyi şanslar!",
-                "msg_action_req": "⚠️ <b>Eylem Gerekli:</b><br>", "msg_pls_join": "• Lütfen kanala katılın.<br>",
-                "msg_watch_more": "• {amount} reklam daha izleyin.", "msg_verifying": "Katılım Doğrulanıyor..."
+                navHome: "Ana Sayfa", navGames: "Oyunlar", navPromo: "Promo", navDraws: "Çekilişler", navWallet: "Cüzdan",
+                currBal: "Mevcut Bakiye",
+                dailyRew: "Günlük Ödüller", dailyDesc: "TON kazanmak için kısa reklamlar izle.",
+                progress: "İlerleme", dailyLimitText: "Günlük Limit",
+                watchAdBtn: "Reklam İzle", limitReached: "🔒 Limit Doldu",
+                miniGames: "Mini Oyunlar", miniGamesDesc: "Reklam izleyerek oyun oyna ve TON kazan.",
+                luckySpin: "Şans Çarkı", luckySpinDesc: "Çarkı çevir ve 5 TON'a kadar kazan.",
+                goToSpin: "Şans Çarkına Git",
+                mysteryBox: "Gizemli Kutu", mysteryBoxDesc: "Gizli TON'u bulmak için kutuyu aç.",
+                goToBox: "Gizemli Kutuya Git",
+                backBtn: "GERİ",
+                watchAdSpin: "Reklam İzle & Çevir", watchAdOpen: "Reklam İzle & Aç",
+                loading: "Yükleniyor...", spinning: "Çevriliyor...", opening: "Açılıyor...",
+                redeemCode: "Promo Kod", redeemDesc: "Anında TON kredisi almak için kodu girin.",
+                promoPlaceholder: "PROMO KOD GİRİN", claimReward: "Ödülü Al",
+                hostTitle: "Kendi Çekilişini Yap", hostDesc: "Kanalını büyütmek için kripto çekilişi başlat.", contactSupport: "Destek ile İletişim",
+                activeGw: "Aktif Çekilişler", prizePool: "Ödül Havuzu", liveNow: "● Canlı",
+                finishedGw: "Biten Çekilişler", ended: "● Bitti", winnerTxt: "🎉 Kazanan:",
+                days: "Gün", hours: "Saat", mins: "Dk", secs: "Sn",
+                gwEnded: "Çekiliş Bitti!", congratsWinner: "Şanslı kazananı tebrik ederiz:",
+                claimPrize: "Ödülü Al", rewardAdded: "✅ Ödül bakiyeye eklendi!",
+                step1: "Adım 1: Kanala Katıl", step1Desc: "Katılım için zorunludur.",
+                joinChannel: "Kanala Katıl", channelJoined: "✓ Kanala Katıldınız",
+                step2: "Adım 2: Toplam Reklam", step2Desc: "Bu çekiliş için toplam 500 reklam izlemelisin.",
+                goToDaily: "Günlük Reklamlara Git", verifyBtn: "Doğrula & Katıl",
+                backToList: "Listeye Dön",
+                availBal: "Kullanılabilir Bakiye", withdrawFunds: "Para Çek",
+                connWalletDesc: "Para çekmek için TON cüzdanınızı bağlayın.",
+                reqAmount: "İstenen Tutar:", netFee: "Ağ Ücreti (30%):", netPayout: "Net Ödeme:",
+                withdraw: "Para Çek", history: "Çekim Geçmişi",
+                noWithdrawals: "Henüz çekim yok.", processing: "İşleniyor", approved: "Onaylandı",
+                req: "İstenen:", fee: "Ücret (30%):", rec: "Alınan:",
+                
+                alertLimitReached: "Günlük limit doldu! Lütfen yarın tekrar gel.",
+                alertAdsInit: "Reklamlar yükleniyor. Lütfen bekle...",
+                toastEarned: "Kazanıldı",
+                toastCongrats: "Tebrikler! {prize} TON kazandınız!",
+                errEnterPromo: "⚠️ Lütfen promo kod girin.",
+                errPromoLimit: "❌ Bu promo kodun kullanım limiti doldu!",
+                errPromoRedeemed: "❌ Bu kodu daha önce kullandınız!",
+                succPromo: "🎉 <b>Tebrikler!</b><br>Promo kod uygulandı! Alınan: +{amount} TON.",
+                errPromoInv: "❌ Geçersiz kod. Lütfen tekrar deneyin.",
+                errMinWithdraw: "⚠️ Minimum çekim 3.0000 TON'dur. {amount} TON daha gerekli.",
+                errConnWallet: "⚠️ Lütfen önce TON cüzdanınızı bağlayın.",
+                errPending: "⚠️ Zaten işlenen bir çekiminiz var. Tamamlanmasını bekleyin.",
+                errInvEntry: "⚠️ Geçersiz tutar. 3.00 TON veya üzeri girin.",
+                errInsuff: "⚠️ Yetersiz bakiye. En fazla {amount} TON çekebilirsiniz.",
+                succEntrySec: "🎉 <b>Katılım Onaylandı:</b> Çekilişe başarıyla katıldınız. Bol şans!",
+                errActionReq: "⚠️ <b>Gereken İşlemler:</b><br>",
+                errJoinChan: "• Lütfen kanala katılın.<br>",
+                errWatchMore: "• {amount} reklam daha izleyin.",
+                verifying: "Doğrulanıyor..."
             }
         };
-
-        let currentLang = localStorage.getItem('app_lang') || 'en';
-
-        function t(key, replacements = {}) {
-            let str = translations[currentLang][key] || translations['en'][key] || key;
-            for (const [k, v] of Object.entries(replacements)) { str = str.replace(`{${k}}`, v); }
-            return str;
-        }
-
-        function setLang(lang) {
-            currentLang = lang;
-            localStorage.setItem('app_lang', lang);
-            document.getElementById('lang-text').innerText = lang.toUpperCase();
-            
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (translations[lang] && translations[lang][key]) { el.innerHTML = translations[lang][key]; }
-            });
-
-            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-                const key = el.getAttribute('data-i18n-placeholder');
-                if (translations[lang] && translations[lang][key]) { el.setAttribute('placeholder', translations[lang][key]); }
-            });
-
-            // Close menu
-            document.getElementById('lang-options').classList.remove('show');
-            document.getElementById('lang-arrow').classList.remove('open');
-
-            updateAllUI();
-            if(currentGwView !== null && document.getElementById('view-giveaway-details').classList.contains('active')) { openGiveawayDetails(currentGwView); }
-            renderHistory();
-        }
-
-        function toggleLang(e) {
-            e.stopPropagation();
-            document.getElementById('lang-options').classList.toggle('show');
-            document.getElementById('lang-arrow').classList.toggle('open');
-        }
 
         ['contextmenu', 'dragstart', 'copy', 'cut', 'paste', 'selectstart'].forEach(evt => 
             document.addEventListener(evt, e => {
@@ -1049,17 +1084,60 @@
         function saveStat(key, val) { localStorage.setItem(`${key}_${getUID()}`, val); }
         function getStat(key) { return localStorage.getItem(`${key}_${getUID()}`); }
 
+        // --- LANGUAGE SYSTEM ---
+        let currentLang = getStat('app_lang') || 'en';
+
+        function toggleLangMenu(e) {
+            e.stopPropagation();
+            document.getElementById('lang-menu').classList.toggle('show');
+            document.querySelector('.lang-arrow').classList.toggle('open');
+        }
+
+        function changeLang(lang) {
+            currentLang = lang;
+            saveStat('app_lang', lang);
+            document.getElementById('current-lang-text').innerText = lang.toUpperCase();
+            
+            document.querySelectorAll('.lang-menu li').forEach(li => li.classList.remove('active-lang'));
+            document.getElementById(`lang-opt-${lang}`).classList.add('active-lang');
+            
+            applyTranslations();
+            updateAllUI();
+            renderHistory();
+            if(currentGwView === 1 || currentGwView === 2) openGiveawayDetails(currentGwView); 
+        }
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[currentLang] && t[currentLang][key]) {
+                    if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
+                        el.placeholder = t[currentLang][key];
+                    } else {
+                        el.innerHTML = t[currentLang][key];
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('lang-menu');
+            if (menu.classList.contains('show') && !e.target.closest('.lang-switcher')) {
+                menu.classList.remove('show');
+                document.querySelector('.lang-arrow').classList.remove('open');
+            }
+        });
+        // -----------------------
+
         let userBalance = parseFloat(getStat("user_balance") || "0");
         let totalAdsWatched = parseInt(getStat("total_ads") || "0");
         
-        // Limits
         let dailyAdsWatched = parseInt(getStat("daily_ads") || "0");
         let dailySpins = parseInt(getStat("daily_spins") || "0");
         let dailyBoxes = parseInt(getStat("daily_boxes") || "0");
         const MAX_SPINS = 10;
         const MAX_BOXES = 5;
 
-        // Wheel Prizes
         const WHEEL_PRIZES = [0.0005, 0.001, 0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 5];
         let currentWheelRotation = 0;
         let isSpinning = false;
@@ -1103,8 +1181,11 @@
             initTonConnect();
             setupKeyboardObservation();
             initWheel();
-            setLang(currentLang);
             
+            document.getElementById('current-lang-text').innerText = currentLang.toUpperCase();
+            document.getElementById(`lang-opt-${currentLang}`).classList.add('active-lang');
+            applyTranslations();
+
             await Promise.race([
                 checkMSKDailyReset(),
                 new Promise(resolve => setTimeout(resolve, 3500))
@@ -1157,15 +1238,8 @@
             }
             
             document.addEventListener('click', function(e) {
-                const opts = document.getElementById('lang-options');
-                const arrow = document.getElementById('lang-arrow');
-                if (opts && opts.classList.contains('show') && !e.target.closest('.lang-dropdown')) {
-                    opts.classList.remove('show');
-                    arrow.classList.remove('open');
-                }
-
                 if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && !e.target.classList.contains('btn')) {
-                    if(document.activeElement.tagName === 'INPUT') document.activeElement.blur();
+                    document.activeElement.blur();
                 }
             });
         }
@@ -1179,9 +1253,9 @@
                 try {
                     const controller = new AbortController();
                     const timeout = setTimeout(() => controller.abort(), 2000); 
-                    const t = await api();
+                    const tm = await api();
                     clearTimeout(timeout);
-                    if (t && !isNaN(t)) return t;
+                    if (tm && !isNaN(tm)) return tm;
                 } catch (e) {}
             }
             return Date.now(); 
@@ -1262,29 +1336,27 @@
             if(document.getElementById("spin-balance")) document.getElementById("spin-balance").innerHTML = balHtml;
             if(document.getElementById("box-balance")) document.getElementById("box-balance").innerHTML = balHtml;
 
-            // Ads Progress
             document.getElementById("daily-ad-count").innerText = dailyAdsWatched;
             document.getElementById("daily-ad-fill").style.width = `${(dailyAdsWatched / 50) * 100}%`;
 
             const mainBtn = document.getElementById("main-watch-btn");
             if (dailyAdsWatched >= 50) {
-                mainBtn.innerHTML = t('limit_reached');
+                mainBtn.innerHTML = t[currentLang].limitReached;
                 mainBtn.className = "btn-ad-compact locked";
             } else {
-                mainBtn.innerHTML = t('watch_ad');
+                mainBtn.innerHTML = `▶ ${t[currentLang].watchAdBtn}`;
                 mainBtn.className = "btn-ad-compact action";
             }
 
-            // Games Progress Limits (Games View)
             document.getElementById("daily-spin-count").innerText = dailySpins;
             document.getElementById("daily-spin-fill").style.width = `${(dailySpins / MAX_SPINS) * 100}%`;
             const spinNavBtn = document.getElementById("spin-nav-btn");
             if(spinNavBtn) {
                 if (dailySpins >= MAX_SPINS) {
-                    spinNavBtn.innerHTML = t('limit_reached');
+                    spinNavBtn.innerHTML = t[currentLang].limitReached;
                     spinNavBtn.className = "btn-ad-compact locked";
                 } else {
-                    spinNavBtn.innerHTML = t('go_lucky_spin');
+                    spinNavBtn.innerHTML = t[currentLang].goToSpin;
                     spinNavBtn.className = "btn-ad-compact action";
                 }
             }
@@ -1294,22 +1366,21 @@
             const boxNavBtn = document.getElementById("box-nav-btn");
             if(boxNavBtn) {
                 if (dailyBoxes >= MAX_BOXES) {
-                    boxNavBtn.innerHTML = t('limit_reached');
+                    boxNavBtn.innerHTML = t[currentLang].limitReached;
                     boxNavBtn.className = "btn-ad-compact locked";
                 } else {
-                    boxNavBtn.innerHTML = t('go_mystery_box');
+                    boxNavBtn.innerHTML = t[currentLang].goToBox;
                     boxNavBtn.className = "btn-ad-compact action";
                 }
             }
 
-            // Action Buttons in Dedicated Pages
             const spinPageBtn = document.getElementById("spin-page-btn");
             if(spinPageBtn && !isSpinning) {
                 if (dailySpins >= MAX_SPINS) {
-                    spinPageBtn.innerHTML = t('limit_reached');
+                    spinPageBtn.innerHTML = t[currentLang].limitReached;
                     spinPageBtn.className = "btn-ad-compact locked";
                 } else {
-                    spinPageBtn.innerHTML = t('watch_ad_spin');
+                    spinPageBtn.innerHTML = t[currentLang].watchAdSpin;
                     spinPageBtn.className = "btn-ad-compact action";
                 }
             }
@@ -1317,21 +1388,26 @@
             const boxPageBtn = document.getElementById("box-page-btn");
             if(boxPageBtn && !isOpeningBox) {
                 if (dailyBoxes >= MAX_BOXES) {
-                    boxPageBtn.innerHTML = t('limit_reached');
+                    boxPageBtn.innerHTML = t[currentLang].limitReached;
                     boxPageBtn.className = "btn-ad-compact locked";
                 } else {
-                    boxPageBtn.innerHTML = t('watch_ad_open');
+                    boxPageBtn.innerHTML = t[currentLang].watchAdOpen;
                     boxPageBtn.className = "btn-ad-compact action";
                 }
             }
 
             document.getElementById("gw-total-ads").innerText = totalAdsWatched;
             
+            const joinBtn = document.getElementById("join-btn");
             if (getStat("gw2_joined") === "true") {
-                const joinBtn = document.getElementById("join-btn");
                 if (joinBtn) {
-                    joinBtn.innerHTML = t('btn_joined');
+                    joinBtn.innerHTML = t[currentLang].channelJoined;
                     joinBtn.className = "btn btn-join joined";
+                }
+            } else {
+                if (joinBtn) {
+                    joinBtn.innerHTML = `🔗 <span data-i18n="joinChannel">${t[currentLang].joinChannel}</span>`;
+                    joinBtn.className = "btn btn-join";
                 }
             }
             
@@ -1350,11 +1426,11 @@
             document.activeElement.blur(); 
             
             const tabs = ['home', 'games', 'promo', 'giveaway', 'wallet'];
-            tabs.forEach(t => {
-                const navEl = document.getElementById(`nav-${t}`);
+            tabs.forEach(tab => {
+                const navEl = document.getElementById(`nav-${tab}`);
                 if(navEl) navEl.classList.remove('active');
                 
-                const viewEl = document.getElementById(`view-${t === 'giveaway' ? 'giveaway-list' : t}`);
+                const viewEl = document.getElementById(`view-${tab === 'giveaway' ? 'giveaway-list' : tab}`);
                 if(viewEl) viewEl.classList.remove('active');
             });
             
@@ -1410,12 +1486,10 @@
                 spinNext005 = spinTotalCount + Math.floor(Math.random() * 11) + 30;
                 saveStat("spin_next_005", spinNext005.toString());
             }
-            
             spinTotalCount++;
             saveStat("spin_total_count", spinTotalCount.toString());
             
             let prize = 0.0005;
-            
             if (spinTotalCount >= spinNext005) {
                 prize = 0.005;
                 saveStat("spin_next_005", (spinTotalCount + Math.floor(Math.random() * 11) + 30).toString());
@@ -1428,29 +1502,27 @@
                     prize = Math.random() < 0.2 ? 0.001 : 0.0005;
                 }
             }
-            
             return WHEEL_PRIZES.indexOf(prize);
         }
 
         function executeSpin() {
             if (isSpinning) return;
-            if (dailySpins >= MAX_SPINS) { alert(t('msg_daily_spin')); return; }
-            if (!adController) { alert(t('msg_ads_init')); return; }
+            if (dailySpins >= MAX_SPINS) { alert(t[currentLang].alertLimitReached); return; }
+            if (!adController) { alert(t[currentLang].alertAdsInit); return; }
             
             const btn = document.getElementById("spin-page-btn");
-            btn.innerHTML = `<span class='spinner'></span> ${t('loading')}`;
+            btn.innerHTML = `<span class='spinner'></span> ${t[currentLang].loading}`;
             btn.classList.add('locked');
             
             adController.show().then(() => {
                 isSpinning = true;
-                btn.innerHTML = t('spinning');
+                btn.innerHTML = t[currentLang].spinning;
                 dailySpins++;
                 totalAdsWatched++;
                 
                 const targetIndex = determineSpinPrizeIndex();
                 const targetDeg = (360 - ((targetIndex * 30) + 15)) % 360;
                 const currentDeg = currentWheelRotation % 360;
-                
                 let moveDeg = targetDeg - currentDeg;
                 if (moveDeg <= 0) moveDeg += 360;
                 
@@ -1465,20 +1537,20 @@
                     saveStat("user_balance", userBalance.toString());
                     
                     const miniAlert = document.getElementById("spin-page-alert");
-                    miniAlert.innerHTML = t('msg_won_ton', {amount: prize});
+                    miniAlert.innerHTML = `🎉 ${t[currentLang].toastCongrats.replace('{prize}', prize)}`;
                     miniAlert.style.display = "block";
                     
-                    updateAllUI();
+                    updateAllUI(); 
                     
                     setTimeout(() => {
                         miniAlert.style.display = "none";
                         isSpinning = false;
-                        updateAllUI();
+                        updateAllUI(); 
                     }, 1500);
                 }, 5000); 
                 
-            }).catch((err) => {
-                btn.innerHTML = t('watch_ad_spin');
+            }).catch(() => {
+                btn.innerHTML = t[currentLang].watchAdSpin;
                 btn.classList.remove('locked');
                 isSpinning = false;
             });
@@ -1486,23 +1558,23 @@
 
         function executeBox() {
             if (isOpeningBox) return;
-            if (dailyBoxes >= MAX_BOXES) { alert(t('msg_daily_box')); return; }
-            if (!adController) { alert(t('msg_ads_init')); return; }
+            if (dailyBoxes >= MAX_BOXES) { alert(t[currentLang].alertLimitReached); return; }
+            if (!adController) { alert(t[currentLang].alertAdsInit); return; }
             
             const btn = document.getElementById("box-page-btn");
-            btn.innerHTML = `<span class='spinner'></span> ${t('loading')}`;
+            btn.innerHTML = `<span class='spinner'></span> ${t[currentLang].loading}`;
             btn.classList.add('locked');
             
             adController.show().then(() => {
                 isOpeningBox = true;
-                btn.innerHTML = t('opening');
+                btn.innerHTML = t[currentLang].opening;
                 dailyBoxes++;
                 totalAdsWatched++;
                 
                 let boxTotalCount = parseInt(getStat("box_total_count") || "0");
                 let boxNext005 = parseInt(getStat("box_next_005") || "0");
                 if (boxNext005 === 0) {
-                    boxNext005 = boxTotalCount + Math.floor(Math.random() * 11) + 20;
+                    boxNext005 = boxTotalCount + Math.floor(Math.random() * 11) + 20; 
                     saveStat("box_next_005", boxNext005.toString());
                 }
                 boxTotalCount++;
@@ -1536,10 +1608,10 @@
                     saveStat("user_balance", userBalance.toString());
                     
                     const miniAlert = document.getElementById("box-page-alert");
-                    miniAlert.innerHTML = t('msg_won_ton', {amount: prize});
+                    miniAlert.innerHTML = `🎉 ${t[currentLang].toastCongrats.replace('{prize}', prize)}`;
                     miniAlert.style.display = "block";
                     
-                    updateAllUI();
+                    updateAllUI(); 
                     
                     setTimeout(() => {
                         miniAlert.style.display = "none";
@@ -1549,8 +1621,8 @@
                     
                 }, 1500); 
                 
-            }).catch((err) => {
-                btn.innerHTML = t('watch_ad_open');
+            }).catch(() => {
+                btn.innerHTML = t[currentLang].watchAdOpen;
                 btn.classList.remove('locked');
                 isOpeningBox = false;
             });
@@ -1570,16 +1642,16 @@
                 
                 let winnerHtml = `
                     <div style="font-size: 3.8rem; margin-bottom: 22px; filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));">🎊🏆🎊</div>
-                    <h3 style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.5rem; margin-bottom: 14px; font-weight: 800;">${t('msg_gw_ended')}</h3>
-                    <p style="color: var(--text-gray); font-size: 1.05rem; margin-bottom: 22px;">${t('msg_gw_congrats')}</p>
+                    <h3 style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.5rem; margin-bottom: 14px; font-weight: 800;">${t[currentLang].gwEnded}</h3>
+                    <p style="color: var(--text-gray); font-size: 1.05rem; margin-bottom: 22px;">${t[currentLang].congratsWinner}</p>
                     <div style="color: var(--accent-gold); font-size: 1.7rem; font-weight: 800; font-family: 'Poppins', sans-serif; letter-spacing: 1px; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);">@matro97</div>
                 `;
 
                 if (getUID() === '8227619759') {
                     if (getStat('gw1_claimed') !== 'true') {
-                        winnerHtml += `<button class="btn btn-claim" onclick="claimPrize(1, 25)">${t('btn_claim_prize')}</button>`;
+                        winnerHtml += `<button class="btn btn-claim" onclick="claimPrize(1, 25)">🎁 ${t[currentLang].claimPrize}</button>`;
                     } else {
-                        winnerHtml += `<div style="margin-top: 24px; color: var(--success); font-weight: 800; font-size: 1.3rem; text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);">${t('msg_reward_added')}</div>`;
+                        winnerHtml += `<div style="margin-top: 24px; color: var(--success); font-weight: 800; font-size: 1.3rem; text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);">${t[currentLang].rewardAdded}</div>`;
                     }
                 }
                 document.getElementById('gw-winner-ui').innerHTML = winnerHtml;
@@ -1616,16 +1688,16 @@
 
         function watchDailyAd() {
             if (dailyAdsWatched >= 50) {
-                alert(t('msg_daily_limit'));
+                alert(t[currentLang].alertLimitReached);
                 return;
             }
             if (!adController) {
-                alert(t('msg_ads_init'));
+                alert(t[currentLang].alertAdsInit);
                 return;
             }
             
             const btn = document.getElementById("main-watch-btn");
-            btn.innerHTML = `<span class='spinner'></span> ${t('loading')}`;
+            btn.innerHTML = `<span class='spinner'></span> ${t[currentLang].loading}`;
             btn.classList.add('locked'); 
             
             adController.show().then(() => {
@@ -1638,13 +1710,13 @@
                 saveStat("user_balance", userBalance.toString());
                 
                 const miniAlert = document.getElementById("ad-mini-alert");
-                miniAlert.innerHTML = t('msg_earned', {amount: 0.0005});
+                miniAlert.innerHTML = `🎉 ${t[currentLang].toastEarned}: +0.0005 TON`;
                 miniAlert.style.display = "block";
                 setTimeout(() => { miniAlert.style.display = "none"; }, 1500);
 
                 updateAllUI(); 
-            }).catch((err) => {
-                btn.innerHTML = t('watch_ad');
+            }).catch(() => {
+                btn.innerHTML = `▶ ${t[currentLang].watchAdBtn}`;
                 btn.classList.remove('locked');
             });
         }
@@ -1658,7 +1730,7 @@
 
             if(!codeInput) {
                 msgBox.className = "msg-box msg-err";
-                msgBox.innerHTML = t('msg_enter_promo');
+                msgBox.innerHTML = t[currentLang].errEnterPromo;
                 msgBox.style.display = "block";
                 promoMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 1500);
                 return;
@@ -1666,7 +1738,7 @@
 
             if (EXPIRED_CODES.includes(codeInput)) {
                 msgBox.className = "msg-box msg-err";
-                msgBox.innerHTML = t('msg_promo_limit');
+                msgBox.innerHTML = t[currentLang].errPromoLimit;
                 msgBox.style.display = "block";
                 promoMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 2000);
                 return;
@@ -1677,7 +1749,7 @@
                 
                 if (getStat(trackingKey) === "true") {
                     msgBox.className = "msg-box msg-err";
-                    msgBox.innerHTML = t('msg_promo_used');
+                    msgBox.innerHTML = t[currentLang].errPromoRedeemed;
                     msgBox.style.display = "block";
                     promoMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 1500);
                 } else {
@@ -1687,7 +1759,7 @@
                     saveStat(trackingKey, "true");
 
                     msgBox.className = "msg-box msg-succ";
-                    msgBox.innerHTML = t('msg_promo_success', {amount: awardValue});
+                    msgBox.innerHTML = t[currentLang].succPromo.replace('{amount}', awardValue);
                     msgBox.style.display = "block";
                     inputField.value = "";
                     updateAllUI();
@@ -1696,7 +1768,7 @@
                 }
             } else {
                 msgBox.className = "msg-box msg-err";
-                msgBox.innerHTML = t('msg_promo_invalid');
+                msgBox.innerHTML = t[currentLang].errPromoInv;
                 msgBox.style.display = "block";
                 promoMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 1500);
             }
@@ -1708,7 +1780,6 @@
                 breakdownBox.style.display = "none";
                 return;
             }
-            
             const fee = amount * 0.30;
             const net = amount - fee;
             
@@ -1744,16 +1815,16 @@
             const history = getWithdrawHistory();
             
             if (history.length === 0) {
-                list.innerHTML = `<div style='color: var(--text-gray); font-size: 1rem; text-align: center; padding: 25px;'>${t('msg_no_withdraw')}</div>`;
+                list.innerHTML = `<div style='color: var(--text-gray); font-size: 1rem; text-align: center; padding: 25px;'>${t[currentLang].noWithdrawals}</div>`;
                 return;
             }
 
             let html = "";
             history.forEach(item => {
                 const statusClass = item.status === 'pending' ? 'status-pending' : 'status-approved';
-                const statusText = item.status === 'pending' ? t('status_pending') : t('status_approved');
-                const timeStr = formatMSKTime(item.time);
+                const statusText = item.status === 'pending' ? t[currentLang].processing : t[currentLang].approved;
                 const icon = item.status === 'pending' ? '⏳' : '✅';
+                const timeStr = formatMSKTime(item.time);
                 
                 const grossVal = parseFloat(item.gross || item.amount || 0).toFixed(4);
                 const feeVal = parseFloat(item.fee || (item.amount * 0.3) || 0).toFixed(4);
@@ -1773,15 +1844,15 @@
                         </div>
                         <div class="history-details-grid">
                             <div style="display:flex; justify-content:space-between; opacity:0.8;">
-                                <span>${t('req_amount')}</span>
+                                <span>${t[currentLang].req}</span>
                                 <span>${grossVal} TON</span>
                             </div>
                             <div style="display:flex; justify-content:space-between; color:var(--error); opacity:0.9;">
-                                <span>${t('net_fee')}</span>
+                                <span>${t[currentLang].fee}</span>
                                 <span>-${feeVal} TON</span>
                             </div>
                             <div style="display:flex; justify-content:space-between; color:var(--success); font-weight:700; padding-top:6px; border-top:1px dashed rgba(255,255,255,0.08)">
-                                <span>${t('net_payout')}</span>
+                                <span>${t[currentLang].rec}</span>
                                 <span>${netVal} TON</span>
                             </div>
                         </div>
@@ -1804,7 +1875,7 @@
             
             if (userBalance < 3.0) {
                 const missingAmount = (3.0 - userBalance).toFixed(4);
-                showWithdrawMessage(t('msg_min_withdraw', {amount: missingAmount}));
+                showWithdrawMessage(t[currentLang].errMinWithdraw.replace('{amount}', missingAmount));
                 return;
             }
 
@@ -1813,7 +1884,7 @@
             const amountToWithdraw = parseFloat(rawValue);
             
             if (!tonConnectUI.connected) {
-                showWithdrawMessage(t('msg_conn_wallet'));
+                showWithdrawMessage(t[currentLang].errConnWallet);
                 return;
             }
 
@@ -1821,17 +1892,17 @@
             const hasPending = history.some(item => item.status === 'pending');
 
             if (hasPending) {
-                showWithdrawMessage(t('msg_proc_withdraw'));
+                showWithdrawMessage(t[currentLang].errPending);
                 return;
             }
 
             if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 3.0) {
-                showWithdrawMessage(t('msg_invalid_entry'));
+                showWithdrawMessage(t[currentLang].errInvEntry);
                 return;
             }
 
             if (amountToWithdraw > userBalance) {
-                showWithdrawMessage(t('msg_insuf_bal', {amount: userBalance.toFixed(4)}));
+                showWithdrawMessage(t[currentLang].errInsuff.replace('{amount}', userBalance.toFixed(4)));
                 return;
             }
 
@@ -1870,7 +1941,6 @@
                 let hasPending = false;
                 const now = new Date().getTime();
                 const hiddenProcessingTime = 5 * 60 * 1000; 
-                const msg = document.getElementById("withdraw-msg");
 
                 for (let i = 0; i < history.length; i++) {
                     if (history[i].status === 'pending') {
@@ -1912,16 +1982,16 @@
                     
                     let winnerHtml = `
                         <div style="font-size: 3.8rem; margin-bottom: 22px; filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));">🎊🏆🎊</div>
-                        <h3 style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.5rem; margin-bottom: 14px; font-weight: 800;">${t('msg_gw_ended')}</h3>
-                        <p style="color: var(--text-gray); font-size: 1.05rem; margin-bottom: 22px;">${t('msg_gw_congrats')}</p>
+                        <h3 style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.5rem; margin-bottom: 14px; font-weight: 800;">${t[currentLang].gwEnded}</h3>
+                        <p style="color: var(--text-gray); font-size: 1.05rem; margin-bottom: 22px;">${t[currentLang].congratsWinner}</p>
                         <div style="color: var(--accent-gold); font-size: 1.7rem; font-weight: 800; font-family: 'Poppins', sans-serif; letter-spacing: 1px; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);">@Ney9773883</div>
                     `;
 
                     if (getUID() === '8066661936') {
                         if (getStat('gw2_claimed') !== 'true') {
-                            winnerHtml += `<button class="btn btn-claim" onclick="claimPrize(2, 25)">${t('btn_claim_prize')}</button>`;
+                            winnerHtml += `<button class="btn btn-claim" onclick="claimPrize(2, 25)">🎁 ${t[currentLang].claimPrize}</button>`;
                         } else {
-                            winnerHtml += `<div style="margin-top: 24px; color: var(--success); font-weight: 800; font-size: 1.3rem; text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);">${t('msg_reward_added')}</div>`;
+                            winnerHtml += `<div style="margin-top: 24px; color: var(--success); font-weight: 800; font-size: 1.3rem; text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);">${t[currentLang].rewardAdded}</div>`;
                         }
                     }
 
@@ -1954,7 +2024,7 @@
                 if(verifyBtn) verifyBtn.style.display = "none";
                 if(msg) {
                     msg.className = "msg-box msg-succ";
-                    msg.innerHTML = t('msg_entry_secured');
+                    msg.innerHTML = t[currentLang].succEntrySec;
                     msg.style.display = "block";
                 }
                 return true;
@@ -1971,15 +2041,15 @@
 
             if (!hasJoined || totalAdsWatched < 500) {
                 msg.className = "msg-box msg-err";
-                let errText = t('msg_action_req');
-                if (!hasJoined) errText += t('msg_pls_join');
-                if (totalAdsWatched < 500) errText += t('msg_watch_more', {amount: 500 - totalAdsWatched});
+                let errText = t[currentLang].errActionReq;
+                if (!hasJoined) errText += t[currentLang].errJoinChan;
+                if (totalAdsWatched < 500) errText += t[currentLang].errWatchMore.replace('{amount}', 500 - totalAdsWatched);
                 msg.innerHTML = errText;
                 msg.style.display = "block";
                 return;
             }
 
-            btn.innerHTML = `<span class='spinner'></span> ${t('msg_verifying')}`;
+            btn.innerHTML = `<span class='spinner'></span> ${t[currentLang].verifying}`;
             btn.disabled = true;
             msg.style.display = "none";
 

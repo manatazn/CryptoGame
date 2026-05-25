@@ -1109,6 +1109,10 @@
             if (document.getElementById('view-giveaway-details').classList.contains('active')) {
                 openGiveawayDetails(currentGwView); 
             }
+
+            // Seçim edildikdən sonra dili seçmək üçün olan dropdown bağlansın (ox əvvəlki halına qayıtsın)
+            document.getElementById('lang-menu').classList.remove('show');
+            document.querySelector('.lang-arrow').classList.remove('open');
         }
 
         function applyTranslations() {

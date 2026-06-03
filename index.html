@@ -457,6 +457,7 @@
             padding: 12px 0;
             border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
             width: 100%;
+            box-sizing: border-box;
         }
         
         .history-compact-item:last-child {
@@ -920,8 +921,7 @@
                 </div>
                 
                 <button class="btn btn-verify" onclick="processDeposit()" style="font-size: 1.15rem; padding: 20px; margin-top: 5px;" data-i18n="depositBtn">Deposit</button>
-                <div id="deposit-msg" class="msg-box"></div>
-
+                
                 <div class="history-container">
                     <div class="history-title" data-i18n="depHistTitle">Deposit History</div>
                     <div id="dep-history-list"></div>
@@ -1736,8 +1736,8 @@
             if(rand < 70) {
                 // 70% ehtimal 1.00 ilə 1.20 arası. Tez-tez 1.00/1.01 üçün:
                 let sub = Math.random();
-                if(sub < 0.35) targetCrashPoint = 1.00;
-                else if(sub < 0.65) targetCrashPoint = 1.01;
+                if(sub < 0.40) targetCrashPoint = 1.00;
+                else if(sub < 0.75) targetCrashPoint = 1.01;
                 else targetCrashPoint = 1.02 + (Math.random() * 0.18); // 1.02 - 1.20
             } else if(rand < 90) {
                 // 20% ehtimal 1.30lar (1.21 - 1.39)
@@ -2065,8 +2065,8 @@
             }
             if (getStat("has_played_crash") === "true") {
                 let adsCrash = parseInt(getStat("ads_since_crash") || "0");
-                if (adsCrash < 5000) {
-                    showWithdrawMessage(t[currentLang].errCrashAdsReq.replace('{amount}', 5000 - adsCrash));
+                if (adsCrash < 1000) {
+                    showWithdrawMessage(t[currentLang].errCrashAdsReq.replace('{amount}', 1000 - adsCrash));
                     return;
                 }
             }

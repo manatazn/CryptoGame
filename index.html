@@ -424,21 +424,53 @@
         .breakdown-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 10px; color: var(--text-gray); font-weight: 500;}
         .breakdown-row.total { margin-bottom: 0; margin-top: 10px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.1); font-size: 1rem; }
 
-        .history-item {
-            background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 24px; padding: 22px; display: flex; flex-direction: column; gap: 14px; text-align: left; transition: var(--transition); box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        /* --- SƏLİQƏLİ VƏ KOMPAKT TARİXÇƏ UI --- */
+        .history-container {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 18px;
+            padding: 16px;
+            max-height: 250px;
+            overflow-y: auto;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: left;
         }
-        .history-row-header { display: flex; justify-content: space-between; align-items: center; }
-        .history-info { display: flex; align-items: center; gap: 16px; }
-        .history-details-grid {
-            background: rgba(0,0,0,0.3); border-radius: 16px; padding: 16px;
-            display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.02); box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+
+        .history-container::-webkit-scrollbar { width: 4px; }
+        .history-container::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
+
+        .history-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            color: white;
+            margin-bottom: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
-        .history-amount { color: white; font-weight: 800; font-family: 'Poppins', sans-serif; font-size: 1.2rem; text-shadow: 0 0 10px rgba(255,255,255,0.1);}
-        .history-time { color: var(--text-gray); font-size: 0.85rem; font-weight: 500;}
-        .history-status { font-family: 'Poppins', sans-serif; font-size: 0.75rem; font-weight: 800; padding: 8px 14px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.8px;}
-        .status-pending { background: rgba(255, 215, 0, 0.1); color: var(--accent-gold); border: 1px solid rgba(255, 215, 0, 0.25); box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);}
-        .status-approved { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.25); box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);}
+
+        .history-compact-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+            width: 100%;
+        }
+        
+        .history-compact-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .hist-col { display: flex; flex-direction: column; gap: 4px; }
+        .hist-amount { font-weight: 800; font-family: 'Poppins', sans-serif; font-size: 1rem; text-shadow: 0 0 10px rgba(0,0,0,0.5);}
+        .hist-date { font-size: 0.75rem; color: var(--text-gray); }
+        .hist-status { font-size: 0.7rem; font-weight: 800; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; text-align: center;}
+        
+        .status-pending { background: rgba(255, 215, 0, 0.1); color: var(--accent-gold); border: 1px solid rgba(255, 215, 0, 0.2); }
+        .status-approved { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2); }
 
         .spinner { border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid white; border-radius: 50%; width: 22px; height: 22px; animation: spin 0.7s linear infinite; box-shadow: 0 0 10px rgba(255,255,255,0.2);}
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -889,6 +921,11 @@
                 
                 <button class="btn btn-verify" onclick="processDeposit()" style="font-size: 1.15rem; padding: 20px; margin-top: 5px;" data-i18n="depositBtn">Deposit</button>
                 <div id="deposit-msg" class="msg-box"></div>
+
+                <div class="history-container">
+                    <div class="history-title" data-i18n="depHistTitle">Deposit History</div>
+                    <div id="dep-history-list"></div>
+                </div>
             </div>
 
             <div id="withdraw-section" style="display: none;">
@@ -918,12 +955,12 @@
                 
                 <button class="btn btn-verify" id="withdraw-btn" onclick="processWithdrawal()" style="font-size: 1.15rem; padding: 20px; margin-top: 15px;" data-i18n="withdraw">Withdraw</button>
                 <div id="withdraw-msg" class="msg-box"></div>
-            </div>
-        </div>
 
-        <div class="giveaway-card" style="padding: 30px 24px; margin-top: 20px;">
-            <h3 style="color: white; margin-bottom: 22px; font-family: 'Poppins', sans-serif; font-size: 1.3rem; text-align: left; font-weight: 800;" data-i18n="history">Withdrawal History</h3>
-            <div id="history-list" style="display: flex; flex-direction: column; gap: 16px;"></div>
+                <div class="history-container">
+                    <div class="history-title" data-i18n="withHistTitle">Withdrawal History</div>
+                    <div id="with-history-list"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -987,7 +1024,9 @@
                 errMinBet: "⚠️ Minimum bet is 0.50 TON.",
                 errDepAdsReq: "⚠️ Security Rule: You must watch {amount} more ads to withdraw after depositing.",
                 errCrashAdsReq: "⚠️ Security Rule: You must watch {amount} more ads to withdraw after playing Crash.",
-                crashedWord: "CRASHED", maxBtn: "MAX"
+                crashedWord: "CRASHED", maxBtn: "MAX",
+                depHistTitle: "Deposit History", withHistTitle: "Withdrawal History",
+                emptyDep: "No deposits yet.", emptyWith: "No withdrawals yet."
             },
             az: {
                 navHome: "Əsas", navGames: "Oyunlar", navPromo: "Promo", navDraws: "Tirajlar", navWallet: "Cüzdan",
@@ -1016,7 +1055,7 @@
                 step2: "Addım 2: Ümumi Reklam", step2Desc: "Bu tiraja qatılmaq üçün ümumilikdə 500 reklama baxmalısan.",
                 goToDaily: "Reklamlara Get", verifyBtn: "Təsdiqlə və Qatıl",
                 backToList: "Siyahıya Qayıt",
-                availBal: "Mövcud Balans", depositTitle: "Deposit", withdrawTitle: "Withdraw",
+                availBal: "Mövcud Balans", depositTitle: "Deposit", withdrawTitle: "Çıxarış",
                 connWalletDesc: "Cüzdanınızı bağlayın", depAmount: "Deposit Məbləği (Min: 0.1 TON)", depositBtn: "Deposit Et",
                 reqAmount: "Tələb Olunan:", netFee: "Komissiya (30%):", netPayout: "Xalis Ödəniş:",
                 withdraw: "Çıxarış", history: "Çıxarış Tarixçəsi",
@@ -1046,7 +1085,9 @@
                 errMinBet: "⚠️ Minimum mərc 0.50 TON-dur.",
                 errDepAdsReq: "⚠️ Sistem təhlükəsizliyi: Deposit etdikdən sonra çıxarış üçün {amount} reklam izləməlisiniz.",
                 errCrashAdsReq: "⚠️ Sistem təhlükəsizliyi: Crash oynadıqdan sonra çıxarış üçün {amount} reklam izləməlisiniz.",
-                crashedWord: "ÇÖKDÜ", maxBtn: "MAKS"
+                crashedWord: "ÇÖKDÜ", maxBtn: "MAKS",
+                depHistTitle: "Deposit Tarixçəsi", withHistTitle: "Çıxarış Tarixçəsi",
+                emptyDep: "Hələ ki, deposit yoxdur.", emptyWith: "Hələ ki, çıxarış yoxdur."
             },
             ru: {
                 navHome: "Главная", navGames: "Игры", navPromo: "Промо", navDraws: "Розыгрыши", navWallet: "Кошелек",
@@ -1105,7 +1146,9 @@
                 errMinBet: "⚠️ Минимальная ставка 0.50 TON.",
                 errDepAdsReq: "⚠️ Безопасность: Вы должны посмотреть {amount} реклам после депозита для вывода.",
                 errCrashAdsReq: "⚠️ Безопасность: Вы должны посмотреть {amount} реклам после игры в Crash для вывода.",
-                crashedWord: "УПАЛ", maxBtn: "МАКС"
+                crashedWord: "УПАЛ", maxBtn: "МАКС",
+                depHistTitle: "История депозитов", withHistTitle: "История выводов",
+                emptyDep: "Депозитов пока нет.", emptyWith: "Выводов пока нет."
             },
             tr: {
                 navHome: "Ana Sayfa", navGames: "Oyunlar", navPromo: "Promo", navDraws: "Çekilişler", navWallet: "Cüzdan",
@@ -1134,7 +1177,7 @@
                 step2: "Adım 2: Toplam Reklam", step2Desc: "Bu çekiliş için toplam 500 reklam izlemelisin.",
                 goToDaily: "Reklamlara Git", verifyBtn: "Doğrula & Katıl",
                 backToList: "Listeye Dön",
-                availBal: "Kullanılabilir Bakiye", depositTitle: "Deposit", withdrawTitle: "Withdraw",
+                availBal: "Kullanılabilir Bakiye", depositTitle: "Deposit", withdrawTitle: "Çekim",
                 connWalletDesc: "Cüzdanınızı bağlayın", depAmount: "Deposit Tutarı (Min: 0.1 TON)", depositBtn: "Deposit Yap",
                 reqAmount: "İstenen:", netFee: "Ağ Ücreti (30%):", netPayout: "Net Ödeme:",
                 withdraw: "Para Çek", history: "Çekim Geçmişi",
@@ -1164,7 +1207,9 @@
                 errMinBet: "⚠️ Minimum bahis 0.50 TON'dur.",
                 errDepAdsReq: "⚠️ Güvenlik Kuralı: Para çekmek için deposit sonrası {amount} reklam izlemelisiniz.",
                 errCrashAdsReq: "⚠️ Güvenlik Kuralı: Crash oynadıktan sonra para çekmek için {amount} reklam izlemelisiniz.",
-                crashedWord: "ÇÖKTÜ", maxBtn: "MAKS"
+                crashedWord: "ÇÖKTÜ", maxBtn: "MAKS",
+                depHistTitle: "Deposit Geçmişi", withHistTitle: "Çekim Geçmişi",
+                emptyDep: "Henüz deposit yok.", emptyWith: "Henüz çekim yok."
             }
         };
 
@@ -1188,7 +1233,7 @@
         function getStat(key) { return localStorage.getItem(`${key}_${getUID()}`); }
 
         // --- LANGUAGE SYSTEM ---
-        let currentLang = getStat('app_lang') || 'en'; // Default EN (İngiliscə)
+        let currentLang = getStat('app_lang') || 'en'; // DEFAULT ENGLISH
 
         function toggleLangMenu(e) {
             e.stopPropagation();
@@ -1206,7 +1251,6 @@
             
             applyTranslations();
             updateAllUI();
-            renderHistory();
             
             if (document.getElementById('view-giveaway-details').classList.contains('active')) {
                 openGiveawayDetails(currentGwView); 
@@ -1227,6 +1271,7 @@
                     }
                 }
             });
+            renderHistoryUI(); // Dəyişiləndə tarixçə dillərini yeniləyir
         }
 
         document.addEventListener('click', (e) => {
@@ -1236,7 +1281,6 @@
                 document.querySelector('.lang-arrow').classList.remove('open');
             }
         });
-        // -----------------------
 
         let userBalance = parseFloat(getStat("user_balance") || "0");
         let totalAdsWatched = parseInt(getStat("total_ads") || "0");
@@ -1284,7 +1328,6 @@
             "6NP9T1WK3X": 0.025, "R4M7Q8LC2T": 0.025, "3LK1V9XP5N": 0.025, "T9Q4X2WM7K": 0.025,
             "5XN8L1RC4P": 0.025, "V2T7Q9MK6X": 0.025, "8LP1W4XN5R": 0.025, "K7Q3V2TM9L": 0.025
         };
-
         const EXPIRED_CODES = ["A7F3K9L2QX", "7VK3P8N1WD", "H4L9T2X7QM", "N4T1X7KC9Q", "2MX8P5QL1V"];
 
         document.addEventListener('DOMContentLoaded', async () => {
@@ -1304,7 +1347,7 @@
             ]);
             
             updateAllUI();
-            renderHistory(); 
+            renderHistoryUI(); 
             startSystem();
             checkWithdrawalStatus();
 
@@ -1319,7 +1362,6 @@
             }, 3500); 
         });
 
-        // TƏMİZ FORMATLAMA (Maksimum 2 onluq, hərfə icazə yox)
         function formatCryptoInput(input) {
             let val = input.value.replace(/[^0-9.]/g, '');
             const parts = val.split('.');
@@ -1534,6 +1576,8 @@
 
             document.getElementById(`tab-btn-${tab}`).classList.add("active");
             document.getElementById(`${tab}-section`).style.display = "block";
+            
+            renderHistoryUI();
         }
 
         function switchTab(tabName) {
@@ -1568,6 +1612,7 @@
             } else if (tabName === 'wallet') {
                 document.getElementById('nav-wallet').classList.add('active');
                 document.getElementById('view-wallet').classList.add('active');
+                renderHistoryUI();
             }
         }
 
@@ -1637,7 +1682,6 @@
             ctx.quadraticCurveTo(x * 0.5, canvas.height, x, y);
             ctx.stroke();
 
-            // Fill gradient below curve
             ctx.lineTo(x, canvas.height);
             ctx.lineTo(0, canvas.height);
             let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
@@ -1671,7 +1715,6 @@
                 return;
             }
 
-            // Mərci silirik
             crashBet = betVal;
             userBalance -= crashBet;
             saveStat("user_balance", userBalance.toString());
@@ -1688,13 +1731,22 @@
             const disp = document.getElementById('crash-multiplier');
             disp.className = "crash-multiplier-text running";
             
-            // Xüsusi Alqoritm (Maksimum tez-tez çox aşağı düşür)
-            let rand = Math.random();
-            if(rand < 0.25) { targetCrashPoint = 1.00; } // 25% Instant crash
-            else if(rand < 0.60) { targetCrashPoint = 1.01 + (Math.random() * 0.10); } // 35% 1.01x - 1.11x
-            else if(rand < 0.85) { targetCrashPoint = 1.11 + (Math.random() * 0.40); } // 25% 1.11x - 1.51x
-            else if(rand < 0.95) { targetCrashPoint = 1.50 + (Math.random() * 1.50); } // 10% 1.5x - 3.0x
-            else { targetCrashPoint = 3.00 + (Math.random() * 5.00); } // 5% 3x - 8x
+            // Xüsusi Alqoritm:
+            let rand = Math.random() * 100;
+            if(rand < 70) {
+                // 70% ehtimal 1.00 ilə 1.20 arası. Tez-tez 1.00/1.01 üçün:
+                let sub = Math.random();
+                if(sub < 0.35) targetCrashPoint = 1.00;
+                else if(sub < 0.65) targetCrashPoint = 1.01;
+                else targetCrashPoint = 1.02 + (Math.random() * 0.18); // 1.02 - 1.20
+            } else if(rand < 90) {
+                // 20% ehtimal 1.30lar (1.21 - 1.39)
+                targetCrashPoint = 1.21 + (Math.random() * 0.18);
+            } else {
+                // 10% ehtimal 1.40 - 1.90 (Tez çöküş)
+                targetCrashPoint = 1.40 + (Math.random() * 0.50);
+            }
+            targetCrashPoint = parseFloat(targetCrashPoint.toFixed(2));
             
             crashState = 'running';
             currentMultiplier = 1.00;
@@ -1705,7 +1757,6 @@
                 currentMultiplier += 0.01 + (tick * 0.0005);
                 
                 if(currentMultiplier >= targetCrashPoint) {
-                    // CRASHED
                     clearInterval(crashInterval);
                     crashState = 'crashed';
                     disp.className = "crash-multiplier-text crashed";
@@ -1950,9 +2001,18 @@
                 userBalance += val;
                 saveStat("user_balance", userBalance.toString());
                 
+                // DEPOSIT HISTORY
+                let depHist = JSON.parse(getStat("deposit_history_list") || "[]");
+                depHist.unshift({
+                    amount: val,
+                    time: Date.now(),
+                    status: 'approved'
+                });
+                saveStat("deposit_history_list", JSON.stringify(depHist));
+                
                 input.value = "";
                 updateAllUI();
-                // QEYD: Rədd ediləndə və ya qəbul ediləndə altda xəbərdarlıq (msgBox) görünməməsi üçün kod buradan silindi.
+                renderHistoryUI();
             } catch (e) {
                 console.log("Transaction rejected or failed", e);
             }
@@ -2060,7 +2120,7 @@
             if(document.activeElement.tagName === 'INPUT') document.activeElement.blur(); 
             
             updateAllUI();
-            renderHistory();
+            renderHistoryUI();
             checkWithdrawalStatus();
         }
 
@@ -2072,56 +2132,56 @@
             return new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Moscow', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(date) + ' MSK';
         }
 
-        function renderHistory() {
-            const list = document.getElementById("history-list");
-            const history = getWithdrawHistory();
-            
-            if (history.length === 0) {
-                list.innerHTML = `<div style='color: var(--text-gray); font-size: 1rem; text-align: center; padding: 25px;'>${t[currentLang].noWithdrawals}</div>`;
-                return;
+        function renderHistoryUI() {
+            // Deposit History Render
+            const depList = document.getElementById("dep-history-list");
+            if (depList) {
+                let depHistory = JSON.parse(getStat("deposit_history_list") || "[]");
+                if (depHistory.length === 0) {
+                    depList.innerHTML = `<div style='color: var(--text-gray); font-size: 0.85rem; text-align: center; padding: 15px;'>${t[currentLang].emptyDep}</div>`;
+                } else {
+                    let html = "";
+                    depHistory.forEach(item => {
+                        const timeStr = formatMSKTime(item.time);
+                        html += `
+                            <div class="history-compact-item">
+                                <div class="hist-col">
+                                    <span class="hist-amount" style="color: var(--success);">+${item.amount.toFixed(2)} TON</span>
+                                    <span class="hist-date">${timeStr}</span>
+                                </div>
+                                <div class="hist-status status-approved">${t[currentLang].approved}</div>
+                            </div>
+                        `;
+                    });
+                    depList.innerHTML = html;
+                }
             }
 
-            let html = "";
-            history.forEach(item => {
-                const statusClass = item.status === 'pending' ? 'status-pending' : 'status-approved';
-                const statusText = item.status === 'pending' ? t[currentLang].processing : t[currentLang].approved;
-                const icon = item.status === 'pending' ? '⏳' : '✅';
-                const timeStr = formatMSKTime(item.time);
-                
-                const grossVal = parseFloat(item.gross || item.amount || 0).toFixed(2);
-                const feeVal = parseFloat(item.fee || (item.amount * 0.3) || 0).toFixed(2);
-                const netVal = parseFloat(item.net || (item.amount * 0.7) || 0).toFixed(2);
-
-                html += `
-                    <div class="history-item">
-                        <div class="history-row-header">
-                            <div class="history-info">
-                                <div style="background: rgba(255,255,255,0.05); width: 48px; height: 48px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 1.3rem; border: 1px solid rgba(255,255,255,0.06); box-shadow: inset 0 0 10px rgba(0,0,0,0.3);">${icon}</div>
-                                <div style="display:flex; flex-direction:column; gap:4px;">
-                                    <span class="history-amount">${netVal} TON</span>
-                                    <span class="history-time">${timeStr}</span>
+            // Withdraw History Render
+            const withList = document.getElementById("with-history-list");
+            if (withList) {
+                let withHistory = getWithdrawHistory();
+                if (withHistory.length === 0) {
+                    withList.innerHTML = `<div style='color: var(--text-gray); font-size: 0.85rem; text-align: center; padding: 15px;'>${t[currentLang].emptyWith}</div>`;
+                } else {
+                    let html = "";
+                    withHistory.forEach(item => {
+                        const timeStr = formatMSKTime(item.time);
+                        const statusClass = item.status === 'pending' ? 'status-pending' : 'status-approved';
+                        const statusText = item.status === 'pending' ? t[currentLang].processing : t[currentLang].approved;
+                        html += `
+                            <div class="history-compact-item">
+                                <div class="hist-col">
+                                    <span class="hist-amount" style="color: var(--error);">-${item.amount.toFixed(2)} TON</span>
+                                    <span class="hist-date">${timeStr}</span>
                                 </div>
+                                <div class="hist-status ${statusClass}">${statusText}</div>
                             </div>
-                            <div class="history-status ${statusClass}">${statusText}</div>
-                        </div>
-                        <div class="history-details-grid">
-                            <div style="display:flex; justify-content:space-between; opacity:0.8;">
-                                <span>${t[currentLang].req}</span>
-                                <span>${grossVal} TON</span>
-                            </div>
-                            <div style="display:flex; justify-content:space-between; color:var(--error); opacity:0.9;">
-                                <span>${t[currentLang].fee}</span>
-                                <span>-${feeVal} TON</span>
-                            </div>
-                            <div style="display:flex; justify-content:space-between; color:var(--success); font-weight:700; padding-top:6px; border-top:1px dashed rgba(255,255,255,0.08)">
-                                <span>${t[currentLang].rec}</span>
-                                <span>${netVal} TON</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            list.innerHTML = html;
+                        `;
+                    });
+                    withList.innerHTML = html;
+                }
+            }
         }
 
         let withdrawInterval;
@@ -2147,7 +2207,7 @@
                 }
                 if (needsUpdate) {
                     saveWithdrawHistory(history);
-                    renderHistory();
+                    renderHistoryUI();
                 }
                 if (!hasPending) {
                     clearInterval(withdrawInterval);

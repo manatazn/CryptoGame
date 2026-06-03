@@ -257,17 +257,6 @@
             border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .btn-crash-action {
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white;
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-        }
-        .btn-crash-action.danger {
-            background: linear-gradient(135deg, #EF4444 0%, #B91C1C 100%);
-            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
-            border-color: rgba(239, 68, 68, 0.2);
-        }
-
         .ad-mini-toast {
             display: none; 
             background: rgba(16, 185, 129, 0.15); 
@@ -504,38 +493,6 @@
             100% { transform: translate(1px, -2px) rotate(-5deg); }
         }
         .shake-anim { animation: shake 0.4s infinite; }
-
-        /* --- LUCKY CRASH CSS --- */
-        .crash-graph-container {
-            width: 100%; height: 200px; background: rgba(5, 10, 15, 0.8);
-            border: 2px solid rgba(0, 152, 234, 0.3); border-radius: 20px;
-            display: flex; justify-content: center; align-items: center; position: relative;
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 0 20px var(--primary-glow);
-            overflow: hidden; margin-top: 10px;
-        }
-        .crash-multiplier-text {
-            font-family: 'Poppins', sans-serif; font-size: 3.5rem; font-weight: 800;
-            color: white; text-shadow: 0 0 20px var(--primary-glow); z-index: 10;
-        }
-        .crash-multiplier-text.crashed {
-            color: var(--error); text-shadow: 0 0 20px rgba(255, 59, 48, 0.5);
-        }
-        .crash-line {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 2px;
-            background: var(--primary); box-shadow: 0 0 10px var(--primary);
-            transform-origin: bottom left; transition: transform 0.1s linear;
-        }
-        .crash-input-row {
-            display: flex; gap: 10px; margin-top: 20px;
-        }
-        .crash-bet-input {
-            flex: 1; padding: 15px; background: rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; color: white;
-            font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; outline: none;
-            text-align: center;
-        }
-        .crash-bet-input:focus { border-color: var(--primary); }
-
     </style>
 </head>
 <body>
@@ -664,18 +621,7 @@
             <p style="font-size:0.9rem; color:var(--text-gray); margin-top:6px; line-height: 1.5;" data-i18n="miniGamesDesc">Watch ads to play games and win extra TON fractions instantly.</p>
         </div>
 
-        <div class="ad-task-card" style="margin-top: 15px; border-color: rgba(0, 152, 234, 0.4); box-shadow: 0 0 20px rgba(0, 152, 234, 0.15);">
-            <div style="display:flex; gap: 15px; align-items: center;">
-                <div style="font-size: 3rem; filter: drop-shadow(0 0 15px rgba(0,152,234,0.5));">🚀</div>
-                <div>
-                    <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.2rem; color: white; margin-bottom: 4px;" data-i18n="luckyCrash">Lucky Crash</h3>
-                    <p style="font-size: 0.85rem; color: var(--text-gray);" data-i18n="luckyCrashDesc">Place a bet and cash out before the graph crashes!</p>
-                </div>
-            </div>
-            <button class="btn-ad-compact action" style="margin-top:10px;" onclick="openGamePage('crash')" data-i18n="goToCrash">Go to Lucky Crash</button>
-        </div>
-
-        <div class="ad-task-card">
+        <div class="ad-task-card" style="margin-top: 15px;">
             <div style="display:flex; gap: 15px; align-items: center;">
                 <div style="font-size: 3rem; filter: drop-shadow(0 0 15px rgba(255,215,0,0.3));">🎡</div>
                 <div>
@@ -709,34 +655,6 @@
                 <div class="ad-progress-bar"><div class="ad-progress-fill" id="daily-box-fill"></div></div>
             </div>
             <button class="btn-ad-compact action" id="box-nav-btn" onclick="openGamePage('box')" data-i18n="goToBox">Go to Mystery Box</button>
-        </div>
-    </div>
-
-    <div id="view-crash-page" class="view-container">
-        <div class="balance-card" style="padding: 24px 20px;">
-            <div class="balance-title" data-i18n="currBal">Current Balance</div>
-            <div class="balance-amount" id="crash-balance">0.0000 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
-        </div>
-
-        <div style="display: flex; justify-content: flex-start; margin-top: 15px;">
-            <button class="btn-page-back" onclick="closeGamePage()">
-                <svg viewBox="0 0 24 24" style="width:20px; height:20px; stroke:currentColor; stroke-width:2.5; fill:none; stroke-linecap:round; stroke-linejoin:round; margin-right:8px;"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
-                <span data-i18n="backBtn">BACK</span>
-            </button>
-        </div>
-        
-        <div style="position: relative; width: 100%; height: 0; z-index: 50;">
-            <div id="crash-page-alert" class="ad-mini-toast" style="top: 10px; padding: 12px 20px; font-size: 0.95rem;"></div>
-        </div>
-
-        <div class="crash-graph-container">
-            <div id="crash-multiplier-display" class="crash-multiplier-text">1.00x</div>
-            <div id="crash-line" class="crash-line"></div>
-        </div>
-
-        <div class="crash-input-row">
-            <input type="text" inputmode="decimal" id="crash-bet-amount" class="crash-bet-input" oninput="formatDecimals(this)" placeholder="0.5" data-i18n="betAmount">
-            <button id="crash-action-btn" class="btn-ad-compact action" onclick="handleCrashAction()" style="width: auto; padding: 15px 30px;" data-i18n="placeBet">Place Bet</button>
         </div>
     </div>
 
@@ -884,22 +802,6 @@
 
         <div class="giveaway-card" style="padding: 35px 24px;">
             <h3 style="color: white; margin-bottom: 28px; font-family: 'Poppins', sans-serif; font-size: 1.4rem; display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 800;">
-                <span style="font-size: 2rem; text-shadow: 0 0 20px rgba(255,255,255,0.3);">💳</span> <span data-i18n="depositFunds">Deposit Funds</span>
-            </h3>
-            
-            <div class="withdraw-step" id="deposit-connect-step">
-                <div style="color: var(--text-gray); font-size: 0.95rem; margin-bottom: 20px; text-align: center; font-weight: 500;" data-i18n="depositDesc">Deposit TON to your balance. Note: You must watch 2000 ads before withdrawing deposited funds.</div>
-                <div class="withdraw-input-wrapper">
-                    <input type="text" inputmode="decimal" id="deposit-amount" class="withdraw-input" oninput="formatDecimals(this)" placeholder="0.1" data-i18n="depositAmount">
-                </div>
-            </div>
-            
-            <button class="btn btn-verify" id="deposit-btn" onclick="processDeposit()" style="font-size: 1.1rem; padding: 18px; margin-top: 5px; background: var(--accent-gold); color: black; box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);" data-i18n="deposit">Deposit</button>
-            <div id="deposit-msg" class="msg-box"></div>
-        </div>
-
-        <div class="giveaway-card" style="padding: 35px 24px; margin-top: 20px;">
-            <h3 style="color: white; margin-bottom: 28px; font-family: 'Poppins', sans-serif; font-size: 1.4rem; display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 800;">
                 <span style="font-size: 2rem; text-shadow: 0 0 20px rgba(255,255,255,0.3);">💸</span> <span data-i18n="withdrawFunds">Withdraw Funds</span>
             </h3>
             
@@ -911,7 +813,7 @@
             <div id="withdraw-input-section" style="display: none;">
                 <div class="withdraw-step">
                     <div class="withdraw-input-wrapper">
-                        <input type="text" inputmode="decimal" id="withdraw-amount" class="withdraw-input" oninput="formatDecimals(this)" placeholder="0.00">
+                        <input type="text" inputmode="decimal" id="withdraw-amount" class="withdraw-input" placeholder="0.00">
                         <button class="btn-max" onclick="handleMaxWithdrawal()">MAX</button>
                     </div>
                     
@@ -956,8 +858,6 @@
                 goToSpin: "Go to Lucky Spin",
                 mysteryBox: "Mystery Box", mysteryBoxDesc: "Open a random box to find hidden TON rewards.",
                 goToBox: "Go to Mystery Box",
-                luckyCrash: "Lucky Crash", luckyCrashDesc: "Place a bet and cash out before the graph crashes!",
-                goToCrash: "Go to Lucky Crash",
                 backBtn: "BACK",
                 watchAdSpin: "Watch Ad & Spin", watchAdOpen: "Watch Ad & Open",
                 loading: "Loading...", spinning: "Spinning...", opening: "Opening...",
@@ -976,8 +876,6 @@
                 backToList: "Back to List",
                 availBal: "Available Balance", withdrawFunds: "Withdraw Funds",
                 connWalletDesc: "Connect your TON wallet to withdraw funds",
-                depositFunds: "Deposit Funds", depositAmount: "Amount (Min 0.1)", deposit: "Deposit",
-                depositDesc: "Deposit TON to your balance. Note: You must watch 2000 ads before withdrawing deposited funds.",
                 reqAmount: "Requested Amount:", netFee: "Network Fee (30%):", netPayout: "Net Payout Amount:",
                 withdraw: "Withdraw", history: "Withdrawal History",
                 noWithdrawals: "No withdrawals yet.", processing: "Processing", approved: "Approved",
@@ -992,19 +890,16 @@
                 errPromoRedeemed: "❌ You have already redeemed this promo code!",
                 succPromo: "🎉 <b>Congratulations!</b><br>Promo code successfully applied! Received: +{amount} TON.",
                 errPromoInv: "❌ Invalid promo code. Please double check and try again.",
-                errMinWithdraw: "⚠️ Minimum withdrawal limit is 3.00 TON. You need {amount} TON more.",
+                errMinWithdraw: "⚠️ Minimum withdrawal limit is 3.0000 TON. You need {amount} TON more.",
                 errConnWallet: "⚠️ Please connect your TON wallet first.",
                 errPending: "⚠️ You already have a processing withdrawal. Please wait until it completes.",
-                errInvEntry: "⚠️ Invalid entry. Please specify a valid total value.",
-                errInsuff: "⚠️ Insufficient balance.",
+                errInvEntry: "⚠️ Invalid entry. Please specify a valid total value of 3.00 TON or more.",
+                errInsuff: "⚠️ Insufficient balance. You can withdraw up to {amount} TON.",
                 succEntrySec: "🎉 <b>Entry Secured:</b> You are successfully entered into the giveaway draw. Good luck!",
                 errActionReq: "⚠️ <b>Action Required:</b><br>",
                 errJoinChan: "• Please join the channel.<br>",
                 errWatchMore: "• Watch {amount} more total ads.",
-                verifying: "Verifying Entry...",
-                
-                betAmount: "Bet Amount", placeBet: "Place Bet", cashOut: "Cash Out", crashing: "Crashing...", crashed: "Crashed!", multiplier: "x",
-                errMinDeposit: "⚠️ Minimum deposit is 0.1 TON.", errMinBet: "⚠️ Minimum bet is 0.5 TON.", errDecimals: "⚠️ Max 2 decimal places allowed.", errAdsNeeded: "⚠️ <b>Action Required:</b><br>Watch {amount} more ads to unlock withdrawals.", adRequirement: "Ad Requirement"
+                verifying: "Verifying Entry..."
             },
             az: {
                 navHome: "Ana Səhifə", navGames: "Oyunlar", navPromo: "Promo", navDraws: "Tirajlar", navWallet: "Pulqabı",
@@ -1017,8 +912,6 @@
                 goToSpin: "Şans Çarxına Get",
                 mysteryBox: "Sirrli Qutu", mysteryBoxDesc: "Gizli TON tapmaq üçün qutunu aç.",
                 goToBox: "Sirrli Qutuya Get",
-                luckyCrash: "Lucky Crash", luckyCrashDesc: "Mərc et və qrafik çökmədən pulunu çıxar!",
-                goToCrash: "Lucky Crash-ə Get",
                 backBtn: "GERİ",
                 watchAdSpin: "Reklama Bax və Fırlat", watchAdOpen: "Reklama Bax və Aç",
                 loading: "Yüklənir...", spinning: "Fırlanır...", opening: "Açılır...",
@@ -1037,8 +930,6 @@
                 backToList: "Siyahıya Qayıt",
                 availBal: "Mövcud Balans", withdrawFunds: "Vəsaiti Çıxar",
                 connWalletDesc: "Vəsaiti çıxarmaq üçün TON pulqabınızı bağlayın.",
-                depositFunds: "Balansı Artır", depositAmount: "Məbləğ (Min 0.1)", deposit: "Mədaxil Et",
-                depositDesc: "Balansınıza TON əlavə edin. Qeyd: Mədaxil edilən vəsaiti çıxarmaq üçün əlavə 2000 reklam izləməlisiniz.",
                 reqAmount: "Tələb Olunan:", netFee: "Şəbəkə Komissiyası (30%):", netPayout: "Xalis Ödəniş:",
                 withdraw: "Çıxarış", history: "Çıxarış Tarixçəsi",
                 noWithdrawals: "Hələ çıxarış yoxdur.", processing: "İcra olunur", approved: "Təsdiqləndi",
@@ -1053,19 +944,16 @@
                 errPromoRedeemed: "❌ Siz bu promo kodu artıq istifadə etmisiniz!",
                 succPromo: "🎉 <b>Təbriklər!</b><br>Promo kod uğurla tətbiq edildi! Alındı: +{amount} TON.",
                 errPromoInv: "❌ Yanlış promo kod. Zəhmət olmasa yoxlayıb yenidən cəhd edin.",
-                errMinWithdraw: "⚠️ Minimum çıxarış limiti 3.00 TON-dur. Sizə daha {amount} TON lazımdır.",
+                errMinWithdraw: "⚠️ Minimum çıxarış limiti 3.0000 TON-dur. Sizə daha {amount} TON lazımdır.",
                 errConnWallet: "⚠️ Zəhmət olmasa əvvəlcə TON pulqabınızı bağlayın.",
                 errPending: "⚠️ Sizin artıq icra olunan çıxarışınız var. Zəhmət olmasa tamamlanmasını gözləyin.",
-                errInvEntry: "⚠️ Yanlış məlumat. Zəhmət olmasa düzgün məbləğ daxil edin.",
-                errInsuff: "⚠️ Balansınız kifayət deyil.",
+                errInvEntry: "⚠️ Yanlış məlumat. Zəhmət olmasa 3.00 TON və ya daha çox dəyər daxil edin.",
+                errInsuff: "⚠️ Balansınız kifayət deyil. Maksimum {amount} TON çıxara bilərsiniz.",
                 succEntrySec: "🎉 <b>İştirak Təsdiqləndi:</b> Tirajda iştirakınız uğurla qeydə alındı. Uğurlar!",
                 errActionReq: "⚠️ <b>Tələb olunan hərəkət:</b><br>",
                 errJoinChan: "• Zəhmət olmasa kanala qoşulun.<br>",
                 errWatchMore: "• Daha {amount} reklama baxın.",
-                verifying: "Təsdiqlənir...",
-                
-                betAmount: "Mərc", placeBet: "Mərc Et", cashOut: "Pulu Götür", crashing: "Çökür...", crashed: "Çökdü!", multiplier: "x",
-                errMinDeposit: "⚠️ Minimum mədaxil 0.1 TON-dur.", errMinBet: "⚠️ Minimum mərc 0.5 TON-dur.", errDecimals: "⚠️ Yalnız 2 onluq kəsrə icazə verilir (Məs: 0.55).", errAdsNeeded: "⚠️ <b>Diqqət:</b><br>Çıxarış etmək üçün daha {amount} reklam izləməlisiniz.", adRequirement: "Reklam Şərti"
+                verifying: "Təsdiqlənir..."
             },
             ru: {
                 navHome: "Главная", navGames: "Игры", navPromo: "Промо", navDraws: "Розыгрыши", navWallet: "Кошелек",
@@ -1078,8 +966,6 @@
                 goToSpin: "К Колесу Фортуны",
                 mysteryBox: "Загадочная Коробка", mysteryBoxDesc: "Открой коробку и найди TON.",
                 goToBox: "К Загадочной Коробке",
-                luckyCrash: "Lucky Crash", luckyCrashDesc: "Сделай ставку и забери деньги до краха!",
-                goToCrash: "К Lucky Crash",
                 backBtn: "НАЗАД",
                 watchAdSpin: "Реклама и Крутить", watchAdOpen: "Реклама и Открыть",
                 loading: "Загрузка...", spinning: "Крутится...", opening: "Открывается...",
@@ -1098,8 +984,6 @@
                 backToList: "К списку",
                 availBal: "Доступный баланс", withdrawFunds: "Вывод средств",
                 connWalletDesc: "Подключите кошелек TON для вывода средств",
-                depositFunds: "Пополнить", depositAmount: "Сумма (Мин 0.1)", deposit: "Пополнить",
-                depositDesc: "Пополните баланс TON. Примечание: Для вывода депозита нужно посмотреть 2000 реклам.",
                 reqAmount: "Сумма запроса:", netFee: "Комиссия сети (30%):", netPayout: "Сумма к выплате:",
                 withdraw: "Вывести", history: "История выводов",
                 noWithdrawals: "Пока нет выводов.", processing: "В обработке", approved: "Одобрено",
@@ -1114,19 +998,16 @@
                 errPromoRedeemed: "❌ Вы уже использовали этот промокод!",
                 succPromo: "🎉 <b>Поздравляем!</b><br>Промокод успешно применен! Получено: +{amount} TON.",
                 errPromoInv: "❌ Неверный промокод. Проверьте и попробуйте снова.",
-                errMinWithdraw: "⚠️ Минимальная сумма вывода 3.00 TON. Вам нужно еще {amount} TON.",
+                errMinWithdraw: "⚠️ Минимальная сумма вывода 3.0000 TON. Вам нужно еще {amount} TON.",
                 errConnWallet: "⚠️ Сначала подключите кошелек TON.",
                 errPending: "⚠️ У вас уже есть обрабатываемый вывод. Подождите завершения.",
-                errInvEntry: "⚠️ Неверный ввод.",
-                errInsuff: "⚠️ Недостаточно средств.",
+                errInvEntry: "⚠️ Неверный ввод. Укажите сумму от 3.00 TON.",
+                errInsuff: "⚠️ Недостаточно средств. Максимальный вывод {amount} TON.",
                 succEntrySec: "🎉 <b>Участие подтверждено:</b> Вы успешно добавлены в розыгрыш. Удачи!",
                 errActionReq: "⚠️ <b>Требуется действие:</b><br>",
                 errJoinChan: "• Пожалуйста, подпишитесь на канал.<br>",
                 errWatchMore: "• Посмотрите еще {amount} реклам.",
-                verifying: "Проверка...",
-                
-                betAmount: "Ставка", placeBet: "Сделать ставку", cashOut: "Забрать", crashing: "Крах...", crashed: "Крах!", multiplier: "x",
-                errMinDeposit: "⚠️ Минимум для пополнения 0.1 TON.", errMinBet: "⚠️ Минимальная ставка 0.5 TON.", errDecimals: "⚠️ Не более 2 знаков после запятой.", errAdsNeeded: "⚠️ <b>Внимание:</b><br>Посмотрите еще {amount} реклам для вывода средств.", adRequirement: "Условие"
+                verifying: "Проверка..."
             },
             tr: {
                 navHome: "Ana Sayfa", navGames: "Oyunlar", navPromo: "Promo", navDraws: "Çekilişler", navWallet: "Cüzdan",
@@ -1139,8 +1020,6 @@
                 goToSpin: "Şans Çarkına Git",
                 mysteryBox: "Gizemli Kutu", mysteryBoxDesc: "Gizli TON'u bulmak için kutuyu aç.",
                 goToBox: "Gizemli Kutuya Git",
-                luckyCrash: "Lucky Crash", luckyCrashDesc: "Bahis yap ve grafik çökmeden paranı çek!",
-                goToCrash: "Lucky Crash'e Git",
                 backBtn: "GERİ",
                 watchAdSpin: "Reklam İzle & Çevir", watchAdOpen: "Reklam İzle & Aç",
                 loading: "Yükleniyor...", spinning: "Çevriliyor...", opening: "Açılıyor...",
@@ -1159,8 +1038,6 @@
                 backToList: "Listeye Dön",
                 availBal: "Kullanılabilir Bakiye", withdrawFunds: "Para Çek",
                 connWalletDesc: "Para çekmek için TON cüzdanınızı bağlayın.",
-                depositFunds: "Para Yatır", depositAmount: "Tutar (Min 0.1)", deposit: "Yatır",
-                depositDesc: "Bakiyenize TON ekleyin. Not: Yatırdığınız parayı çekmek için 2000 reklam izlemelisiniz.",
                 reqAmount: "İstenen Tutar:", netFee: "Ağ Ücreti (30%):", netPayout: "Net Ödeme:",
                 withdraw: "Para Çek", history: "Çekim Geçmişi",
                 noWithdrawals: "Henüz çekim yok.", processing: "İşleniyor", approved: "Onaylandı",
@@ -1175,19 +1052,16 @@
                 errPromoRedeemed: "❌ Bu kodu daha önce kullandınız!",
                 succPromo: "🎉 <b>Tebrikler!</b><br>Promo kod uygulandı! Alınan: +{amount} TON.",
                 errPromoInv: "❌ Geçersiz kod. Lütfen tekrar deneyin.",
-                errMinWithdraw: "⚠️ Minimum çekim 3.00 TON'dur. {amount} TON daha gerekli.",
+                errMinWithdraw: "⚠️ Minimum çekim 3.0000 TON'dur. {amount} TON daha gerekli.",
                 errConnWallet: "⚠️ Lütfen önce TON cüzdanınızı bağlayın.",
                 errPending: "⚠️ Zaten işlenen bir çekiminiz var. Tamamlanmasını bekleyin.",
-                errInvEntry: "⚠️ Geçersiz tutar.",
-                errInsuff: "⚠️ Yetersiz bakiye.",
+                errInvEntry: "⚠️ Geçersiz tutar. 3.00 TON veya üzeri girin.",
+                errInsuff: "⚠️ Yetersiz bakiye. En fazla {amount} TON çekebilirsiniz.",
                 succEntrySec: "🎉 <b>Katılım Onaylandı:</b> Çekilişe başarıyla katıldınız. Bol şans!",
                 errActionReq: "⚠️ <b>Gereken İşlemler:</b><br>",
                 errJoinChan: "• Lütfen kanala katılın.<br>",
                 errWatchMore: "• {amount} reklam daha izleyin.",
-                verifying: "Doğrulanıyor...",
-                
-                betAmount: "Bahis", placeBet: "Bahis Yap", cashOut: "Parayı Al", crashing: "Çöküyor...", crashed: "Çöktü!", multiplier: "x",
-                errMinDeposit: "⚠️ Minimum para yatırma 0.1 TON'dur.", errMinBet: "⚠️ Minimum bahis 0.5 TON'dur.", errDecimals: "⚠️ En fazla 2 ondalık basamak.", errAdsNeeded: "⚠️ <b>Dikkat:</b><br>Para çekebilmek için {amount} reklam daha izlemelisiniz.", adRequirement: "Reklam Şartı"
+                verifying: "Doğrulanıyor..."
             }
         };
 
@@ -1231,10 +1105,12 @@
             updateAllUI();
             renderHistory();
             
+            // Yalnız aktiv olduqda yenilənmə apar (səhifəni dəyişməmək üçün)
             if (document.getElementById('view-giveaway-details').classList.contains('active')) {
                 openGiveawayDetails(currentGwView); 
             }
 
+            // Seçim edildikdən sonra dili seçmək üçün olan dropdown bağlansın (ox əvvəlki halına qayıtsın)
             document.getElementById('lang-menu').classList.remove('show');
             document.querySelector('.lang-arrow').classList.remove('open');
         }
@@ -1259,20 +1135,7 @@
                 document.querySelector('.lang-arrow').classList.remove('open');
             }
         });
-
         // -----------------------
-        // INPUT FORMATTER (Strictly 2 decimal places, e.g., 0.1, 0.55)
-        function formatDecimals(input) {
-            let val = input.value.replace(/[^0-9.]/g, '');
-            const parts = val.split('.');
-            if (parts.length > 2) val = parts[0] + '.' + parts.slice(1).join('');
-            if (parts[1] && parts[1].length > 2) val = parts[0] + '.' + parts[1].slice(0, 2);
-            input.value = val;
-            
-            if (input.id === "withdraw-amount") {
-                updateLiveBreakdown(parseFloat(val));
-            }
-        }
 
         let userBalance = parseFloat(getStat("user_balance") || "0");
         let totalAdsWatched = parseInt(getStat("total_ads") || "0");
@@ -1288,16 +1151,9 @@
         let isSpinning = false;
         let isOpeningBox = false;
 
-        // Crash Variables
-        let isCrashActive = false;
-        let crashInterval;
-        let crashMultiplier = 1.00;
-        let currentBet = 0;
-        
         let currentGwView = 2;
         let promoMsgTimeout; 
         let withdrawMsgTimeout;
-        let depositMsgTimeout;
 
         let tonConnectUI;
 
@@ -1348,6 +1204,16 @@
             startSystem();
             checkWithdrawalStatus();
             
+            const withdrawInput = document.getElementById("withdraw-amount");
+            withdrawInput.addEventListener("input", function(e) {
+                let cleanVal = this.value.replace(/[^0-9.]/g, '');
+                const parts = cleanVal.split('.');
+                if (parts.length > 2) cleanVal = parts[0] + '.' + parts.slice(1).join('');
+                if (parts[1] && parts[1].length > 4) cleanVal = parts[0] + '.' + parts[1].slice(0, 4);
+                this.value = cleanVal;
+                updateLiveBreakdown(parseFloat(cleanVal));
+            });
+
             const splash = document.getElementById('splash-screen');
             setTimeout(() => {
                 splash.style.opacity = '0'; 
@@ -1477,7 +1343,6 @@
             document.getElementById("wallet-balance").innerHTML = balHtml;
             if(document.getElementById("spin-balance")) document.getElementById("spin-balance").innerHTML = balHtml;
             if(document.getElementById("box-balance")) document.getElementById("box-balance").innerHTML = balHtml;
-            if(document.getElementById("crash-balance")) document.getElementById("crash-balance").innerHTML = balHtml;
 
             document.getElementById("daily-ad-count").innerText = dailyAdsWatched;
             document.getElementById("daily-ad-fill").style.width = `${(dailyAdsWatched / 50) * 100}%`;
@@ -1580,7 +1445,6 @@
             document.getElementById('view-giveaway-details').classList.remove('active');
             document.getElementById('view-spin-page').classList.remove('active');
             document.getElementById('view-box-page').classList.remove('active');
-            document.getElementById('view-crash-page').classList.remove('active');
 
             if (tabName === 'home') {
                 document.getElementById('nav-home').classList.add('active');
@@ -1610,134 +1474,16 @@
                 document.getElementById('view-spin-page').classList.add('active');
             } else if (pageId === 'box') {
                 document.getElementById('view-box-page').classList.add('active');
-            } else if (pageId === 'crash') {
-                document.getElementById('view-crash-page').classList.add('active');
             }
         }
 
         function closeGamePage() {
             document.activeElement.blur();
-            if (isCrashActive) return; // Prevent closing while in-game
             const views = document.querySelectorAll('.view-container');
             views.forEach(v => v.classList.remove('active'));
             document.getElementById('app-nav').style.display = 'flex';
             document.getElementById('view-games').classList.add('active');
             updateAllUI();
-        }
-
-        // --- LUCKY CRASH LOGIC ---
-        function generateCrashPoint() {
-            const r = Math.random();
-            // Limits massive multipliers. Highly skewed to crash early.
-            if (r < 0.3) return 1.00 + (Math.random() * 0.2); // 30% chance 1.00 - 1.20
-            if (r < 0.6) return 1.20 + (Math.random() * 0.8); // 30% chance 1.20 - 2.00
-            if (r < 0.85) return 2.00 + (Math.random() * 3.0); // 25% chance 2.00 - 5.00
-            if (r < 0.95) return 5.00 + (Math.random() * 10.0); // 10% chance 5.00 - 15.00
-            return 15.00 + (Math.random() * 35.0); // 5% chance 15.00 - 50.00 max
-        }
-
-        function handleCrashAction() {
-            const btn = document.getElementById("crash-action-btn");
-            const input = document.getElementById("crash-bet-amount");
-            const display = document.getElementById("crash-multiplier-display");
-            const line = document.getElementById("crash-line");
-            const miniAlert = document.getElementById("crash-page-alert");
-
-            if (!isCrashActive) {
-                // START GAME
-                currentBet = parseFloat(input.value);
-                if (isNaN(currentBet) || currentBet < 0.5) {
-                    miniAlert.innerHTML = t[currentLang].errMinBet;
-                    miniAlert.style.display = "block";
-                    setTimeout(() => { miniAlert.style.display = "none"; }, 2000);
-                    return;
-                }
-                if (currentBet > userBalance) {
-                    miniAlert.innerHTML = t[currentLang].errInsuff;
-                    miniAlert.style.display = "block";
-                    setTimeout(() => { miniAlert.style.display = "none"; }, 2000);
-                    return;
-                }
-
-                // Register that they played crash for withdrawal restrictions
-                saveStat("played_crash", "true");
-                saveStat("crash_ads_target", (totalAdsWatched + 5000).toString());
-
-                userBalance -= currentBet;
-                saveStat("user_balance", userBalance.toString());
-                updateAllUI();
-
-                isCrashActive = true;
-                crashMultiplier = 1.00;
-                input.disabled = true;
-                display.classList.remove('crashed');
-                display.innerHTML = `1.00${t[currentLang].multiplier}`;
-                btn.className = "btn-ad-compact btn-crash-action";
-                btn.innerHTML = t[currentLang].cashOut;
-                
-                const targetCrash = generateCrashPoint();
-                let startTime = Date.now();
-                
-                crashInterval = setInterval(() => {
-                    let elapsed = (Date.now() - startTime) / 1000;
-                    // Exponential curve
-                    crashMultiplier = Math.pow(1.06, elapsed * 10);
-                    
-                    if (crashMultiplier >= targetCrash) {
-                        // CRASHED
-                        clearInterval(crashInterval);
-                        isCrashActive = false;
-                        crashMultiplier = targetCrash;
-                        display.innerHTML = `${crashMultiplier.toFixed(2)}${t[currentLang].multiplier}`;
-                        display.classList.add('crashed');
-                        
-                        btn.className = "btn-ad-compact btn-crash-action danger locked";
-                        btn.innerHTML = t[currentLang].crashed;
-                        
-                        setTimeout(() => {
-                            btn.className = "btn-ad-compact action";
-                            btn.innerHTML = t[currentLang].placeBet;
-                            input.disabled = false;
-                            line.style.transform = `scaleY(1)`;
-                        }, 2000);
-                    } else {
-                        display.innerHTML = `${crashMultiplier.toFixed(2)}${t[currentLang].multiplier}`;
-                        // Visual Line
-                        let heightPercent = Math.min((crashMultiplier / targetCrash) * 100, 100);
-                        line.style.transform = `scaleY(${Math.max(1, heightPercent)})`;
-                    }
-                }, 50);
-
-            } else {
-                // CASH OUT
-                clearInterval(crashInterval);
-                isCrashActive = false;
-                
-                let winAmount = currentBet * crashMultiplier;
-                userBalance += winAmount;
-                saveStat("user_balance", userBalance.toString());
-                updateAllUI();
-                
-                display.classList.add('crashed');
-                display.style.color = "var(--success)";
-                display.style.textShadow = "0 0 20px rgba(16, 185, 129, 0.5)";
-                
-                btn.className = "btn-ad-compact locked";
-                btn.innerHTML = t[currentLang].crashed;
-                
-                miniAlert.innerHTML = `🎉 ${t[currentLang].toastCongrats.replace('{prize}', winAmount.toFixed(2))}`;
-                miniAlert.style.display = "block";
-                
-                setTimeout(() => {
-                    display.style.color = "";
-                    display.style.textShadow = "";
-                    miniAlert.style.display = "none";
-                    btn.className = "btn-ad-compact action";
-                    btn.innerHTML = t[currentLang].placeBet;
-                    input.disabled = false;
-                    line.style.transform = `scaleY(1)`;
-                }, 2000);
-            }
         }
 
         function determineSpinPrizeIndex() {
@@ -2036,64 +1782,6 @@
             }
         }
 
-        // --- DEPOSIT SYSTEM ---
-        async function processDeposit() {
-            const msg = document.getElementById("deposit-msg");
-            const inputElem = document.getElementById("deposit-amount");
-            const rawValue = inputElem.value;
-            const amountToDeposit = parseFloat(rawValue);
-
-            const showDepositMessage = (htmlContent, isError = true) => {
-                if (depositMsgTimeout) clearTimeout(depositMsgTimeout);
-                msg.className = isError ? "msg-box msg-err" : "msg-box msg-succ";
-                msg.innerHTML = htmlContent;
-                msg.style.display = "block";
-                depositMsgTimeout = setTimeout(() => { msg.style.display = "none"; }, 2500);
-            };
-
-            if (!tonConnectUI || !tonConnectUI.connected) {
-                showDepositMessage(t[currentLang].errConnWallet);
-                return;
-            }
-
-            if (isNaN(amountToDeposit) || amountToDeposit < 0.1) {
-                showDepositMessage(t[currentLang].errMinDeposit);
-                return;
-            }
-
-            const nanoTon = Math.floor(amountToDeposit * 1e9).toString();
-            // UID in Base64 for comment payload standard format
-            const commentBase64 = btoa(unescape(encodeURIComponent(getUID())));
-
-            const transaction = {
-                validUntil: Math.floor(Date.now() / 1000) + 360,
-                messages: [
-                    {
-                        address: "UQBMGQg3Mm0QsOdsEr0LxC4ZwGLBVqLApuWKqJawpjQnLFN_", // Secure Wallet Target
-                        amount: nanoTon,
-                        payload: commentBase64 // Base64 encoding of UID
-                    }
-                ]
-            };
-
-            try {
-                await tonConnectUI.sendTransaction(transaction);
-                
-                // Set Ads Target after successful deposit
-                saveStat("deposited", "true");
-                saveStat("deposit_ads_target", (totalAdsWatched + 2000).toString());
-                
-                userBalance += amountToDeposit;
-                saveStat("user_balance", userBalance.toString());
-                inputElem.value = "";
-                
-                showDepositMessage("✅ Transaction Sent! Balance Updated.", false);
-                updateAllUI();
-            } catch (e) {
-                showDepositMessage("❌ Transaction failed or canceled.");
-            }
-        }
-
         function updateLiveBreakdown(amount) {
             const breakdownBox = document.getElementById("live-breakdown");
             if (isNaN(amount) || amount <= 0) {
@@ -2111,10 +1799,8 @@
 
         function handleMaxWithdrawal() {
             const maxVal = userBalance;
-            // Strict 2 decimal places to match requirements
-            let val = maxVal.toFixed(2);
-            document.getElementById('withdraw-amount').value = val;
-            updateLiveBreakdown(parseFloat(val));
+            document.getElementById('withdraw-amount').value = maxVal.toFixed(4);
+            updateLiveBreakdown(maxVal);
         }
 
         function getWithdrawHistory() {
@@ -2192,23 +1878,12 @@
                 msg.className = isError ? "msg-box msg-err" : "msg-box msg-succ";
                 msg.innerHTML = htmlContent;
                 msg.style.display = "block";
-                withdrawMsgTimeout = setTimeout(() => { msg.style.display = "none"; }, 3500);
+                withdrawMsgTimeout = setTimeout(() => { msg.style.display = "none"; }, 1500);
             };
             
             if (userBalance < 3.0) {
                 const missingAmount = (3.0 - userBalance).toFixed(4);
                 showWithdrawMessage(t[currentLang].errMinWithdraw.replace('{amount}', missingAmount));
-                return;
-            }
-
-            // --- CHECK AD REQUIREMENTS ---
-            let depTarget = parseInt(getStat("deposit_ads_target") || "0");
-            let crashTarget = parseInt(getStat("crash_ads_target") || "0");
-            let reqTarget = Math.max(depTarget, crashTarget);
-
-            if (totalAdsWatched < reqTarget) {
-                let adsNeeded = reqTarget - totalAdsWatched;
-                showWithdrawMessage(t[currentLang].errAdsNeeded.replace('{amount}', adsNeeded));
                 return;
             }
 
@@ -2235,7 +1910,7 @@
             }
 
             if (amountToWithdraw > userBalance) {
-                showWithdrawMessage(t[currentLang].errInsuff);
+                showWithdrawMessage(t[currentLang].errInsuff.replace('{amount}', userBalance.toFixed(4)));
                 return;
             }
 

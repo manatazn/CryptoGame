@@ -467,7 +467,7 @@
             z-index: 2; text-shadow: 0 0 20px rgba(0,0,0,0.8); transition: color 0.3s;
         }
         .crash-multiplier-text.running { color: var(--success); text-shadow: 0 0 20px rgba(16,185,129,0.5); }
-        .crash-multiplier-text.crashed { color: var(--error); text-shadow: 0 0 20px rgba(255,59,48,0.5); }
+        .crash-multiplier-text.crashed { color: var(--error); text-shadow: 0 0 20px rgba(255,59,48,0.5); font-size: 2.5rem; }
 
         /* Wheel of Fortune CSS */
         .wheel-wrapper { position: relative; width: 280px; height: 280px; margin: 20px auto; }
@@ -654,7 +654,7 @@
                 <div style="font-size: 3rem; filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.4));">🚀</div>
                 <div>
                     <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.2rem; color: white; margin-bottom: 4px;" data-i18n="luckyCrash">Lucky Crash</h3>
-                    <p style="font-size: 0.85rem; color: var(--text-gray);" data-i18n="luckyCrashDesc">Qrafik çökmədən mərci götür və qazan!</p>
+                    <p style="font-size: 0.85rem; color: var(--text-gray);" data-i18n="luckyCrashDesc">Cash out before the chart crashes!</p>
                 </div>
             </div>
             <button class="btn-ad-compact action" onclick="openGamePage('crash')" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); border-color: rgba(16, 185, 129, 0.5); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);" data-i18n="goToCrash">Go to Lucky Crash</button>
@@ -716,14 +716,14 @@
         </div>
 
         <div class="withdraw-step" style="margin-bottom: 10px;">
-            <div style="font-size: 0.9rem; color: var(--text-gray); margin-bottom: 10px; font-weight: 600;" data-i18n="betAmount">Mərc Məbləği (Min: 0.5 TON)</div>
+            <div style="font-size: 0.9rem; color: var(--text-gray); margin-bottom: 10px; font-weight: 600;" data-i18n="betAmount">Bet Amount (Min: 0.5 TON)</div>
             <div class="withdraw-input-wrapper">
                 <input type="text" inputmode="decimal" id="crash-bet-input" class="withdraw-input" style="padding: 18px 22px; font-size: 1.4rem;" placeholder="0.50" oninput="formatCryptoInput(this)">
             </div>
         </div>
 
-        <button class="btn btn-verify" id="crash-btn-start" onclick="startCrash()" style="font-size: 1.15rem; padding: 20px; margin-top: 5px;" data-i18n="placeBet">Mərc Et</button>
-        <button class="btn btn-claim" id="crash-btn-cashout" onclick="cashOutCrash()" style="font-size: 1.15rem; padding: 20px; margin-top: 5px; display: none;" data-i18n="cashOut">Çıxarış Et</button>
+        <button class="btn btn-verify" id="crash-btn-start" onclick="startCrash()" style="font-size: 1.15rem; padding: 20px; margin-top: 5px;" data-i18n="placeBet">Place Bet</button>
+        <button class="btn btn-claim" id="crash-btn-cashout" onclick="cashOutCrash()" style="font-size: 1.15rem; padding: 20px; margin-top: 5px; display: none;" data-i18n="cashOut">Cash Out</button>
         
         <div id="crash-msg" class="msg-box"></div>
     </div>
@@ -876,18 +876,18 @@
 
             <div id="deposit-section">
                 <div class="withdraw-step" id="connect-wallet-step-dep" style="text-align: center;">
-                    <div id="connect-wallet-text-dep" style="color: var(--text-gray); font-size: 0.95rem; margin-bottom: 20px; font-weight: 600;" data-i18n="connWalletDesc">Cüzdanınızı bağlayın</div>
+                    <div id="connect-wallet-text-dep" style="color: var(--text-gray); font-size: 0.95rem; margin-bottom: 20px; font-weight: 600;" data-i18n="connWalletDesc">Connect your TON wallet</div>
                     <div id="ton-connect-dep" style="display: flex; justify-content: center;"></div>
                 </div>
 
                 <div class="withdraw-step">
-                    <div style="font-size: 0.9rem; color: var(--text-gray); margin-bottom: 10px; font-weight: 600;" data-i18n="depAmount">Deposit Məbləği (Min: 0.1 TON)</div>
+                    <div style="font-size: 0.9rem; color: var(--text-gray); margin-bottom: 10px; font-weight: 600;" data-i18n="depAmount">Deposit Amount (Min: 0.1 TON)</div>
                     <div class="withdraw-input-wrapper">
                         <input type="text" inputmode="decimal" id="deposit-amount" class="withdraw-input" placeholder="0.10" oninput="formatCryptoInput(this)">
                     </div>
                 </div>
                 
-                <button class="btn btn-verify" onclick="processDeposit()" style="font-size: 1.15rem; padding: 20px; margin-top: 5px;" data-i18n="depositBtn">Deposit Et</button>
+                <button class="btn btn-verify" onclick="processDeposit()" style="font-size: 1.15rem; padding: 20px; margin-top: 5px;" data-i18n="depositBtn">Deposit</button>
                 <div id="deposit-msg" class="msg-box"></div>
             </div>
 
@@ -896,7 +896,7 @@
                     <div class="withdraw-step">
                         <div class="withdraw-input-wrapper">
                             <input type="text" inputmode="decimal" id="withdraw-amount" class="withdraw-input" placeholder="0.00" oninput="formatCryptoInput(this); updateLiveBreakdown(parseFloat(this.value));">
-                            <button class="btn-max" onclick="handleMaxWithdrawal()">MAX</button>
+                            <button class="btn-max" onclick="handleMaxWithdrawal()" data-i18n="maxBtn">MAX</button>
                         </div>
                         
                         <div id="live-breakdown" class="live-breakdown-box">
@@ -987,7 +987,7 @@
                 errMinBet: "⚠️ Minimum bet is 0.50 TON.",
                 errDepAdsReq: "⚠️ Security Rule: You must watch {amount} more ads to withdraw after depositing.",
                 errCrashAdsReq: "⚠️ Security Rule: You must watch {amount} more ads to withdraw after playing Crash.",
-                succDep: "✅ Deposit transaction initiated successfully!"
+                crashedWord: "CRASHED", maxBtn: "MAX"
             },
             az: {
                 navHome: "Əsas", navGames: "Oyunlar", navPromo: "Promo", navDraws: "Tirajlar", navWallet: "Cüzdan",
@@ -1046,7 +1046,7 @@
                 errMinBet: "⚠️ Minimum mərc 0.50 TON-dur.",
                 errDepAdsReq: "⚠️ Sistem təhlükəsizliyi: Deposit etdikdən sonra çıxarış üçün {amount} reklam izləməlisiniz.",
                 errCrashAdsReq: "⚠️ Sistem təhlükəsizliyi: Crash oynadıqdan sonra çıxarış üçün {amount} reklam izləməlisiniz.",
-                succDep: "✅ Deposit əməliyyatı göndərildi! Blokçeyn təsdiqləndikdən sonra hesaba oturacaq."
+                crashedWord: "ÇÖKDÜ", maxBtn: "MAKS"
             },
             ru: {
                 navHome: "Главная", navGames: "Игры", navPromo: "Промо", navDraws: "Розыгрыши", navWallet: "Кошелек",
@@ -1105,7 +1105,7 @@
                 errMinBet: "⚠️ Минимальная ставка 0.50 TON.",
                 errDepAdsReq: "⚠️ Безопасность: Вы должны посмотреть {amount} реклам после депозита для вывода.",
                 errCrashAdsReq: "⚠️ Безопасность: Вы должны посмотреть {amount} реклам после игры в Crash для вывода.",
-                succDep: "✅ Транзакция депозита отправлена!"
+                crashedWord: "УПАЛ", maxBtn: "МАКС"
             },
             tr: {
                 navHome: "Ana Sayfa", navGames: "Oyunlar", navPromo: "Promo", navDraws: "Çekilişler", navWallet: "Cüzdan",
@@ -1164,7 +1164,7 @@
                 errMinBet: "⚠️ Minimum bahis 0.50 TON'dur.",
                 errDepAdsReq: "⚠️ Güvenlik Kuralı: Para çekmek için deposit sonrası {amount} reklam izlemelisiniz.",
                 errCrashAdsReq: "⚠️ Güvenlik Kuralı: Crash oynadıktan sonra para çekmek için {amount} reklam izlemelisiniz.",
-                succDep: "✅ Deposit işlemi gönderildi!"
+                crashedWord: "ÇÖKTÜ", maxBtn: "MAKS"
             }
         };
 
@@ -1188,7 +1188,7 @@
         function getStat(key) { return localStorage.getItem(`${key}_${getUID()}`); }
 
         // --- LANGUAGE SYSTEM ---
-        let currentLang = getStat('app_lang') || 'az'; // Default AZ 
+        let currentLang = getStat('app_lang') || 'en'; // Default EN (İngiliscə)
 
         function toggleLangMenu(e) {
             e.stopPropagation();
@@ -1688,12 +1688,13 @@
             const disp = document.getElementById('crash-multiplier');
             disp.className = "crash-multiplier-text running";
             
-            // Xüsusi Alqoritm (Maksimum 50x-100x falan)
+            // Xüsusi Alqoritm (Maksimum tez-tez çox aşağı düşür)
             let rand = Math.random();
-            if(rand < 0.10) { targetCrashPoint = 1.00; } // Instant crash %10
-            else if(rand < 0.80) { targetCrashPoint = 1.05 + (Math.random() * 2.5); } 
-            else if(rand < 0.95) { targetCrashPoint = 3.5 + (Math.random() * 6.5); }
-            else { targetCrashPoint = 10.0 + (Math.random() * 40.0); } // 50x Capped
+            if(rand < 0.25) { targetCrashPoint = 1.00; } // 25% Instant crash
+            else if(rand < 0.60) { targetCrashPoint = 1.01 + (Math.random() * 0.10); } // 35% 1.01x - 1.11x
+            else if(rand < 0.85) { targetCrashPoint = 1.11 + (Math.random() * 0.40); } // 25% 1.11x - 1.51x
+            else if(rand < 0.95) { targetCrashPoint = 1.50 + (Math.random() * 1.50); } // 10% 1.5x - 3.0x
+            else { targetCrashPoint = 3.00 + (Math.random() * 5.00); } // 5% 3x - 8x
             
             crashState = 'running';
             currentMultiplier = 1.00;
@@ -1708,7 +1709,7 @@
                     clearInterval(crashInterval);
                     crashState = 'crashed';
                     disp.className = "crash-multiplier-text crashed";
-                    disp.innerHTML = "CRASHED";
+                    disp.innerHTML = t[currentLang].crashedWord;
                     drawCrashCanvas(tick, true);
                     
                     document.getElementById("crash-btn-start").style.display = "block";
@@ -1921,7 +1922,6 @@
                 return;
             }
 
-            // TonWeb ilə Memo (Yorum) payload-u yaradırıq (istifadəçi UID-si ilə)
             let payloadBoc = "";
             try {
                 const tonweb = new window.TonWeb();
@@ -1951,14 +1951,10 @@
                 saveStat("user_balance", userBalance.toString());
                 
                 input.value = "";
-                msgBox.className = "msg-box msg-succ"; 
-                msgBox.innerHTML = t[currentLang].succDep; 
-                msgBox.style.display = "block";
                 updateAllUI();
-                depositMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 3000);
+                // QEYD: Rədd ediləndə və ya qəbul ediləndə altda xəbərdarlıq (msgBox) görünməməsi üçün kod buradan silindi.
             } catch (e) {
-                msgBox.className = "msg-box msg-err"; msgBox.innerHTML = "❌ Transaction failed or rejected."; msgBox.style.display = "block";
-                depositMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 2000);
+                console.log("Transaction rejected or failed", e);
             }
         }
 
@@ -2000,7 +1996,6 @@
                 return;
             }
 
-            // Güvənlik Şərtləri: Deposit və Crash oynadıqdan sonra reklam izləmə
             if (getStat("has_deposited") === "true") {
                 let adsDep = parseInt(getStat("ads_since_deposit") || "0");
                 if (adsDep < 2000) {

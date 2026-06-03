@@ -8,6 +8,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tonweb@0.0.66/dist/tonweb.js"></script>
     
     <style>
         :root {
@@ -379,6 +380,19 @@
         .msg-succ { background: rgba(16, 185, 129, 0.1); color: #6EE7B7; border-color: rgba(16, 185, 129, 0.25); box-shadow: 0 5px 20px rgba(16, 185, 129, 0.15);}
 
         /* --- WALLET & LIVE BREAKDOWN DETAILS UI --- */
+        .wallet-tabs-container {
+            display: flex; gap: 12px; margin-bottom: 24px;
+        }
+        .wallet-tab-btn {
+            flex: 1; padding: 14px; border-radius: 16px; font-family: 'Poppins', sans-serif;
+            font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: var(--transition);
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: var(--text-gray);
+        }
+        .wallet-tab-btn.active {
+            background: var(--primary-gradient); color: white; border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(0, 152, 234, 0.3);
+        }
+
         .withdraw-step { 
             background: rgba(0,0,0,0.35); padding: 24px 20px; 
             border-radius: 24px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.04); 
@@ -402,7 +416,6 @@
         }
         .btn-max:active { transform: translateY(-50%) scale(0.9); background: rgba(255,255,255,0.1); }
 
-        /* Dynamic Crypto Breakdown Box */
         .live-breakdown-box {
             display: none; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.06);
             border-radius: 20px; padding: 20px; margin-top: 18px; text-align: left;
@@ -411,7 +424,6 @@
         .breakdown-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 10px; color: var(--text-gray); font-weight: 500;}
         .breakdown-row.total { margin-bottom: 0; margin-top: 10px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.1); font-size: 1rem; }
 
-        /* Modernized History Entries */
         .history-item {
             background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05);
             border-radius: 24px; padding: 22px; display: flex; flex-direction: column; gap: 14px; text-align: left; transition: var(--transition); box-shadow: 0 8px 20px rgba(0,0,0,0.2);
@@ -440,6 +452,22 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         .btn-page-back:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
+
+        /* Crash Game CSS */
+        .crash-chart-container {
+            width: 100%; height: 220px; background: rgba(0,0,0,0.6);
+            border-radius: 20px; border: 1px solid rgba(255,255,255,0.08);
+            position: relative; overflow: hidden; margin-top: 15px; margin-bottom: 20px;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+        }
+        .crash-canvas { width: 100%; height: 100%; position: absolute; bottom: 0; left: 0; z-index: 1;}
+        .crash-multiplier-text {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-family: 'Poppins', sans-serif; font-size: 3.5rem; font-weight: 800; color: white;
+            z-index: 2; text-shadow: 0 0 20px rgba(0,0,0,0.8); transition: color 0.3s;
+        }
+        .crash-multiplier-text.running { color: var(--success); text-shadow: 0 0 20px rgba(16,185,129,0.5); }
+        .crash-multiplier-text.crashed { color: var(--error); text-shadow: 0 0 20px rgba(255,59,48,0.5); }
 
         /* Wheel of Fortune CSS */
         .wheel-wrapper { position: relative; width: 280px; height: 280px; margin: 20px auto; }
@@ -589,7 +617,7 @@
 
         <div class="balance-card">
             <div class="balance-title" data-i18n="currBal">Current Balance</div>
-            <div class="balance-amount" id="home-balance">0.0000 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
+            <div class="balance-amount" id="home-balance">0.00 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
         </div>
 
         <div class="ad-task-card">
@@ -599,7 +627,7 @@
                     <h3 data-i18n="dailyRew">Daily Rewards</h3>
                     <p data-i18n="dailyDesc">Watch short ads to earn TON fractions.</p>
                 </div>
-                <div class="ad-reward-badge">0.0005 TON</div> </div>
+                <div class="ad-reward-badge">0.005 TON</div> </div>
             
             <div class="ad-progress-container">
                 <div class="ad-progress-text">
@@ -621,7 +649,18 @@
             <p style="font-size:0.9rem; color:var(--text-gray); margin-top:6px; line-height: 1.5;" data-i18n="miniGamesDesc">Watch ads to play games and win extra TON fractions instantly.</p>
         </div>
 
-        <div class="ad-task-card" style="margin-top: 15px;">
+        <div class="ad-task-card" style="margin-top: 15px; border-color: rgba(16, 185, 129, 0.3);">
+            <div style="display:flex; gap: 15px; align-items: center;">
+                <div style="font-size: 3rem; filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.4));">🚀</div>
+                <div>
+                    <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.2rem; color: white; margin-bottom: 4px;" data-i18n="luckyCrash">Lucky Crash</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-gray);" data-i18n="luckyCrashDesc">Qrafik çökmədən mərci götür və qazan!</p>
+                </div>
+            </div>
+            <button class="btn-ad-compact action" onclick="openGamePage('crash')" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); border-color: rgba(16, 185, 129, 0.5); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);" data-i18n="goToCrash">Go to Lucky Crash</button>
+        </div>
+
+        <div class="ad-task-card">
             <div style="display:flex; gap: 15px; align-items: center;">
                 <div style="font-size: 3rem; filter: drop-shadow(0 0 15px rgba(255,215,0,0.3));">🎡</div>
                 <div>
@@ -658,11 +697,41 @@
         </div>
     </div>
 
-    <div id="view-spin-page" class="view-container">
-        
+    <div id="view-crash-page" class="view-container">
         <div class="balance-card" style="padding: 24px 20px;">
             <div class="balance-title" data-i18n="currBal">Current Balance</div>
-            <div class="balance-amount" id="spin-balance">0.0000 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
+            <div class="balance-amount" id="crash-balance">0.00 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-start; margin-top: 15px;">
+            <button class="btn-page-back" onclick="closeGamePage()">
+                <svg viewBox="0 0 24 24" style="width:20px; height:20px; stroke:currentColor; stroke-width:2.5; fill:none; stroke-linecap:round; stroke-linejoin:round; margin-right:8px;"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
+                <span data-i18n="backBtn">BACK</span>
+            </button>
+        </div>
+
+        <div class="crash-chart-container">
+            <canvas id="crash-canvas" class="crash-canvas"></canvas>
+            <div id="crash-multiplier" class="crash-multiplier-text">1.00x</div>
+        </div>
+
+        <div class="withdraw-step" style="margin-bottom: 10px;">
+            <div style="font-size: 0.9rem; color: var(--text-gray); margin-bottom: 10px; font-weight: 600;" data-i18n="betAmount">Mərc Məbləği (Min: 0.5 TON)</div>
+            <div class="withdraw-input-wrapper">
+                <input type="text" inputmode="decimal" id="crash-bet-input" class="withdraw-input" style="padding: 18px 22px; font-size: 1.4rem;" placeholder="0.50" oninput="formatCryptoInput(this)">
+            </div>
+        </div>
+
+        <button class="btn btn-verify" id="crash-btn-start" onclick="startCrash()" style="font-size: 1.15rem; padding: 20px; margin-top: 5px;" data-i18n="placeBet">Mərc Et</button>
+        <button class="btn btn-claim" id="crash-btn-cashout" onclick="cashOutCrash()" style="font-size: 1.15rem; padding: 20px; margin-top: 5px; display: none;" data-i18n="cashOut">Çıxarış Et</button>
+        
+        <div id="crash-msg" class="msg-box"></div>
+    </div>
+
+    <div id="view-spin-page" class="view-container">
+        <div class="balance-card" style="padding: 24px 20px;">
+            <div class="balance-title" data-i18n="currBal">Current Balance</div>
+            <div class="balance-amount" id="spin-balance">0.00 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
         </div>
 
         <div style="display: flex; justify-content: flex-start; margin-top: 15px;">
@@ -685,10 +754,9 @@
     </div>
 
     <div id="view-box-page" class="view-container">
-        
         <div class="balance-card" style="padding: 24px 20px;">
             <div class="balance-title" data-i18n="currBal">Current Balance</div>
-            <div class="balance-amount" id="box-balance">0.0000 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
+            <div class="balance-amount" id="box-balance">0.00 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
         </div>
 
         <div style="display: flex; justify-content: flex-start; margin-top: 15px;">
@@ -797,45 +865,60 @@
     <div id="view-wallet" class="view-container">
         <div class="balance-card">
             <div class="balance-title" data-i18n="availBal">Available Balance</div>
-            <div class="balance-amount" id="wallet-balance">0.0000 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
+            <div class="balance-amount" id="wallet-balance">0.00 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
         </div>
 
-        <div class="giveaway-card" style="padding: 35px 24px;">
-            <h3 style="color: white; margin-bottom: 28px; font-family: 'Poppins', sans-serif; font-size: 1.4rem; display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 800;">
-                <span style="font-size: 2rem; text-shadow: 0 0 20px rgba(255,255,255,0.3);">💸</span> <span data-i18n="withdrawFunds">Withdraw Funds</span>
-            </h3>
-            
-            <div class="withdraw-step" id="connect-wallet-step">
-                <div id="connect-wallet-text" style="color: var(--text-gray); font-size: 1rem; margin-bottom: 20px; text-align: center; font-weight: 600;" data-i18n="connWalletDesc">Connect your TON wallet to withdraw funds</div>
-                <div id="ton-connect" style="display: flex; justify-content: center;"></div>
+        <div class="giveaway-card" style="padding: 25px 20px;">
+            <div class="wallet-tabs-container">
+                <button class="wallet-tab-btn active" id="tab-btn-deposit" onclick="toggleWalletTab('deposit')" data-i18n="depositTitle">Deposit</button>
+                <button class="wallet-tab-btn" id="tab-btn-withdraw" onclick="toggleWalletTab('withdraw')" data-i18n="withdrawTitle">Withdraw</button>
             </div>
-            
-            <div id="withdraw-input-section" style="display: none;">
+
+            <div id="deposit-section">
+                <div class="withdraw-step" id="connect-wallet-step-dep" style="text-align: center;">
+                    <div id="connect-wallet-text-dep" style="color: var(--text-gray); font-size: 0.95rem; margin-bottom: 20px; font-weight: 600;" data-i18n="connWalletDesc">Cüzdanınızı bağlayın</div>
+                    <div id="ton-connect-dep" style="display: flex; justify-content: center;"></div>
+                </div>
+
                 <div class="withdraw-step">
+                    <div style="font-size: 0.9rem; color: var(--text-gray); margin-bottom: 10px; font-weight: 600;" data-i18n="depAmount">Deposit Məbləği (Min: 0.1 TON)</div>
                     <div class="withdraw-input-wrapper">
-                        <input type="text" inputmode="decimal" id="withdraw-amount" class="withdraw-input" placeholder="0.00">
-                        <button class="btn-max" onclick="handleMaxWithdrawal()">MAX</button>
+                        <input type="text" inputmode="decimal" id="deposit-amount" class="withdraw-input" placeholder="0.10" oninput="formatCryptoInput(this)">
                     </div>
-                    
-                    <div id="live-breakdown" class="live-breakdown-box">
-                        <div class="breakdown-row">
-                            <span data-i18n="reqAmount">Requested Amount:</span>
-                            <span id="bd-gross" style="color:white; font-weight:700;">0.0000 TON</span>
+                </div>
+                
+                <button class="btn btn-verify" onclick="processDeposit()" style="font-size: 1.15rem; padding: 20px; margin-top: 5px;" data-i18n="depositBtn">Deposit Et</button>
+                <div id="deposit-msg" class="msg-box"></div>
+            </div>
+
+            <div id="withdraw-section" style="display: none;">
+                <div id="withdraw-input-section" style="display: none;">
+                    <div class="withdraw-step">
+                        <div class="withdraw-input-wrapper">
+                            <input type="text" inputmode="decimal" id="withdraw-amount" class="withdraw-input" placeholder="0.00" oninput="formatCryptoInput(this); updateLiveBreakdown(parseFloat(this.value));">
+                            <button class="btn-max" onclick="handleMaxWithdrawal()">MAX</button>
                         </div>
-                        <div class="breakdown-row" style="color:var(--error);">
-                            <span data-i18n="netFee">Network Fee (30%):</span>
-                            <span id="bd-fee" style="font-weight:700;">0.0000 TON</span>
-                        </div>
-                        <div class="breakdown-row total" style="color:var(--success);">
-                            <span data-i18n="netPayout">Net Payout Amount:</span>
-                            <span id="bd-net" style="font-weight:800; text-shadow: 0 0 10px rgba(16, 185, 129, 0.2);">0.0000 TON</span>
+                        
+                        <div id="live-breakdown" class="live-breakdown-box">
+                            <div class="breakdown-row">
+                                <span data-i18n="reqAmount">Requested Amount:</span>
+                                <span id="bd-gross" style="color:white; font-weight:700;">0.00 TON</span>
+                            </div>
+                            <div class="breakdown-row" style="color:var(--error);">
+                                <span data-i18n="netFee">Network Fee (30%):</span>
+                                <span id="bd-fee" style="font-weight:700;">0.00 TON</span>
+                            </div>
+                            <div class="breakdown-row total" style="color:var(--success);">
+                                <span data-i18n="netPayout">Net Payout Amount:</span>
+                                <span id="bd-net" style="font-weight:800; text-shadow: 0 0 10px rgba(16, 185, 129, 0.2);">0.00 TON</span>
+                            </div>
                         </div>
                     </div>
                 </div>
+                
+                <button class="btn btn-verify" id="withdraw-btn" onclick="processWithdrawal()" style="font-size: 1.15rem; padding: 20px; margin-top: 15px;" data-i18n="withdraw">Withdraw</button>
+                <div id="withdraw-msg" class="msg-box"></div>
             </div>
-            
-            <button class="btn btn-verify" id="withdraw-btn" onclick="processWithdrawal()" style="font-size: 1.2rem; padding: 20px; margin-top: 15px;" data-i18n="withdraw">Withdraw</button>
-            <div id="withdraw-msg" class="msg-box"></div>
         </div>
 
         <div class="giveaway-card" style="padding: 30px 24px; margin-top: 20px;">
@@ -854,13 +937,13 @@
                 progress: "Progress", dailyLimitText: "Daily Limit",
                 watchAdBtn: "Watch Ad", limitReached: "🔒 Limit Reached",
                 miniGames: "Mini Games", miniGamesDesc: "Watch ads to play games and win extra TON fractions instantly.",
-                luckySpin: "Lucky Spin", luckySpinDesc: "Spin the wheel for a chance to win up to 5 TON.",
-                goToSpin: "Go to Lucky Spin",
-                mysteryBox: "Mystery Box", mysteryBoxDesc: "Open a random box to find hidden TON rewards.",
-                goToBox: "Go to Mystery Box",
+                luckyCrash: "Lucky Crash", luckyCrashDesc: "Cash out before the chart crashes!", goToCrash: "Go to Lucky Crash",
+                luckySpin: "Lucky Spin", luckySpinDesc: "Spin the wheel for a chance to win up to 5 TON.", goToSpin: "Go to Lucky Spin",
+                mysteryBox: "Mystery Box", mysteryBoxDesc: "Open a random box to find hidden TON rewards.", goToBox: "Go to Mystery Box",
                 backBtn: "BACK",
                 watchAdSpin: "Watch Ad & Spin", watchAdOpen: "Watch Ad & Open",
                 loading: "Loading...", spinning: "Spinning...", opening: "Opening...",
+                betAmount: "Bet Amount (Min: 0.5 TON)", placeBet: "Place Bet", cashOut: "Cash Out",
                 redeemCode: "Redeem Code", redeemDesc: "Enter your code below to receive an instant TON credit.",
                 promoPlaceholder: "ENTER PROMO CODE", claimReward: "Claim Reward",
                 hostTitle: "Host Your Own Giveaway", hostDesc: "Boost your channel's growth and engage your community by starting a customized crypto giveaway.", contactSupport: "Contact Support",
@@ -874,9 +957,9 @@
                 step2: "Step 2: Total Ads Goal", step2Desc: "You must watch a lifetime total of 500 ads to qualify for this draw.",
                 goToDaily: "Go to Daily Ads", verifyBtn: "Verify & Enter Draw",
                 backToList: "Back to List",
-                availBal: "Available Balance", withdrawFunds: "Withdraw Funds",
-                connWalletDesc: "Connect your TON wallet to withdraw funds",
-                reqAmount: "Requested Amount:", netFee: "Network Fee (30%):", netPayout: "Net Payout Amount:",
+                availBal: "Available Balance", depositTitle: "Deposit", withdrawTitle: "Withdraw",
+                connWalletDesc: "Connect your TON wallet", depAmount: "Deposit Amount (Min: 0.1 TON)", depositBtn: "Deposit",
+                reqAmount: "Requested Amount:", netFee: "Network Fee (30%):", netPayout: "Net Payout:",
                 withdraw: "Withdraw", history: "Withdrawal History",
                 noWithdrawals: "No withdrawals yet.", processing: "Processing", approved: "Approved",
                 req: "Requested:", fee: "Fee (30%):", rec: "Received:",
@@ -888,180 +971,200 @@
                 errEnterPromo: "⚠️ Please enter a promo code.",
                 errPromoLimit: "❌ The usage limit for this promo code has been reached!",
                 errPromoRedeemed: "❌ You have already redeemed this promo code!",
-                succPromo: "🎉 <b>Congratulations!</b><br>Promo code successfully applied! Received: +{amount} TON.",
-                errPromoInv: "❌ Invalid promo code. Please double check and try again.",
-                errMinWithdraw: "⚠️ Minimum withdrawal limit is 3.0000 TON. You need {amount} TON more.",
+                succPromo: "🎉 <b>Congratulations!</b><br>Promo applied! Received: +{amount} TON.",
+                errPromoInv: "❌ Invalid promo code.",
+                errMinWithdraw: "⚠️ Minimum withdrawal is 3.00 TON. You need {amount} TON more.",
                 errConnWallet: "⚠️ Please connect your TON wallet first.",
-                errPending: "⚠️ You already have a processing withdrawal. Please wait until it completes.",
-                errInvEntry: "⚠️ Invalid entry. Please specify a valid total value of 3.00 TON or more.",
-                errInsuff: "⚠️ Insufficient balance. You can withdraw up to {amount} TON.",
-                succEntrySec: "🎉 <b>Entry Secured:</b> You are successfully entered into the giveaway draw. Good luck!",
+                errPending: "⚠️ You already have a processing withdrawal.",
+                errInvEntry: "⚠️ Invalid entry.",
+                errInsuff: "⚠️ Insufficient balance.",
+                succEntrySec: "🎉 <b>Entry Secured:</b> You are entered into the draw.",
                 errActionReq: "⚠️ <b>Action Required:</b><br>",
                 errJoinChan: "• Please join the channel.<br>",
                 errWatchMore: "• Watch {amount} more total ads.",
-                verifying: "Verifying Entry..."
+                verifying: "Verifying...",
+                errMinDep: "⚠️ Minimum deposit is 0.10 TON.",
+                errMinBet: "⚠️ Minimum bet is 0.50 TON.",
+                errDepAdsReq: "⚠️ Security Rule: You must watch {amount} more ads to withdraw after depositing.",
+                errCrashAdsReq: "⚠️ Security Rule: You must watch {amount} more ads to withdraw after playing Crash.",
+                succDep: "✅ Deposit transaction initiated successfully!"
             },
             az: {
-                navHome: "Ana Səhifə", navGames: "Oyunlar", navPromo: "Promo", navDraws: "Tirajlar", navWallet: "Pulqabı",
+                navHome: "Əsas", navGames: "Oyunlar", navPromo: "Promo", navDraws: "Tirajlar", navWallet: "Cüzdan",
                 currBal: "Cari Balans",
-                dailyRew: "Gündəlik Mükafatlar", dailyDesc: "Qısa reklamlara baxaraq TON kəsrləri qazan.",
+                dailyRew: "Gündəlik Mükafatlar", dailyDesc: "Qısa reklamlara baxaraq TON qazan.",
                 progress: "Tərəqqi", dailyLimitText: "Gündəlik Limit",
                 watchAdBtn: "Reklama Bax", limitReached: "🔒 Limit Doldu",
                 miniGames: "Mini Oyunlar", miniGamesDesc: "Reklamlara baxaraq oyunlar oyna və əlavə TON qazan.",
-                luckySpin: "Şans Çarxı", luckySpinDesc: "Çarxı fırlat və 5 TON-a qədər qazan.",
-                goToSpin: "Şans Çarxına Get",
-                mysteryBox: "Sirrli Qutu", mysteryBoxDesc: "Gizli TON tapmaq üçün qutunu aç.",
-                goToBox: "Sirrli Qutuya Get",
+                luckyCrash: "Lucky Crash", luckyCrashDesc: "Qrafik çökmədən mərci götür və qazan!", goToCrash: "Lucky Crash-ə Get",
+                luckySpin: "Şans Çarxı", luckySpinDesc: "Çarxı fırlat və 5 TON-a qədər qazan.", goToSpin: "Şans Çarxına Get",
+                mysteryBox: "Sirrli Qutu", mysteryBoxDesc: "Gizli TON tapmaq üçün qutunu aç.", goToBox: "Sirrli Qutuya Get",
                 backBtn: "GERİ",
                 watchAdSpin: "Reklama Bax və Fırlat", watchAdOpen: "Reklama Bax və Aç",
                 loading: "Yüklənir...", spinning: "Fırlanır...", opening: "Açılır...",
-                redeemCode: "Promo Kod", redeemDesc: "TON krediti almaq üçün kodu aşağıya daxil et.",
-                promoPlaceholder: "PROMO KODU DAXİL ET", claimReward: "Mükafatı Al",
-                hostTitle: "Öz Tirajını Yarat", hostDesc: "Kanalınızı böyütmək üçün xüsusi kripto tirajı yaradın.", contactSupport: "Dəstək ilə Əlaqə",
-                activeGw: "Aktiv Tirajlar", prizePool: "Mükafat Fondu", liveNow: "● Canlı",
+                betAmount: "Mərc Məbləği (Min: 0.5 TON)", placeBet: "Mərc Et", cashOut: "Çıxarış Et",
+                redeemCode: "Promo Kod", redeemDesc: "TON krediti almaq üçün kodu daxil et.",
+                promoPlaceholder: "PROMO KOD", claimReward: "Mükafatı Al",
+                hostTitle: "Öz Tirajını Yarat", hostDesc: "Kanalınızı böyütmək üçün xüsusi kripto tirajı yaradın.", contactSupport: "Dəstək",
+                activeGw: "Aktiv Tirajlar", prizePool: "Mükafat", liveNow: "● Canlı",
                 finishedGw: "Bitmiş Tirajlar", ended: "● Bitdi", winnerTxt: "🎉 Qalib:",
-                days: "Gün", hours: "Saat", mins: "Dəqiqə", secs: "Saniyə",
+                days: "Gün", hours: "Saat", mins: "Dəq", secs: "San",
                 gwEnded: "Tiraj Bitdi!", congratsWinner: "Şanslı qalibimizi təbrik edirik:",
                 claimPrize: "Mükafatı Tələb Et", rewardAdded: "✅ Mükafat balansa əlavə edildi!",
                 step1: "Addım 1: Kanala Qoşul", step1Desc: "İştirak üçün məcburidir.",
-                joinChannel: "Kanala Qoşul", channelJoined: "✓ Kanala Qoşulmusunuz",
+                joinChannel: "Kanala Qoşul", channelJoined: "✓ Qoşulmusunuz",
                 step2: "Addım 2: Ümumi Reklam", step2Desc: "Bu tiraja qatılmaq üçün ümumilikdə 500 reklama baxmalısan.",
-                goToDaily: "Gündəlik Reklamlara Get", verifyBtn: "Təsdiqlə və Qatıl",
+                goToDaily: "Reklamlara Get", verifyBtn: "Təsdiqlə və Qatıl",
                 backToList: "Siyahıya Qayıt",
-                availBal: "Mövcud Balans", withdrawFunds: "Vəsaiti Çıxar",
-                connWalletDesc: "Vəsaiti çıxarmaq üçün TON pulqabınızı bağlayın.",
-                reqAmount: "Tələb Olunan:", netFee: "Şəbəkə Komissiyası (30%):", netPayout: "Xalis Ödəniş:",
+                availBal: "Mövcud Balans", depositTitle: "Deposit", withdrawTitle: "Withdraw",
+                connWalletDesc: "Cüzdanınızı bağlayın", depAmount: "Deposit Məbləği (Min: 0.1 TON)", depositBtn: "Deposit Et",
+                reqAmount: "Tələb Olunan:", netFee: "Komissiya (30%):", netPayout: "Xalis Ödəniş:",
                 withdraw: "Çıxarış", history: "Çıxarış Tarixçəsi",
                 noWithdrawals: "Hələ çıxarış yoxdur.", processing: "İcra olunur", approved: "Təsdiqləndi",
-                req: "Tələb Edildi:", fee: "Komissiya (30%):", rec: "Alındı:",
+                req: "Tələb:", fee: "Komissiya (30%):", rec: "Alındı:",
                 
-                alertLimitReached: "Gündəlik limit doldu! Zəhmət olmasa sabah yenidən sınayın.",
-                alertAdsInit: "Reklamlar yüklənir. Zəhmət olmasa gözləyin...",
+                alertLimitReached: "Gündəlik limit doldu! Sabah yenidən sınayın.",
+                alertAdsInit: "Reklamlar yüklənir. Gözləyin...",
                 toastEarned: "Qazanıldı",
                 toastCongrats: "Təbrik edirik! {prize} TON qazandınız!",
                 errEnterPromo: "⚠️ Zəhmət olmasa promo kod daxil edin.",
-                errPromoLimit: "❌ Bu promo kodun istifadə limiti bitmişdir!",
-                errPromoRedeemed: "❌ Siz bu promo kodu artıq istifadə etmisiniz!",
-                succPromo: "🎉 <b>Təbriklər!</b><br>Promo kod uğurla tətbiq edildi! Alındı: +{amount} TON.",
-                errPromoInv: "❌ Yanlış promo kod. Zəhmət olmasa yoxlayıb yenidən cəhd edin.",
-                errMinWithdraw: "⚠️ Minimum çıxarış limiti 3.0000 TON-dur. Sizə daha {amount} TON lazımdır.",
-                errConnWallet: "⚠️ Zəhmət olmasa əvvəlcə TON pulqabınızı bağlayın.",
-                errPending: "⚠️ Sizin artıq icra olunan çıxarışınız var. Zəhmət olmasa tamamlanmasını gözləyin.",
-                errInvEntry: "⚠️ Yanlış məlumat. Zəhmət olmasa 3.00 TON və ya daha çox dəyər daxil edin.",
-                errInsuff: "⚠️ Balansınız kifayət deyil. Maksimum {amount} TON çıxara bilərsiniz.",
-                succEntrySec: "🎉 <b>İştirak Təsdiqləndi:</b> Tirajda iştirakınız uğurla qeydə alındı. Uğurlar!",
+                errPromoLimit: "❌ Promo kodun istifadə limiti bitmişdir!",
+                errPromoRedeemed: "❌ Bu kodu artıq istifadə etmisiniz!",
+                succPromo: "🎉 <b>Təbriklər!</b><br>Promo kod tətbiq edildi! Alındı: +{amount} TON.",
+                errPromoInv: "❌ Yanlış promo kod.",
+                errMinWithdraw: "⚠️ Minimum çıxarış 3.00 TON-dur. Daha {amount} TON lazımdır.",
+                errConnWallet: "⚠️ Cüzdanınızı bağlayın.",
+                errPending: "⚠️ Sizin artıq icra olunan çıxarışınız var.",
+                errInvEntry: "⚠️ Yanlış məlumat.",
+                errInsuff: "⚠️ Balansınız kifayət deyil.",
+                succEntrySec: "🎉 <b>İştirak Təsdiqləndi:</b> Tirajdasınız. Uğurlar!",
                 errActionReq: "⚠️ <b>Tələb olunan hərəkət:</b><br>",
                 errJoinChan: "• Zəhmət olmasa kanala qoşulun.<br>",
                 errWatchMore: "• Daha {amount} reklama baxın.",
-                verifying: "Təsdiqlənir..."
+                verifying: "Təsdiqlənir...",
+                errMinDep: "⚠️ Minimum deposit 0.10 TON-dur.",
+                errMinBet: "⚠️ Minimum mərc 0.50 TON-dur.",
+                errDepAdsReq: "⚠️ Sistem təhlükəsizliyi: Deposit etdikdən sonra çıxarış üçün {amount} reklam izləməlisiniz.",
+                errCrashAdsReq: "⚠️ Sistem təhlükəsizliyi: Crash oynadıqdan sonra çıxarış üçün {amount} reklam izləməlisiniz.",
+                succDep: "✅ Deposit əməliyyatı göndərildi! Blokçeyn təsdiqləndikdən sonra hesaba oturacaq."
             },
             ru: {
                 navHome: "Главная", navGames: "Игры", navPromo: "Промо", navDraws: "Розыгрыши", navWallet: "Кошелек",
                 currBal: "Текущий баланс",
-                dailyRew: "Ежедневные награды", dailyDesc: "Смотрите рекламу, чтобы заработать части TON.",
+                dailyRew: "Награды", dailyDesc: "Смотрите рекламу, чтобы заработать TON.",
                 progress: "Прогресс", dailyLimitText: "Дневной лимит",
                 watchAdBtn: "Смотреть рекламу", limitReached: "🔒 Лимит исчерпан",
                 miniGames: "Мини Игры", miniGamesDesc: "Смотрите рекламу, чтобы играть и получать TON.",
-                luckySpin: "Колесо Фортуны", luckySpinDesc: "Крути колесо и выиграй до 5 TON.",
-                goToSpin: "К Колесу Фортуны",
-                mysteryBox: "Загадочная Коробка", mysteryBoxDesc: "Открой коробку и найди TON.",
-                goToBox: "К Загадочной Коробке",
+                luckyCrash: "Lucky Crash", luckyCrashDesc: "Выведи ставку до того как график упадет!", goToCrash: "К Lucky Crash",
+                luckySpin: "Колесо Фортуны", luckySpinDesc: "Крути колесо и выиграй до 5 TON.", goToSpin: "К Колесу Фортуны",
+                mysteryBox: "Загадочная Коробка", mysteryBoxDesc: "Открой коробку и найди TON.", goToBox: "К Загадочной Коробке",
                 backBtn: "НАЗАД",
                 watchAdSpin: "Реклама и Крутить", watchAdOpen: "Реклама и Открыть",
                 loading: "Загрузка...", spinning: "Крутится...", opening: "Открывается...",
+                betAmount: "Сумма (Мин: 0.5 TON)", placeBet: "Поставить", cashOut: "Вывести",
                 redeemCode: "Промокод", redeemDesc: "Введите код ниже, чтобы получить TON.",
-                promoPlaceholder: "ВВЕДИТЕ ПРОМОКОД", claimReward: "Получить награду",
-                hostTitle: "Создать Розыгрыш", hostDesc: "Запустите свой розыгрыш для развития канала.", contactSupport: "Служба поддержки",
-                activeGw: "Активные розыгрыши", prizePool: "Призовой фонд", liveNow: "● В эфире",
+                promoPlaceholder: "ПРОМОКОД", claimReward: "Получить награду",
+                hostTitle: "Создать Розыгрыш", hostDesc: "Запустите свой розыгрыш для развития канала.", contactSupport: "Поддержка",
+                activeGw: "Активные розыгрыши", prizePool: "Приз", liveNow: "● В эфире",
                 finishedGw: "Завершенные", ended: "● Завершен", winnerTxt: "🎉 Победитель:",
                 days: "Дни", hours: "Часы", mins: "Мин", secs: "Сек",
                 gwEnded: "Розыгрыш завершен!", congratsWinner: "Поздравляем победителя:",
-                claimPrize: "Забрать Приз", rewardAdded: "✅ Награда добавлена на баланс!",
+                claimPrize: "Забрать Приз", rewardAdded: "✅ Награда добавлена!",
                 step1: "Шаг 1: Присоединиться", step1Desc: "Обязательно для участия.",
                 joinChannel: "Вступить в канал", channelJoined: "✓ Вы подписаны",
                 step2: "Шаг 2: Просмотры рекламы", step2Desc: "Для участия посмотрите 500 реклам в сумме.",
-                goToDaily: "Смотреть рекламу", verifyBtn: "Проверить и Участвовать",
+                goToDaily: "Смотреть рекламу", verifyBtn: "Участвовать",
                 backToList: "К списку",
-                availBal: "Доступный баланс", withdrawFunds: "Вывод средств",
-                connWalletDesc: "Подключите кошелек TON для вывода средств",
-                reqAmount: "Сумма запроса:", netFee: "Комиссия сети (30%):", netPayout: "Сумма к выплате:",
+                availBal: "Доступный баланс", depositTitle: "Депозит", withdrawTitle: "Вывод",
+                connWalletDesc: "Подключите кошелек TON", depAmount: "Депозит (Мин: 0.1 TON)", depositBtn: "Внести депозит",
+                reqAmount: "Сумма запроса:", netFee: "Комиссия (30%):", netPayout: "Сумма к выплате:",
                 withdraw: "Вывести", history: "История выводов",
                 noWithdrawals: "Пока нет выводов.", processing: "В обработке", approved: "Одобрено",
                 req: "Запрошено:", fee: "Комиссия (30%):", rec: "Получено:",
                 
                 alertLimitReached: "Дневной лимит достигнут! Возвращайтесь завтра.",
-                alertAdsInit: "Реклама загружается. Пожалуйста, подождите...",
+                alertAdsInit: "Реклама загружается...",
                 toastEarned: "Заработано",
                 toastCongrats: "Поздравляем! Вы выиграли {prize} TON!",
                 errEnterPromo: "⚠️ Введите промокод.",
-                errPromoLimit: "❌ Лимит использования этого промокода исчерпан!",
+                errPromoLimit: "❌ Лимит промокода исчерпан!",
                 errPromoRedeemed: "❌ Вы уже использовали этот промокод!",
-                succPromo: "🎉 <b>Поздравляем!</b><br>Промокод успешно применен! Получено: +{amount} TON.",
-                errPromoInv: "❌ Неверный промокод. Проверьте и попробуйте снова.",
-                errMinWithdraw: "⚠️ Минимальная сумма вывода 3.0000 TON. Вам нужно еще {amount} TON.",
+                succPromo: "🎉 <b>Поздравляем!</b><br>Промокод применен! Получено: +{amount} TON.",
+                errPromoInv: "❌ Неверный промокод.",
+                errMinWithdraw: "⚠️ Минимум для вывода 3.00 TON. Нужно еще {amount} TON.",
                 errConnWallet: "⚠️ Сначала подключите кошелек TON.",
-                errPending: "⚠️ У вас уже есть обрабатываемый вывод. Подождите завершения.",
-                errInvEntry: "⚠️ Неверный ввод. Укажите сумму от 3.00 TON.",
-                errInsuff: "⚠️ Недостаточно средств. Максимальный вывод {amount} TON.",
-                succEntrySec: "🎉 <b>Участие подтверждено:</b> Вы успешно добавлены в розыгрыш. Удачи!",
+                errPending: "⚠️ У вас уже есть вывод в обработке.",
+                errInvEntry: "⚠️ Неверный ввод.",
+                errInsuff: "⚠️ Недостаточно средств.",
+                succEntrySec: "🎉 <b>Участие подтверждено.</b> Удачи!",
                 errActionReq: "⚠️ <b>Требуется действие:</b><br>",
-                errJoinChan: "• Пожалуйста, подпишитесь на канал.<br>",
+                errJoinChan: "• Подпишитесь на канал.<br>",
                 errWatchMore: "• Посмотрите еще {amount} реклам.",
-                verifying: "Проверка..."
+                verifying: "Проверка...",
+                errMinDep: "⚠️ Минимальный депозит 0.10 TON.",
+                errMinBet: "⚠️ Минимальная ставка 0.50 TON.",
+                errDepAdsReq: "⚠️ Безопасность: Вы должны посмотреть {amount} реклам после депозита для вывода.",
+                errCrashAdsReq: "⚠️ Безопасность: Вы должны посмотреть {amount} реклам после игры в Crash для вывода.",
+                succDep: "✅ Транзакция депозита отправлена!"
             },
             tr: {
                 navHome: "Ana Sayfa", navGames: "Oyunlar", navPromo: "Promo", navDraws: "Çekilişler", navWallet: "Cüzdan",
                 currBal: "Mevcut Bakiye",
-                dailyRew: "Günlük Ödüller", dailyDesc: "TON kazanmak için kısa reklamlar izle.",
+                dailyRew: "Günlük Ödüller", dailyDesc: "TON kazanmak için reklam izle.",
                 progress: "İlerleme", dailyLimitText: "Günlük Limit",
                 watchAdBtn: "Reklam İzle", limitReached: "🔒 Limit Doldu",
                 miniGames: "Mini Oyunlar", miniGamesDesc: "Reklam izleyerek oyun oyna ve TON kazan.",
-                luckySpin: "Şans Çarkı", luckySpinDesc: "Çarkı çevir ve 5 TON'a kadar kazan.",
-                goToSpin: "Şans Çarkına Git",
-                mysteryBox: "Gizemli Kutu", mysteryBoxDesc: "Gizli TON'u bulmak için kutuyu aç.",
-                goToBox: "Gizemli Kutuya Git",
+                luckyCrash: "Lucky Crash", luckyCrashDesc: "Grafik çökmeden paranı al!", goToCrash: "Lucky Crash'e Git",
+                luckySpin: "Şans Çarkı", luckySpinDesc: "Çarkı çevir ve 5 TON'a kadar kazan.", goToSpin: "Şans Çarkına Git",
+                mysteryBox: "Gizemli Kutu", mysteryBoxDesc: "Gizli TON'u bulmak için kutuyu aç.", goToBox: "Gizemli Kutuya Git",
                 backBtn: "GERİ",
-                watchAdSpin: "Reklam İzle & Çevir", watchAdOpen: "Reklam İzle & Aç",
+                watchAdSpin: "İzle & Çevir", watchAdOpen: "İzle & Aç",
                 loading: "Yükleniyor...", spinning: "Çevriliyor...", opening: "Açılıyor...",
-                redeemCode: "Promo Kod", redeemDesc: "Anında TON kredisi almak için kodu girin.",
-                promoPlaceholder: "PROMO KOD GİRİN", claimReward: "Ödülü Al",
-                hostTitle: "Kendi Çekilişini Yap", hostDesc: "Kanalını büyütmek için kripto çekilişi başlat.", contactSupport: "Destek ile İletişim",
-                activeGw: "Aktif Çekilişler", prizePool: "Ödül Havuzu", liveNow: "● Canlı",
+                betAmount: "Bahis (Min: 0.5 TON)", placeBet: "Bahis Yap", cashOut: "Bozdur",
+                redeemCode: "Promo Kod", redeemDesc: "Anında TON almak için kodu girin.",
+                promoPlaceholder: "PROMO KOD", claimReward: "Ödülü Al",
+                hostTitle: "Kendi Çekilişini Yap", hostDesc: "Kanalını büyütmek için kripto çekilişi başlat.", contactSupport: "Destek",
+                activeGw: "Aktif Çekilişler", prizePool: "Ödül", liveNow: "● Canlı",
                 finishedGw: "Biten Çekilişler", ended: "● Bitti", winnerTxt: "🎉 Kazanan:",
                 days: "Gün", hours: "Saat", mins: "Dk", secs: "Sn",
                 gwEnded: "Çekiliş Bitti!", congratsWinner: "Şanslı kazananı tebrik ederiz:",
                 claimPrize: "Ödülü Al", rewardAdded: "✅ Ödül bakiyeye eklendi!",
                 step1: "Adım 1: Kanala Katıl", step1Desc: "Katılım için zorunludur.",
-                joinChannel: "Kanala Katıl", channelJoined: "✓ Kanala Katıldınız",
+                joinChannel: "Kanala Katıl", channelJoined: "✓ Katıldınız",
                 step2: "Adım 2: Toplam Reklam", step2Desc: "Bu çekiliş için toplam 500 reklam izlemelisin.",
-                goToDaily: "Günlük Reklamlara Git", verifyBtn: "Doğrula & Katıl",
+                goToDaily: "Reklamlara Git", verifyBtn: "Doğrula & Katıl",
                 backToList: "Listeye Dön",
-                availBal: "Kullanılabilir Bakiye", withdrawFunds: "Para Çek",
-                connWalletDesc: "Para çekmek için TON cüzdanınızı bağlayın.",
-                reqAmount: "İstenen Tutar:", netFee: "Ağ Ücreti (30%):", netPayout: "Net Ödeme:",
+                availBal: "Kullanılabilir Bakiye", depositTitle: "Deposit", withdrawTitle: "Withdraw",
+                connWalletDesc: "Cüzdanınızı bağlayın", depAmount: "Deposit Tutarı (Min: 0.1 TON)", depositBtn: "Deposit Yap",
+                reqAmount: "İstenen:", netFee: "Ağ Ücreti (30%):", netPayout: "Net Ödeme:",
                 withdraw: "Para Çek", history: "Çekim Geçmişi",
                 noWithdrawals: "Henüz çekim yok.", processing: "İşleniyor", approved: "Onaylandı",
                 req: "İstenen:", fee: "Ücret (30%):", rec: "Alınan:",
                 
                 alertLimitReached: "Günlük limit doldu! Lütfen yarın tekrar gel.",
-                alertAdsInit: "Reklamlar yükleniyor. Lütfen bekle...",
+                alertAdsInit: "Reklamlar yükleniyor...",
                 toastEarned: "Kazanıldı",
                 toastCongrats: "Tebrikler! {prize} TON kazandınız!",
                 errEnterPromo: "⚠️ Lütfen promo kod girin.",
-                errPromoLimit: "❌ Bu promo kodun kullanım limiti doldu!",
+                errPromoLimit: "❌ Bu kodun limiti doldu!",
                 errPromoRedeemed: "❌ Bu kodu daha önce kullandınız!",
                 succPromo: "🎉 <b>Tebrikler!</b><br>Promo kod uygulandı! Alınan: +{amount} TON.",
-                errPromoInv: "❌ Geçersiz kod. Lütfen tekrar deneyin.",
-                errMinWithdraw: "⚠️ Minimum çekim 3.0000 TON'dur. {amount} TON daha gerekli.",
-                errConnWallet: "⚠️ Lütfen önce TON cüzdanınızı bağlayın.",
-                errPending: "⚠️ Zaten işlenen bir çekiminiz var. Tamamlanmasını bekleyin.",
-                errInvEntry: "⚠️ Geçersiz tutar. 3.00 TON veya üzeri girin.",
-                errInsuff: "⚠️ Yetersiz bakiye. En fazla {amount} TON çekebilirsiniz.",
-                succEntrySec: "🎉 <b>Katılım Onaylandı:</b> Çekilişe başarıyla katıldınız. Bol şans!",
+                errPromoInv: "❌ Geçersiz kod.",
+                errMinWithdraw: "⚠️ Minimum çekim 3.00 TON'dur. {amount} TON daha gerekli.",
+                errConnWallet: "⚠️ Lütfen TON cüzdanınızı bağlayın.",
+                errPending: "⚠️ İşlenen bir çekiminiz var.",
+                errInvEntry: "⚠️ Geçersiz tutar.",
+                errInsuff: "⚠️ Yetersiz bakiye.",
+                succEntrySec: "🎉 <b>Katılım Onaylandı.</b> Bol şans!",
                 errActionReq: "⚠️ <b>Gereken İşlemler:</b><br>",
                 errJoinChan: "• Lütfen kanala katılın.<br>",
                 errWatchMore: "• {amount} reklam daha izleyin.",
-                verifying: "Doğrulanıyor..."
+                verifying: "Doğrulanıyor...",
+                errMinDep: "⚠️ Minimum deposit 0.10 TON'dur.",
+                errMinBet: "⚠️ Minimum bahis 0.50 TON'dur.",
+                errDepAdsReq: "⚠️ Güvenlik Kuralı: Para çekmek için deposit sonrası {amount} reklam izlemelisiniz.",
+                errCrashAdsReq: "⚠️ Güvenlik Kuralı: Crash oynadıktan sonra para çekmek için {amount} reklam izlemelisiniz.",
+                succDep: "✅ Deposit işlemi gönderildi!"
             }
         };
 
@@ -1085,7 +1188,7 @@
         function getStat(key) { return localStorage.getItem(`${key}_${getUID()}`); }
 
         // --- LANGUAGE SYSTEM ---
-        let currentLang = getStat('app_lang') || 'en';
+        let currentLang = getStat('app_lang') || 'az'; // Default AZ 
 
         function toggleLangMenu(e) {
             e.stopPropagation();
@@ -1105,12 +1208,10 @@
             updateAllUI();
             renderHistory();
             
-            // Yalnız aktiv olduqda yenilənmə apar (səhifəni dəyişməmək üçün)
             if (document.getElementById('view-giveaway-details').classList.contains('active')) {
                 openGiveawayDetails(currentGwView); 
             }
 
-            // Seçim edildikdən sonra dili seçmək üçün olan dropdown bağlansın (ox əvvəlki halına qayıtsın)
             document.getElementById('lang-menu').classList.remove('show');
             document.querySelector('.lang-arrow').classList.remove('open');
         }
@@ -1154,6 +1255,8 @@
         let currentGwView = 2;
         let promoMsgTimeout; 
         let withdrawMsgTimeout;
+        let depositMsgTimeout;
+        let crashMsgTimeout;
 
         let tonConnectUI;
 
@@ -1189,6 +1292,7 @@
             initTonConnect();
             setupKeyboardObservation();
             initWheel();
+            initCrashCanvas();
             
             document.getElementById('current-lang-text').innerText = currentLang.toUpperCase();
             document.getElementById(`lang-opt-${currentLang}`).classList.add('active-lang');
@@ -1203,16 +1307,6 @@
             renderHistory(); 
             startSystem();
             checkWithdrawalStatus();
-            
-            const withdrawInput = document.getElementById("withdraw-amount");
-            withdrawInput.addEventListener("input", function(e) {
-                let cleanVal = this.value.replace(/[^0-9.]/g, '');
-                const parts = cleanVal.split('.');
-                if (parts.length > 2) cleanVal = parts[0] + '.' + parts.slice(1).join('');
-                if (parts[1] && parts[1].length > 4) cleanVal = parts[0] + '.' + parts[1].slice(0, 4);
-                this.value = cleanVal;
-                updateLiveBreakdown(parseFloat(cleanVal));
-            });
 
             const splash = document.getElementById('splash-screen');
             setTimeout(() => {
@@ -1224,6 +1318,15 @@
                 }, 500);
             }, 3500); 
         });
+
+        // TƏMİZ FORMATLAMA (Maksimum 2 onluq, hərfə icazə yox)
+        function formatCryptoInput(input) {
+            let val = input.value.replace(/[^0-9.]/g, '');
+            const parts = val.split('.');
+            if (parts.length > 2) val = parts[0] + '.' + parts.slice(1).join('');
+            if (parts[1] && parts[1].length > 2) val = parts[0] + '.' + parts[1].substring(0, 2);
+            input.value = val;
+        }
 
         function setupKeyboardObservation() {
             const nav = document.getElementById("app-nav");
@@ -1246,8 +1349,10 @@
             }
             
             document.addEventListener('click', function(e) {
-                if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && !e.target.classList.contains('btn')) {
-                    document.activeElement.blur();
+                if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && !e.target.classList.contains('btn') && !e.target.classList.contains('btn-ad-compact')) {
+                    if (document.activeElement.tagName === 'INPUT') {
+                        document.activeElement.blur();
+                    }
                 }
             });
         }
@@ -1299,10 +1404,10 @@
         function initTonConnect() {
             tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
                 manifestUrl: 'https://manatazn.github.io/CryptoGame/tonconnect-manifest.json',
-                buttonRootId: 'ton-connect'
+                buttonRootId: 'ton-connect-dep'
             });
             tonConnectUI.onStatusChange((wallet) => {
-                const connectText = document.getElementById("connect-wallet-text");
+                const connectText = document.getElementById("connect-wallet-text-dep");
                 if (wallet) {
                     if (connectText) connectText.style.display = 'none';
                 } else {
@@ -1336,13 +1441,14 @@
         }
 
         function updateAllUI() {
-            const balVal = userBalance.toFixed(4);
+            const balVal = userBalance.toFixed(2);
             const balHtml = `${balVal} <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span>`;
             
             document.getElementById("home-balance").innerHTML = balHtml;
             document.getElementById("wallet-balance").innerHTML = balHtml;
             if(document.getElementById("spin-balance")) document.getElementById("spin-balance").innerHTML = balHtml;
             if(document.getElementById("box-balance")) document.getElementById("box-balance").innerHTML = balHtml;
+            if(document.getElementById("crash-balance")) document.getElementById("crash-balance").innerHTML = balHtml;
 
             document.getElementById("daily-ad-count").innerText = dailyAdsWatched;
             document.getElementById("daily-ad-fill").style.width = `${(dailyAdsWatched / 50) * 100}%`;
@@ -1382,28 +1488,6 @@
                 }
             }
 
-            const spinPageBtn = document.getElementById("spin-page-btn");
-            if(spinPageBtn && !isSpinning) {
-                if (dailySpins >= MAX_SPINS) {
-                    spinPageBtn.innerHTML = t[currentLang].limitReached;
-                    spinPageBtn.className = "btn-ad-compact locked";
-                } else {
-                    spinPageBtn.innerHTML = t[currentLang].watchAdSpin;
-                    spinPageBtn.className = "btn-ad-compact action";
-                }
-            }
-
-            const boxPageBtn = document.getElementById("box-page-btn");
-            if(boxPageBtn && !isOpeningBox) {
-                if (dailyBoxes >= MAX_BOXES) {
-                    boxPageBtn.innerHTML = t[currentLang].limitReached;
-                    boxPageBtn.className = "btn-ad-compact locked";
-                } else {
-                    boxPageBtn.innerHTML = t[currentLang].watchAdOpen;
-                    boxPageBtn.className = "btn-ad-compact action";
-                }
-            }
-
             document.getElementById("gw-total-ads").innerText = totalAdsWatched;
             
             const joinBtn = document.getElementById("join-btn");
@@ -1430,8 +1514,30 @@
             checkGiveawayUIState();
         }
 
+        function incrementGlobalAdCount() {
+            totalAdsWatched++;
+            saveStat("total_ads", totalAdsWatched.toString());
+            
+            if (getStat("has_deposited") === "true") {
+                saveStat("ads_since_deposit", (parseInt(getStat("ads_since_deposit") || "0") + 1).toString());
+            }
+            if (getStat("has_played_crash") === "true") {
+                saveStat("ads_since_crash", (parseInt(getStat("ads_since_crash") || "0") + 1).toString());
+            }
+        }
+
+        function toggleWalletTab(tab) {
+            document.getElementById("tab-btn-deposit").classList.remove("active");
+            document.getElementById("tab-btn-withdraw").classList.remove("active");
+            document.getElementById("deposit-section").style.display = "none";
+            document.getElementById("withdraw-section").style.display = "none";
+
+            document.getElementById(`tab-btn-${tab}`).classList.add("active");
+            document.getElementById(`${tab}-section`).style.display = "block";
+        }
+
         function switchTab(tabName) {
-            document.activeElement.blur(); 
+            if(document.activeElement.tagName === 'INPUT') document.activeElement.blur(); 
             
             const tabs = ['home', 'games', 'promo', 'giveaway', 'wallet'];
             tabs.forEach(tab => {
@@ -1445,6 +1551,7 @@
             document.getElementById('view-giveaway-details').classList.remove('active');
             document.getElementById('view-spin-page').classList.remove('active');
             document.getElementById('view-box-page').classList.remove('active');
+            document.getElementById('view-crash-page').classList.remove('active');
 
             if (tabName === 'home') {
                 document.getElementById('nav-home').classList.add('active');
@@ -1465,7 +1572,7 @@
         }
 
         function openGamePage(pageId) {
-            document.activeElement.blur();
+            if(document.activeElement.tagName === 'INPUT') document.activeElement.blur();
             const views = document.querySelectorAll('.view-container');
             views.forEach(v => v.classList.remove('active'));
             document.getElementById('app-nav').style.display = 'none';
@@ -1474,16 +1581,228 @@
                 document.getElementById('view-spin-page').classList.add('active');
             } else if (pageId === 'box') {
                 document.getElementById('view-box-page').classList.add('active');
+            } else if (pageId === 'crash') {
+                document.getElementById('view-crash-page').classList.add('active');
+                initCrashCanvas();
             }
         }
 
         function closeGamePage() {
-            document.activeElement.blur();
+            if(document.activeElement.tagName === 'INPUT') document.activeElement.blur();
             const views = document.querySelectorAll('.view-container');
             views.forEach(v => v.classList.remove('active'));
             document.getElementById('app-nav').style.display = 'flex';
             document.getElementById('view-games').classList.add('active');
             updateAllUI();
+        }
+
+        /* --- LUCKY CRASH GAME --- */
+        let crashInterval;
+        let currentMultiplier = 1.00;
+        let targetCrashPoint = 1.00;
+        let crashBet = 0;
+        let crashState = 'idle'; // idle, running, crashed
+
+        function initCrashCanvas() {
+            const canvas = document.getElementById('crash-canvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height);
+            ctx.lineTo(canvas.width, canvas.height);
+            ctx.stroke();
+        }
+
+        function drawCrashCanvas(progress, isCrashed = false) {
+            const canvas = document.getElementById('crash-canvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.strokeStyle = isCrashed ? '#FF3B30' : '#10B981';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height);
+            
+            let x = (progress / 100) * canvas.width;
+            if(x > canvas.width) x = canvas.width;
+            let y = canvas.height - ((Math.pow(progress, 1.5) / Math.pow(100, 1.5)) * (canvas.height - 20));
+            if(y < 20) y = 20;
+
+            ctx.quadraticCurveTo(x * 0.5, canvas.height, x, y);
+            ctx.stroke();
+
+            // Fill gradient below curve
+            ctx.lineTo(x, canvas.height);
+            ctx.lineTo(0, canvas.height);
+            let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            if(isCrashed) {
+                gradient.addColorStop(0, 'rgba(255, 59, 48, 0.4)');
+                gradient.addColorStop(1, 'rgba(255, 59, 48, 0.0)');
+            } else {
+                gradient.addColorStop(0, 'rgba(16, 185, 129, 0.4)');
+                gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+            }
+            ctx.fillStyle = gradient;
+            ctx.fill();
+        }
+
+        function startCrash() {
+            if (crashState === 'running') return;
+            const msgBox = document.getElementById("crash-msg");
+            const betInput = document.getElementById("crash-bet-input");
+            const betVal = parseFloat(betInput.value);
+            
+            if (crashMsgTimeout) clearTimeout(crashMsgTimeout);
+            
+            if (isNaN(betVal) || betVal < 0.5) {
+                msgBox.className = "msg-box msg-err"; msgBox.innerHTML = t[currentLang].errMinBet; msgBox.style.display = "block";
+                crashMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 2000);
+                return;
+            }
+            if (betVal > userBalance) {
+                msgBox.className = "msg-box msg-err"; msgBox.innerHTML = t[currentLang].errInsuff; msgBox.style.display = "block";
+                crashMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 2000);
+                return;
+            }
+
+            // Mərci silirik
+            crashBet = betVal;
+            userBalance -= crashBet;
+            saveStat("user_balance", userBalance.toString());
+            saveStat("has_played_crash", "true");
+            saveStat("ads_since_crash", "0");
+            updateAllUI();
+            
+            if(document.activeElement.tagName === 'INPUT') document.activeElement.blur();
+            msgBox.style.display = "none";
+            document.getElementById("crash-btn-start").style.display = "none";
+            document.getElementById("crash-btn-cashout").style.display = "block";
+            betInput.disabled = true;
+
+            const disp = document.getElementById('crash-multiplier');
+            disp.className = "crash-multiplier-text running";
+            
+            // Xüsusi Alqoritm (Maksimum 50x-100x falan)
+            let rand = Math.random();
+            if(rand < 0.10) { targetCrashPoint = 1.00; } // Instant crash %10
+            else if(rand < 0.80) { targetCrashPoint = 1.05 + (Math.random() * 2.5); } 
+            else if(rand < 0.95) { targetCrashPoint = 3.5 + (Math.random() * 6.5); }
+            else { targetCrashPoint = 10.0 + (Math.random() * 40.0); } // 50x Capped
+            
+            crashState = 'running';
+            currentMultiplier = 1.00;
+            let tick = 0;
+            
+            crashInterval = setInterval(() => {
+                tick += 1;
+                currentMultiplier += 0.01 + (tick * 0.0005);
+                
+                if(currentMultiplier >= targetCrashPoint) {
+                    // CRASHED
+                    clearInterval(crashInterval);
+                    crashState = 'crashed';
+                    disp.className = "crash-multiplier-text crashed";
+                    disp.innerHTML = "CRASHED";
+                    drawCrashCanvas(tick, true);
+                    
+                    document.getElementById("crash-btn-start").style.display = "block";
+                    document.getElementById("crash-btn-cashout").style.display = "none";
+                    betInput.disabled = false;
+                    setTimeout(() => {
+                        if(crashState !== 'running') {
+                            disp.className = "crash-multiplier-text";
+                            disp.innerHTML = "1.00x";
+                            initCrashCanvas();
+                        }
+                    }, 3000);
+                } else {
+                    disp.innerHTML = currentMultiplier.toFixed(2) + "x";
+                    drawCrashCanvas(tick, false);
+                }
+            }, 60);
+        }
+
+        function cashOutCrash() {
+            if(crashState !== 'running') return;
+            clearInterval(crashInterval);
+            crashState = 'idle';
+            
+            const won = crashBet * currentMultiplier;
+            userBalance += won;
+            saveStat("user_balance", userBalance.toString());
+            updateAllUI();
+            
+            const disp = document.getElementById('crash-multiplier');
+            disp.className = "crash-multiplier-text running";
+            disp.innerHTML = `+${won.toFixed(2)} TON`;
+            
+            document.getElementById("crash-btn-start").style.display = "block";
+            document.getElementById("crash-btn-cashout").style.display = "none";
+            document.getElementById("crash-bet-input").disabled = false;
+            
+            setTimeout(() => {
+                if(crashState !== 'running') {
+                    disp.className = "crash-multiplier-text";
+                    disp.innerHTML = "1.00x";
+                    initCrashCanvas();
+                }
+            }, 2500);
+        }
+
+        function executeSpin() {
+            if (isSpinning) return;
+            if (dailySpins >= MAX_SPINS) { alert(t[currentLang].alertLimitReached); return; }
+            if (!adController) { alert(t[currentLang].alertAdsInit); return; }
+            
+            const btn = document.getElementById("spin-page-btn");
+            btn.innerHTML = `<span class='spinner'></span> ${t[currentLang].loading}`;
+            btn.classList.add('locked');
+            
+            adController.show().then(() => {
+                isSpinning = true;
+                btn.innerHTML = t[currentLang].spinning;
+                dailySpins++;
+                incrementGlobalAdCount();
+                
+                const targetIndex = determineSpinPrizeIndex();
+                const targetDeg = (360 - ((targetIndex * 30) + 15)) % 360;
+                const currentDeg = currentWheelRotation % 360;
+                let moveDeg = targetDeg - currentDeg;
+                if (moveDeg <= 0) moveDeg += 360;
+                
+                currentWheelRotation += (360 * 5) + moveDeg;
+                document.getElementById('roulette-wheel').style.transform = `rotate(${currentWheelRotation}deg)`;
+                
+                setTimeout(() => {
+                    const prize = WHEEL_PRIZES[targetIndex];
+                    userBalance += prize;
+                    saveStat("daily_spins", dailySpins.toString());
+                    saveStat("user_balance", userBalance.toString());
+                    
+                    const miniAlert = document.getElementById("spin-page-alert");
+                    miniAlert.innerHTML = `🎉 ${t[currentLang].toastCongrats.replace('{prize}', prize)}`;
+                    miniAlert.style.display = "block";
+                    
+                    updateAllUI(); 
+                    
+                    setTimeout(() => {
+                        miniAlert.style.display = "none";
+                        isSpinning = false;
+                        updateAllUI(); 
+                    }, 1500);
+                }, 5000); 
+                
+            }).catch(() => {
+                btn.innerHTML = t[currentLang].watchAdSpin;
+                btn.classList.remove('locked');
+                isSpinning = false;
+            });
         }
 
         function determineSpinPrizeIndex() {
@@ -1513,57 +1832,6 @@
             return WHEEL_PRIZES.indexOf(prize);
         }
 
-        function executeSpin() {
-            if (isSpinning) return;
-            if (dailySpins >= MAX_SPINS) { alert(t[currentLang].alertLimitReached); return; }
-            if (!adController) { alert(t[currentLang].alertAdsInit); return; }
-            
-            const btn = document.getElementById("spin-page-btn");
-            btn.innerHTML = `<span class='spinner'></span> ${t[currentLang].loading}`;
-            btn.classList.add('locked');
-            
-            adController.show().then(() => {
-                isSpinning = true;
-                btn.innerHTML = t[currentLang].spinning;
-                dailySpins++;
-                totalAdsWatched++;
-                
-                const targetIndex = determineSpinPrizeIndex();
-                const targetDeg = (360 - ((targetIndex * 30) + 15)) % 360;
-                const currentDeg = currentWheelRotation % 360;
-                let moveDeg = targetDeg - currentDeg;
-                if (moveDeg <= 0) moveDeg += 360;
-                
-                currentWheelRotation += (360 * 5) + moveDeg;
-                document.getElementById('roulette-wheel').style.transform = `rotate(${currentWheelRotation}deg)`;
-                
-                setTimeout(() => {
-                    const prize = WHEEL_PRIZES[targetIndex];
-                    userBalance += prize;
-                    saveStat("daily_spins", dailySpins.toString());
-                    saveStat("total_ads", totalAdsWatched.toString());
-                    saveStat("user_balance", userBalance.toString());
-                    
-                    const miniAlert = document.getElementById("spin-page-alert");
-                    miniAlert.innerHTML = `🎉 ${t[currentLang].toastCongrats.replace('{prize}', prize)}`;
-                    miniAlert.style.display = "block";
-                    
-                    updateAllUI(); 
-                    
-                    setTimeout(() => {
-                        miniAlert.style.display = "none";
-                        isSpinning = false;
-                        updateAllUI(); 
-                    }, 1500);
-                }, 5000); 
-                
-            }).catch(() => {
-                btn.innerHTML = t[currentLang].watchAdSpin;
-                btn.classList.remove('locked');
-                isSpinning = false;
-            });
-        }
-
         function executeBox() {
             if (isOpeningBox) return;
             if (dailyBoxes >= MAX_BOXES) { alert(t[currentLang].alertLimitReached); return; }
@@ -1577,7 +1845,7 @@
                 isOpeningBox = true;
                 btn.innerHTML = t[currentLang].opening;
                 dailyBoxes++;
-                totalAdsWatched++;
+                incrementGlobalAdCount();
                 
                 let boxTotalCount = parseInt(getStat("box_total_count") || "0");
                 let boxNext005 = parseInt(getStat("box_next_005") || "0");
@@ -1612,7 +1880,6 @@
                     
                     userBalance += prize;
                     saveStat("daily_boxes", dailyBoxes.toString());
-                    saveStat("total_ads", totalAdsWatched.toString());
                     saveStat("user_balance", userBalance.toString());
                     
                     const miniAlert = document.getElementById("box-page-alert");
@@ -1636,73 +1903,266 @@
             });
         }
 
-        function openGiveawayDetails(gwId) {
-            currentGwView = gwId;
-            document.getElementById('view-home').classList.remove('active');
-            document.getElementById('view-giveaway-list').classList.remove('active');
-            document.getElementById('view-giveaway-details').classList.add('active');
+        async function processDeposit() {
+            const input = document.getElementById('deposit-amount');
+            const msgBox = document.getElementById('deposit-msg');
+            const val = parseFloat(input.value);
+            
+            if (depositMsgTimeout) clearTimeout(depositMsgTimeout);
 
-            if (gwId === 1) {
-                document.getElementById('det-prize').innerHTML = '25 <span style="font-size:1.4rem; color:var(--primary);">TON</span>';
-                document.getElementById('det-subtitle').innerText = "Crypto Group #1";
-                document.getElementById('timer-ui').style.display = "none";
-                document.getElementById('gw-actions').style.display = "none";
+            if (!tonConnectUI || !tonConnectUI.connected) {
+                msgBox.className = "msg-box msg-err"; msgBox.innerHTML = t[currentLang].errConnWallet; msgBox.style.display = "block";
+                depositMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 2000);
+                return;
+            }
+            if (isNaN(val) || val < 0.1) {
+                msgBox.className = "msg-box msg-err"; msgBox.innerHTML = t[currentLang].errMinDep; msgBox.style.display = "block";
+                depositMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 2000);
+                return;
+            }
+
+            // TonWeb ilə Memo (Yorum) payload-u yaradırıq (istifadəçi UID-si ilə)
+            let payloadBoc = "";
+            try {
+                const tonweb = new window.TonWeb();
+                const cell = new tonweb.boc.Cell();
+                cell.bits.writeUint(0, 32);
+                cell.bits.writeString(getUID());
+                payloadBoc = tonweb.utils.bytesToBase64(await cell.toBoc());
+            } catch (e) {
+                console.error("Payload creation error", e);
+            }
+
+            const nanoAmount = Math.round(val * 1e9).toString();
+            const transaction = {
+                validUntil: Math.floor(Date.now() / 1000) + 360,
+                messages: [{
+                    address: "UQCpsMlc_UquEHejj6q5KIgxbajKam4VQTjuGc0VceIpt1py",
+                    amount: nanoAmount,
+                    payload: payloadBoc
+                }]
+            };
+
+            try {
+                await tonConnectUI.sendTransaction(transaction);
+                saveStat("has_deposited", "true");
+                saveStat("ads_since_deposit", "0");
+                userBalance += val;
+                saveStat("user_balance", userBalance.toString());
                 
-                let winnerHtml = `
-                    <div style="font-size: 3.8rem; margin-bottom: 22px; filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));">🎊🏆🎊</div>
-                    <h3 style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.5rem; margin-bottom: 14px; font-weight: 800;">${t[currentLang].gwEnded}</h3>
-                    <p style="color: var(--text-gray); font-size: 1.05rem; margin-bottom: 22px;">${t[currentLang].congratsWinner}</p>
-                    <div style="color: var(--accent-gold); font-size: 1.7rem; font-weight: 800; font-family: 'Poppins', sans-serif; letter-spacing: 1px; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);">@matro97</div>
-                `;
+                input.value = "";
+                msgBox.className = "msg-box msg-succ"; 
+                msgBox.innerHTML = t[currentLang].succDep; 
+                msgBox.style.display = "block";
+                updateAllUI();
+                depositMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 3000);
+            } catch (e) {
+                msgBox.className = "msg-box msg-err"; msgBox.innerHTML = "❌ Transaction failed or rejected."; msgBox.style.display = "block";
+                depositMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 2000);
+            }
+        }
 
-                if (getUID() === '8227619759') {
-                    if (getStat('gw1_claimed') !== 'true') {
-                        winnerHtml += `<button class="btn btn-claim" onclick="claimPrize(1, 25)">🎁 ${t[currentLang].claimPrize}</button>`;
-                    } else {
-                        winnerHtml += `<div style="margin-top: 24px; color: var(--success); font-weight: 800; font-size: 1.3rem; text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);">${t[currentLang].rewardAdded}</div>`;
+        function updateLiveBreakdown(amount) {
+            const breakdownBox = document.getElementById("live-breakdown");
+            if (isNaN(amount) || amount <= 0) {
+                breakdownBox.style.display = "none";
+                return;
+            }
+            const fee = amount * 0.30;
+            const net = amount - fee;
+            
+            document.getElementById("bd-gross").innerText = `${amount.toFixed(2)} TON`;
+            document.getElementById("bd-fee").innerText = `${fee.toFixed(2)} TON`;
+            document.getElementById("bd-net").innerText = `${net.toFixed(2)} TON`;
+            breakdownBox.style.display = "block";
+        }
+
+        function handleMaxWithdrawal() {
+            const maxVal = userBalance;
+            document.getElementById('withdraw-amount').value = maxVal.toFixed(2);
+            updateLiveBreakdown(maxVal);
+        }
+
+        function processWithdrawal() {
+            const msg = document.getElementById("withdraw-msg");
+
+            const showWithdrawMessage = (htmlContent, isError = true) => {
+                if (withdrawMsgTimeout) clearTimeout(withdrawMsgTimeout);
+                msg.className = isError ? "msg-box msg-err" : "msg-box msg-succ";
+                msg.innerHTML = htmlContent;
+                msg.style.display = "block";
+                withdrawMsgTimeout = setTimeout(() => { msg.style.display = "none"; }, 2500);
+            };
+            
+            if (userBalance < 3.0) {
+                const missingAmount = (3.0 - userBalance).toFixed(2);
+                showWithdrawMessage(t[currentLang].errMinWithdraw.replace('{amount}', missingAmount));
+                return;
+            }
+
+            // Güvənlik Şərtləri: Deposit və Crash oynadıqdan sonra reklam izləmə
+            if (getStat("has_deposited") === "true") {
+                let adsDep = parseInt(getStat("ads_since_deposit") || "0");
+                if (adsDep < 2000) {
+                    showWithdrawMessage(t[currentLang].errDepAdsReq.replace('{amount}', 2000 - adsDep));
+                    return;
+                }
+            }
+            if (getStat("has_played_crash") === "true") {
+                let adsCrash = parseInt(getStat("ads_since_crash") || "0");
+                if (adsCrash < 5000) {
+                    showWithdrawMessage(t[currentLang].errCrashAdsReq.replace('{amount}', 5000 - adsCrash));
+                    return;
+                }
+            }
+
+            const inputElem = document.getElementById("withdraw-amount");
+            const rawValue = inputElem.value;
+            const amountToWithdraw = parseFloat(rawValue);
+            
+            if (!tonConnectUI || !tonConnectUI.connected) {
+                showWithdrawMessage(t[currentLang].errConnWallet);
+                return;
+            }
+
+            let history = getWithdrawHistory();
+            const hasPending = history.some(item => item.status === 'pending');
+
+            if (hasPending) {
+                showWithdrawMessage(t[currentLang].errPending);
+                return;
+            }
+
+            if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 3.0) {
+                showWithdrawMessage(t[currentLang].errInvEntry);
+                return;
+            }
+
+            if (amountToWithdraw > userBalance) {
+                showWithdrawMessage(t[currentLang].errInsuff);
+                return;
+            }
+
+            const calculatedFee = amountToWithdraw * 0.30;
+            const netPayout = amountToWithdraw - calculatedFee;
+            
+            history.unshift({
+                id: Date.now(),
+                amount: amountToWithdraw, 
+                gross: amountToWithdraw,
+                fee: calculatedFee,
+                net: netPayout,
+                time: Date.now(),
+                status: 'pending'
+            });
+
+            saveWithdrawHistory(history);
+            userBalance -= amountToWithdraw;
+            saveStat("user_balance", userBalance.toString());
+            
+            inputElem.value = ""; 
+            document.getElementById("live-breakdown").style.display = "none";
+            if(document.activeElement.tagName === 'INPUT') document.activeElement.blur(); 
+            
+            updateAllUI();
+            renderHistory();
+            checkWithdrawalStatus();
+        }
+
+        function getWithdrawHistory() { try { return JSON.parse(getStat("withdraw_history_array") || "[]"); } catch (e) { return []; } }
+        function saveWithdrawHistory(arr) { saveStat("withdraw_history_array", JSON.stringify(arr)); }
+
+        function formatMSKTime(timestamp) {
+            const date = new Date(timestamp);
+            return new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Moscow', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(date) + ' MSK';
+        }
+
+        function renderHistory() {
+            const list = document.getElementById("history-list");
+            const history = getWithdrawHistory();
+            
+            if (history.length === 0) {
+                list.innerHTML = `<div style='color: var(--text-gray); font-size: 1rem; text-align: center; padding: 25px;'>${t[currentLang].noWithdrawals}</div>`;
+                return;
+            }
+
+            let html = "";
+            history.forEach(item => {
+                const statusClass = item.status === 'pending' ? 'status-pending' : 'status-approved';
+                const statusText = item.status === 'pending' ? t[currentLang].processing : t[currentLang].approved;
+                const icon = item.status === 'pending' ? '⏳' : '✅';
+                const timeStr = formatMSKTime(item.time);
+                
+                const grossVal = parseFloat(item.gross || item.amount || 0).toFixed(2);
+                const feeVal = parseFloat(item.fee || (item.amount * 0.3) || 0).toFixed(2);
+                const netVal = parseFloat(item.net || (item.amount * 0.7) || 0).toFixed(2);
+
+                html += `
+                    <div class="history-item">
+                        <div class="history-row-header">
+                            <div class="history-info">
+                                <div style="background: rgba(255,255,255,0.05); width: 48px; height: 48px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 1.3rem; border: 1px solid rgba(255,255,255,0.06); box-shadow: inset 0 0 10px rgba(0,0,0,0.3);">${icon}</div>
+                                <div style="display:flex; flex-direction:column; gap:4px;">
+                                    <span class="history-amount">${netVal} TON</span>
+                                    <span class="history-time">${timeStr}</span>
+                                </div>
+                            </div>
+                            <div class="history-status ${statusClass}">${statusText}</div>
+                        </div>
+                        <div class="history-details-grid">
+                            <div style="display:flex; justify-content:space-between; opacity:0.8;">
+                                <span>${t[currentLang].req}</span>
+                                <span>${grossVal} TON</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; color:var(--error); opacity:0.9;">
+                                <span>${t[currentLang].fee}</span>
+                                <span>-${feeVal} TON</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; color:var(--success); font-weight:700; padding-top:6px; border-top:1px dashed rgba(255,255,255,0.08)">
+                                <span>${t[currentLang].rec}</span>
+                                <span>${netVal} TON</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            list.innerHTML = html;
+        }
+
+        let withdrawInterval;
+        function checkWithdrawalStatus() {
+            if(withdrawInterval) clearInterval(withdrawInterval);
+            withdrawInterval = setInterval(() => {
+                let history = getWithdrawHistory();
+                let needsUpdate = false;
+                let hasPending = false;
+                const now = new Date().getTime();
+                const hiddenProcessingTime = 5 * 60 * 1000; 
+
+                for (let i = 0; i < history.length; i++) {
+                    if (history[i].status === 'pending') {
+                        hasPending = true;
+                        const diff = now - history[i].time;
+                        if (diff >= hiddenProcessingTime) {
+                            history[i].status = 'approved';
+                            needsUpdate = true;
+                            hasPending = false; 
+                        }
                     }
                 }
-                document.getElementById('gw-winner-ui').innerHTML = winnerHtml;
-                document.getElementById('gw-winner-ui').style.display = "block";
-            } else {
-                document.getElementById('det-prize').innerHTML = '25 <span style="font-size:1.4rem; color:var(--primary);">TON</span>';
-                document.getElementById('det-subtitle').innerText = "Crypto Group #2";
-                document.getElementById('timer-ui').style.display = "flex";
-                document.getElementById('gw-actions').style.display = "block";
-                document.getElementById('gw-winner-ui').style.display = "none";
-                refreshTimer();
-            }
-            updateAllUI();
-        }
-
-        function claimPrize(gwId, amount) {
-            saveStat(`gw${gwId}_claimed`, "true");
-            userBalance += amount;
-            saveStat("user_balance", userBalance.toString());
-            updateAllUI();
-            openGiveawayDetails(gwId); 
-        }
-
-        function checkDeepLink() {
-            const startParam = tgApp?.initDataUnsafe?.start_param;
-            if (startParam === 'giveaway-1') {
-                openGiveawayDetails(1);
-            } else if (startParam === 'giveaway-2') {
-                openGiveawayDetails(2);
-            } else {
-                switchTab('home');
-            }
+                if (needsUpdate) {
+                    saveWithdrawHistory(history);
+                    renderHistory();
+                }
+                if (!hasPending) {
+                    clearInterval(withdrawInterval);
+                }
+            }, 1000);
         }
 
         function watchDailyAd() {
-            if (dailyAdsWatched >= 50) {
-                alert(t[currentLang].alertLimitReached);
-                return;
-            }
-            if (!adController) {
-                alert(t[currentLang].alertAdsInit);
-                return;
-            }
+            if (dailyAdsWatched >= 50) { alert(t[currentLang].alertLimitReached); return; }
+            if (!adController) { alert(t[currentLang].alertAdsInit); return; }
             
             const btn = document.getElementById("main-watch-btn");
             btn.innerHTML = `<span class='spinner'></span> ${t[currentLang].loading}`;
@@ -1710,15 +2170,14 @@
             
             adController.show().then(() => {
                 dailyAdsWatched++;
-                totalAdsWatched++;
-                userBalance += 0.0005;
+                incrementGlobalAdCount();
+                userBalance += 0.005;
                 
                 saveStat("daily_ads", dailyAdsWatched.toString());
-                saveStat("total_ads", totalAdsWatched.toString());
                 saveStat("user_balance", userBalance.toString());
                 
                 const miniAlert = document.getElementById("ad-mini-alert");
-                miniAlert.innerHTML = `🎉 ${t[currentLang].toastEarned}: +0.0005 TON`;
+                miniAlert.innerHTML = `🎉 ${t[currentLang].toastEarned}: +0.005 TON`;
                 miniAlert.style.display = "block";
                 setTimeout(() => { miniAlert.style.display = "none"; }, 1500);
 
@@ -1782,198 +2241,65 @@
             }
         }
 
-        function updateLiveBreakdown(amount) {
-            const breakdownBox = document.getElementById("live-breakdown");
-            if (isNaN(amount) || amount <= 0) {
-                breakdownBox.style.display = "none";
-                return;
-            }
-            const fee = amount * 0.30;
-            const net = amount - fee;
-            
-            document.getElementById("bd-gross").innerText = `${amount.toFixed(4)} TON`;
-            document.getElementById("bd-fee").innerText = `${fee.toFixed(4)} TON`;
-            document.getElementById("bd-net").innerText = `${net.toFixed(4)} TON`;
-            breakdownBox.style.display = "block";
-        }
+        function openGiveawayDetails(gwId) {
+            currentGwView = gwId;
+            document.getElementById('view-home').classList.remove('active');
+            document.getElementById('view-giveaway-list').classList.remove('active');
+            document.getElementById('view-giveaway-details').classList.add('active');
 
-        function handleMaxWithdrawal() {
-            const maxVal = userBalance;
-            document.getElementById('withdraw-amount').value = maxVal.toFixed(4);
-            updateLiveBreakdown(maxVal);
-        }
-
-        function getWithdrawHistory() {
-            try { return JSON.parse(getStat("withdraw_history_array") || "[]"); } catch (e) { return []; }
-        }
-        function saveWithdrawHistory(arr) { saveStat("withdraw_history_array", JSON.stringify(arr)); }
-
-        function formatMSKTime(timestamp) {
-            const date = new Date(timestamp);
-            return new Intl.DateTimeFormat('en-GB', {
-                timeZone: 'Europe/Moscow',
-                day: '2-digit', month: '2-digit', year: 'numeric',
-                hour: '2-digit', minute: '2-digit', second: '2-digit',
-                hour12: false
-            }).format(date) + ' MSK';
-        }
-
-        function renderHistory() {
-            const list = document.getElementById("history-list");
-            const history = getWithdrawHistory();
-            
-            if (history.length === 0) {
-                list.innerHTML = `<div style='color: var(--text-gray); font-size: 1rem; text-align: center; padding: 25px;'>${t[currentLang].noWithdrawals}</div>`;
-                return;
-            }
-
-            let html = "";
-            history.forEach(item => {
-                const statusClass = item.status === 'pending' ? 'status-pending' : 'status-approved';
-                const statusText = item.status === 'pending' ? t[currentLang].processing : t[currentLang].approved;
-                const icon = item.status === 'pending' ? '⏳' : '✅';
-                const timeStr = formatMSKTime(item.time);
+            if (gwId === 1) {
+                document.getElementById('det-prize').innerHTML = '25 <span style="font-size:1.4rem; color:var(--primary);">TON</span>';
+                document.getElementById('det-subtitle').innerText = "Crypto Group #1";
+                document.getElementById('timer-ui').style.display = "none";
+                document.getElementById('gw-actions').style.display = "none";
                 
-                const grossVal = parseFloat(item.gross || item.amount || 0).toFixed(4);
-                const feeVal = parseFloat(item.fee || (item.amount * 0.3) || 0).toFixed(4);
-                const netVal = parseFloat(item.net || (item.amount * 0.7) || 0).toFixed(4);
-
-                html += `
-                    <div class="history-item">
-                        <div class="history-row-header">
-                            <div class="history-info">
-                                <div style="background: rgba(255,255,255,0.05); width: 48px; height: 48px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 1.3rem; border: 1px solid rgba(255,255,255,0.06); box-shadow: inset 0 0 10px rgba(0,0,0,0.3);">${icon}</div>
-                                <div style="display:flex; flex-direction:column; gap:4px;">
-                                    <span class="history-amount">${netVal} TON</span>
-                                    <span class="history-time">${timeStr}</span>
-                                </div>
-                            </div>
-                            <div class="history-status ${statusClass}">${statusText}</div>
-                        </div>
-                        <div class="history-details-grid">
-                            <div style="display:flex; justify-content:space-between; opacity:0.8;">
-                                <span>${t[currentLang].req}</span>
-                                <span>${grossVal} TON</span>
-                            </div>
-                            <div style="display:flex; justify-content:space-between; color:var(--error); opacity:0.9;">
-                                <span>${t[currentLang].fee}</span>
-                                <span>-${feeVal} TON</span>
-                            </div>
-                            <div style="display:flex; justify-content:space-between; color:var(--success); font-weight:700; padding-top:6px; border-top:1px dashed rgba(255,255,255,0.08)">
-                                <span>${t[currentLang].rec}</span>
-                                <span>${netVal} TON</span>
-                            </div>
-                        </div>
-                    </div>
+                let winnerHtml = `
+                    <div style="font-size: 3.8rem; margin-bottom: 22px; filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));">🎊🏆🎊</div>
+                    <h3 style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.5rem; margin-bottom: 14px; font-weight: 800;">${t[currentLang].gwEnded}</h3>
+                    <p style="color: var(--text-gray); font-size: 1.05rem; margin-bottom: 22px;">${t[currentLang].congratsWinner}</p>
+                    <div style="color: var(--accent-gold); font-size: 1.7rem; font-weight: 800; font-family: 'Poppins', sans-serif; letter-spacing: 1px; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);">@matro97</div>
                 `;
-            });
-            list.innerHTML = html;
-        }
 
-        function processWithdrawal() {
-            const msg = document.getElementById("withdraw-msg");
-
-            const showWithdrawMessage = (htmlContent, isError = true) => {
-                if (withdrawMsgTimeout) clearTimeout(withdrawMsgTimeout);
-                msg.className = isError ? "msg-box msg-err" : "msg-box msg-succ";
-                msg.innerHTML = htmlContent;
-                msg.style.display = "block";
-                withdrawMsgTimeout = setTimeout(() => { msg.style.display = "none"; }, 1500);
-            };
-            
-            if (userBalance < 3.0) {
-                const missingAmount = (3.0 - userBalance).toFixed(4);
-                showWithdrawMessage(t[currentLang].errMinWithdraw.replace('{amount}', missingAmount));
-                return;
-            }
-
-            const inputElem = document.getElementById("withdraw-amount");
-            const rawValue = inputElem.value;
-            const amountToWithdraw = parseFloat(rawValue);
-            
-            if (!tonConnectUI.connected) {
-                showWithdrawMessage(t[currentLang].errConnWallet);
-                return;
-            }
-
-            let history = getWithdrawHistory();
-            const hasPending = history.some(item => item.status === 'pending');
-
-            if (hasPending) {
-                showWithdrawMessage(t[currentLang].errPending);
-                return;
-            }
-
-            if (!rawValue || isNaN(amountToWithdraw) || amountToWithdraw < 3.0) {
-                showWithdrawMessage(t[currentLang].errInvEntry);
-                return;
-            }
-
-            if (amountToWithdraw > userBalance) {
-                showWithdrawMessage(t[currentLang].errInsuff.replace('{amount}', userBalance.toFixed(4)));
-                return;
-            }
-
-            const calculatedFee = amountToWithdraw * 0.30;
-            const netPayout = amountToWithdraw - calculatedFee;
-            
-            history.unshift({
-                id: Date.now(),
-                amount: amountToWithdraw, 
-                gross: amountToWithdraw,
-                fee: calculatedFee,
-                net: netPayout,
-                time: Date.now(),
-                status: 'pending'
-            });
-
-            saveWithdrawHistory(history);
-            userBalance -= amountToWithdraw;
-            saveStat("user_balance", userBalance.toString());
-            
-            inputElem.value = ""; 
-            document.getElementById("live-breakdown").style.display = "none";
-            document.activeElement.blur(); 
-            
-            updateAllUI();
-            renderHistory();
-            checkWithdrawalStatus();
-        }
-
-        let withdrawInterval;
-        function checkWithdrawalStatus() {
-            if(withdrawInterval) clearInterval(withdrawInterval);
-            withdrawInterval = setInterval(() => {
-                let history = getWithdrawHistory();
-                let needsUpdate = false;
-                let hasPending = false;
-                const now = new Date().getTime();
-                const hiddenProcessingTime = 5 * 60 * 1000; 
-
-                for (let i = 0; i < history.length; i++) {
-                    if (history[i].status === 'pending') {
-                        hasPending = true;
-                        const diff = now - history[i].time;
-                        if (diff >= hiddenProcessingTime) {
-                            history[i].status = 'approved';
-                            needsUpdate = true;
-                            hasPending = false; 
-                        }
+                if (getUID() === '8227619759') {
+                    if (getStat('gw1_claimed') !== 'true') {
+                        winnerHtml += `<button class="btn btn-claim" onclick="claimPrize(1, 25)">🎁 ${t[currentLang].claimPrize}</button>`;
+                    } else {
+                        winnerHtml += `<div style="margin-top: 24px; color: var(--success); font-weight: 800; font-size: 1.3rem; text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);">${t[currentLang].rewardAdded}</div>`;
                     }
                 }
+                document.getElementById('gw-winner-ui').innerHTML = winnerHtml;
+                document.getElementById('gw-winner-ui').style.display = "block";
+            } else {
+                document.getElementById('det-prize').innerHTML = '25 <span style="font-size:1.4rem; color:var(--primary);">TON</span>';
+                document.getElementById('det-subtitle').innerText = "Crypto Group #2";
+                document.getElementById('timer-ui').style.display = "flex";
+                document.getElementById('gw-actions').style.display = "block";
+                document.getElementById('gw-winner-ui').style.display = "none";
+                refreshTimer();
+            }
+            updateAllUI();
+        }
 
-                if (needsUpdate) {
-                    saveWithdrawHistory(history);
-                    renderHistory();
-                }
-                if (!hasPending) {
-                    clearInterval(withdrawInterval);
-                }
-            }, 1000);
+        function claimPrize(gwId, amount) {
+            saveStat(`gw${gwId}_claimed`, "true");
+            userBalance += amount;
+            saveStat("user_balance", userBalance.toString());
+            updateAllUI();
+            openGiveawayDetails(gwId); 
+        }
+
+        function checkDeepLink() {
+            const startParam = tgApp?.initDataUnsafe?.start_param;
+            if (startParam === 'giveaway-1') {
+                openGiveawayDetails(1);
+            } else if (startParam === 'giveaway-2') {
+                openGiveawayDetails(2);
+            } else {
+                switchTab('home');
+            }
         }
 
         const END_TIME = new Date("2026-06-12T20:00:00Z").getTime();
-        
         function refreshTimer() {
             const now = new Date().getTime();
             const diff = END_TIME - now;

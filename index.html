@@ -291,7 +291,7 @@
             background: rgba(11, 15, 25, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 26px; padding: 26px;
             display: flex; flex-direction: column; gap: 18px; backdrop-filter: blur(20px); box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
-        .promo-input-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
+        .promo-input-wrapper { position: relative; width: 100%; }
         .promo-field {
             width: 100%; padding: 18px 18px 18px 50px; background: rgba(5, 10, 15, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 18px; color: white;
@@ -398,6 +398,7 @@
             border-radius: 24px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.04); 
             text-align: left; box-shadow: inset 0 2px 20px rgba(0,0,0,0.5);
         }
+        .withdraw-input-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
         
         .withdraw-input {
             width: 100%; padding: 20px 95px 20px 22px; background: rgba(5, 10, 15, 0.9);
@@ -489,7 +490,7 @@
         .crash-chart-container {
             width: 100%; height: 220px; background: rgba(0,0,0,0.6);
             border-radius: 20px; border: 1px solid rgba(255,255,255,0.08);
-            position: relative; overflow: hidden; margin-top: 10px; margin-bottom: 15px;
+            position: relative; overflow: hidden; margin-top: 15px; margin-bottom: 20px;
             box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
         }
         .crash-canvas { width: 100%; height: 100%; position: absolute; bottom: 0; left: 0; z-index: 1;}
@@ -500,7 +501,14 @@
             text-align: center; line-height: 1.1;
         }
         .crash-multiplier-text.running { color: var(--success); text-shadow: 0 0 20px rgba(16,185,129,0.5); }
-        .crash-multiplier-text.crashed { color: var(--error); text-shadow: 0 0 20px rgba(255,59,48,0.5); font-size: 2.2rem; }
+        .crash-multiplier-text.crashed { color: var(--error); text-shadow: 0 0 20px rgba(255,59,48,0.5); font-size: 2rem; }
+
+        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.1); transition: .3s; border-radius: 26px; border: 1px solid rgba(255,255,255,0.2); }
+        .toggle-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: #94A3B8; transition: .3s; border-radius: 50%; }
+        .toggle-switch input:checked + .toggle-slider { background: var(--success); border-color: var(--success); box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(24px); background-color: white; }
 
         /* Wheel of Fortune CSS */
         .wheel-wrapper { position: relative; width: 280px; height: 280px; margin: 20px auto; }
@@ -736,16 +744,11 @@
             <div class="balance-amount" id="crash-balance">0.00 <span style="color:var(--primary); font-size:1.1rem; font-weight:700; letter-spacing:1px;">TON</span></div>
         </div>
 
-        <div style="display: flex; justify-content: flex-start; margin-top: 15px; margin-bottom: 5px;">
+        <div style="display: flex; justify-content: flex-start; margin-top: 15px;">
             <button class="btn-page-back" onclick="closeGamePage()">
                 <svg viewBox="0 0 24 24" style="width:20px; height:20px; stroke:currentColor; stroke-width:2.5; fill:none; stroke-linecap:round; stroke-linejoin:round; margin-right:8px;"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
                 <span data-i18n="backBtn">BACK</span>
             </button>
-        </div>
-
-        <div style="display:flex; flex-direction:column;">
-            <div style="font-size:0.85rem; color:var(--text-gray); margin-bottom:5px; font-weight:600;" data-i18n="recentCrashes">Recent Crashes:</div>
-            <div id="crash-history" style="display:flex; gap:8px; overflow-x:auto; padding-bottom:8px;"></div>
         </div>
 
         <div class="crash-chart-container">
@@ -753,18 +756,26 @@
             <div id="crash-multiplier" class="crash-multiplier-text">1.00x</div>
         </div>
 
-        <div class="withdraw-step" style="margin-bottom: 10px; display: flex; gap: 12px; padding: 20px 15px;">
-            <div style="flex: 1;">
-                <div style="font-size: 0.8rem; color: var(--text-gray); margin-bottom: 8px; font-weight: 600;" data-i18n="betAmount">Bet Amount</div>
+        <div class="withdraw-step" style="margin-bottom: 10px; padding: 16px 20px;">
+            <div style="font-size: 0.85rem; color: var(--text-gray); margin-bottom: 8px; font-weight: 600;" data-i18n="betAmount">Bet Amount (Min: 0.5 TON)</div>
+            <div class="withdraw-input-wrapper">
+                <input type="text" inputmode="decimal" id="crash-bet-input" class="withdraw-input" style="padding: 14px 18px; font-size: 1.3rem;" placeholder="0.50" oninput="formatCryptoInput(this)">
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <div class="withdraw-step" style="flex: 1; padding: 12px 16px; margin-bottom: 0;">
+                <div style="font-size: 0.8rem; color: var(--text-gray); margin-bottom: 8px; font-weight: 600;" data-i18n="autoCashout">Auto Cashout</div>
                 <div class="withdraw-input-wrapper">
-                    <input type="text" inputmode="decimal" id="crash-bet-input" class="withdraw-input" style="padding: 14px 14px; font-size: 1.25rem;" placeholder="0.50" oninput="formatCryptoInput(this)">
+                    <input type="text" inputmode="decimal" id="crash-auto-cashout" class="withdraw-input" style="padding: 10px; font-size: 1.15rem; text-align: center;" placeholder="2.00" oninput="formatCryptoInput(this)">
                 </div>
             </div>
-            <div style="flex: 1;">
-                <div style="font-size: 0.8rem; color: var(--text-gray); margin-bottom: 8px; font-weight: 600;" data-i18n="autoCashout">Auto Cashout (x)</div>
-                <div class="withdraw-input-wrapper">
-                    <input type="text" inputmode="decimal" id="crash-auto-input" class="withdraw-input" style="padding: 14px 14px; font-size: 1.25rem;" placeholder="2.00" oninput="formatCryptoInput(this)">
-                </div>
+            <div class="withdraw-step" style="flex: 1; padding: 12px 16px; margin-bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div style="font-size: 0.8rem; color: var(--text-gray); margin-bottom: 8px; font-weight: 600;" data-i18n="autoBet">Auto Bet</div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="crash-auto-bet">
+                    <span class="toggle-slider"></span>
+                </label>
             </div>
         </div>
 
@@ -993,7 +1004,8 @@
                 backBtn: "BACK",
                 watchAdSpin: "Watch Ad & Spin", watchAdOpen: "Watch Ad & Open",
                 loading: "Loading...", spinning: "Spinning...", opening: "Opening...",
-                betAmount: "Bet Amount", autoCashout: "Auto Cashout (x)", placeBet: "Place Bet", cashOut: "Cash Out", cashedOut: "Cashed Out!", recentCrashes: "Recent Crashes:",
+                betAmount: "Bet Amount (Min: 0.5 TON)", placeBet: "Place Bet", cashOut: "Cash Out",
+                autoCashout: "Auto Cashout", autoBet: "Auto Bet",
                 redeemCode: "Redeem Code", redeemDesc: "Enter your code below to receive an instant TON credit.",
                 promoPlaceholder: "ENTER PROMO CODE", claimReward: "Claim Reward",
                 hostTitle: "Host Your Own Giveaway", hostDesc: "Boost your channel's growth and engage your community by starting a customized crypto giveaway.", contactSupport: "Contact Support",
@@ -1054,7 +1066,8 @@
                 backBtn: "GERİ",
                 watchAdSpin: "Reklama Bax və Fırlat", watchAdOpen: "Reklama Bax və Aç",
                 loading: "Yüklənir...", spinning: "Fırlanır...", opening: "Açılır...",
-                betAmount: "Mərc", autoCashout: "Avto Çıxarış (x)", placeBet: "Mərc Et", cashOut: "Çıxarış Et", cashedOut: "Çıxarıldı!", recentCrashes: "Son Çöküşlər:",
+                betAmount: "Mərc (Min: 0.5 TON)", placeBet: "Mərc Et", cashOut: "Çıxarış Et",
+                autoCashout: "Avto Çıxarış", autoBet: "Avto Mərc",
                 redeemCode: "Promo Kod", redeemDesc: "TON krediti almaq üçün kodu daxil et.",
                 promoPlaceholder: "PROMO KOD", claimReward: "Mükafatı Al",
                 hostTitle: "Öz Tirajını Yarat", hostDesc: "Kanalınızı böyütmək üçün xüsusi kripto tirajı yaradın.", contactSupport: "Dəstək",
@@ -1097,7 +1110,7 @@
                 errMinDep: "⚠️ Minimum deposit 0.10 TON-dur.",
                 errMinBet: "⚠️ Minimum mərc 0.50 TON-dur.",
                 errDepAdsReq: "⚠️ Sistem təhlükəsizliyi: Deposit etdikdən sonra çıxarış üçün {amount} reklam izləməlisiniz.",
-                errCrashAdsReq: "⚠️ Sistem təhlükəsizliyi: Crash oynadıqdan sonra çıxarış üçün ümumilikdə {amount} reklam izləməlisiniz.",
+                errCrashAdsReq: "⚠️ Sistem təhlükəsizliyi: Crash oynadıqdan sonra çıxarış üçün {amount} əlavə reklam izləməlisiniz.",
                 crashedWord: "ÇÖKDÜ", maxBtn: "MAKS",
                 depHistTitle: "Deposit Tarixçəsi", withHistTitle: "Çıxarış Tarixçəsi",
                 emptyDep: "Hələ ki, deposit yoxdur.", emptyWith: "Hələ ki, çıxarış yoxdur."
@@ -1109,13 +1122,14 @@
                 progress: "Прогресс", dailyLimitText: "Дневной лимит",
                 watchAdBtn: "Смотреть рекламу", limitReached: "🔒 Лимит исчерпан",
                 miniGames: "Мини Игры", miniGamesDesc: "Смотрите рекламу, чтобы играть и получать TON.",
-                luckyCrash: "Lucky Crash", luckyCrashDesc: "Забери выигрыш до того, как график обрушится!", goToCrash: "К Lucky Crash",
+                luckyCrash: "Lucky Crash", luckyCrashDesc: "Забери выигрыш до обрушения графика!", goToCrash: "К Lucky Crash",
                 luckySpin: "Колесо Фортуны", luckySpinDesc: "Крути колесо и выиграй до 5 TON.", goToSpin: "К Колесу Фортуны",
-                mysteryBox: "Загадочная Коробка", mysteryBoxDesc: "Открой коробку и найди TON.", goToBox: "К Загадочной Коробке",
+                mysteryBox: "Коробка", mysteryBoxDesc: "Открой коробку и найди TON.", goToBox: "К Коробке",
                 backBtn: "НАЗАД",
                 watchAdSpin: "Реклама и Крутить", watchAdOpen: "Реклама и Открыть",
                 loading: "Загрузка...", spinning: "Крутится...", opening: "Открывается...",
-                betAmount: "Ставка", autoCashout: "Авто-Вывод (x)", placeBet: "Поставить", cashOut: "Вывести", cashedOut: "Выведено!", recentCrashes: "Последние:",
+                betAmount: "Ставка (Мин: 0.5 TON)", placeBet: "Поставить", cashOut: "Вывести",
+                autoCashout: "Автовывод", autoBet: "Автоставка",
                 redeemCode: "Промокод", redeemDesc: "Введите код ниже, чтобы получить TON.",
                 promoPlaceholder: "ПРОМОКОД", claimReward: "Получить награду",
                 hostTitle: "Создать Розыгрыш", hostDesc: "Запустите свой розыгрыш для развития канала.", contactSupport: "Поддержка",
@@ -1158,8 +1172,8 @@
                 errMinDep: "⚠️ Минимальный депозит 0.10 TON.",
                 errMinBet: "⚠️ Минимальная ставка 0.50 TON.",
                 errDepAdsReq: "⚠️ Безопасность: Вы должны посмотреть {amount} реклам после депозита для вывода.",
-                errCrashAdsReq: "⚠️ Безопасность: Вы должны посмотреть {amount} реклам после игры в Crash для вывода.",
-                crashedWord: "УПАЛ", maxBtn: "МАКС",
+                errCrashAdsReq: "⚠️ Безопасность: Вы должны посмотреть еще {amount} реклам после игры в Crash для вывода.",
+                crashedWord: "ОБРУШЕНИЕ", maxBtn: "МАКС",
                 depHistTitle: "История депозитов", withHistTitle: "История выводов",
                 emptyDep: "Депозитов пока нет.", emptyWith: "Выводов пока нет."
             },
@@ -1176,7 +1190,8 @@
                 backBtn: "GERİ",
                 watchAdSpin: "İzle & Çevir", watchAdOpen: "İzle & Aç",
                 loading: "Yükleniyor...", spinning: "Çevriliyor...", opening: "Açılıyor...",
-                betAmount: "Bahis", autoCashout: "Oto Çıkış (x)", placeBet: "Bahis Yap", cashOut: "Bozdur", cashedOut: "Çekildi!", recentCrashes: "Son Çökmeler:",
+                betAmount: "Bahis (Min: 0.5 TON)", placeBet: "Bahis Yap", cashOut: "Bozdur",
+                autoCashout: "Oto Bozdur", autoBet: "Oto Bahis",
                 redeemCode: "Promo Kod", redeemDesc: "Anında TON almak için kodu girin.",
                 promoPlaceholder: "PROMO KOD", claimReward: "Ödülü Al",
                 hostTitle: "Kendi Çekilişini Yap", hostDesc: "Kanalını büyütmek için kripto çekilişi başlat.", contactSupport: "Destek",
@@ -1219,7 +1234,7 @@
                 errMinDep: "⚠️ Minimum deposit 0.10 TON'dur.",
                 errMinBet: "⚠️ Minimum bahis 0.50 TON'dur.",
                 errDepAdsReq: "⚠️ Güvenlik Kuralı: Para çekmek için deposit sonrası {amount} reklam izlemelisiniz.",
-                errCrashAdsReq: "⚠️ Güvenlik Kuralı: Crash oynadıktan sonra para çekmek için {amount} reklam izlemelisiniz.",
+                errCrashAdsReq: "⚠️ Güvenlik Kuralı: Crash oynadıktan sonra para çekmek için {amount} reklam daha izlemelisiniz.",
                 crashedWord: "ÇÖKTÜ", maxBtn: "MAKS",
                 depHistTitle: "Deposit Geçmişi", withHistTitle: "Çekim Geçmişi",
                 emptyDep: "Henüz deposit yok.", emptyWith: "Henüz çekim yok."
@@ -1278,17 +1293,13 @@
                 const key = el.getAttribute('data-i18n');
                 if (t[currentLang] && t[currentLang][key]) {
                     if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
-                        // Keep current placeholder behavior or replace it
-                        if(el.id !== 'crash-bet-input' && el.id !== 'crash-auto-input') {
-                            el.placeholder = t[currentLang][key];
-                        }
+                        el.placeholder = t[currentLang][key];
                     } else {
                         el.innerHTML = t[currentLang][key];
                     }
                 }
             });
             renderHistoryUI(); 
-            updateCrashHistoryUI();
         }
 
         document.addEventListener('click', (e) => {
@@ -1353,7 +1364,6 @@
             setupKeyboardObservation();
             initWheel();
             initCrashCanvas();
-            updateCrashHistoryUI();
             
             document.getElementById('current-lang-text').innerText = currentLang.toUpperCase();
             document.getElementById(`lang-opt-${currentLang}`).classList.add('active-lang');
@@ -1409,7 +1419,7 @@
             }
             
             document.addEventListener('click', function(e) {
-                if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && !e.target.classList.contains('btn') && !e.target.classList.contains('btn-ad-compact')) {
+                if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && !e.target.classList.contains('btn') && !e.target.classList.contains('btn-ad-compact') && !e.target.classList.contains('toggle-slider')) {
                     if (document.activeElement.tagName === 'INPUT') {
                         document.activeElement.blur();
                     }
@@ -1659,24 +1669,13 @@
             updateAllUI();
         }
 
-        /* --- LUCKY CRASH GAME REWRITTEN --- */
-        let crashRAF;
-        let crashStartTime;
-        let targetCrashPoint = 1.00;
+        /* --- LUCKY CRASH GAME --- */
+        let crashInterval;
         let currentMultiplier = 1.00;
+        let targetCrashPoint = 1.00;
         let crashBet = 0;
-        let isCashedOut = false;
         let crashState = 'idle'; // idle, running, crashed
-        
-        let recentCrashes = getStat("recent_crashes") ? JSON.parse(getStat("recent_crashes")) : [];
-
-        function updateCrashHistoryUI() {
-            const histDiv = document.getElementById("crash-history");
-            histDiv.innerHTML = recentCrashes.map(c => {
-                const color = c >= 2.0 ? 'var(--primary)' : (c < 1.1 ? 'var(--error)' : 'var(--success)');
-                return `<span style="color:${color}; font-weight:700; font-family:'Poppins',sans-serif; font-size:0.8rem; background:rgba(255,255,255,0.05); padding: 4px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); white-space:nowrap;">${c.toFixed(2)}x</span>`;
-            }).join('');
-        }
+        let userCashedOut = false;
 
         function initCrashCanvas() {
             const canvas = document.getElementById('crash-canvas');
@@ -1730,25 +1729,19 @@
             if (crashState === 'running') return;
             const msgBox = document.getElementById("crash-msg");
             const betInput = document.getElementById("crash-bet-input");
-            const autoInput = document.getElementById("crash-auto-input");
             const betVal = parseFloat(betInput.value);
-            const autoVal = parseFloat(autoInput.value);
             
             if (crashMsgTimeout) clearTimeout(crashMsgTimeout);
             
             if (isNaN(betVal) || betVal < 0.5) {
+                document.getElementById("crash-auto-bet").checked = false;
                 msgBox.className = "msg-box msg-err"; msgBox.innerHTML = t[currentLang].errMinBet; msgBox.style.display = "block";
                 crashMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 2000);
                 return;
             }
             if (betVal > userBalance) {
+                document.getElementById("crash-auto-bet").checked = false;
                 msgBox.className = "msg-box msg-err"; msgBox.innerHTML = t[currentLang].errInsuff; msgBox.style.display = "block";
-                crashMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 2000);
-                return;
-            }
-            
-            if (!isNaN(autoVal) && autoVal <= 1.0) {
-                msgBox.className = "msg-box msg-err"; msgBox.innerHTML = "Auto Cashout must be > 1.00"; msgBox.style.display = "block";
                 crashMsgTimeout = setTimeout(() => { msgBox.style.display = "none"; }, 2000);
                 return;
             }
@@ -1756,136 +1749,105 @@
             crashBet = betVal;
             userBalance -= crashBet;
             saveStat("user_balance", userBalance.toString());
-            saveStat("has_played_crash", "true");
-            // DIQQET: Burada saveStat("ads_since_crash", "0") silindi! 
-            // Artiq her oynayanda sifirlanmayacaq, tek bir defe istediyi kimi 1000 olana qeder toplanacaq.
             
+            if (getStat("has_played_crash") !== "true") {
+                saveStat("has_played_crash", "true");
+                saveStat("ads_since_crash", "0");
+            }
             updateAllUI();
             
             if(document.activeElement.tagName === 'INPUT') document.activeElement.blur();
             msgBox.style.display = "none";
-            
-            const btnCashout = document.getElementById("crash-btn-cashout");
             document.getElementById("crash-btn-start").style.display = "none";
-            btnCashout.style.display = "block";
-            btnCashout.disabled = false;
-            btnCashout.innerHTML = t[currentLang].cashOut;
-            btnCashout.style.background = "";
-            btnCashout.style.color = "";
-            btnCashout.style.border = "";
-            
+            document.getElementById("crash-btn-cashout").style.display = "block";
             betInput.disabled = true;
-            autoInput.disabled = true;
 
             const disp = document.getElementById('crash-multiplier');
             disp.className = "crash-multiplier-text running";
+            disp.style.color = ''; 
             
-            // Xüsusi Alqoritm:
+            // Re-balanced Algorithm
             let rand = Math.random() * 100;
             if(rand < 65) {
                 let sub = Math.random();
-                if(sub < 0.25) targetCrashPoint = 1.00;
-                else if(sub < 0.50) targetCrashPoint = 1.01;
-                else targetCrashPoint = 1.02 + (Math.random() * 0.23); 
+                if(sub < 0.20) targetCrashPoint = 1.00;
+                else if(sub < 0.50) targetCrashPoint = 1.01 + (Math.random() * 0.08);
+                else targetCrashPoint = 1.10 + (Math.random() * 0.40);
             } else if(rand < 85) {
-                targetCrashPoint = 1.26 + (Math.random() * 0.73);
+                targetCrashPoint = 1.50 + (Math.random() * 1.50);
             } else if(rand < 95) {
-                targetCrashPoint = 2.00 + (Math.random() * 2.00);
+                targetCrashPoint = 3.00 + (Math.random() * 3.00);
             } else {
-                targetCrashPoint = 4.00 + (Math.random() * 6.00);
+                targetCrashPoint = 6.00 + (Math.random() * 9.00);
             }
             targetCrashPoint = parseFloat(targetCrashPoint.toFixed(2));
             
             crashState = 'running';
-            isCashedOut = false;
+            userCashedOut = false;
             currentMultiplier = 1.00;
-            crashStartTime = performance.now();
+            let tick = 0;
             
-            function crashLoop(timestamp) {
-                if (crashState !== 'running') return;
+            crashInterval = setInterval(() => {
+                tick += 1;
+                currentMultiplier += 0.01 + (tick * 0.0005);
                 
-                let elapsed = timestamp - crashStartTime;
-                let ticks = elapsed / 60;
-                // Eyni sürət əyrisini qorumaq üçün riyazi funksiya:
-                currentMultiplier = 1.00 + (ticks * 0.01) + (0.5 * ticks * ticks * 0.0005);
-                
-                // Avtomatik çıxarış yoxlanışı
-                if (!isCashedOut && !isNaN(autoVal) && autoVal > 1.0 && currentMultiplier >= autoVal) {
-                    cashOutCrash(autoVal);
+                // Auto Cashout check
+                if (!userCashedOut) {
+                    let autoCashVal = parseFloat(document.getElementById("crash-auto-cashout").value);
+                    if (!isNaN(autoCashVal) && autoCashVal > 1.00 && currentMultiplier >= autoCashVal) {
+                        cashOutCrash();
+                    }
                 }
                 
-                if (currentMultiplier >= targetCrashPoint) {
-                    // Qrafik Çökdü
+                if(currentMultiplier >= targetCrashPoint) {
+                    clearInterval(crashInterval);
                     crashState = 'crashed';
-                    currentMultiplier = targetCrashPoint;
-                    
                     disp.className = "crash-multiplier-text crashed";
-                    disp.innerHTML = `${t[currentLang].crashedWord}<br><span style='font-size:2rem'>${currentMultiplier.toFixed(2)}x</span>`;
-                    drawCrashCanvas(ticks, true);
+                    disp.innerHTML = t[currentLang].crashedWord + "<br><span style='font-size:1.5rem; color:#fff;'>" + targetCrashPoint.toFixed(2) + "x</span>";
+                    drawCrashCanvas(tick, true);
                     
-                    recentCrashes.unshift(currentMultiplier);
-                    if(recentCrashes.length > 10) recentCrashes.pop();
-                    saveStat("recent_crashes", JSON.stringify(recentCrashes));
-                    updateCrashHistoryUI();
-                    
-                    if (!isCashedOut) {
-                        // İstifadəçi uduzdu
-                        document.getElementById("crash-btn-cashout").style.display = "none";
-                        document.getElementById("crash-btn-start").style.display = "block";
-                        betInput.disabled = false;
-                        autoInput.disabled = false;
-                    } else {
-                        // Artıq pulu çəkmişdi deyə, sadəcə qrafiki dayandırıb yeniləyirik
-                        setTimeout(() => {
-                            document.getElementById("crash-btn-cashout").style.display = "none";
-                            document.getElementById("crash-btn-start").style.display = "block";
-                            betInput.disabled = false;
-                            autoInput.disabled = false;
-                        }, 2500);
-                    }
+                    document.getElementById("crash-btn-start").style.display = "block";
+                    document.getElementById("crash-btn-cashout").style.display = "none";
+                    betInput.disabled = false;
                     
                     setTimeout(() => {
-                        if(crashState !== 'running') {
+                        if(crashState === 'crashed') {
+                            crashState = 'idle';
                             disp.className = "crash-multiplier-text";
                             disp.innerHTML = "1.00x";
                             initCrashCanvas();
+                            
+                            // Auto Bet Trigger
+                            if(document.getElementById("crash-auto-bet").checked) {
+                                startCrash();
+                            }
                         }
-                    }, 2500);
-                    
+                    }, 3000);
                 } else {
-                    // Oyuna davam edir
-                    if (!isCashedOut) {
+                    if (!userCashedOut) {
                         disp.innerHTML = currentMultiplier.toFixed(2) + "x";
                     }
-                    drawCrashCanvas(ticks, false);
-                    crashRAF = requestAnimationFrame(crashLoop);
+                    drawCrashCanvas(tick, false);
                 }
-            }
-            crashRAF = requestAnimationFrame(crashLoop);
+            }, 60);
         }
 
-        function cashOutCrash(forcedMultiplier = null) {
-            if (crashState !== 'running' || isCashedOut) return;
-            isCashedOut = true;
+        function cashOutCrash() {
+            if(crashState !== 'running' || userCashedOut) return;
+            userCashedOut = true;
             
-            let payoutMultiplier = forcedMultiplier !== null ? forcedMultiplier : currentMultiplier;
-            const won = crashBet * payoutMultiplier;
+            const won = crashBet * currentMultiplier;
             userBalance += won;
             saveStat("user_balance", userBalance.toString());
             updateAllUI();
             
             const disp = document.getElementById('crash-multiplier');
-            disp.className = "crash-multiplier-text running";
-            disp.innerHTML = `+${won.toFixed(2)} TON`;
+            disp.innerHTML = `<span style="font-size: 1.2rem; color: #fff; text-shadow: none;">+${won.toFixed(2)} TON</span>`;
+            disp.style.color = 'var(--success)';
             
-            const btn = document.getElementById("crash-btn-cashout");
-            btn.disabled = true;
-            btn.innerHTML = `✓ ${t[currentLang].cashedOut}`;
-            btn.style.background = "var(--success-bg)";
-            btn.style.color = "var(--success)";
-            btn.style.border = "1px solid var(--success)";
-            
-            // Diqqət: Burada qrafik dayanmır, arxada 'targetCrashPoint'-ə qədər uçmağa davam edir.
+            document.getElementById("crash-btn-start").style.display = "none";
+            document.getElementById("crash-btn-cashout").style.display = "none";
+            document.getElementById("crash-bet-input").disabled = false;
         }
 
         function executeSpin() {
@@ -1924,13 +1886,11 @@
                     
                     updateAllUI(); 
                     
-                    // DÜZƏLİŞ: Uğurlu bitdikdən sonra düyməni bərpa edirik!
-                    btn.innerHTML = t[currentLang].watchAdSpin;
-                    btn.classList.remove('locked');
-                    
                     setTimeout(() => {
                         miniAlert.style.display = "none";
                         isSpinning = false;
+                        btn.innerHTML = t[currentLang].watchAdSpin;
+                        btn.classList.remove('locked');
                         updateAllUI(); 
                     }, 1500);
                 }, 5000); 
@@ -2025,13 +1985,11 @@
                     
                     updateAllUI(); 
                     
-                    // DÜZƏLİŞ: Uğurlu bitdikdən sonra düyməni bərpa edirik!
-                    btn.innerHTML = t[currentLang].watchAdOpen;
-                    btn.classList.remove('locked');
-                    
                     setTimeout(() => {
                         miniAlert.style.display = "none";
                         isOpeningBox = false;
+                        btn.innerHTML = t[currentLang].watchAdOpen;
+                        btn.classList.remove('locked');
                         updateAllUI(); 
                     }, 1500);
                     
@@ -2086,11 +2044,7 @@
             try {
                 await tonConnectUI.sendTransaction(transaction);
                 saveStat("has_deposited", "true");
-                
-                // Məntiqi Crash oyunundakı kimi düzəltdik. 
-                // Sadəcə ilk dəfədirsə '0' yaradır, varsa davam edir.
-                if(!getStat("ads_since_deposit")) saveStat("ads_since_deposit", "0");
-                
+                saveStat("ads_since_deposit", "0");
                 userBalance += val;
                 saveStat("user_balance", userBalance.toString());
                 

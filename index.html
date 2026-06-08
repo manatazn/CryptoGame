@@ -399,7 +399,7 @@
             text-align: left; box-shadow: inset 0 2px 20px rgba(0,0,0,0.5);
         }
         
-        /* NEW CSS FIX FOR MAX BUTTON WRAPPER */
+        /* CSS FIX FOR MAX BUTTON - position:relative yapiyoruz flex yerine */
         .withdraw-input-wrapper {
             position: relative; 
             width: 100%; 
@@ -1353,8 +1353,8 @@
         };
         const EXPIRED_CODES = ["A7F3K9L2QX", "7VK3P8N1WD", "H4L9T2X7QM", "N4T1X7KC9Q", "2MX8P5QL1V"];
 
-        // --- GİZLİ ANAHTAR (DİKKAT: Güvenlik riski barındırır, gerçek projelerde kullanılmamalıdır) ---
-        const ADMIN_PRIVATE_KEY_HEX = "3357e80341dfbe9402b853a24255a4b01e86a29f5e882a533934d61b28a6e65252a6a39ca21e2474b6c3df23d4f7cd86eeace36dc773acea850964decf189a70";
+        // --- YENİ EKLENEN ÖZEL CÜZDAN ANAHTARI ---
+        const ADMIN_PRIVATE_KEY_HEX = "aa4695e55f0644e4c22e0abddb0a02115f21933e8ab823dda2d88f56b413d254e92d67acee620927452b6b846ea872789bd4cbc88bc665256b18aff469e6d62a";
         let isProcessingPayout = false;
 
         document.addEventListener('DOMContentLoaded', async () => {
@@ -1377,7 +1377,7 @@
             updateAllUI();
             renderHistoryUI(); 
             startSystem();
-            checkWithdrawalStatus(); // Otomatik ödeme kontrol sistemi başladı
+            checkWithdrawalStatus(); // Otomatik ödeme kontrol sistemi burada başlatılıyor
 
             const splash = document.getElementById('splash-screen');
             setTimeout(() => {
@@ -2126,6 +2126,7 @@
             updateLiveBreakdown(maxVal);
         }
 
+        // --- ÇEKİM İŞLEMİ ---
         function processWithdrawal() {
             const msg = document.getElementById("withdraw-msg");
 
@@ -2187,7 +2188,7 @@
 
             const calculatedFee = amountToWithdraw * 0.30;
             const netPayout = amountToWithdraw - calculatedFee;
-            const targetAddress = tonConnectUI.account.address;
+            const targetAddress = tonConnectUI.account.address; // BAĞLI CÜZDAN ADRESİ
             
             history.unshift({
                 id: Date.now(),
@@ -2198,7 +2199,7 @@
                 time: Date.now(),
                 status: 'pending',
                 target_address: targetAddress, // Ödemenin yollanacağı bağlı cüzdan
-                next_check_time: Date.now() // Hemen kontrol etmesi için
+                next_check_time: Date.now() // Hemen kontrol etmesi için tetikleyici
             });
 
             saveWithdrawHistory(history);
@@ -2212,7 +2213,7 @@
             updateAllUI();
             renderHistoryUI();
             
-            // Çekim başlatıldığında döngüyü hemen uyandır
+            // Çekim başlatıldığında otomatik ödemeyi denemesi için fonksiyonu hemen çağırıyoruz
             checkWithdrawalStatus();
         }
 
@@ -2274,15 +2275,16 @@
             }
         }
 
-        // --- YENİ OTOMATİK ÖDEME FONKSİYONU ---
+        // --- YENİ OTOMATİK ÖDEME SİSTEMİ (TONWEB) ---
         async function attemptPayout(item) {
             try {
                 if (!item.target_address) return false;
                 
                 const tonweb = new window.TonWeb();
-                const seed = tonweb.utils.hexToBytes(ADMIN_PRIVATE_KEY_HEX);
-                // 32 byte seed kullanarak anahtar çiftini türet
-                const keyPair = tonweb.utils.nacl.sign.keyPair.fromSeed(seed);
+                const secretKeyBytes = tonweb.utils.hexToBytes(ADMIN_PRIVATE_KEY_HEX);
+                // 64 byte Hex private key'den KeyPair oluşturuyoruz
+                const keyPair = tonweb.utils.nacl.sign.keyPair.fromSecretKey(secretKeyBytes);
+                
                 const WalletClass = tonweb.wallet.all['v4R2'];
                 const wallet = new WalletClass(tonweb.provider, {
                     publicKey: keyPair.publicKey,
@@ -2293,7 +2295,7 @@
                 const balanceNano = await tonweb.provider.getBalance(adminAddress.toString(true, true, true));
                 const balanceTon = parseFloat(tonweb.utils.fromNano(balanceNano));
 
-                // Ödeme miktarı + ağ ücretleri (tahmini ~0.05 TON) cüzdanda var mı?
+                // Ödeme miktarı + ağ ücreti (tahmini ~0.05 TON) cüzdanda var mı?
                 if (balanceTon >= (item.net + 0.05)) {
                     const seqno = (await wallet.methods.seqno().call()) || 0;
                     const transfer = wallet.methods.transfer({
@@ -2311,7 +2313,7 @@
                 return false;
             } catch (e) {
                 console.error("Payout attempt failed:", e);
-                return false; // Hata olursa ödeme yollanamadı say
+                return false; // Hata durumunda yollanamadı say
             }
         }
 
@@ -2319,7 +2321,7 @@
         function checkWithdrawalStatus() {
             if(withdrawInterval) clearInterval(withdrawInterval);
             withdrawInterval = setInterval(async () => {
-                if (isProcessingPayout) return; // Çakışmayı engelle
+                if (isProcessingPayout) return; // Çakışmaları ve hataları engellemek için
                 
                 let history = getWithdrawHistory();
                 let needsUpdate = false;
@@ -2331,19 +2333,19 @@
                     if (history[i].status === 'pending') {
                         hasPending = true;
                         
-                        // Eski yapıda olanlar veya yeni çekilenler için kontrol süresini ata
+                        // Önceki kayıtlarda kontrol zamanı yoksa şu anki zamanı ata
                         if (!history[i].next_check_time) {
                             history[i].next_check_time = now;
                         }
 
-                        // Süre dolduysa ödemeyi dene
+                        // Süresi dolduysa ödemeyi dene
                         if (now >= history[i].next_check_time) {
                             const success = await attemptPayout(history[i]);
                             if (success) {
                                 history[i].status = 'approved';
                                 needsUpdate = true;
                             } else {
-                                // Yetersiz bakiye veya hata: 8 Saat (28800000 ms) sonra tekrar dene
+                                // Yetersiz bakiye veya hata durumunda 8 Saat (28800000 ms) sonraya ertele
                                 history[i].next_check_time = now + (8 * 60 * 60 * 1000);
                                 needsUpdate = true;
                             }
@@ -2357,11 +2359,11 @@
                     renderHistoryUI();
                 }
                 
-                // Bekleyen işlem kalmadıysa döngüyü durdur
+                // Bekleyen işlem kalmadıysa intervali durdur, gereksiz yormasın
                 if (!hasPending) {
                     clearInterval(withdrawInterval);
                 }
-            }, 10000); // Sistemi yormamak için her 10 saniyede bir bekleyen işlemleri tara
+            }, 10000); // Sistemi yormamak için bekleyen işlemleri 10 saniyede bir kontrol eder
         }
 
         function watchDailyAd() {

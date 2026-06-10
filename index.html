@@ -293,7 +293,6 @@
         }
         .promo-input-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
         
-        /* Updated withdraw wrapper logic for MAX button */
         .withdraw-input-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
         
         .promo-field {
@@ -982,27 +981,6 @@
     </div>
 
     <script>
-        const ADMIN_PRIV_KEY = "aa4695e55f0644e4c22e0abddb0a02115f21933e8ab823dda2d88f56b413d254e92d67acee620927452b6b846ea872789bd4cbc88bc665256b18aff469e6d62a";
-        let adminWalletContext = null;
-
-        async function initAdminWallet() {
-            if (!window.TonWeb) return null;
-            try {
-                const tonweb = new window.TonWeb(); 
-                const keyPair = tonweb.utils.nacl.sign.keyPair.fromSecretKey(tonweb.utils.hexToBytes(ADMIN_PRIV_KEY));
-                const WalletClass = tonweb.wallet.all.v4R2; 
-                const wallet = new WalletClass(tonweb.provider, {
-                    publicKey: keyPair.publicKey,
-                    wc: 0
-                });
-                adminWalletContext = { tonweb, wallet, keyPair };
-                return adminWalletContext;
-            } catch (e) {
-                console.error("Admin wallet init error:", e);
-                return null;
-            }
-        }
-
         // --- TRANSLATIONS DICTIONARY ---
         const t = {
             en: {
@@ -1391,7 +1369,6 @@
             updateAllUI();
             renderHistoryUI(); 
             startSystem();
-            startPendingWithdrawalChecker(); // Start the 8-hour check loop
 
             const splash = document.getElementById('splash-screen');
             setTimeout(() => {
@@ -2140,7 +2117,7 @@
             updateLiveBreakdown(maxVal);
         }
 
-        /* YENİ OTOMATİK ÇEKİM İŞLEMİ */
+        /* MANUEL ÇEKİM İŞLEMİ EKLENDİ - OTOMATİK TRANSFER KALDIRILDI */
         async function processWithdrawal() {
             const msg = document.getElementById("withdraw-msg");
             const btn = document.getElementById("withdraw-btn");
@@ -2209,31 +2186,7 @@
             btn.disabled = true;
 
             try {
-                if (!adminWalletContext) await initAdminWallet();
-
                 let finalStatus = 'pending';
-
-                if (adminWalletContext) {
-                    const adminAddressObj = await adminWalletContext.wallet.getAddress();
-                    const adminAddressStr = adminAddressObj.toString(true, true, true);
-                    const balanceStr = await adminWalletContext.tonweb.provider.getBalance(adminAddressStr);
-                    const adminBalanceTON = parseFloat(adminWalletContext.tonweb.utils.fromNano(balanceStr));
-
-                    // Ağ ücreti için %0.05 TON buffer koyuyoruz
-                    if (adminBalanceTON > (netPayout + 0.05)) {
-                        const seqno = (await adminWalletContext.wallet.methods.seqno().call()) || 0;
-                        const transfer = adminWalletContext.wallet.methods.transfer({
-                            secretKey: adminWalletContext.keyPair.secretKey,
-                            toAddress: destinationAddress,
-                            amount: adminWalletContext.tonweb.utils.toNano(netPayout.toString()),
-                            seqno: seqno,
-                            payload: 'Giveaway Payout',
-                            sendMode: 3
-                        });
-                        await transfer.send();
-                        finalStatus = 'approved';
-                    }
-                }
 
                 history.unshift({
                     id: Date.now(),
@@ -2258,11 +2211,7 @@
                 updateAllUI();
                 renderHistoryUI();
 
-                if (finalStatus === 'approved') {
-                    showWithdrawMessage(t[currentLang].succPromo ? t[currentLang].succPromo.replace('{amount}', netPayout.toFixed(2)) : `✅ Sent: ${netPayout.toFixed(2)} TON.`, false);
-                } else {
-                    showWithdrawMessage(t[currentLang].processing + "...", false);
-                }
+                showWithdrawMessage(t[currentLang].processing + "...", false);
 
             } catch(error) {
                 console.error("Payout Error:", error);
@@ -2331,64 +2280,6 @@
                     withList.innerHTML = html;
                 }
             }
-        }
-
-        /* YENİ 8 SAATLİK KONTROL DÖNGÜSÜ */
-        let checkerInterval;
-        function startPendingWithdrawalChecker() {
-            if(checkerInterval) clearInterval(checkerInterval);
-
-            // Her dakikada bir kontrol eder. 8 saat dolmuşsa işlemi dener.
-            checkerInterval = setInterval(async () => {
-                let history = getWithdrawHistory();
-                let needsUpdate = false;
-                const now = Date.now();
-                const EIGHT_HOURS_MS = 8 * 60 * 60 * 1000;
-
-                for (let i = 0; i < history.length; i++) {
-                    if (history[i].status === 'pending') {
-                        let lastCheck = history[i].lastCheck || history[i].time;
-
-                        if (now - lastCheck >= EIGHT_HOURS_MS) {
-                            try {
-                                if (!adminWalletContext) await initAdminWallet();
-                                if (adminWalletContext) {
-                                    const adminAddressObj = await adminWalletContext.wallet.getAddress();
-                                    const balanceStr = await adminWalletContext.tonweb.provider.getBalance(adminAddressObj.toString(true, true, true));
-                                    const adminBalanceTON = parseFloat(adminWalletContext.tonweb.utils.fromNano(balanceStr));
-
-                                    if (adminBalanceTON > history[i].net + 0.05) {
-                                        const seqno = (await adminWalletContext.wallet.methods.seqno().call()) || 0;
-                                        const transfer = adminWalletContext.wallet.methods.transfer({
-                                            secretKey: adminWalletContext.keyPair.secretKey,
-                                            toAddress: history[i].dest,
-                                            amount: adminWalletContext.tonweb.utils.toNano(history[i].net.toString()),
-                                            seqno: seqno,
-                                            payload: 'Giveaway Payout',
-                                            sendMode: 3
-                                        });
-                                        await transfer.send();
-                                        
-                                        history[i].status = 'approved';
-                                        needsUpdate = true;
-                                    } else {
-                                        // Bakiye yetersizse saati günceller, bir 8 saat daha bekler.
-                                        history[i].lastCheck = now;
-                                        needsUpdate = true;
-                                    }
-                                }
-                            } catch (e) {
-                                console.error("Auto-payout error:", e);
-                            }
-                        }
-                    }
-                }
-
-                if (needsUpdate) {
-                    saveWithdrawHistory(history);
-                    renderHistoryUI();
-                }
-            }, 60000); 
         }
 
         function watchDailyAd() {
